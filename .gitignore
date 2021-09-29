@@ -1,0 +1,41 @@
+# Gradle
+.gradle
+build/
+
+# Eclipse
+.classpath
+.project
+.metadata
+**/bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+
+# NetBeans
+**/nbproject/private/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# IntelliJ, Android Studio:
+.idea/
+*.ipr
+*.iws
+*.iml
+out/
+
+# OS Specific
+.DS_Store
+
+# Miscellaneous
+*~
+*.*#
+*#*#
