@@ -3,8 +3,11 @@ package de.pottgames.tuningfork;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALCCapabilities;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,11 +29,13 @@ public class Audio implements Disposable {
         }
 
         // CREATE A CONTEXT AND SET IT ACTIVE
+        final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.device);
         this.context = ALC10.alcCreateContext(this.device, (IntBuffer) null);
         if (this.context == 0L) {
             throw new IllegalStateException("Failed to create OpenAL context.");
         }
         ALC10.alcMakeContextCurrent(this.context);
+        AL.createCapabilities(deviceCapabilities);
 
         // SET DISTANCE ATTENUATION MODEL
         AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
@@ -90,6 +95,13 @@ public class Audio implements Disposable {
         source.setRelative(true);
 
         return source;
+    }
+
+
+    public void play(SoundBuffer buffer) {
+        final SoundSource source = this.obtainRelativeSource(buffer, false);
+        source.play();
+        source.obtained = false;
     }
 
 
