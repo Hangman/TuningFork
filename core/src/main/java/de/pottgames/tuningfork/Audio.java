@@ -134,7 +134,7 @@ public class Audio implements Disposable {
 
     public void play3D(SoundBuffer buffer, Vector3 position) {
         final SoundSource source = this.obtainSource(buffer);
-        source.play();
+        source.setPosition(position);
         source.play();
         source.obtained = false;
     }
@@ -143,7 +143,7 @@ public class Audio implements Disposable {
     public void play3D(SoundBuffer buffer, float volume, Vector3 position) {
         final SoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
-        source.play();
+        source.setPosition(position);
         source.play();
         source.obtained = false;
     }
@@ -153,7 +153,7 @@ public class Audio implements Disposable {
         final SoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPitch(pitch);
-        source.play();
+        source.setPosition(position);
         source.play();
         source.obtained = false;
     }
