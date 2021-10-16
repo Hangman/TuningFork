@@ -19,7 +19,7 @@ import de.pottgames.tuningfork.Audio.TaskAction;
 public class StreamedSound implements Disposable {
     private static final int  BUFFER_SIZE                     = 4096 * 10;
     private static final int  BUFFER_COUNT                    = 3;
-    private static final int  BYTES_PER_SAMLE                 = 2;
+    private static final int  BYTES_PER_SAMPLE                = 2;
     private final FileHandle  file;
     private final SoundSource source;
     private AudioStream       audioStream;
@@ -54,8 +54,7 @@ public class StreamedSound implements Disposable {
         this.audioFormat = channels > 1 ? AL10.AL_FORMAT_STEREO16 : AL10.AL_FORMAT_MONO16;
 
         // CREATE BUFFERS
-        this.secondsPerBuffer = (float) StreamedSound.BUFFER_SIZE / (StreamedSound.BYTES_PER_SAMLE * channels * sampleRate);
-        System.out.println("buffer seconds length: " + this.secondsPerBuffer);
+        this.secondsPerBuffer = (float) StreamedSound.BUFFER_SIZE / (StreamedSound.BYTES_PER_SAMPLE * channels * sampleRate);
         this.buffers = BufferUtils.createIntBuffer(StreamedSound.BUFFER_COUNT);
         AL10.alGenBuffers(this.buffers);
 
@@ -65,7 +64,6 @@ public class StreamedSound implements Disposable {
 
 
     private void initInputStream(boolean reuseInputStream) {
-        System.out.println("init input stream");
         this.resetProcessedBuffersOnBufferId.set(this.lastQueuedBufferId.get());
         if (this.audioStream != null && !this.audioStream.isClosed()) {
             StreamUtils.closeQuietly(this.audioStream);
