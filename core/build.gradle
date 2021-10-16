@@ -28,6 +28,17 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 }
 
+allprojects {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	compileJava {
+		options.incremental = true
+	}
+}
+
+java {
+    withSourcesJar()
+}
+
 publishing {
     publications {
         maven(MavenPublication) {

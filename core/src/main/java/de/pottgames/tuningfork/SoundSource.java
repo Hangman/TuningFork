@@ -116,7 +116,7 @@ public class SoundSource {
 
     public void stop() {
         if (this.obtained) {
-            AL10.alSourceStop(this.sourceId);
+            AL10.alSourceRewind(this.sourceId);
         }
     }
 
@@ -141,7 +141,6 @@ public class SoundSource {
 
 
     void dispose() {
-        this.stop();
         AL10.alDeleteSources(this.sourceId);
     }
 

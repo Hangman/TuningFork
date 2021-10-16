@@ -1,15 +1,29 @@
+/*******************************************************************************
+ * Copyright 2011 See AUTHORS file.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ ******************************************************************************/
+
 package de.pottgames.tuningfork;
 
 import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 
-class WavInputStream extends FilterInputStream {
-    int channels, sampleRate, dataRemaining;
+class WavInputStream extends FilterInputStream implements AudioStream {
+    int             channels, sampleRate, dataRemaining;
+    private boolean closed = false;
 
 
     WavInputStream(FileHandle file) {
@@ -56,6 +70,18 @@ class WavInputStream extends FilterInputStream {
     }
 
 
+    @Override
+    public int getChannels() {
+        return this.channels;
+    }
+
+
+    @Override
+    public int getSampleRate() {
+        return this.sampleRate;
+    }
+
+
     private int seekToChunk(char c1, char c2, char c3, char c4) throws IOException {
         while (true) {
             boolean found = this.read() == c1;
@@ -86,13 +112,18 @@ class WavInputStream extends FilterInputStream {
 
 
     @Override
-    public int read(byte[] buffer) throws IOException {
+    public int read(byte[] buffer) {
         if (this.dataRemaining == 0) {
             return -1;
         }
         int offset = 0;
         do {
-            final int length = Math.min(super.read(buffer, offset, buffer.length - offset), this.dataRemaining);
+            int length = 0;
+            try {
+                length = Math.min(super.read(buffer, offset, buffer.length - offset), this.dataRemaining);
+            } catch (final IOException e) {
+                throw new TuningForkRuntimeException(e);
+            }
             if (length == -1) {
                 if (offset > 0) {
                     return offset;
@@ -104,4 +135,24 @@ class WavInputStream extends FilterInputStream {
         } while (offset < buffer.length);
         return offset;
     }
+
+
+    @Override
+    public void close() {
+        try {
+            super.close();
+        } catch (final IOException e) {
+            // ignore but log it
+            Gdx.app.error("TuningFork", "WavInputStream was not successfully closed: " + e.getMessage());
+        } finally {
+            this.closed = true;
+        }
+    }
+
+
+    @Override
+    public boolean isClosed() {
+        return this.closed;
+    }
+
 }
