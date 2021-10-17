@@ -21,7 +21,7 @@ public class StreamedSound implements Disposable {
     private static final int  BUFFER_COUNT                    = 3;
     private static final int  BYTES_PER_SAMPLE                = 2;
     private final FileHandle  file;
-    private final SoundSource source;
+    private final BufferedSoundSource source;
     private AudioStream       audioStream;
     private final float       secondsPerBuffer;
     private final IntBuffer   buffers;
@@ -42,7 +42,7 @@ public class StreamedSound implements Disposable {
         this.file = file;
 
         // CREATE SOUND SOURCE
-        this.source = new SoundSource();
+        this.source = new BufferedSoundSource();
         this.source.obtained = true;
 
         // CREATE INPUT STREAM
@@ -59,7 +59,7 @@ public class StreamedSound implements Disposable {
         AL10.alGenBuffers(this.buffers);
 
         // INITIAL BUFFER FILL
-        this.fillAllBuffers();
+        this.audio.postTask(this, TaskAction.INITIAL_BUFFER_FILL);
     }
 
 
@@ -255,7 +255,7 @@ public class StreamedSound implements Disposable {
     }
 
 
-    private int fillAllBuffers() {
+    int fillAllBuffers() {
         AL10.alSourcei(this.source.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);

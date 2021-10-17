@@ -1,147 +1,127 @@
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.AL10;
-
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.NumberUtils;
 
-public class SoundSource {
-    final int             sourceId;
-    boolean               obtained   = false;
-    private final Vector3 zeroVector = new Vector3(0f, 0f, 0f);
+/**
+ * A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world. It enables you to play, pause, stop,
+ * position sounds and let's you set different effects on it.
+ *
+ * @author Matthias
+ *
+ */
+public interface SoundSource {
 
-    // OPEN AL STATES
-    private float         volume   = 1f;
-    private float         pitch    = 1f;
-    private final Vector3 position = new Vector3(this.zeroVector);
-    private final Vector3 speed    = new Vector3(this.zeroVector);
-    private int           bufferId = Integer.MIN_VALUE;
-    private boolean       relative = false;
-    private boolean       looping  = false;
-
-
-    SoundSource() {
-        this.sourceId = AL10.alGenSources();
-    }
+    /**
+     * Sets the base volume of this sound source. The final output volume might differ depending on the source's position, speed, etc.
+     *
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume.
+     */
+    void setVolume(float volume);
 
 
-    public void setVolume(float volume) {
-        if (this.obtained) {
-            if (NumberUtils.floatToIntBits(volume) != NumberUtils.floatToIntBits(this.volume)) {
-                AL10.alSourcef(this.sourceId, AL10.AL_GAIN, volume);
-                this.volume = volume;
-            }
-        }
-    }
+    /**
+     * Sets the pitch of this sound source.
+     *
+     * @param pitch in the range of 0.5 - 2.0 with 0.5 being the lowest and 2.0 being the highest supported pitch.
+     */
+    void setPitch(float pitch);
 
 
-    public void setPitch(float pitch) {
-        if (this.obtained) {
-            if (NumberUtils.floatToIntBits(pitch) != NumberUtils.floatToIntBits(this.pitch)) {
-                AL10.alSourcef(this.sourceId, AL10.AL_PITCH, pitch);
-                this.pitch = pitch;
-            }
-        }
-    }
+    /**
+     * Starts the playback of this sound source.
+     */
+    void play();
 
 
-    public void play() {
-        if (this.obtained) {
-            AL10.alSourcePlay(this.sourceId);
-        }
-    }
+    /**
+     * Sets wether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+     * If set to false, the position is the absolute position in the 3D world.<br>
+     * If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.
+     *
+     * @param relative true = relative, false = absolute
+     */
+    void setRelative(boolean relative);
 
 
-    public void setBuffer(int bufferId) {
-        if (this.obtained) {
-            if (bufferId != this.bufferId) {
-                AL10.alSourcei(this.sourceId, AL10.AL_BUFFER, bufferId);
-                this.bufferId = bufferId;
-            }
-        }
-    }
+    /**
+     * Sets the positions of this sound source in the virtual world.
+     *
+     * @param position
+     */
+    void setPosition(Vector3 position);
 
 
-    public void setRelative(boolean relative) {
-        if (this.obtained) {
-            if (relative != this.relative) {
-                AL10.alSourcei(this.sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
-                this.relative = relative;
-            }
-        }
-    }
+    /**
+     * Sets the positions of this sound source in the virtual world.
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    void setPosition(float x, float y, float z);
 
 
-    public void setPosition(Vector3 position) {
-        if (this.obtained) {
-            if (!this.position.equals(position)) {
-                AL10.alSource3f(this.sourceId, AL10.AL_POSITION, position.x, position.y, position.z);
-                this.position.set(position);
-            }
-        }
-    }
+    /**
+     * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+     * The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+     * Doppler effect.
+     *
+     * @param speed
+     */
+    void setSpeed(Vector3 speed);
 
 
-    public void setSpeed(Vector3 speed) {
-        if (this.obtained) {
-            if (!this.speed.equals(speed)) {
-                AL10.alSource3f(this.sourceId, AL10.AL_VELOCITY, speed.x, speed.y, speed.z);
-                this.speed.set(speed);
-            }
-        }
-    }
+    /**
+     * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+     * The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+     * Doppler effect.
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    void setSpeed(float x, float y, float z);
 
 
-    public void setLooping(boolean looping) {
-        if (this.obtained) {
-            if (this.looping != looping) {
-                AL10.alSourcei(this.sourceId, AL10.AL_LOOPING, looping ? AL10.AL_TRUE : AL10.AL_FALSE);
-                this.looping = looping;
-            }
-        }
-    }
+    /**
+     * Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound again when it's finished playing.
+     *
+     * @param looping
+     */
+    void setLooping(boolean looping);
 
 
-    public boolean isPlaying() {
-        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
-    }
+    /**
+     * Returns wether this sound source is currently playing.
+     *
+     * @return true when this sound source is playing, false otherwise.
+     */
+    boolean isPlaying();
 
 
-    public void pause() {
-        if (this.obtained) {
-            AL10.alSourcePause(this.sourceId);
-        }
-    }
+    /**
+     * Pauses the sound playback.
+     */
+    void pause();
 
 
-    public void stop() {
-        if (this.obtained) {
-            AL10.alSourceRewind(this.sourceId);
-        }
-    }
+    /**
+     * Stops the sound playback and rewinds it.
+     */
+    void stop();
 
 
-    void reset() {
-        this.obtained = true;
-        AL10.alSourceRewind(this.sourceId);
-        this.setLooping(false);
-        this.setPitch(1f);
-        this.setVolume(1f);
-        this.setRelative(false);
-        this.setPosition(this.zeroVector);
-        this.setSpeed(this.zeroVector);
-        this.obtained = false;
-    }
+    /**
+     * Returns the duration of the attached sound.
+     *
+     * @return the duration of the attached sound. -1f if no sound is attached to it.
+     */
+    float getDuration();
 
 
-    public void free() {
-        this.stop();
-        this.obtained = false;
-    }
-
-
-    void dispose() {
-        AL10.alDeleteSources(this.sourceId);
-    }
+    /**
+     * Releases this sound source which makes it available again. Always call this after you're done using it.
+     */
+    void free();
 
 }

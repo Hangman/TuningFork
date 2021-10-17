@@ -7,6 +7,12 @@ import org.lwjgl.openal.AL10;
 
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * Stores sound data in an OpenAL buffer that can be used by sound sources. Needs to be disposed when no longer needed.
+ *
+ * @author Matthias
+ *
+ */
 public class SoundBuffer implements Disposable {
     private final int   bufferId;
     private final float duration;
@@ -32,6 +38,11 @@ public class SoundBuffer implements Disposable {
     }
 
 
+    /**
+     * Returns the duration in seconds.
+     *
+     * @return the playback duration in seconds.
+     */
     public float getDuration() {
         return this.duration;
     }

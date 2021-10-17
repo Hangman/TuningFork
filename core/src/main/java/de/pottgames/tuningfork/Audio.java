@@ -15,12 +15,18 @@ import org.lwjgl.openal.ALCCapabilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * The main management and entry point of TuningFork. This class initializes the sound device and provides fire&forget features for sounds and also gives access
+ * to SoundSource's for advanced manual playback control.
+ *
+ * @author Matthias
+ *
+ */
 public class Audio implements Disposable {
     private static final int                       DEFAULT_IDLE_TASKS_POOL_CAPACITY = 10;
     private static final int                       DEFAULT_SOURCES_POOL_CAPACITY    = 20;
@@ -36,17 +42,25 @@ public class Audio implements Disposable {
     private final ConcurrentLinkedQueue<AsyncTask> idleTasks                        = new ConcurrentLinkedQueue<>();
 
 
+    /**
+     * Creates an audio instance initialized on the default sound device of the OS.
+     */
     public Audio() {
         this(Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY);
     }
 
 
+    /**
+     * Creates an audio instance initialized on the default sound device of the OS.
+     *
+     * @param simultaneousSources defines how many non-streamed sounds can be played simultaneously.
+     */
     public Audio(int simultaneousSources) {
         this(simultaneousSources, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY);
     }
 
 
-    public Audio(int simultaneousSources, int idleTasks) {
+    private Audio(int simultaneousSources, int idleTasks) {
         // INITIAL IDLE TASK CREATION FOR THE POOL
         for (int i = 0; i < idleTasks - 1; i++) {
             this.idleTasks.add(new AsyncTask());
@@ -106,21 +120,14 @@ public class Audio implements Disposable {
     }
 
 
-    public void updateListener(Camera camera) {
-        this.listener.setSpeed(camera);
-        this.listener.setPosition(camera);
-        this.listener.setOrientation(camera);
-    }
-
-
-    public SoundSource obtainSource(SoundBuffer buffer) {
+    public BufferedSoundSource obtainSource(SoundBuffer buffer) {
         return this.obtainSource(buffer, false);
     }
 
 
-    public SoundSource obtainSource(SoundBuffer buffer, boolean allowNull) {
+    public BufferedSoundSource obtainSource(SoundBuffer buffer, boolean allowNull) {
         // FIND FREE SOUND SOURCE
-        final SoundSource source = this.sourcePool.findFreeSource();
+        final BufferedSoundSource source = this.sourcePool.findFreeSource();
 
         // THROW EXCEPTION IF ALL SOUND SOURCES ARE BUSY/OBTAINED
         if (!allowNull && source == null) {
@@ -130,16 +137,16 @@ public class Audio implements Disposable {
 
         // PREPARE SOURCE
         source.obtained = true;
-        source.setBuffer(buffer.getBufferId());
+        source.setBuffer(buffer);
         source.setRelative(false);
 
         return source;
     }
 
 
-    private SoundSource obtainRelativeSource(SoundBuffer buffer, boolean looping) {
+    private BufferedSoundSource obtainRelativeSource(SoundBuffer buffer, boolean looping) {
         // FIND FREE SOUND SOURCE
-        final SoundSource source = this.sourcePool.findFreeSource();
+        final BufferedSoundSource source = this.sourcePool.findFreeSource();
 
         // THROW EXCEPTION IF ALL SOUND SOURCES ARE BUSY/OBTAINED
         if (source == null) {
@@ -149,7 +156,7 @@ public class Audio implements Disposable {
 
         // PREPARE SOURCE
         source.obtained = true;
-        source.setBuffer(buffer.getBufferId());
+        source.setBuffer(buffer);
         source.setRelative(true);
 
         return source;
@@ -157,14 +164,14 @@ public class Audio implements Disposable {
 
 
     public void play(SoundBuffer buffer) {
-        final SoundSource source = this.obtainRelativeSource(buffer, false);
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.play();
         source.obtained = false;
     }
 
 
     public void play(SoundBuffer buffer, float volume) {
-        final SoundSource source = this.obtainRelativeSource(buffer, false);
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.play();
         source.obtained = false;
@@ -172,7 +179,7 @@ public class Audio implements Disposable {
 
 
     public void play(SoundBuffer buffer, float volume, float pitch) {
-        final SoundSource source = this.obtainRelativeSource(buffer, false);
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
         source.play();
@@ -181,7 +188,7 @@ public class Audio implements Disposable {
 
 
     public void play(SoundBuffer buffer, float volume, float pitch, float pan) {
-        final SoundSource source = this.obtainRelativeSource(buffer, false);
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
         AL10.alSource3f(source.sourceId, AL10.AL_POSITION, MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
@@ -191,7 +198,7 @@ public class Audio implements Disposable {
 
 
     public void play3D(SoundBuffer buffer, Vector3 position) {
-        final SoundSource source = this.obtainSource(buffer);
+        final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
         source.play();
         source.obtained = false;
@@ -199,7 +206,7 @@ public class Audio implements Disposable {
 
 
     public void play3D(SoundBuffer buffer, float volume, Vector3 position) {
-        final SoundSource source = this.obtainSource(buffer);
+        final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPosition(position);
         source.play();
@@ -208,7 +215,7 @@ public class Audio implements Disposable {
 
 
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
-        final SoundSource source = this.obtainSource(buffer);
+        final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPitch(pitch);
         source.setPosition(position);
@@ -235,6 +242,11 @@ public class Audio implements Disposable {
         synchronized (this.lock) {
             this.soundsToUpdate.removeValue(sound, true);
         }
+    }
+
+
+    public SoundListener getListener() {
+        return this.listener;
     }
 
 
@@ -289,7 +301,7 @@ public class Audio implements Disposable {
 
 
     enum TaskAction {
-        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION;
+        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL;
     }
 
 
@@ -315,6 +327,9 @@ public class Audio implements Disposable {
                             break;
                         case SET_PLAYBACK_POSITION:
                             this.sound.setPlaybackPositionAsync(this.floatParam);
+                            break;
+                        case INITIAL_BUFFER_FILL:
+                            this.sound.fillAllBuffers();
                             break;
                         default:
                             break;
