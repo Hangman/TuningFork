@@ -33,8 +33,8 @@ public class StreamedSound implements Disposable {
     private boolean           stopped                         = true;
     private volatile boolean  looping                         = false;
     private volatile int      processedBuffers                = 0;
-    private AtomicInteger     lastQueuedBufferId              = new AtomicInteger();                                    // TODO: ATOMIC NEEDED?
-    private AtomicInteger     resetProcessedBuffersOnBufferId = new AtomicInteger();                                    // TODO: ATOMIC NEEDED?
+    private AtomicInteger     lastQueuedBufferId              = new AtomicInteger();
+    private AtomicInteger     resetProcessedBuffersOnBufferId = new AtomicInteger();
 
 
     StreamedSound(Audio audio, FileHandle file) {
@@ -75,7 +75,6 @@ public class StreamedSound implements Disposable {
                     reuseInputStream && this.audioStream instanceof OggInputStream ? (OggInputStream) this.audioStream : null);
         } else if ("wav".equalsIgnoreCase(fileExtension) || "wave".equalsIgnoreCase(fileExtension)) {
             this.audioStream = new WavInputStream(this.file);
-            // TODO: CAN WE REUSE THE WAVINPUTSTREAM LIKE WITH OGG?
         } else {
             throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "', only ogg and wav files are supported.");
         }
@@ -113,7 +112,7 @@ public class StreamedSound implements Disposable {
         if (end && AL10.alGetSourcei(this.source.sourceId, AL10.AL_BUFFERS_QUEUED) == 0) {
             this.stopAsync();
             this.playing.set(false);
-            // if (onCompletionListener != null) onCompletionListener.onCompletion(this);
+            // TODO: if (onCompletionListener != null) onCompletionListener.onCompletion(this);
         }
 
         // A buffer underflow will cause the source to stop, so we should resume playback in this case.
@@ -136,14 +135,13 @@ public class StreamedSound implements Disposable {
         // STOP THE SOURCE
         AL10.alSourceStop(this.source.sourceId);
 
-        // TODO: CHECK IF NEEDED
+        // FULL RESET
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
-        //
         this.initInputStream(false);
-        float currentSeconds = 0f;
 
         // SKIP THE INPUT STREAM UNTIL THE NEW POSITION IS IN REACH
+        float currentSeconds = 0f;
         int buffersSkipped = 0;
         boolean unreachable = false;
         while (currentSeconds < seconds - this.secondsPerBuffer) {
@@ -220,11 +218,9 @@ public class StreamedSound implements Disposable {
     void stopAsync() {
         AL10.alSourceRewind(this.source.sourceId);
         AL10.alSourcei(this.source.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
-        // TODO: CHECK IF NEEDED
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
         this.processedBuffers = 0;
-        //
         this.initInputStream(false);
         this.fillAllBuffers();
     }
@@ -261,10 +257,8 @@ public class StreamedSound implements Disposable {
 
     private int fillAllBuffers() {
         AL10.alSourcei(this.source.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
-        // TODO: CHECK IF NEEDED
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
-        //
         int filledBufferCount = 0;
         for (int i = 0; i < StreamedSound.BUFFER_COUNT; i++) {
             final int bufferId = this.buffers.get(i);
