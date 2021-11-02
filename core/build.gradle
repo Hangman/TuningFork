@@ -30,9 +30,17 @@ dependencies {
 
 allprojects {
 	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 	compileJava {
 		options.incremental = true
 	}
+	
+	if(JavaVersion.current().isJava9Compatible()) {
+        tasks.withType(JavaCompile) {
+            options.release.set(8)
+        }
+    }
+
 }
 
 java {
