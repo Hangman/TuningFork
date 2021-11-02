@@ -12,9 +12,9 @@ import com.badlogic.gdx.math.Vector3;
 public interface SoundSource {
 
     /**
-     * Sets the base volume of this sound source. The final output volume might differ depending on the source's position, speed, etc.
+     * Sets the base volume of this sound source. The final output volume might differ depending on the source's position, listener position etc.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume.
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
     void setVolume(float volume);
 
@@ -22,7 +22,7 @@ public interface SoundSource {
     /**
      * Sets the pitch of this sound source.
      *
-     * @param pitch in the range of 0.5 - 2.0 with 0.5 being the lowest and 2.0 being the highest supported pitch.
+     * @param pitch (default 1)
      */
     void setPitch(float pitch);
 
@@ -34,7 +34,7 @@ public interface SoundSource {
 
 
     /**
-     * Sets wether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+     * Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
      * If set to false, the position is the absolute position in the 3D world.<br>
      * If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.
      *
@@ -49,6 +49,16 @@ public interface SoundSource {
      * @param position
      */
     void setPosition(Vector3 position);
+
+
+    /**
+     * Retrieves the position of this sound source.
+     *
+     * @param saveTo the vector the result should be saved to
+     *
+     * @return returns the saveTo parameter vector that contains the result
+     */
+    Vector3 getPosition(Vector3 saveTo);
 
 
     /**
@@ -81,6 +91,15 @@ public interface SoundSource {
      * @param z
      */
     void setSpeed(float x, float y, float z);
+
+
+    /**
+     * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
+     * volume loss by half. With a factor of 2, the source loses volume twice as fast.
+     *
+     * @param rolloff (default 1)
+     */
+    void setDistanceFactor(float rolloff);
 
 
     /**

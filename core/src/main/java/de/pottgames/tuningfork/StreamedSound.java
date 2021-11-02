@@ -11,30 +11,32 @@ import org.lwjgl.openal.AL11;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.Audio.TaskAction;
 
-public class StreamedSound implements Disposable {
-    private static final int  BUFFER_SIZE                     = 4096 * 10;
-    private static final int  BUFFER_COUNT                    = 3;
-    private static final int  BYTES_PER_SAMPLE                = 2;
-    private final FileHandle  file;
+public class StreamedSound implements SoundSource, Disposable {
+    private static final int          BUFFER_SIZE                     = 4096 * 10;
+    private static final int          BUFFER_COUNT                    = 3;
+    private static final int          BYTES_PER_SAMPLE                = 2;
+    private final FileHandle          file;
     private final BufferedSoundSource source;
-    private AudioStream       audioStream;
-    private final float       secondsPerBuffer;
-    private final IntBuffer   buffers;
-    private final int         audioFormat;
-    private final ByteBuffer  tempBuffer                      = BufferUtils.createByteBuffer(StreamedSound.BUFFER_SIZE);
-    private final byte[]      tempBytes                       = new byte[StreamedSound.BUFFER_SIZE];
-    private final Audio       audio;
-    private AtomicBoolean     playing                         = new AtomicBoolean(false);
-    private boolean           stopped                         = true;
-    private volatile boolean  looping                         = false;
-    private volatile int      processedBuffers                = 0;
-    private AtomicInteger     lastQueuedBufferId              = new AtomicInteger();
-    private AtomicInteger     resetProcessedBuffersOnBufferId = new AtomicInteger();
+    private final Vector3             position                        = new Vector3(0f, 0f, 0f);
+    private AudioStream               audioStream;
+    private final float               secondsPerBuffer;
+    private final IntBuffer           buffers;
+    private final int                 audioFormat;
+    private final ByteBuffer          tempBuffer                      = BufferUtils.createByteBuffer(StreamedSound.BUFFER_SIZE);
+    private final byte[]              tempBytes                       = new byte[StreamedSound.BUFFER_SIZE];
+    private final Audio               audio;
+    private AtomicBoolean             playing                         = new AtomicBoolean(false);
+    private boolean                   stopped                         = true;
+    private volatile boolean          looping                         = false;
+    private volatile int              processedBuffers                = 0;
+    private AtomicInteger             lastQueuedBufferId              = new AtomicInteger();
+    private AtomicInteger             resetProcessedBuffersOnBufferId = new AtomicInteger();
 
 
     StreamedSound(Audio audio, FileHandle file) {
@@ -70,7 +72,8 @@ public class StreamedSound implements Disposable {
         }
 
         final String fileExtension = this.file.extension();
-        if ("ogg".equalsIgnoreCase(fileExtension)) {
+        if ("ogg".equalsIgnoreCase(fileExtension) || "oga".equalsIgnoreCase(fileExtension) || "ogx".equalsIgnoreCase(fileExtension)
+                || "opus".equalsIgnoreCase(fileExtension)) {
             this.audioStream = new OggInputStream(this.file.read(),
                     reuseInputStream && this.audioStream instanceof OggInputStream ? (OggInputStream) this.audioStream : null);
         } else if ("wav".equalsIgnoreCase(fileExtension) || "wave".equalsIgnoreCase(fileExtension)) {
@@ -177,6 +180,7 @@ public class StreamedSound implements Disposable {
     }
 
 
+    @Override
     public void setLooping(boolean value) {
         this.looping = value;
     }
@@ -187,11 +191,18 @@ public class StreamedSound implements Disposable {
     }
 
 
+    @Override
+    public void setDistanceFactor(float rolloff) {
+        AL10.alSourcef(this.source.sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
+    }
+
+
     void pauseAsync() {
         AL10.alSourcePause(this.source.sourceId);
     }
 
 
+    @Override
     public void pause() {
         if (this.playing.get()) {
             this.audio.postTask(this, TaskAction.PAUSE);
@@ -206,6 +217,7 @@ public class StreamedSound implements Disposable {
     }
 
 
+    @Override
     public void play() {
         if (!this.playing.get()) {
             this.audio.postTask(this, TaskAction.PLAY);
@@ -226,6 +238,7 @@ public class StreamedSound implements Disposable {
     }
 
 
+    @Override
     public void stop() {
         if (!this.stopped) {
             this.audio.postTask(this, TaskAction.STOP);
@@ -271,6 +284,80 @@ public class StreamedSound implements Disposable {
         }
 
         return filledBufferCount;
+    }
+
+
+    @Override
+    public void setVolume(float volume) {
+        AL10.alSourcef(this.source.sourceId, AL10.AL_GAIN, volume);
+    }
+
+
+    @Override
+    public void setPitch(float pitch) {
+        AL10.alSourcef(this.source.sourceId, AL10.AL_PITCH, pitch);
+    }
+
+
+    @Override
+    public void setRelative(boolean relative) {
+        AL10.alSourcei(this.source.sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
+    }
+
+
+    @Override
+    public void setPosition(Vector3 position) {
+        this.setPosition(position.x, position.y, position.z);
+    }
+
+
+    @Override
+    public void setPosition(float x, float y, float z) {
+        this.position.set(this.position);
+        AL10.alSource3f(this.source.sourceId, AL10.AL_POSITION, x, y, z);
+    }
+
+
+    @Override
+    public Vector3 getPosition(Vector3 saveTo) {
+        return saveTo.set(this.position);
+    }
+
+
+    @Override
+    public void setSpeed(Vector3 speed) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+    @Override
+    public void setSpeed(float x, float y, float z) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+    @Override
+    public boolean isPlaying() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    @Override
+    public float getDuration() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+
+    /**
+     * This method is unsupported on StreamedSounds.
+     */
+    @Override
+    public void free() {
+        throw new UnsupportedMethodException("This method is unsupported on StreamedSounds.");
     }
 
 

@@ -38,7 +38,7 @@ public class Audio implements Disposable {
     private final Thread                           updateThread;
     private volatile boolean                       running                          = true;
     private final Array<StreamedSound>             soundsToUpdate                   = new Array<>();
-    private final ExecutorService                  taskService                      = Executors.newSingleThreadExecutor();
+    private final ExecutorService                  taskService;
     private final ConcurrentLinkedQueue<AsyncTask> idleTasks                        = new ConcurrentLinkedQueue<>();
 
 
@@ -65,6 +65,14 @@ public class Audio implements Disposable {
         for (int i = 0; i < idleTasks - 1; i++) {
             this.idleTasks.add(new AsyncTask());
         }
+
+        // CREATE THE TASK SERVICE
+        this.taskService = Executors.newSingleThreadExecutor(r -> {
+            final Thread t = Executors.defaultThreadFactory().newThread(r);
+            t.setDaemon(true);
+            return t;
+        });
+
         // adding the last task by executing it for warm up
         this.taskService.execute(new AsyncTask());
 
@@ -106,6 +114,7 @@ public class Audio implements Disposable {
                 }
             }
         };
+        this.updateThread.setDaemon(true);
         this.updateThread.start();
     }
 
@@ -116,6 +125,29 @@ public class Audio implements Disposable {
                 final StreamedSound sound = this.soundsToUpdate.get(i);
                 sound.updateAsync();
             }
+        }
+    }
+
+
+    public void setMasterVolume(float volume) {
+        if (volume >= 0f && volume <= 1f) {
+            this.listener.setMasterVolume(volume);
+        } else {
+            Gdx.app.error("TuningFork", "invalid volume parameter for setMasterVolume: " + volume);
+        }
+    }
+
+
+    /**
+     * Changing the doppler factor exaggerates or deemphasizes the doppler effect. Physically accurate doppler calculation might not give the desired result, so
+     * changing this to your needs is fine. The default doppler factor is 1. Values < 0 are ignored, 0 turns the doppler effect off, values greater than 1 will
+     * increase the strength of the doppler effect.
+     *
+     * @param dopplerFactor (default 1)
+     */
+    public void setDopplerFactor(float dopplerFactor) {
+        if (dopplerFactor > 0f) {
+            AL10.alDopplerFactor(dopplerFactor);
         }
     }
 

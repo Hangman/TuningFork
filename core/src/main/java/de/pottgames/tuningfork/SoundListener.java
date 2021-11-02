@@ -7,10 +7,16 @@ import com.badlogic.gdx.math.Vector3;
 
 public class SoundListener {
     private final float[] orientation = new float[6];
+    private final Vector3 tempVector  = new Vector3();
 
 
     SoundListener() {
         // hide public constructor
+    }
+
+
+    void setMasterVolume(float volume) {
+        AL10.alListenerf(AL10.AL_GAIN, volume);
     }
 
 
@@ -42,7 +48,11 @@ public class SoundListener {
 
 
     public SoundListener setOrientation(Camera camera) {
-        return this.setOrientation(camera.direction, camera.up);
+        this.tempVector.set(camera.direction);
+        this.tempVector.crs(camera.up);
+        this.tempVector.crs(camera.direction);
+        this.setOrientation(camera.direction, this.tempVector);
+        return this;
     }
 
 
