@@ -271,12 +271,22 @@ public abstract class SoundSource {
 
 
     /**
-     * Returns wether this sound source is currently playing.
+     * Returns whether this sound source is currently playing.
      *
      * @return true when this sound source is playing, false otherwise.
      */
     public boolean isPlaying() {
         return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+    }
+
+
+    /**
+     * Returns whether this sound source is paused.
+     *
+     * @return true when this sound source is paused, false otherwise.
+     */
+    public boolean isPaused() {
+        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
     }
 
 

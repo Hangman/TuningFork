@@ -41,6 +41,24 @@ class SoundSourcePool {
     }
 
 
+    void resumeAll() {
+        for (final BufferedSoundSource source : this.sources) {
+            if (source.isPaused()) {
+                source.play();
+            }
+        }
+    }
+
+
+    void pauseAll() {
+        for (final BufferedSoundSource source : this.sources) {
+            if (source.isPlaying()) {
+                source.pause();
+            }
+        }
+    }
+
+
     void stopAll() {
         for (final BufferedSoundSource source : this.sources) {
             source.stop();

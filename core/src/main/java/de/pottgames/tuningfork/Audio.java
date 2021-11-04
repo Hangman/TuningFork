@@ -326,6 +326,38 @@ public class Audio implements Disposable {
     }
 
 
+    public void resumeAll() {
+        this.resumeAllBufferedSources();
+        this.resumeAllStreamedSources();
+    }
+
+
+    public void resumeAllStreamedSources() {
+        this.postTask(TaskAction.RESUME_ALL);
+    }
+
+
+    public void resumeAllBufferedSources() {
+        this.sourcePool.resumeAll();
+    }
+
+
+    public void pauseAll() {
+        this.pauseAllBufferedSources();
+        this.pauseAllStreamedSources();
+    }
+
+
+    public void pauseAllStreamedSources() {
+        this.postTask(TaskAction.PAUSE_ALL);
+    }
+
+
+    public void pauseAllBufferedSources() {
+        this.sourcePool.pauseAll();
+    }
+
+
     public void stopAll() {
         this.stopAllBufferedSources();
         this.stopAllStreamedSources();
@@ -431,7 +463,7 @@ public class Audio implements Disposable {
 
 
     enum TaskAction {
-        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL, STOP_ALL;
+        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL, STOP_ALL, PAUSE_ALL, RESUME_ALL;
     }
 
 
@@ -467,7 +499,21 @@ public class Audio implements Disposable {
                                 sound.stopAsync();
                             }
                             break;
-                        default:
+                        case PAUSE_ALL:
+                            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
+                                final StreamedSound sound = Audio.this.soundsToUpdate.get(i);
+                                if (sound.isPlaying()) {
+                                    sound.pauseAsync();
+                                }
+                            }
+                            break;
+                        case RESUME_ALL:
+                            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
+                                final StreamedSound sound = Audio.this.soundsToUpdate.get(i);
+                                if (sound.isPaused()) {
+                                    sound.playAsync();
+                                }
+                            }
                             break;
                     }
                 }

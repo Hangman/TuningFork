@@ -192,6 +192,8 @@ public class StreamedSound extends SoundSource implements Disposable {
 
     void pauseAsync() {
         super.pause();
+        this.playing.set(false);
+        this.stopped.set(false);
     }
 
 
@@ -207,6 +209,8 @@ public class StreamedSound extends SoundSource implements Disposable {
 
     void playAsync() {
         super.play();
+        this.playing.set(true);
+        this.stopped.set(false);
     }
 
 
@@ -285,6 +289,12 @@ public class StreamedSound extends SoundSource implements Disposable {
     @Override
     public boolean isPlaying() {
         return this.playing.get();
+    }
+
+
+    @Override
+    public boolean isPaused() {
+        return !this.playing.get() && !this.stopped.get();
     }
 
 
