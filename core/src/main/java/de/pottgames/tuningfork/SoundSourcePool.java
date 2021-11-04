@@ -41,8 +41,16 @@ class SoundSourcePool {
     }
 
 
+    void stopAll() {
+        for (final BufferedSoundSource source : this.sources) {
+            source.stop();
+        }
+    }
+
+
     void dispose() {
         this.sources.forEach(BufferedSoundSource::dispose);
+        this.sources.clear();
     }
 
 }

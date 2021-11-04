@@ -29,7 +29,7 @@ public class StreamedSound extends SoundSource implements Disposable {
     private final byte[]           tempBytes                       = new byte[StreamedSound.BUFFER_SIZE];
     private final Audio            audio;
     private AtomicBoolean          playing                         = new AtomicBoolean(false);
-    private boolean                stopped                         = true;
+    private AtomicBoolean          stopped                         = new AtomicBoolean(true);
     private volatile boolean       looping                         = false;
     private volatile int           processedBuffers                = 0;
     private AtomicInteger          lastQueuedBufferId              = new AtomicInteger();
@@ -200,7 +200,7 @@ public class StreamedSound extends SoundSource implements Disposable {
         if (this.playing.get()) {
             this.audio.postTask(this, TaskAction.PAUSE);
             this.playing.set(false);
-            this.stopped = false;
+            this.stopped.set(false);
         }
     }
 
@@ -215,7 +215,7 @@ public class StreamedSound extends SoundSource implements Disposable {
         if (!this.playing.get()) {
             this.audio.postTask(this, TaskAction.PLAY);
             this.playing.set(true);
-            this.stopped = false;
+            this.stopped.set(false);
         }
     }
 
@@ -228,15 +228,17 @@ public class StreamedSound extends SoundSource implements Disposable {
         this.processedBuffers = 0;
         this.initInputStream(false);
         this.fillAllBuffers();
+        this.playing.set(false);
+        this.stopped.set(true);
     }
 
 
     @Override
     public void stop() {
-        if (!this.stopped) {
+        if (!this.stopped.get()) {
             this.audio.postTask(this, TaskAction.STOP);
             this.playing.set(false);
-            this.stopped = true;
+            this.stopped.set(true);
         }
     }
 

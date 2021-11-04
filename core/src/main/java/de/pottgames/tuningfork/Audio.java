@@ -326,6 +326,22 @@ public class Audio implements Disposable {
     }
 
 
+    public void stopAll() {
+        this.stopAllBufferedSources();
+        this.stopAllStreamedSources();
+    }
+
+
+    public void stopAllStreamedSources() {
+        this.postTask(TaskAction.STOP_ALL);
+    }
+
+
+    public void stopAllBufferedSources() {
+        this.sourcePool.stopAll();
+    }
+
+
     void addIdleTask(AsyncTask task) {
         this.idleTasks.offer(task);
     }
@@ -369,6 +385,16 @@ public class Audio implements Disposable {
     }
 
 
+    void postTask(TaskAction action) {
+        AsyncTask task = this.idleTasks.poll();
+        if (task == null) {
+            task = new AsyncTask();
+        }
+        task.taskAction = action;
+        this.taskService.execute(task);
+    }
+
+
     @Override
     public void dispose() {
         // TERMINATE UPDATE THREAD
@@ -405,7 +431,7 @@ public class Audio implements Disposable {
 
 
     enum TaskAction {
-        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL;
+        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL, STOP_ALL;
     }
 
 
@@ -434,6 +460,12 @@ public class Audio implements Disposable {
                             break;
                         case INITIAL_BUFFER_FILL:
                             this.sound.fillAllBuffers();
+                            break;
+                        case STOP_ALL:
+                            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
+                                final StreamedSound sound = Audio.this.soundsToUpdate.get(i);
+                                sound.stopAsync();
+                            }
                             break;
                         default:
                             break;
