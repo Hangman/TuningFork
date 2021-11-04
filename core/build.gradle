@@ -13,6 +13,10 @@ plugins {
 // ECLIPSE SETTINGS
 eclipse.project.name = 'TuningFork-core'
 
+// ENCODING SETTINGS
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
 repositories {
     mavenLocal()
 	mavenCentral()
@@ -24,13 +28,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 }
 
 allprojects {
 	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
 	compileJava {
 		options.incremental = true
 	}

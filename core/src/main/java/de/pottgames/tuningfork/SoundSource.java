@@ -1,5 +1,9 @@
 package de.pottgames.tuningfork;
 
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.EXTEfx;
+
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -9,14 +13,29 @@ import com.badlogic.gdx.math.Vector3;
  * @author Matthias
  *
  */
-public interface SoundSource {
+public abstract class SoundSource {
+    final int             sourceId;
+    private SoundEffect[] effects               = new SoundEffect[2];
+    private int           nextSoundEffectSendId = 0;
+    private float         attenuationFactor     = 1f;
+    private final Vector3 position              = new Vector3(0f, 0f, 0f);
+    private boolean       directional           = false;
+
+
+    SoundSource() {
+        this.sourceId = AL10.alGenSources();
+        AL10.alSourcef(this.sourceId, EXTEfx.AL_AIR_ABSORPTION_FACTOR, 1f);
+    }
+
 
     /**
      * Sets the base volume of this sound source. The final output volume might differ depending on the source's position, listener position etc.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
-    void setVolume(float volume);
+    public void setVolume(float volume) {
+        AL10.alSourcef(this.sourceId, AL10.AL_GAIN, volume);
+    }
 
 
     /**
@@ -24,13 +43,17 @@ public interface SoundSource {
      *
      * @param pitch (default 1)
      */
-    void setPitch(float pitch);
+    public void setPitch(float pitch) {
+        AL10.alSourcef(this.sourceId, AL10.AL_PITCH, pitch);
+    }
 
 
     /**
      * Starts the playback of this sound source.
      */
-    void play();
+    public void play() {
+        AL10.alSourcePlay(this.sourceId);
+    }
 
 
     /**
@@ -40,7 +63,9 @@ public interface SoundSource {
      *
      * @param relative true = relative, false = absolute
      */
-    void setRelative(boolean relative);
+    public void setRelative(boolean relative) {
+        AL10.alSourcei(this.sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
+    }
 
 
     /**
@@ -48,7 +73,22 @@ public interface SoundSource {
      *
      * @param position
      */
-    void setPosition(Vector3 position);
+    public void setPosition(Vector3 position) {
+        this.setPosition(position.x, position.y, position.z);
+    }
+
+
+    /**
+     * Sets the positions of this sound source in the virtual world.
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void setPosition(float x, float y, float z) {
+        this.position.set(this.position);
+        AL10.alSource3f(this.sourceId, AL10.AL_POSITION, x, y, z);
+    }
 
 
     /**
@@ -58,17 +98,9 @@ public interface SoundSource {
      *
      * @return returns the saveTo parameter vector that contains the result
      */
-    Vector3 getPosition(Vector3 saveTo);
-
-
-    /**
-     * Sets the positions of this sound source in the virtual world.
-     *
-     * @param x
-     * @param y
-     * @param z
-     */
-    void setPosition(float x, float y, float z);
+    public Vector3 getPosition(Vector3 saveTo) {
+        return saveTo.set(this.position);
+    }
 
 
     /**
@@ -78,7 +110,9 @@ public interface SoundSource {
      *
      * @param speed
      */
-    void setSpeed(Vector3 speed);
+    public void setSpeed(Vector3 speed) {
+        this.setSpeed(speed.x, speed.y, speed.z);
+    }
 
 
     /**
@@ -90,16 +124,140 @@ public interface SoundSource {
      * @param y
      * @param z
      */
-    void setSpeed(float x, float y, float z);
+    public void setSpeed(float x, float y, float z) {
+        AL10.alSource3f(this.sourceId, AL10.AL_VELOCITY, x, y, z);
+    }
+
+
+    /**
+     * Makes this sound source directional. The sound is emitted in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound
+     * at full volume. Outside the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles
+     * (inside the cone). Call {@link #makeOmniDirectional()} to make the source non-directional again.
+     *
+     * @param direction the direction the source is facing
+     * @param coneInnerAngle the inner cone angle
+     * @param coneOuterAngle the outer cone angle
+     * @param outOfConeVolume the volume of the sound source when outside of the cone
+     */
+    public void makeDirectional(Vector3 direction, float coneInnerAngle, float coneOuterAngle, float outOfConeVolume) {
+        this.directional = true;
+        AL10.alSourcef(this.sourceId, AL10.AL_CONE_INNER_ANGLE, coneInnerAngle);
+        AL10.alSourcef(this.sourceId, AL10.AL_CONE_OUTER_ANGLE, coneOuterAngle);
+        AL10.alSourcef(this.sourceId, AL10.AL_CONE_OUTER_GAIN, outOfConeVolume);
+        this.setDirection(direction);
+    }
+
+
+    /**
+     * Sets the direction of this sound source. You need to call {@link #makeDirectional(Vector3, float, float, float)} first, otherwise the direction will be
+     * ignored.
+     *
+     * @param direction
+     */
+    public void setDirection(Vector3 direction) {
+        if (this.directional) {
+            AL10.alSource3f(this.sourceId, AL10.AL_DIRECTION, direction.x, direction.y, direction.z);
+        }
+    }
+
+
+    /**
+     * Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the source directional earlier.
+     */
+    public void makeOmniDirectional() {
+        this.directional = false;
+        AL10.alSource3f(this.sourceId, AL10.AL_DIRECTION, 0f, 0f, 0f);
+    }
+
+
+    /**
+     * Returns true if this sound source is directional.
+     *
+     * @return directional = true, omni-directional = false
+     */
+    public boolean isDirectional() {
+        return this.directional;
+    }
+
+
+    /**
+     * Enables the distance attenuation of this sound source.
+     */
+    public void enableAttenuation() {
+        AL10.alSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR, this.attenuationFactor);
+    }
+
+
+    /**
+     * Disables the distance attenuation of this sound source.
+     */
+    public void disableAttenuation() {
+        AL10.alSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR, 0f);
+    }
 
 
     /**
      * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
      * volume loss by half. With a factor of 2, the source loses volume twice as fast.
      *
-     * @param rolloff (default 1)
+     * @param rolloff (default depends on the attenuation model)
      */
-    void setDistanceFactor(float rolloff);
+    public void setAttenuationFactor(float rolloff) {
+        this.attenuationFactor = rolloff;
+        AL10.alSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
+    }
+
+
+    /**
+     * Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
+     * attenuation model and the attenuation factor of the source.
+     *
+     * @param minDistance (default depends on the attenuation model)
+     */
+    public void setAttenuationMinDistance(float minDistance) {
+        AL10.alSourcef(this.sourceId, AL10.AL_REFERENCE_DISTANCE, minDistance);
+    }
+
+
+    /**
+     * Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
+     * attenuation model and the attenuation factor of the source.
+     *
+     * @param maxDistance (default depends on the attenuation model)
+     */
+    public void setAttenuationMaxDistance(float maxDistance) {
+        AL10.alSourcef(this.sourceId, AL10.AL_MAX_DISTANCE, maxDistance);
+    }
+
+
+    /**
+     * Returns the attenuation factor of this source. See {@link #setAttenuationFactor(float)} for more information.
+     *
+     * @return the attenuation factor (default depends on the attenuation model)
+     */
+    public float getAttenuationFactor() {
+        return AL10.alGetSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR);
+    }
+
+
+    /**
+     * Returns the minimum distance for the attenuation to start. See {@link #setAttenuationMinDistance(float)} for more information.
+     *
+     * @return the attenuation min distance (default depends on the attenuation model)
+     */
+    public float getAttenuationMinDistance() {
+        return AL10.alGetSourcef(this.sourceId, AL10.AL_REFERENCE_DISTANCE);
+    }
+
+
+    /**
+     * Returns the distance at which the attenuation will stop. See {@link #setAttenuationMaxDistance(float)} for more information.
+     *
+     * @return the attenuation max distance (default depends on the attenuation model)
+     */
+    public float getAttenuationMaxDistance() {
+        return AL10.alGetSourcef(this.sourceId, AL10.AL_MAX_DISTANCE);
+    }
 
 
     /**
@@ -107,7 +265,9 @@ public interface SoundSource {
      *
      * @param looping
      */
-    void setLooping(boolean looping);
+    public void setLooping(boolean looping) {
+        AL10.alSourcei(this.sourceId, AL10.AL_LOOPING, looping ? AL10.AL_TRUE : AL10.AL_FALSE);
+    }
 
 
     /**
@@ -115,32 +275,121 @@ public interface SoundSource {
      *
      * @return true when this sound source is playing, false otherwise.
      */
-    boolean isPlaying();
+    public boolean isPlaying() {
+        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+    }
 
 
     /**
      * Pauses the sound playback.
      */
-    void pause();
+    public void pause() {
+        AL10.alSourcePause(this.sourceId);
+    }
 
 
     /**
      * Stops the sound playback and rewinds it.
      */
-    void stop();
+    public void stop() {
+        AL10.alSourceRewind(this.sourceId);
+    }
 
 
     /**
      * Returns the duration of the attached sound.
      *
-     * @return the duration of the attached sound. -1f if no sound is attached to it.
+     * @return the duration of the attached {@link de.pottgames.tuningfork.SoundBuffer SoundBuffer}. -1f if no buffer is attached to it.
      */
-    float getDuration();
+    abstract public float getDuration();
 
 
     /**
-     * Releases this sound source which makes it available again. Always call this after you're done using it.
+     * Attaches a sound effect to this sound source. You can only attach 2 different effects in total. If you attach more than 2 effects, the oldest attached
+     * effect will be kicked out. Attaching an effect that is already attached to this source is a legal NOP.
+     *
+     * @param effect
+     *
+     * @return the effect that was kicked out or null otherwise
      */
-    void free();
+    public SoundEffect attachEffect(SoundEffect effect) {
+        SoundEffect result = null;
+
+        // CANCEL IF THE EFFECT IS ALREADY ATTACHED TO THIS SOURCE
+        for (final SoundEffect effect2 : this.effects) {
+            if (effect2 == effect) {
+                return null;
+            }
+        }
+
+        // REMOVE OLD EFFECT IF ANY
+        if (this.effects[this.nextSoundEffectSendId] != null) {
+            this.effects[this.nextSoundEffectSendId].removeSource(this);
+            result = this.effects[this.nextSoundEffectSendId];
+            this.effects[this.nextSoundEffectSendId] = null;
+        }
+
+        // ADD EFFECT
+        AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, EXTEfx.AL_FILTER_NULL);
+        this.effects[this.nextSoundEffectSendId] = effect;
+        effect.addSource(this);
+        this.nextSoundEffectSendId = 1 - this.nextSoundEffectSendId;
+
+        return result;
+    }
+
+
+    /**
+     * Detaches the given SoundEffect from this sound source.
+     *
+     * @param effect the effect
+     *
+     * @return true if the effect was successfully detached, false if the effect isn't attached to this source (anymore)
+     */
+    public boolean detachEffect(SoundEffect effect) {
+        for (int i = 0; i < this.effects.length; i++) {
+            if (this.effects[i] == effect) {
+                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                this.effects[i].removeSource(this);
+                this.effects[i] = null;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Detaches all currently attached sound effects from this sound source.
+     */
+    public void detachAllEffects() {
+        for (int i = 0; i < this.effects.length; i++) {
+            if (this.effects[i] != null) {
+                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                this.effects[i].removeSource(this);
+                this.effects[i] = null;
+            }
+        }
+        this.nextSoundEffectSendId = 0;
+    }
+
+
+    void onEffectDisposal(SoundEffect effect) {
+        for (int i = 0; i < this.effects.length; i++) {
+            if (this.effects[i] == effect) {
+                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                this.effects[i] = null;
+                this.nextSoundEffectSendId = i;
+                break;
+            }
+        }
+    }
+
+
+    void dispose() {
+        this.detachAllEffects();
+        AL10.alDeleteSources(this.sourceId);
+    }
 
 }

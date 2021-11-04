@@ -13,7 +13,6 @@ import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -21,13 +20,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
- * The main management and entry point of TuningFork. This class initializes the sound device and provides fire&forget features for sounds and also gives access
- * to SoundSource's for advanced manual playback control.
+ * The main management and entry point of TuningFork. This class initializes the sound device and provides "fire & forget" features for sounds and also gives
+ * access to SoundSource's for advanced manual playback control.
  *
  * @author Matthias
  *
  */
 public class Audio implements Disposable {
+    private static Audio                           instance;
     private static final int                       DEFAULT_IDLE_TASKS_POOL_CAPACITY = 10;
     private static final int                       DEFAULT_SOURCES_POOL_CAPACITY    = 20;
     final Object                                   lock                             = new Object();
@@ -40,13 +40,22 @@ public class Audio implements Disposable {
     private final Array<StreamedSound>             soundsToUpdate                   = new Array<>();
     private final ExecutorService                  taskService;
     private final ConcurrentLinkedQueue<AsyncTask> idleTasks                        = new ConcurrentLinkedQueue<>();
+    private float                                  defaultMinAttenuationDistance    = 1f;
+    private float                                  defaultMaxAttenuationDistance    = Float.MAX_VALUE;
+    private float                                  defaultAttenuationFactor         = 1f;
+    final TuningForkLogger                         logger;
+
+
+    static Audio get() {
+        return Audio.instance;
+    }
 
 
     /**
      * Creates an audio instance initialized on the default sound device of the OS.
      */
     public Audio() {
-        this(Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY);
+        this(Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
     }
 
 
@@ -56,11 +65,23 @@ public class Audio implements Disposable {
      * @param simultaneousSources defines how many non-streamed sounds can be played simultaneously.
      */
     public Audio(int simultaneousSources) {
-        this(simultaneousSources, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY);
+        this(simultaneousSources, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
     }
 
 
-    private Audio(int simultaneousSources, int idleTasks) {
+    private Audio(int simultaneousSources, int idleTasks, TuningForkLogger logger) {
+        if (Audio.instance != null) {
+            throw new TuningForkRuntimeException("Only 1 Audio instance allowed at any time.");
+        }
+        Audio.instance = this;
+
+        // SET LOGGER
+        if (logger != null) {
+            this.logger = logger;
+        } else {
+            this.logger = new MockLogger();
+        }
+
         // INITIAL IDLE TASK CREATION FOR THE POOL
         for (int i = 0; i < idleTasks - 1; i++) {
             this.idleTasks.add(new AsyncTask());
@@ -92,7 +113,7 @@ public class Audio implements Disposable {
         AL.createCapabilities(deviceCapabilities);
 
         // SET DISTANCE ATTENUATION MODEL
-        AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
+        this.setDistanceAttenuationModel(DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED);
 
         // CREATE LISTENER
         this.listener = new SoundListener();
@@ -114,6 +135,7 @@ public class Audio implements Disposable {
                 }
             }
         };
+        this.updateThread.setName("TuningFork-Update-Thread");
         this.updateThread.setDaemon(true);
         this.updateThread.start();
     }
@@ -129,12 +151,60 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * As the listener moves away from a sound source, the volume of the sound source decreases for the listener. The Attenuation Model is responsible for this
+     * calculation.<br>
+     * <br>
+     * <b>Note:</b> Setting a DistanceAttenuationModel overwrites the default min and max attenuation distance as well as the attenuation factor that is used
+     * for new sound sources. It won't affect existing ones.<br>
+     * <br>
+     * There are several {@link de.pottgames.tuningfork.DistanceAttenuationModel models} to choose from, including a
+     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#LINEAR_DISTANCE_CLAMPED linear model} and a
+     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#INVERSE_DISTANCE_CLAMPED semi-realistic model} based on the real world. By default the
+     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#INVERSE_DISTANCE_CLAMPED INVERSE_DISTANCE_CLAMPED} model is used.
+     *
+     * @param model the model
+     */
+    public void setDistanceAttenuationModel(DistanceAttenuationModel model) {
+        AL10.alDistanceModel(model.getAlId());
+        this.setDefaultAttenuationFactor(model.getAttenuationFactor());
+        this.setDefaultAttenuationMinDistance(model.getAttenuationMinDistance());
+        this.setDefaultAttenuationMaxDistance(model.getAttenuationMaxDistance());
+    }
+
+
+    public void setDefaultAttenuationMinDistance(float distance) {
+        this.defaultMinAttenuationDistance = distance;
+    }
+
+
+    public void setDefaultAttenuationMaxDistance(float distance) {
+        this.defaultMaxAttenuationDistance = distance;
+    }
+
+
+    public void setDefaultAttenuationFactor(float rolloff) {
+        this.defaultAttenuationFactor = rolloff;
+    }
+
+
+    public float getDefaultAttenuationMinDistance() {
+        return this.defaultMinAttenuationDistance;
+    }
+
+
+    public float getDefaultAttenuationMaxDistance() {
+        return this.defaultMaxAttenuationDistance;
+    }
+
+
+    public float getDefaultAttenuationFactor() {
+        return this.defaultAttenuationFactor;
+    }
+
+
     public void setMasterVolume(float volume) {
-        if (volume >= 0f && volume <= 1f) {
-            this.listener.setMasterVolume(volume);
-        } else {
-            Gdx.app.error("TuningFork", "invalid volume parameter for setMasterVolume: " + volume);
-        }
+        this.listener.setMasterVolume(MathUtils.clamp(volume, 0f, 1f));
     }
 
 
@@ -262,7 +332,7 @@ public class Audio implements Disposable {
 
 
     public StreamedSound createStreamedSound(FileHandle fileHandle) {
-        final StreamedSound sound = new StreamedSound(this, fileHandle);
+        final StreamedSound sound = new StreamedSound(fileHandle);
         synchronized (this.lock) {
             this.soundsToUpdate.add(sound);
         }
@@ -313,7 +383,7 @@ public class Audio implements Disposable {
         this.taskService.shutdown();
         try {
             if (!this.taskService.awaitTermination(500L, TimeUnit.MILLISECONDS)) {
-                Gdx.app.debug("TuningFork", "The task service timed out on shutdown.");
+                this.logger.debug(this.getClass(), "The task service timed out on shutdown.");
             }
         } catch (final InterruptedException e) {
             this.taskService.shutdownNow();
@@ -329,6 +399,8 @@ public class Audio implements Disposable {
         if (this.device != 0L) {
             ALC10.alcCloseDevice(this.device);
         }
+
+        Audio.instance = null;
     }
 
 

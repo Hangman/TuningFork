@@ -9,43 +9,42 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.Audio.TaskAction;
 
-public class StreamedSound implements SoundSource, Disposable {
-    private static final int          BUFFER_SIZE                     = 4096 * 10;
-    private static final int          BUFFER_COUNT                    = 3;
-    private static final int          BYTES_PER_SAMPLE                = 2;
-    private final FileHandle          file;
-    private final BufferedSoundSource source;
-    private final Vector3             position                        = new Vector3(0f, 0f, 0f);
-    private AudioStream               audioStream;
-    private final float               secondsPerBuffer;
-    private final IntBuffer           buffers;
-    private final int                 audioFormat;
-    private final ByteBuffer          tempBuffer                      = BufferUtils.createByteBuffer(StreamedSound.BUFFER_SIZE);
-    private final byte[]              tempBytes                       = new byte[StreamedSound.BUFFER_SIZE];
-    private final Audio               audio;
-    private AtomicBoolean             playing                         = new AtomicBoolean(false);
-    private boolean                   stopped                         = true;
-    private volatile boolean          looping                         = false;
-    private volatile int              processedBuffers                = 0;
-    private AtomicInteger             lastQueuedBufferId              = new AtomicInteger();
-    private AtomicInteger             resetProcessedBuffersOnBufferId = new AtomicInteger();
+public class StreamedSound extends SoundSource implements Disposable {
+    private static final int       BUFFER_SIZE                     = 4096 * 10;
+    private static final int       BUFFER_COUNT                    = 3;
+    private static final int       BYTES_PER_SAMPLE                = 2;
+    private final TuningForkLogger logger;
+    private final FileHandle       file;
+    private AudioStream            audioStream;
+    private final float            secondsPerBuffer;
+    private final IntBuffer        buffers;
+    private final int              audioFormat;
+    private final ByteBuffer       tempBuffer                      = BufferUtils.createByteBuffer(StreamedSound.BUFFER_SIZE);
+    private final byte[]           tempBytes                       = new byte[StreamedSound.BUFFER_SIZE];
+    private final Audio            audio;
+    private AtomicBoolean          playing                         = new AtomicBoolean(false);
+    private boolean                stopped                         = true;
+    private volatile boolean       looping                         = false;
+    private volatile int           processedBuffers                = 0;
+    private AtomicInteger          lastQueuedBufferId              = new AtomicInteger();
+    private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
 
 
-    StreamedSound(Audio audio, FileHandle file) {
-        this.audio = audio;
+    StreamedSound(FileHandle file) {
+        this.audio = Audio.get();
+        this.logger = this.audio.logger;
         this.file = file;
 
-        // CREATE SOUND SOURCE
-        this.source = new BufferedSoundSource();
-        this.source.obtained = true;
+        // SET DEFAULT ATTENUATION VALUES
+        this.setAttenuationFactor(this.audio.getDefaultAttenuationFactor());
+        this.setAttenuationMinDistance(this.audio.getDefaultAttenuationMinDistance());
+        this.setAttenuationMaxDistance(this.audio.getDefaultAttenuationMaxDistance());
 
         // CREATE INPUT STREAM
         this.initInputStream(false);
@@ -85,7 +84,7 @@ public class StreamedSound implements SoundSource, Disposable {
 
 
     void updateAsync() {
-        int processedBufferCount = AL10.alGetSourcei(this.source.sourceId, AL10.AL_BUFFERS_PROCESSED);
+        int processedBufferCount = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
         if (processedBufferCount > 0) {
             this.processedBuffers += processedBufferCount;
         }
@@ -93,7 +92,7 @@ public class StreamedSound implements SoundSource, Disposable {
         boolean end = false;
         while (processedBufferCount > 0) {
             processedBufferCount--;
-            final int bufferId = AL10.alSourceUnqueueBuffers(this.source.sourceId);
+            final int bufferId = AL10.alSourceUnqueueBuffers(this.sourceId);
             if (bufferId == AL10.AL_INVALID_VALUE) {
                 break;
             }
@@ -106,21 +105,21 @@ public class StreamedSound implements SoundSource, Disposable {
                 continue;
             }
             if (this.fillBuffer(bufferId)) {
-                AL10.alSourceQueueBuffers(this.source.sourceId, bufferId);
+                AL10.alSourceQueueBuffers(this.sourceId, bufferId);
                 this.lastQueuedBufferId.set(bufferId);
             } else {
                 end = true;
             }
         }
-        if (end && AL10.alGetSourcei(this.source.sourceId, AL10.AL_BUFFERS_QUEUED) == 0) {
+        if (end && AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_QUEUED) == 0) {
             this.stopAsync();
             this.playing.set(false);
             // TODO: if (onCompletionListener != null) onCompletionListener.onCompletion(this);
         }
 
         // A buffer underflow will cause the source to stop, so we should resume playback in this case.
-        if (this.playing.get() && AL10.alGetSourcei(this.source.sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING) {
-            AL10.alSourcePlay(this.source.sourceId);
+        if (this.playing.get() && AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING) {
+            AL10.alSourcePlay(this.sourceId);
         }
     }
 
@@ -129,14 +128,14 @@ public class StreamedSound implements SoundSource, Disposable {
         if (seconds >= 0f) {
             this.audio.postTask(this, TaskAction.SET_PLAYBACK_POSITION, seconds);
         } else {
-            Gdx.app.error("TuningFork", "Can't setPlaybackPosition to values < 0");
+            this.logger.error(this.getClass(), "Can't setPlaybackPosition to values < 0");
         }
     }
 
 
     void setPlaybackPositionAsync(final float seconds) {
         // STOP THE SOURCE
-        AL10.alSourceStop(this.source.sourceId);
+        AL10.alSourceStop(this.sourceId);
 
         // FULL RESET
         this.resetProcessedBuffersOnBufferId.set(0);
@@ -166,13 +165,13 @@ public class StreamedSound implements SoundSource, Disposable {
 
         // SKIP TO PERFECT POSITION IN BUFFER
         if (filledBufferCount > 0 && !unreachable) {
-            AL10.alSourcef(this.source.sourceId, AL11.AL_SEC_OFFSET, seconds - currentSeconds);
+            AL10.alSourcef(this.sourceId, AL11.AL_SEC_OFFSET, seconds - currentSeconds);
         }
 
         // CONTINUE PLAYING IF THAT WAS THE LAST STATE
         final boolean playing = this.playing.get();
         if (filledBufferCount > 0 && playing) {
-            AL10.alSourcePlay(this.source.sourceId);
+            AL10.alSourcePlay(this.sourceId);
         } else if (playing) {
             this.playing.set(false);
             // TODO: WHAT IF THE SOURCE IS LOOPING?
@@ -187,18 +186,12 @@ public class StreamedSound implements SoundSource, Disposable {
 
 
     public float getPlaybackPosition() {
-        return this.processedBuffers * this.secondsPerBuffer + AL10.alGetSourcef(this.source.sourceId, AL11.AL_SEC_OFFSET);
-    }
-
-
-    @Override
-    public void setDistanceFactor(float rolloff) {
-        AL10.alSourcef(this.source.sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
+        return this.processedBuffers * this.secondsPerBuffer + AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }
 
 
     void pauseAsync() {
-        AL10.alSourcePause(this.source.sourceId);
+        super.pause();
     }
 
 
@@ -213,7 +206,7 @@ public class StreamedSound implements SoundSource, Disposable {
 
 
     void playAsync() {
-        AL10.alSourcePlay(this.source.sourceId);
+        super.play();
     }
 
 
@@ -228,8 +221,8 @@ public class StreamedSound implements SoundSource, Disposable {
 
 
     void stopAsync() {
-        AL10.alSourceRewind(this.source.sourceId);
-        AL10.alSourcei(this.source.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
+        super.stop();
+        AL10.alSourcei(this.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
         this.processedBuffers = 0;
@@ -269,7 +262,7 @@ public class StreamedSound implements SoundSource, Disposable {
 
 
     int fillAllBuffers() {
-        AL10.alSourcei(this.source.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
+        AL10.alSourcei(this.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
         int filledBufferCount = 0;
@@ -279,7 +272,7 @@ public class StreamedSound implements SoundSource, Disposable {
                 break;
             }
             filledBufferCount++;
-            AL10.alSourceQueueBuffers(this.source.sourceId, bufferId);
+            AL10.alSourceQueueBuffers(this.sourceId, bufferId);
             this.lastQueuedBufferId.set(bufferId);
         }
 
@@ -288,60 +281,8 @@ public class StreamedSound implements SoundSource, Disposable {
 
 
     @Override
-    public void setVolume(float volume) {
-        AL10.alSourcef(this.source.sourceId, AL10.AL_GAIN, volume);
-    }
-
-
-    @Override
-    public void setPitch(float pitch) {
-        AL10.alSourcef(this.source.sourceId, AL10.AL_PITCH, pitch);
-    }
-
-
-    @Override
-    public void setRelative(boolean relative) {
-        AL10.alSourcei(this.source.sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
-    }
-
-
-    @Override
-    public void setPosition(Vector3 position) {
-        this.setPosition(position.x, position.y, position.z);
-    }
-
-
-    @Override
-    public void setPosition(float x, float y, float z) {
-        this.position.set(this.position);
-        AL10.alSource3f(this.source.sourceId, AL10.AL_POSITION, x, y, z);
-    }
-
-
-    @Override
-    public Vector3 getPosition(Vector3 saveTo) {
-        return saveTo.set(this.position);
-    }
-
-
-    @Override
-    public void setSpeed(Vector3 speed) {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    @Override
-    public void setSpeed(float x, float y, float z) {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    @Override
     public boolean isPlaying() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.playing.get();
     }
 
 
@@ -352,21 +293,12 @@ public class StreamedSound implements SoundSource, Disposable {
     }
 
 
-    /**
-     * This method is unsupported on StreamedSounds.
-     */
-    @Override
-    public void free() {
-        throw new UnsupportedMethodException("This method is unsupported on StreamedSounds.");
-    }
-
-
     @Override
     public void dispose() {
         this.audio.removeStreamedSound(this);
-        this.source.dispose();
+        super.dispose();
         StreamUtils.closeQuietly(this.audioStream);
-        // TODO: CLEANUP OPENAL STUFF: SOURCE, BUFFER, ETC.
+        // TODO: CLEANUP OPENAL STUFF: BUFFER, ETC.
     }
 
 }

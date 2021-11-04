@@ -4,10 +4,12 @@ import com.badlogic.gdx.utils.Array;
 
 class SoundSourcePool {
     private final Array<BufferedSoundSource> sources         = new Array<>();
-    private int                      nextSourceIndex = 0;
+    private int                              nextSourceIndex = 0;
+    private final Audio                      audio;
 
 
     SoundSourcePool(int simultaneousSources) {
+        this.audio = Audio.get();
         for (int i = 0; i < simultaneousSources; i++) {
             this.sources.add(new BufferedSoundSource());
         }
@@ -22,7 +24,8 @@ class SoundSourcePool {
         while (result == null) {
             final BufferedSoundSource candidate = this.sources.get(this.nextSourceIndex);
             if (!candidate.obtained && !candidate.isPlaying()) {
-                candidate.reset();
+                candidate.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(),
+                        this.audio.getDefaultAttenuationMaxDistance());
                 result = candidate;
             }
             this.nextSourceIndex++;
