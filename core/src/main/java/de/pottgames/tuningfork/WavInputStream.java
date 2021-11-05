@@ -15,6 +15,7 @@ package de.pottgames.tuningfork;
 import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -26,17 +27,28 @@ class WavInputStream extends FilterInputStream implements AudioStream {
     private boolean closed = false;
 
 
+    WavInputStream(InputStream input, String fileName) {
+        super(input);
+        this.initialRead(fileName);
+    }
+
+
     WavInputStream(FileHandle file) {
         super(file.read());
+        this.initialRead(file.toString());
+    }
+
+
+    private void initialRead(String fileName) {
         try {
             if (this.read() != 'R' || this.read() != 'I' || this.read() != 'F' || this.read() != 'F') {
-                throw new GdxRuntimeException("RIFF header not found: " + file);
+                throw new GdxRuntimeException("RIFF header not found: " + fileName);
             }
 
             this.skipFully(4);
 
             if (this.read() != 'W' || this.read() != 'A' || this.read() != 'V' || this.read() != 'E') {
-                throw new GdxRuntimeException("Invalid wave file header: " + file);
+                throw new GdxRuntimeException("Invalid wave file header: " + fileName);
             }
 
             final int fmtChunkLength = this.seekToChunk('f', 'm', 't', ' ');
@@ -65,7 +77,7 @@ class WavInputStream extends FilterInputStream implements AudioStream {
             this.dataRemaining = this.seekToChunk('d', 'a', 't', 'a');
         } catch (final Throwable ex) {
             StreamUtils.closeQuietly(this);
-            throw new GdxRuntimeException("Error reading WAV file: " + file, ex);
+            throw new GdxRuntimeException("Error reading WAV file: " + fileName, ex);
         }
     }
 

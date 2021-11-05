@@ -37,6 +37,11 @@ public class StreamedSound extends SoundSource implements Disposable {
 
 
     StreamedSound(FileHandle file) {
+        if (file == null) {
+            throw new TuningForkRuntimeException("file is null");
+        }
+
+        // FETCH AND SET DEPENDENCIES
         this.audio = Audio.get();
         this.logger = this.audio.logger;
         this.file = file;

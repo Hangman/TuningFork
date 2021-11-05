@@ -1,7 +1,7 @@
 package de.pottgames.tuningfork;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,12 +11,16 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALUtil;
+import org.lwjgl.openal.EXTEfx;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -46,6 +50,11 @@ public class Audio implements Disposable {
     final TuningForkLogger                         logger;
 
 
+    public static List<String> availableDevices() {
+        return ALUtil.getStringList(0L, ALC11.ALC_ALL_DEVICES_SPECIFIER);
+    }
+
+
     static Audio get() {
         return Audio.instance;
     }
@@ -53,9 +62,37 @@ public class Audio implements Disposable {
 
     /**
      * Creates an audio instance initialized on the default sound device of the OS.
+     *
+     * @throws OpenDeviceException
      */
-    public Audio() {
-        this(Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
+    public Audio() throws OpenDeviceException {
+        this(null, Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
+    }
+
+
+    /**
+     * Creates an audio instance initialized on the given device. You can fetch a list of all available devices with {@link Audio#availableDevices()}.
+     *
+     * @param deviceSpecifier
+     *
+     * @throws OpenDeviceException
+     */
+    public Audio(String deviceSpecifier) throws OpenDeviceException {
+        this(deviceSpecifier, Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
+    }
+
+
+    /**
+     * Creates an audio instance initialized on the given device. You can fetch a list of all available devices with {@link Audio#availableDevices()}. You can
+     * implement {@link TuningForkLogger} to write your own logger or build a bridge to another logging system like log4j.
+     *
+     * @param deviceSpecifier
+     * @param logger the logger to use
+     *
+     * @throws OpenDeviceException
+     */
+    public Audio(String deviceSpecifier, TuningForkLogger logger) throws OpenDeviceException {
+        this(deviceSpecifier, Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, logger);
     }
 
 
@@ -63,54 +100,83 @@ public class Audio implements Disposable {
      * Creates an audio instance initialized on the default sound device of the OS.
      *
      * @param simultaneousSources defines how many non-streamed sounds can be played simultaneously.
+     *
+     * @throws OpenDeviceException
      */
-    public Audio(int simultaneousSources) {
-        this(simultaneousSources, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
+    public Audio(int simultaneousSources) throws OpenDeviceException {
+        this(null, simultaneousSources, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
     }
 
 
-    private Audio(int simultaneousSources, int idleTasks, TuningForkLogger logger) {
-        if (Audio.instance != null) {
-            throw new TuningForkRuntimeException("Only 1 Audio instance allowed at any time.");
+    /**
+     * Creates an audio instance initialized on the given device. You can fetch a list of all available devices with {@link Audio#availableDevices()}. You can
+     * implement {@link TuningForkLogger} to write your own logger or build a bridge to another logging system like log4j.
+     *
+     * @param deviceSpecifier the sound device
+     * @param simultaneousSources defines how many non-streamed sounds can be played simultaneously.
+     * @param idleTasks default 10
+     * @param logger the logger to use
+     *
+     * @throws OpenDeviceException
+     */
+    public Audio(String deviceSpecifier, int simultaneousSources, int idleTasks, TuningForkLogger logger) throws OpenDeviceException {
+        try {
+            if (Audio.instance != null) {
+                Audio.instance.dispose();
+            }
+            Audio.instance = this;
+
+            // SET LOGGER
+            if (logger != null) {
+                this.logger = logger;
+            } else {
+                this.logger = new MockLogger();
+            }
+
+            // INITIAL IDLE TASK CREATION FOR THE POOL
+            for (int i = 0; i < idleTasks - 1; i++) {
+                this.idleTasks.add(new AsyncTask());
+            }
+
+            // CREATE THE TASK SERVICE
+            this.taskService = Executors.newSingleThreadExecutor(r -> {
+                final Thread t = Executors.defaultThreadFactory().newThread(r);
+                t.setDaemon(true);
+                return t;
+            });
+
+            // adding the last task by executing it for warm up
+            this.taskService.execute(new AsyncTask());
+
+            // OPEN THE DEFAULT SOUND DEVICE
+            this.device = ALC10.alcOpenDevice(deviceSpecifier);
+            if (this.device == 0L) {
+                throw new IllegalStateException("Failed to open the default OpenAL device.");
+            }
+
+            // CREATE A CONTEXT AND SET IT ACTIVE
+            final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.device);
+            this.context = ALC10.alcCreateContext(this.device, (IntBuffer) null);
+            if (this.context == 0L) {
+                throw new IllegalStateException("Failed to create OpenAL context.");
+            }
+            ALC10.alcMakeContextCurrent(this.context);
+            AL.createCapabilities(deviceCapabilities);
+        } catch (final Exception e) {
+            Audio.instance = null;
+            if (deviceSpecifier == null) {
+                deviceSpecifier = "default";
+            }
+            throw new OpenDeviceException("Failed to open device: " + deviceSpecifier, e);
         }
-        Audio.instance = this;
 
-        // SET LOGGER
-        if (logger != null) {
-            this.logger = logger;
-        } else {
-            this.logger = new MockLogger();
-        }
+        // NOTE ON CAPABILITIES: TuningFork makes the assumption that there are always 2 or more auxiliary sends available per source. Since the OpenAL
+        // implementation is OpenAL Soft, it should be safe to do so.
 
-        // INITIAL IDLE TASK CREATION FOR THE POOL
-        for (int i = 0; i < idleTasks - 1; i++) {
-            this.idleTasks.add(new AsyncTask());
-        }
-
-        // CREATE THE TASK SERVICE
-        this.taskService = Executors.newSingleThreadExecutor(r -> {
-            final Thread t = Executors.defaultThreadFactory().newThread(r);
-            t.setDaemon(true);
-            return t;
-        });
-
-        // adding the last task by executing it for warm up
-        this.taskService.execute(new AsyncTask());
-
-        // OPEN THE DEFAULT SOUND DEVICE
-        this.device = ALC10.alcOpenDevice((ByteBuffer) null);
-        if (this.device == 0L) {
-            throw new IllegalStateException("Failed to open the default OpenAL device.");
-        }
-
-        // CREATE A CONTEXT AND SET IT ACTIVE
-        final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.device);
-        this.context = ALC10.alcCreateContext(this.device, (IntBuffer) null);
-        if (this.context == 0L) {
-            throw new IllegalStateException("Failed to create OpenAL context.");
-        }
-        ALC10.alcMakeContextCurrent(this.context);
-        AL.createCapabilities(deviceCapabilities);
+        // CHECK AVAILABLE AUXILIARY SENDS
+        final IntBuffer auxSends = BufferUtils.newIntBuffer(1);
+        ALC10.alcGetIntegerv(this.device, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
+        logger.debug(this.getClass(), "Available auxiliary sends: " + auxSends.get(0));
 
         // SET DISTANCE ATTENUATION MODEL
         this.setDistanceAttenuationModel(DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED);

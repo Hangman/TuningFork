@@ -29,6 +29,9 @@ repositories {
 
 dependencies {
     compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
 
 allprojects {
@@ -48,6 +51,11 @@ allprojects {
 java {
     withSourcesJar()
 }
+
+test {
+     exclude 'de/pottgames/tuningfork/test/MiniExample.class'
+     exclude 'de/pottgames/tuningfork/test/DeviceTest.class'
+ }
 
 publishing {
     publications {

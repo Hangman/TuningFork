@@ -130,9 +130,9 @@ public abstract class SoundSource {
 
 
     /**
-     * Makes this sound source directional. The sound is emitted in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound
-     * at full volume. Outside the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles
-     * (inside the cone). Call {@link #makeOmniDirectional()} to make the source non-directional again.
+     * Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound at full volume. Outside
+     * the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
+     * {@link #makeOmniDirectional()} to make the source non-directional again.
      *
      * @param direction the direction the source is facing
      * @param coneInnerAngle the inner cone angle
