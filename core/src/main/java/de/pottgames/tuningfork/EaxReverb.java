@@ -279,6 +279,3283 @@ public class EaxReverb extends SoundEffectData {
     public boolean decayHfLimit = true;
 
 
+    public static EaxReverb generic() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.8913f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.0500f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb paddedcell() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.1715f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0010f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 0.1700f;
+        result.decayHfRatio = 0.1000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2500f;
+        result.reflectionsDelay = 0.0010f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2691f;
+        result.lateReverbDelay = 0.0020f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb room() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5929f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 0.4000f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.1503f;
+        result.reflectionsDelay = 0.0020f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.0629f;
+        result.lateReverbDelay = 0.0030f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb bathroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.1715f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2512f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.5400f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.6531f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 3.2734f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb livingroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.9766f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0010f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 0.5000f;
+        result.decayHfRatio = 0.1000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2051f;
+        result.reflectionsDelay = 0.0030f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.2805f;
+        result.lateReverbDelay = 0.0040f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb stoneroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 2.3100f;
+        result.decayHfRatio = 0.6400f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.4411f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1003f;
+        result.lateReverbDelay = 0.0170f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb auditorium() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5781f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 4.3200f;
+        result.decayHfRatio = 0.5900f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.4032f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7170f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb concerthall() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 3.9200f;
+        result.decayHfRatio = 0.7000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2427f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.9977f;
+        result.lateReverbDelay = 0.0290f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb cave() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 1.0000f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 2.9100f;
+        result.decayHfRatio = 1.3000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.5000f;
+        result.reflectionsDelay = 0.0150f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7063f;
+        result.lateReverbDelay = 0.0220f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb arena() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4477f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 7.2400f;
+        result.decayHfRatio = 0.3300f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2612f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.0186f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb hangar() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3162f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 10.0500f;
+        result.decayHfRatio = 0.2300f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.5000f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2560f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb carpetedhallway() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0100f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 0.3000f;
+        result.decayHfRatio = 0.1000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.1215f;
+        result.reflectionsDelay = 0.0020f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1531f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb hallway() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.5900f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2458f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.6615f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb stonecorridor() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7612f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 2.7000f;
+        result.decayHfRatio = 0.7900f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2472f;
+        result.reflectionsDelay = 0.0130f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.5758f;
+        result.lateReverbDelay = 0.0200f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb alley() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.3000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7328f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.8600f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2500f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.9954f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1250f;
+        result.echoDepth = 0.9500f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb forest() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.3000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0224f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.5400f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.0525f;
+        result.reflectionsDelay = 0.1620f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7682f;
+        result.lateReverbDelay = 0.0880f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1250f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb city() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.5000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3981f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.6700f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.0730f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1427f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb mountains() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.2700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0562f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.2100f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.0407f;
+        result.reflectionsDelay = 0.3000f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1919f;
+        result.lateReverbDelay = 0.1000f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb quarry() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3162f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.0000f;
+        result.reflectionsDelay = 0.0610f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.7783f;
+        result.lateReverbDelay = 0.0250f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1250f;
+        result.echoDepth = 0.7000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb plain() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.2100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1000f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.5000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.0585f;
+        result.reflectionsDelay = 0.1790f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1089f;
+        result.lateReverbDelay = 0.1000f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb parkinglot() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 1.0000f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.6500f;
+        result.decayHfRatio = 1.5000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.2082f;
+        result.reflectionsDelay = 0.0080f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.2652f;
+        result.lateReverbDelay = 0.0120f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb sewerpipe() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3071f;
+        result.diffusion = 0.8000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3162f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 2.8100f;
+        result.decayHfRatio = 0.1400f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 1.6387f;
+        result.reflectionsDelay = 0.0140f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 3.2471f;
+        result.lateReverbDelay = 0.0210f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb underwater() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0100f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.4900f;
+        result.decayHfRatio = 0.1000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.5963f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 7.0795f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 1.1800f;
+        result.modulationDepth = 0.3480f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb drugged() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.5000f;
+        result.gain = 0.3162f;
+        result.gainHf = 1.0000f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 8.3900f;
+        result.decayHfRatio = 1.3900f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.8760f;
+        result.reflectionsDelay = 0.0020f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 3.1081f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 1.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb dizzy() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.6000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 17.2300f;
+        result.decayHfRatio = 0.5600f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.1392f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.4937f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.8100f;
+        result.modulationDepth = 0.3100f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb psychotic() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.0625f;
+        result.diffusion = 0.5000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.8404f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 7.5600f;
+        result.decayHfRatio = 0.9100f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 0.4864f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 2.4378f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 4.0000f;
+        result.modulationDepth = 1.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb castle_smallroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3981f;
+        result.gainLf = 0.1000f;
+        result.decayTime = 1.2200f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 0.3100f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0220f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.9953f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1380f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_shortpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3162f;
+        result.gainLf = 0.1000f;
+        result.decayTime = 2.3200f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 0.3100f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0230f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1380f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_mediumroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.9300f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.1000f;
+        result.decayTime = 2.0400f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 0.4600f;
+        result.reflectionsGain = 0.6310f;
+        result.reflectionsDelay = 0.0220f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.5849f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1550f;
+        result.echoDepth = 0.0300f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_largeroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.1259f;
+        result.decayTime = 2.5300f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 0.5000f;
+        result.reflectionsGain = 0.4467f;
+        result.reflectionsDelay = 0.0340f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0160f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1850f;
+        result.echoDepth = 0.0700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_longpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3981f;
+        result.gainLf = 0.1000f;
+        result.decayTime = 3.4200f;
+        result.decayHfRatio = 0.8300f;
+        result.decayLfRatio = 0.3100f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0230f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1380f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_hall() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.1778f;
+        result.decayTime = 3.1400f;
+        result.decayHfRatio = 0.7900f;
+        result.decayLfRatio = 0.6200f;
+        result.reflectionsGain = 0.1778f;
+        result.reflectionsDelay = 0.0560f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0240f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_cupboard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.1000f;
+        result.decayTime = 0.6700f;
+        result.decayHfRatio = 0.8700f;
+        result.decayLfRatio = 0.3100f;
+        result.reflectionsGain = 1.4125f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 3.5481f;
+        result.lateReverbDelay = 0.0070f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1380f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb castle_courtyard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.4200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.1995f;
+        result.decayTime = 2.1300f;
+        result.decayHfRatio = 0.6100f;
+        result.decayLfRatio = 0.2300f;
+        result.reflectionsGain = 0.2239f;
+        result.reflectionsDelay = 0.1600f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7079f;
+        result.lateReverbDelay = 0.0360f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.3700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb castle_alcove() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5012f;
+        result.gainLf = 0.1000f;
+        result.decayTime = 1.6400f;
+        result.decayHfRatio = 0.8700f;
+        result.decayLfRatio = 0.3100f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0340f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1380f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5168.6001f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_smallroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 1.7200f;
+        result.decayHfRatio = 0.6500f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 0.7079f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.7783f;
+        result.lateReverbDelay = 0.0240f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1190f;
+        result.echoDepth = 0.0700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_shortpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.6400f;
+        result.gain = 0.2512f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 2.5300f;
+        result.decayHfRatio = 0.6500f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0380f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1350f;
+        result.echoDepth = 0.2300f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_mediumroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.2512f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 2.7600f;
+        result.decayHfRatio = 0.6500f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 0.2818f;
+        result.reflectionsDelay = 0.0220f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0230f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1740f;
+        result.echoDepth = 0.0700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_largeroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.7500f;
+        result.gain = 0.2512f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.6310f;
+        result.decayTime = 4.2400f;
+        result.decayHfRatio = 0.5100f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 0.1778f;
+        result.reflectionsDelay = 0.0390f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0230f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2310f;
+        result.echoDepth = 0.0700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_longpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.6400f;
+        result.gain = 0.2512f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 4.0600f;
+        result.decayHfRatio = 0.6500f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0370f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1350f;
+        result.echoDepth = 0.2300f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_hall() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.7500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.6310f;
+        result.decayTime = 7.4300f;
+        result.decayHfRatio = 0.5100f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 0.0631f;
+        result.reflectionsDelay = 0.0730f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0270f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_cupboard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3071f;
+        result.diffusion = 0.6300f;
+        result.gain = 0.2512f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 0.4900f;
+        result.decayHfRatio = 0.6500f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 1.2589f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.9953f;
+        result.lateReverbDelay = 0.0320f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1070f;
+        result.echoDepth = 0.0700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_courtyard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3071f;
+        result.diffusion = 0.5700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3162f;
+        result.gainLf = 0.6310f;
+        result.decayTime = 2.3200f;
+        result.decayHfRatio = 0.2900f;
+        result.decayLfRatio = 0.5600f;
+        result.reflectionsGain = 0.2239f;
+        result.reflectionsDelay = 0.1400f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.3981f;
+        result.lateReverbDelay = 0.0390f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.2900f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb factory_alcove() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.5900f;
+        result.gain = 0.2512f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 3.1400f;
+        result.decayHfRatio = 0.6500f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 1.4125f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.0000f;
+        result.lateReverbDelay = 0.0380f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1140f;
+        result.echoDepth = 0.1000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3762.6001f;
+        result.lfReference = 362.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_smallroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8400f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 1.5100f;
+        result.decayHfRatio = 1.5300f;
+        result.decayLfRatio = 0.2700f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1640f;
+        result.echoDepth = 0.1400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_shortpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 1.7900f;
+        result.decayHfRatio = 1.4600f;
+        result.decayLfRatio = 0.2800f;
+        result.reflectionsGain = 0.5012f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0190f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1770f;
+        result.echoDepth = 0.0900f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_mediumroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.4467f;
+        result.decayTime = 2.2200f;
+        result.decayHfRatio = 1.5300f;
+        result.decayLfRatio = 0.3200f;
+        result.reflectionsGain = 0.3981f;
+        result.reflectionsDelay = 0.0390f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0270f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1860f;
+        result.echoDepth = 0.1200f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_largeroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.4467f;
+        result.decayTime = 3.1400f;
+        result.decayHfRatio = 1.5300f;
+        result.decayLfRatio = 0.3200f;
+        result.reflectionsGain = 0.2512f;
+        result.reflectionsDelay = 0.0390f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.0000f;
+        result.lateReverbDelay = 0.0270f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2140f;
+        result.echoDepth = 0.1100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_longpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.3981f;
+        result.decayTime = 3.0100f;
+        result.decayHfRatio = 1.4600f;
+        result.decayLfRatio = 0.2800f;
+        result.reflectionsGain = 0.7943f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0250f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1860f;
+        result.echoDepth = 0.0400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_hall() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7600f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.5623f;
+        result.decayTime = 5.4900f;
+        result.decayHfRatio = 1.5300f;
+        result.decayLfRatio = 0.3800f;
+        result.reflectionsGain = 0.1122f;
+        result.reflectionsDelay = 0.0540f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.6310f;
+        result.lateReverbDelay = 0.0520f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2260f;
+        result.echoDepth = 0.1100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_cupboard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8300f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5012f;
+        result.gainLf = 0.2239f;
+        result.decayTime = 0.7600f;
+        result.decayHfRatio = 1.5300f;
+        result.decayLfRatio = 0.2600f;
+        result.reflectionsGain = 1.1220f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.9953f;
+        result.lateReverbDelay = 0.0160f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1430f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_courtyard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.5900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 2.0400f;
+        result.decayHfRatio = 1.2000f;
+        result.decayLfRatio = 0.3800f;
+        result.reflectionsGain = 0.3162f;
+        result.reflectionsDelay = 0.1730f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.3162f;
+        result.lateReverbDelay = 0.0430f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2350f;
+        result.echoDepth = 0.4800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb icepalace_alcove() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8400f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 2.7600f;
+        result.decayHfRatio = 1.4600f;
+        result.decayLfRatio = 0.2800f;
+        result.reflectionsGain = 1.1220f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1610f;
+        result.echoDepth = 0.0900f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 12428.5000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_smallroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.2109f;
+        result.diffusion = 0.7000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 1.7200f;
+        result.decayHfRatio = 0.8200f;
+        result.decayLfRatio = 0.5500f;
+        result.reflectionsGain = 0.7943f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0130f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1880f;
+        result.echoDepth = 0.2600f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_shortpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.2109f;
+        result.diffusion = 0.8700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.5700f;
+        result.decayHfRatio = 0.5000f;
+        result.decayLfRatio = 0.5500f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0160f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1720f;
+        result.echoDepth = 0.2000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_mediumroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.2109f;
+        result.diffusion = 0.7500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.0100f;
+        result.decayHfRatio = 0.5000f;
+        result.decayLfRatio = 0.5500f;
+        result.reflectionsGain = 0.3981f;
+        result.reflectionsDelay = 0.0340f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0350f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2090f;
+        result.echoDepth = 0.3100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_largeroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.8100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.8900f;
+        result.decayHfRatio = 0.3800f;
+        result.decayLfRatio = 0.6100f;
+        result.reflectionsGain = 0.3162f;
+        result.reflectionsDelay = 0.0560f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0350f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2330f;
+        result.echoDepth = 0.2800f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_longpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 4.6200f;
+        result.decayHfRatio = 0.6200f;
+        result.decayLfRatio = 0.5500f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0310f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.2300f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_hall() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.8700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 7.1100f;
+        result.decayHfRatio = 0.3800f;
+        result.decayLfRatio = 0.6100f;
+        result.reflectionsGain = 0.1778f;
+        result.reflectionsDelay = 0.1000f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.6310f;
+        result.lateReverbDelay = 0.0470f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.2500f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_cupboard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.1715f;
+        result.diffusion = 0.5600f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 0.7900f;
+        result.decayHfRatio = 0.8100f;
+        result.decayLfRatio = 0.5500f;
+        result.reflectionsGain = 1.4125f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.7783f;
+        result.lateReverbDelay = 0.0180f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1810f;
+        result.echoDepth = 0.3100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb spacestation_alcove() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.2109f;
+        result.diffusion = 0.7800f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 1.1600f;
+        result.decayHfRatio = 0.8100f;
+        result.decayLfRatio = 0.5500f;
+        result.reflectionsGain = 1.4125f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.0000f;
+        result.lateReverbDelay = 0.0180f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1920f;
+        result.echoDepth = 0.2100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 3316.1001f;
+        result.lfReference = 458.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_smallroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1122f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 0.7900f;
+        result.decayHfRatio = 0.3200f;
+        result.decayLfRatio = 0.8700f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0320f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0290f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_shortpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1259f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 1.7500f;
+        result.decayHfRatio = 0.5000f;
+        result.decayLfRatio = 0.8700f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.6310f;
+        result.lateReverbDelay = 0.0240f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_mediumroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1000f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 1.4700f;
+        result.decayHfRatio = 0.4200f;
+        result.decayLfRatio = 0.8200f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0490f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0290f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_largeroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0891f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 2.6500f;
+        result.decayHfRatio = 0.3300f;
+        result.decayLfRatio = 0.8200f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0660f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7943f;
+        result.lateReverbDelay = 0.0490f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_longpassage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1000f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 1.9900f;
+        result.decayHfRatio = 0.4000f;
+        result.decayLfRatio = 0.7900f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.4467f;
+        result.lateReverbDelay = 0.0360f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_hall() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0794f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 3.4500f;
+        result.decayHfRatio = 0.3000f;
+        result.decayLfRatio = 0.8200f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0880f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7943f;
+        result.lateReverbDelay = 0.0630f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_cupboard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1413f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 0.5600f;
+        result.decayHfRatio = 0.4600f;
+        result.decayLfRatio = 0.9100f;
+        result.reflectionsGain = 1.1220f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0280f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_courtyard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.6500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0794f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 1.7900f;
+        result.decayHfRatio = 0.3500f;
+        result.decayLfRatio = 0.7900f;
+        result.reflectionsGain = 0.5623f;
+        result.reflectionsDelay = 0.1230f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1000f;
+        result.lateReverbDelay = 0.0320f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb wooden_alcove() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1259f;
+        result.gainLf = 0.3162f;
+        result.decayTime = 1.2200f;
+        result.decayHfRatio = 0.6200f;
+        result.decayLfRatio = 0.9100f;
+        result.reflectionsGain = 1.1220f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7079f;
+        result.lateReverbDelay = 0.0240f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4705.0000f;
+        result.lfReference = 99.6000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb sport_emptystadium() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.7943f;
+        result.decayTime = 6.2600f;
+        result.decayHfRatio = 0.5100f;
+        result.decayLfRatio = 1.1000f;
+        result.reflectionsGain = 0.0631f;
+        result.reflectionsDelay = 0.1830f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.3981f;
+        result.lateReverbDelay = 0.0380f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb sport_squashcourt() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3162f;
+        result.gainLf = 0.7943f;
+        result.decayTime = 2.2200f;
+        result.decayHfRatio = 0.9100f;
+        result.decayLfRatio = 1.1600f;
+        result.reflectionsGain = 0.4467f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7943f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1260f;
+        result.echoDepth = 0.1900f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 7176.8999f;
+        result.lfReference = 211.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb sport_smallswimmingpool() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 2.7600f;
+        result.decayHfRatio = 1.2500f;
+        result.decayLfRatio = 1.1400f;
+        result.reflectionsGain = 0.6310f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7943f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1790f;
+        result.echoDepth = 0.1500f;
+        result.modulationTime = 0.8950f;
+        result.modulationDepth = 0.1900f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb sport_largeswimmingpool() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 5.4900f;
+        result.decayHfRatio = 1.3100f;
+        result.decayLfRatio = 1.1400f;
+        result.reflectionsGain = 0.4467f;
+        result.reflectionsDelay = 0.0390f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.5012f;
+        result.lateReverbDelay = 0.0490f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2220f;
+        result.echoDepth = 0.5500f;
+        result.modulationTime = 1.1590f;
+        result.modulationDepth = 0.2100f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb sport_gymnasium() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.1400f;
+        result.decayHfRatio = 1.0600f;
+        result.decayLfRatio = 1.3500f;
+        result.reflectionsGain = 0.3981f;
+        result.reflectionsDelay = 0.0290f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.5623f;
+        result.lateReverbDelay = 0.0450f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1460f;
+        result.echoDepth = 0.1400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 7176.8999f;
+        result.lfReference = 211.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb sport_fullstadium() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0708f;
+        result.gainLf = 0.7943f;
+        result.decayTime = 5.2500f;
+        result.decayHfRatio = 0.1700f;
+        result.decayLfRatio = 0.8000f;
+        result.reflectionsGain = 0.1000f;
+        result.reflectionsDelay = 0.1880f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.2818f;
+        result.lateReverbDelay = 0.0380f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb sport_stadiumtannoy() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7800f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 2.5300f;
+        result.decayHfRatio = 0.8800f;
+        result.decayLfRatio = 0.6800f;
+        result.reflectionsGain = 0.2818f;
+        result.reflectionsDelay = 0.2300f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.5012f;
+        result.lateReverbDelay = 0.0630f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.2000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb prefab_workshop() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1413f;
+        result.gainLf = 0.3981f;
+        result.decayTime = 0.7600f;
+        result.decayHfRatio = 1.0000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0120f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb prefab_schoolroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4022f;
+        result.diffusion = 0.6900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 0.9800f;
+        result.decayHfRatio = 0.4500f;
+        result.decayLfRatio = 0.1800f;
+        result.reflectionsGain = 1.4125f;
+        result.reflectionsDelay = 0.0170f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0150f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.0950f;
+        result.echoDepth = 0.1400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 7176.8999f;
+        result.lfReference = 211.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb prefab_practiseroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4022f;
+        result.diffusion = 0.8700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3981f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 1.1200f;
+        result.decayHfRatio = 0.5600f;
+        result.decayLfRatio = 0.1800f;
+        result.reflectionsGain = 1.2589f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0110f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.0950f;
+        result.echoDepth = 0.1400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 7176.8999f;
+        result.lfReference = 211.2000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb prefab_outhouse() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1122f;
+        result.gainLf = 0.1585f;
+        result.decayTime = 1.3800f;
+        result.decayHfRatio = 0.3800f;
+        result.decayLfRatio = 0.3500f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0240f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.6310f;
+        result.lateReverbDelay = 0.0440f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1210f;
+        result.echoDepth = 0.1700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 107.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb prefab_caravan() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0891f;
+        result.gainLf = 0.1259f;
+        result.decayTime = 0.4300f;
+        result.decayHfRatio = 1.5000f;
+        result.decayLfRatio = 1.0000f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0120f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.9953f;
+        result.lateReverbDelay = 0.0120f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb dome_tomb() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3548f;
+        result.gainLf = 0.2239f;
+        result.decayTime = 4.1800f;
+        result.decayHfRatio = 0.2100f;
+        result.decayLfRatio = 0.1000f;
+        result.reflectionsGain = 0.3868f;
+        result.reflectionsDelay = 0.0300f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.6788f;
+        result.lateReverbDelay = 0.0220f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1770f;
+        result.echoDepth = 0.1900f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 20.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb pipe_small() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3548f;
+        result.gainLf = 0.2239f;
+        result.decayTime = 5.0400f;
+        result.decayHfRatio = 0.1000f;
+        result.decayLfRatio = 0.1000f;
+        result.reflectionsGain = 0.5012f;
+        result.reflectionsDelay = 0.0320f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 2.5119f;
+        result.lateReverbDelay = 0.0150f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 20.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb dome_saintpauls() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3548f;
+        result.gainLf = 0.2239f;
+        result.decayTime = 10.4800f;
+        result.decayHfRatio = 0.1900f;
+        result.decayLfRatio = 0.1000f;
+        result.reflectionsGain = 0.1778f;
+        result.reflectionsDelay = 0.0900f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0420f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.1200f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 20.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb pipe_longthin() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.2560f;
+        result.diffusion = 0.9100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 9.2100f;
+        result.decayHfRatio = 0.1800f;
+        result.decayLfRatio = 0.1000f;
+        result.reflectionsGain = 0.7079f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7079f;
+        result.lateReverbDelay = 0.0220f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 20.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb pipe_large() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3548f;
+        result.gainLf = 0.2239f;
+        result.decayTime = 8.4500f;
+        result.decayHfRatio = 0.1000f;
+        result.decayLfRatio = 0.1000f;
+        result.reflectionsGain = 0.3981f;
+        result.reflectionsDelay = 0.0460f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.5849f;
+        result.lateReverbDelay = 0.0320f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 20.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb pipe_resonant() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.1373f;
+        result.diffusion = 0.9100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.2818f;
+        result.decayTime = 6.8100f;
+        result.decayHfRatio = 0.1800f;
+        result.decayLfRatio = 0.1000f;
+        result.reflectionsGain = 0.7079f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.0000f;
+        result.lateReverbDelay = 0.0220f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 20.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb outdoors_backyard() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.4500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2512f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 1.1200f;
+        result.decayHfRatio = 0.3400f;
+        result.decayLfRatio = 0.4600f;
+        result.reflectionsGain = 0.4467f;
+        result.reflectionsDelay = 0.0690f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7079f;
+        result.lateReverbDelay = 0.0230f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2180f;
+        result.echoDepth = 0.3400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4399.1001f;
+        result.lfReference = 242.9000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb outdoors_rollingplains() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0112f;
+        result.gainLf = 0.6310f;
+        result.decayTime = 2.1300f;
+        result.decayHfRatio = 0.2100f;
+        result.decayLfRatio = 0.4600f;
+        result.reflectionsGain = 0.1778f;
+        result.reflectionsDelay = 0.3000f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.4467f;
+        result.lateReverbDelay = 0.0190f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4399.1001f;
+        result.lfReference = 242.9000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb outdoors_deepcanyon() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7400f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1778f;
+        result.gainLf = 0.6310f;
+        result.decayTime = 3.8900f;
+        result.decayHfRatio = 0.2100f;
+        result.decayLfRatio = 0.4600f;
+        result.reflectionsGain = 0.3162f;
+        result.reflectionsDelay = 0.2230f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.3548f;
+        result.lateReverbDelay = 0.0190f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4399.1001f;
+        result.lfReference = 242.9000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb outdoors_creek() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.3500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1778f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 2.1300f;
+        result.decayHfRatio = 0.2100f;
+        result.decayLfRatio = 0.4600f;
+        result.reflectionsGain = 0.3981f;
+        result.reflectionsDelay = 0.1150f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1995f;
+        result.lateReverbDelay = 0.0310f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2180f;
+        result.echoDepth = 0.3400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 4399.1001f;
+        result.lfReference = 242.9000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb outdoors_valley() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.2800f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.0282f;
+        result.gainLf = 0.1585f;
+        result.decayTime = 2.8800f;
+        result.decayHfRatio = 0.2600f;
+        result.decayLfRatio = 0.3500f;
+        result.reflectionsGain = 0.1413f;
+        result.reflectionsDelay = 0.2630f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.3981f;
+        result.lateReverbDelay = 0.1000f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.3400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 107.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb mood_heaven() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.9400f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.4467f;
+        result.decayTime = 5.0400f;
+        result.decayHfRatio = 1.1200f;
+        result.decayLfRatio = 0.5600f;
+        result.reflectionsGain = 0.2427f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0290f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0800f;
+        result.modulationTime = 2.7420f;
+        result.modulationDepth = 0.0500f;
+        result.airAbsorptionGainHf = 0.9977f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb mood_hell() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.5700f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3548f;
+        result.gainLf = 0.4467f;
+        result.decayTime = 3.5700f;
+        result.decayHfRatio = 0.4900f;
+        result.decayLfRatio = 2.0000f;
+        result.reflectionsGain = 0.0000f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1100f;
+        result.echoDepth = 0.0400f;
+        result.modulationTime = 2.1090f;
+        result.modulationDepth = 0.5200f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 139.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb mood_memory() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8500f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 0.3548f;
+        result.decayTime = 4.0600f;
+        result.decayHfRatio = 0.8200f;
+        result.decayLfRatio = 0.5600f;
+        result.reflectionsGain = 0.0398f;
+        result.reflectionsDelay = 0.0000f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.1220f;
+        result.lateReverbDelay = 0.0000f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.4740f;
+        result.modulationDepth = 0.4500f;
+        result.airAbsorptionGainHf = 0.9886f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb driving_commentator() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 2.4200f;
+        result.decayHfRatio = 0.8800f;
+        result.decayLfRatio = 0.6800f;
+        result.reflectionsGain = 0.1995f;
+        result.reflectionsDelay = 0.0930f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.2512f;
+        result.lateReverbDelay = 0.0170f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 1.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9886f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb driving_pitgarage() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.4287f;
+        result.diffusion = 0.5900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.5623f;
+        result.decayTime = 1.7200f;
+        result.decayHfRatio = 0.9300f;
+        result.decayLfRatio = 0.8700f;
+        result.reflectionsGain = 0.5623f;
+        result.reflectionsDelay = 0.0000f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0160f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.1100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb driving_incar_racer() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.0832f;
+        result.diffusion = 0.8000f;
+        result.gain = 0.3162f;
+        result.gainHf = 1.0000f;
+        result.gainLf = 0.7943f;
+        result.decayTime = 0.1700f;
+        result.decayHfRatio = 2.0000f;
+        result.decayLfRatio = 0.4100f;
+        result.reflectionsGain = 1.7783f;
+        result.reflectionsDelay = 0.0070f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7079f;
+        result.lateReverbDelay = 0.0150f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 10268.2002f;
+        result.lfReference = 251.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb driving_incar_sports() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.0832f;
+        result.diffusion = 0.8000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.6310f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 0.1700f;
+        result.decayHfRatio = 0.7500f;
+        result.decayLfRatio = 0.4100f;
+        result.reflectionsGain = 1.0000f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.5623f;
+        result.lateReverbDelay = 0.0000f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 10268.2002f;
+        result.lfReference = 251.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb driving_incar_luxury() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.2560f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1000f;
+        result.gainLf = 0.5012f;
+        result.decayTime = 0.1300f;
+        result.decayHfRatio = 0.4100f;
+        result.decayLfRatio = 0.4600f;
+        result.reflectionsGain = 0.7943f;
+        result.reflectionsDelay = 0.0100f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.5849f;
+        result.lateReverbDelay = 0.0100f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 10268.2002f;
+        result.lfReference = 251.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb driving_fullgrandstand() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.6310f;
+        result.decayTime = 3.0100f;
+        result.decayHfRatio = 1.3700f;
+        result.decayLfRatio = 1.2800f;
+        result.reflectionsGain = 0.3548f;
+        result.reflectionsDelay = 0.0900f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1778f;
+        result.lateReverbDelay = 0.0490f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 10420.2002f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb driving_emptygrandstand() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 1.0000f;
+        result.gain = 0.3162f;
+        result.gainHf = 1.0000f;
+        result.gainLf = 0.7943f;
+        result.decayTime = 4.6200f;
+        result.decayHfRatio = 1.7500f;
+        result.decayLfRatio = 1.4000f;
+        result.reflectionsGain = 0.2082f;
+        result.reflectionsDelay = 0.0900f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.2512f;
+        result.lateReverbDelay = 0.0490f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 10420.2002f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb driving_tunnel() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8100f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.3981f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.4200f;
+        result.decayHfRatio = 0.9400f;
+        result.decayLfRatio = 1.3100f;
+        result.reflectionsGain = 0.7079f;
+        result.reflectionsDelay = 0.0510f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7079f;
+        result.lateReverbDelay = 0.0470f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2140f;
+        result.echoDepth = 0.0500f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 155.3000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb city_streets() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7800f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 1.7900f;
+        result.decayHfRatio = 1.1200f;
+        result.decayLfRatio = 0.9100f;
+        result.reflectionsGain = 0.2818f;
+        result.reflectionsDelay = 0.0460f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.1995f;
+        result.lateReverbDelay = 0.0280f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.2000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb city_subway() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7400f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7079f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.0100f;
+        result.decayHfRatio = 1.2300f;
+        result.decayLfRatio = 0.9100f;
+        result.reflectionsGain = 0.7079f;
+        result.reflectionsDelay = 0.0460f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0280f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1250f;
+        result.echoDepth = 0.2100f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb city_museum() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.1778f;
+        result.gainLf = 0.1778f;
+        result.decayTime = 3.2800f;
+        result.decayHfRatio = 1.4000f;
+        result.decayLfRatio = 0.5700f;
+        result.reflectionsGain = 0.2512f;
+        result.reflectionsDelay = 0.0390f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0340f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1300f;
+        result.echoDepth = 0.1700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 107.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb city_library() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.2818f;
+        result.gainLf = 0.0891f;
+        result.decayTime = 2.7600f;
+        result.decayHfRatio = 0.8900f;
+        result.decayLfRatio = 0.4100f;
+        result.reflectionsGain = 0.3548f;
+        result.reflectionsDelay = 0.0290f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0200f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1300f;
+        result.echoDepth = 0.1700f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 2854.3999f;
+        result.lfReference = 107.5000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
+    public static EaxReverb city_underpass() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8200f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4467f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.5700f;
+        result.decayHfRatio = 1.1200f;
+        result.decayLfRatio = 0.9100f;
+        result.reflectionsGain = 0.3981f;
+        result.reflectionsDelay = 0.0590f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.8913f;
+        result.lateReverbDelay = 0.0370f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.1400f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9920f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb city_abandoned() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.6900f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.8913f;
+        result.decayTime = 3.2800f;
+        result.decayHfRatio = 1.1700f;
+        result.decayLfRatio = 0.9100f;
+        result.reflectionsGain = 0.4467f;
+        result.reflectionsDelay = 0.0440f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.2818f;
+        result.lateReverbDelay = 0.0240f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.2000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9966f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb dustyroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 0.3645f;
+        result.diffusion = 0.5600f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.7943f;
+        result.gainLf = 0.7079f;
+        result.decayTime = 1.7900f;
+        result.decayHfRatio = 0.3800f;
+        result.decayLfRatio = 0.2100f;
+        result.reflectionsGain = 0.5012f;
+        result.reflectionsDelay = 0.0020f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.2589f;
+        result.lateReverbDelay = 0.0060f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2020f;
+        result.echoDepth = 0.0500f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.0000f;
+        result.airAbsorptionGainHf = 0.9886f;
+        result.hfReference = 13046.0000f;
+        result.lfReference = 163.3000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb chapel() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.8400f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.5623f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 4.6200f;
+        result.decayHfRatio = 0.6400f;
+        result.decayLfRatio = 1.2300f;
+        result.reflectionsGain = 0.4467f;
+        result.reflectionsDelay = 0.0320f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 0.7943f;
+        result.lateReverbDelay = 0.0490f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.2500f;
+        result.echoDepth = 0.0000f;
+        result.modulationTime = 0.2500f;
+        result.modulationDepth = 0.1100f;
+        result.airAbsorptionGainHf = 0.9943f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = true;
+        return result;
+    }
+
+
+    public static EaxReverb smallwaterroom() {
+        final EaxReverb result = new EaxReverb();
+        result.density = 1.0000f;
+        result.diffusion = 0.7000f;
+        result.gain = 0.3162f;
+        result.gainHf = 0.4477f;
+        result.gainLf = 1.0000f;
+        result.decayTime = 1.5100f;
+        result.decayHfRatio = 1.2500f;
+        result.decayLfRatio = 1.1400f;
+        result.reflectionsGain = 0.8913f;
+        result.reflectionsDelay = 0.0200f;
+        result.reflectionsPan.set(0f, 0f, 0f);
+        result.lateReverbGain = 1.4125f;
+        result.lateReverbDelay = 0.0300f;
+        result.lateReverbPan.set(0f, 0f, 0f);
+        result.echoTime = 0.1790f;
+        result.echoDepth = 0.1500f;
+        result.modulationTime = 0.8950f;
+        result.modulationDepth = 0.1900f;
+        result.airAbsorptionGainHf = 0.9920f;
+        result.hfReference = 5000.0000f;
+        result.lfReference = 250.0000f;
+        result.roomRolloffFactor = 0.0000f;
+        result.decayHfLimit = false;
+        return result;
+    }
+
+
     @Override
     void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
