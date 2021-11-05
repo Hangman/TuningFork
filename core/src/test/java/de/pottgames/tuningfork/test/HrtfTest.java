@@ -71,7 +71,7 @@ public class HrtfTest extends ApplicationAdapter {
 
     public static void main(String[] args) {
         final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("MiniExample");
+        config.setTitle("HrtfTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         new Lwjgl3Application(new HrtfTest(), config);
