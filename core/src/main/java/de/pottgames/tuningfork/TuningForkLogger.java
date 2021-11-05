@@ -13,4 +13,7 @@ public interface TuningForkLogger {
 
     void debug(Class<?> clazz, String message);
 
+
+    void trace(Class<?> clazz, String message);
+
 }

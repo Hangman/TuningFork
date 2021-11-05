@@ -1,6 +1,6 @@
 package de.pottgames.tuningfork;
 
-public class OpenDeviceException extends Exception {
+public class OpenDeviceException extends TuningForkException {
     private static final long serialVersionUID = -6963586216442321879L;
 
 

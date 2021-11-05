@@ -29,4 +29,9 @@ public class GdxLogger implements TuningForkLogger {
         Gdx.app.debug(GdxLogger.TAG, message);
     }
 
+
+    @Override
+    public void trace(Class<?> clazz, String message) {
+    }
+
 }

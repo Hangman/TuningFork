@@ -1,26 +1,19 @@
 package de.pottgames.tuningfork;
 
-import java.nio.IntBuffer;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
-import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALUtil;
-import org.lwjgl.openal.EXTEfx;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -31,23 +24,21 @@ import com.badlogic.gdx.utils.Disposable;
  *
  */
 public class Audio implements Disposable {
-    private static Audio                           instance;
-    private static final int                       DEFAULT_IDLE_TASKS_POOL_CAPACITY = 10;
-    private static final int                       DEFAULT_SOURCES_POOL_CAPACITY    = 20;
-    final Object                                   lock                             = new Object();
-    private long                                   device;
-    private long                                   context;
+    private static Audio instance;
+
+    final Object                                   lock                          = new Object();
     private SoundListener                          listener;
     private SoundSourcePool                        sourcePool;
     private final Thread                           updateThread;
-    private volatile boolean                       running                          = true;
-    private final Array<StreamedSound>             soundsToUpdate                   = new Array<>();
+    private volatile boolean                       running                       = true;
+    private final Array<StreamedSound>             soundsToUpdate                = new Array<>();
     private final ExecutorService                  taskService;
-    private final ConcurrentLinkedQueue<AsyncTask> idleTasks                        = new ConcurrentLinkedQueue<>();
-    private float                                  defaultMinAttenuationDistance    = 1f;
-    private float                                  defaultMaxAttenuationDistance    = Float.MAX_VALUE;
-    private float                                  defaultAttenuationFactor         = 1f;
+    private final ConcurrentLinkedQueue<AsyncTask> idleTasks                     = new ConcurrentLinkedQueue<>();
+    private float                                  defaultMinAttenuationDistance = 1f;
+    private float                                  defaultMaxAttenuationDistance = Float.MAX_VALUE;
+    private float                                  defaultAttenuationFactor      = 1f;
     final TuningForkLogger                         logger;
+    private final AudioDevice                      device;
 
 
     public static List<String> availableDevices() {
@@ -55,137 +46,101 @@ public class Audio implements Disposable {
     }
 
 
-    static Audio get() {
-        return Audio.instance;
+    /**
+     * Initializes an Audio instance with the default {@link AudioConfig}. Errors are logged but exceptions are silently ignored. Call
+     * {@link Audio#initSafe(AudioConfig)} instead, if you want to handle exceptions.
+     *
+     * @return the initialized Audio instance or null on failure
+     */
+    public static Audio init() {
+        return Audio.init(new AudioConfig());
     }
 
 
     /**
-     * Creates an audio instance initialized on the default sound device of the OS.
+     * Initializes an Audio instance with the default {@link AudioConfig}. If you don't want to take care of exceptions, call {@link Audio#init(AudioConfig)}
+     * instead.
+     *
+     * @return the initialized Audio instance
      *
      * @throws OpenDeviceException
+     * @throws UnsupportedAudioDeviceException
      */
-    public Audio() throws OpenDeviceException {
-        this(null, Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
+    public static Audio initSafe() throws OpenDeviceException, UnsupportedAudioDeviceException {
+        return Audio.initSafe(new AudioConfig());
     }
 
 
     /**
-     * Creates an audio instance initialized on the given device. You can fetch a list of all available devices with {@link Audio#availableDevices()}.
+     * Initializes an Audio instance with the given {@link AudioConfig}. Errors are logged but exceptions are silently ignored. Call
+     * {@link Audio#initSafe(AudioConfig)} instead, if you want to handle exceptions.
      *
-     * @param deviceSpecifier
+     * @param config
      *
-     * @throws OpenDeviceException
+     * @return the initialized Audio instance or null on failure
      */
-    public Audio(String deviceSpecifier) throws OpenDeviceException {
-        this(deviceSpecifier, Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
-    }
-
-
-    /**
-     * Creates an audio instance initialized on the given device. You can fetch a list of all available devices with {@link Audio#availableDevices()}. You can
-     * implement {@link TuningForkLogger} to write your own logger or build a bridge to another logging system like log4j.
-     *
-     * @param deviceSpecifier
-     * @param logger the logger to use
-     *
-     * @throws OpenDeviceException
-     */
-    public Audio(String deviceSpecifier, TuningForkLogger logger) throws OpenDeviceException {
-        this(deviceSpecifier, Audio.DEFAULT_SOURCES_POOL_CAPACITY, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, logger);
-    }
-
-
-    /**
-     * Creates an audio instance initialized on the default sound device of the OS.
-     *
-     * @param simultaneousSources defines how many non-streamed sounds can be played simultaneously.
-     *
-     * @throws OpenDeviceException
-     */
-    public Audio(int simultaneousSources) throws OpenDeviceException {
-        this(null, simultaneousSources, Audio.DEFAULT_IDLE_TASKS_POOL_CAPACITY, new GdxLogger());
-    }
-
-
-    /**
-     * Creates an audio instance initialized on the given device. You can fetch a list of all available devices with {@link Audio#availableDevices()}. You can
-     * implement {@link TuningForkLogger} to write your own logger or build a bridge to another logging system like log4j.
-     *
-     * @param deviceSpecifier the sound device
-     * @param simultaneousSources defines how many non-streamed sounds can be played simultaneously.
-     * @param idleTasks default 10
-     * @param logger the logger to use
-     *
-     * @throws OpenDeviceException
-     */
-    public Audio(String deviceSpecifier, int simultaneousSources, int idleTasks, TuningForkLogger logger) throws OpenDeviceException {
+    public static Audio init(AudioConfig config) {
+        AudioDevice device;
+        Audio audio = null;
         try {
-            if (Audio.instance != null) {
-                Audio.instance.dispose();
-            }
-            Audio.instance = this;
-
-            // SET LOGGER
-            if (logger != null) {
-                this.logger = logger;
-            } else {
-                this.logger = new MockLogger();
-            }
-
-            // INITIAL IDLE TASK CREATION FOR THE POOL
-            for (int i = 0; i < idleTasks - 1; i++) {
-                this.idleTasks.add(new AsyncTask());
-            }
-
-            // CREATE THE TASK SERVICE
-            this.taskService = Executors.newSingleThreadExecutor(r -> {
-                final Thread t = Executors.defaultThreadFactory().newThread(r);
-                t.setDaemon(true);
-                return t;
-            });
-
-            // adding the last task by executing it for warm up
-            this.taskService.execute(new AsyncTask());
-
-            // OPEN THE DEFAULT SOUND DEVICE
-            this.device = ALC10.alcOpenDevice(deviceSpecifier);
-            if (this.device == 0L) {
-                throw new IllegalStateException("Failed to open the default OpenAL device.");
-            }
-
-            // CREATE A CONTEXT AND SET IT ACTIVE
-            final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.device);
-            this.context = ALC10.alcCreateContext(this.device, (IntBuffer) null);
-            if (this.context == 0L) {
-                throw new IllegalStateException("Failed to create OpenAL context.");
-            }
-            ALC10.alcMakeContextCurrent(this.context);
-            AL.createCapabilities(deviceCapabilities);
+            device = new AudioDevice(config.getDeviceConfig(), config.getLogger());
+            audio = new Audio(device, config);
         } catch (final Exception e) {
-            Audio.instance = null;
-            if (deviceSpecifier == null) {
-                deviceSpecifier = "default";
-            }
-            throw new OpenDeviceException("Failed to open device: " + deviceSpecifier, e);
+            config.getLogger().error(Audio.class, "Failed to init Audio. Details: " + e.getMessage());
         }
 
-        // NOTE ON CAPABILITIES: TuningFork makes the assumption that there are always 2 or more auxiliary sends available per source. Since the OpenAL
-        // implementation is OpenAL Soft, it should be safe to do so.
+        return audio;
+    }
 
-        // CHECK AVAILABLE AUXILIARY SENDS
-        final IntBuffer auxSends = BufferUtils.newIntBuffer(1);
-        ALC10.alcGetIntegerv(this.device, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
-        logger.debug(this.getClass(), "Available auxiliary sends: " + auxSends.get(0));
+
+    /**
+     * Initializes an Audio instance with the given {@link AudioConfig}. If you don't want to take care of exceptions, call {@link Audio#init(AudioConfig)}
+     * instead.
+     *
+     * @param config
+     *
+     * @return the initialized Audio instance
+     *
+     * @throws OpenDeviceException
+     * @throws UnsupportedAudioDeviceException
+     */
+    public static Audio initSafe(AudioConfig config) throws OpenDeviceException, UnsupportedAudioDeviceException {
+        final AudioDevice device = new AudioDevice(config.getDeviceConfig(), config.getLogger());
+        return new Audio(device, config);
+    }
+
+
+    private Audio(AudioDevice device, AudioConfig config) {
+        this.logger = config.getLogger();
+        this.device = device;
+
+        // INITIAL IDLE TASK CREATION FOR THE POOL
+        for (int i = 0; i < config.getIdleTasks() - 1; i++) {
+            this.idleTasks.add(new AsyncTask());
+        }
+
+        // SET INSTANCE
+        Audio.instance = this;
+
+        // CREATE THE TASK SERVICE
+        this.taskService = Executors.newSingleThreadExecutor(runnable -> {
+            final Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+            thread.setName("TuningFork-Task-Thread");
+            thread.setDaemon(true);
+            return thread;
+        });
+
+        // adding the last task by executing it for warm up
+        this.taskService.execute(new AsyncTask());
 
         // SET DISTANCE ATTENUATION MODEL
-        this.setDistanceAttenuationModel(DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED);
+        this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
 
         // CREATE LISTENER
         this.listener = new SoundListener();
 
         // CREATE SOURCES
-        this.sourcePool = new SoundSourcePool(simultaneousSources);
+        this.sourcePool = new SoundSourcePool(config.getSimultaneousSources());
 
         // START UPDATE THREAD
         this.updateThread = new Thread() {
@@ -204,6 +159,21 @@ public class Audio implements Disposable {
         this.updateThread.setName("TuningFork-Update-Thread");
         this.updateThread.setDaemon(true);
         this.updateThread.start();
+    }
+
+
+    static Audio get() {
+        return Audio.instance;
+    }
+
+
+    /**
+     * Returns the currently used AudioDevice.
+     *
+     * @return the device in charge
+     */
+    public AudioDevice getDevice() {
+        return this.device;
     }
 
 
@@ -584,13 +554,8 @@ public class Audio implements Disposable {
         // DISPOSE SOUND SOURCE POOL
         this.sourcePool.dispose();
 
-        // SHUTDOWN OPEN AL
-        if (this.context != 0L) {
-            ALC10.alcDestroyContext(this.context);
-        }
-        if (this.device != 0L) {
-            ALC10.alcCloseDevice(this.device);
-        }
+        // DISPOSE DEVICE LAST
+        this.device.dispose(true);
 
         Audio.instance = null;
     }

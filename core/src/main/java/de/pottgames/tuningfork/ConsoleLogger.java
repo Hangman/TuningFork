@@ -5,7 +5,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
 
     public enum LogLevel {
-        DEBUG_INFO_WARN_ERROR(4), INFO_WARN_ERROR(3), WARN_ERROR(2), ERROR(1), OFF(0);
+        TRACE_DEBUG_INFO_WARN_ERROR(5), DEBUG_INFO_WARN_ERROR(4), INFO_WARN_ERROR(3), WARN_ERROR(2), ERROR(1), OFF(0);
 
 
         private final int value;
@@ -64,6 +64,14 @@ public class ConsoleLogger implements TuningForkLogger {
     @Override
     public void debug(Class<?> clazz, String message) {
         if (this.logLevel.allowedToLog(LogLevel.DEBUG_INFO_WARN_ERROR)) {
+            System.out.println(clazz.getName() + ": " + message);
+        }
+    }
+
+
+    @Override
+    public void trace(Class<?> clazz, String message) {
+        if (this.logLevel.allowedToLog(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }

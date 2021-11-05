@@ -21,4 +21,9 @@ class MockLogger implements TuningForkLogger {
     public void debug(Class<?> clazz, String message) {
     }
 
+
+    @Override
+    public void trace(Class<?> clazz, String message) {
+    }
+
 }
