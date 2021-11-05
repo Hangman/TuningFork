@@ -338,9 +338,26 @@ public class Audio implements Disposable {
     }
 
 
+    public void play(SoundBuffer buffer, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.attachEffect(effect);
+        source.play();
+        source.obtained = false;
+    }
+
+
     public void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    public void play(SoundBuffer buffer, float volume, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.setVolume(volume);
+        source.attachEffect(effect);
         source.play();
         source.obtained = false;
     }
@@ -350,6 +367,16 @@ public class Audio implements Disposable {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    public void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.setVolume(volume);
+        source.setPitch(pitch);
+        source.attachEffect(effect);
         source.play();
         source.obtained = false;
     }
@@ -365,9 +392,29 @@ public class Audio implements Disposable {
     }
 
 
+    public void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.setVolume(volume);
+        source.setPitch(pitch);
+        AL10.alSource3f(source.sourceId, AL10.AL_POSITION, MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
+        source.attachEffect(effect);
+        source.play();
+        source.obtained = false;
+    }
+
+
     public void play3D(SoundBuffer buffer, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    public void play3D(SoundBuffer buffer, Vector3 position, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainSource(buffer);
+        source.setPosition(position);
+        source.attachEffect(effect);
         source.play();
         source.obtained = false;
     }
@@ -382,11 +429,32 @@ public class Audio implements Disposable {
     }
 
 
+    public void play3D(SoundBuffer buffer, float volume, Vector3 position, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainSource(buffer);
+        source.setVolume(volume);
+        source.setPosition(position);
+        source.attachEffect(effect);
+        source.play();
+        source.obtained = false;
+    }
+
+
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPitch(pitch);
         source.setPosition(position);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainSource(buffer);
+        source.setVolume(volume);
+        source.setPitch(pitch);
+        source.setPosition(position);
+        source.attachEffect(effect);
         source.play();
         source.obtained = false;
     }
