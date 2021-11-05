@@ -165,6 +165,34 @@ public class BufferedSoundSource extends SoundSource {
     }
 
 
+    @Override
+    public SoundEffect attachEffect(SoundEffect effect) {
+        if (this.obtained) {
+            return super.attachEffect(effect);
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public boolean detachEffect(SoundEffect effect) {
+        if (this.obtained) {
+            return super.detachEffect(effect);
+        }
+
+        return false;
+    }
+
+
+    @Override
+    public void detachAllEffects() {
+        if (this.obtained) {
+            super.detachAllEffects();
+        }
+    }
+
+
     void reset(float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance) {
         this.obtained = true;
         AL10.alSourceRewind(this.sourceId);
