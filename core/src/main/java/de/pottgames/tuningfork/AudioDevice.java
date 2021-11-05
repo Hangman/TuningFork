@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 
 /**
- * Encapsulates an OpenAL audio device.
+ * A class that gives access to some audio hardware device specific settings. Allows to query and change hardware specific settings.
  *
  * @author Matthias
  *
@@ -203,6 +203,7 @@ public class AudioDevice {
         if (this.isHrtfSupported()) {
             final int num_hrtf = ALC10.alcGetInteger(this.device, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
 
+            // FIND HRTF INDEX BY SPECIFIER
             int hrtfIndex = -1;
             for (int i = 0; i < num_hrtf; i++) {
                 final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.device, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
