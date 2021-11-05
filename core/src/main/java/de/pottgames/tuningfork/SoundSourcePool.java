@@ -44,7 +44,10 @@ class SoundSourcePool {
     void resumeAll() {
         for (final BufferedSoundSource source : this.sources) {
             if (source.isPaused()) {
+                final boolean obtainedState = source.obtained;
+                source.obtained = true;
                 source.play();
+                source.obtained = obtainedState;
             }
         }
     }
@@ -53,7 +56,10 @@ class SoundSourcePool {
     void pauseAll() {
         for (final BufferedSoundSource source : this.sources) {
             if (source.isPlaying()) {
+                final boolean obtainedState = source.obtained;
+                source.obtained = true;
                 source.pause();
+                source.obtained = obtainedState;
             }
         }
     }
@@ -61,7 +67,10 @@ class SoundSourcePool {
 
     void stopAll() {
         for (final BufferedSoundSource source : this.sources) {
+            final boolean obtainedState = source.obtained;
+            source.obtained = true;
             source.stop();
+            source.obtained = obtainedState;
         }
     }
 
