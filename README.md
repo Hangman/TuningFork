@@ -53,5 +53,4 @@ project(":core") {
 ```
 
 ## Get Started
-WORK IN PROGRESS! THE WIKI IS NOT YET AVAILABLE!
-// On the wiki page you will find everything you need to know, come on, click me and let's go to the wiki.
+[Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
