@@ -14,17 +14,26 @@ import com.badlogic.gdx.math.Vector3;
  *
  */
 public abstract class SoundSource {
-    final int             sourceId;
-    private SoundEffect[] effects               = new SoundEffect[2];
-    private int           nextSoundEffectSendId = 0;
-    private float         attenuationFactor     = 1f;
-    private final Vector3 position              = new Vector3(0f, 0f, 0f);
-    private boolean       directional           = false;
+    private final TuningForkLogger logger;
+    private final ErrorLogger      errorLogger;
+    final int                      sourceId;
+    private SoundEffect[]          effects               = new SoundEffect[2];
+    private int                    nextSoundEffectSendId = 0;
+    private float                  attenuationFactor     = 1f;
+    private final Vector3          position              = new Vector3(0f, 0f, 0f);
+    private boolean                directional           = false;
 
 
     SoundSource() {
+        this.logger = Audio.get().logger;
+        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+
         this.sourceId = AL10.alGenSources();
         AL10.alSourcef(this.sourceId, EXTEfx.AL_AIR_ABSORPTION_FACTOR, 1f);
+
+        if (!this.errorLogger.checkLogError("Failed to create the SoundSource")) {
+            this.logger.debug(this.getClass(), "SoundSource successfully created");
+        }
     }
 
 
@@ -145,6 +154,7 @@ public abstract class SoundSource {
         AL10.alSourcef(this.sourceId, AL10.AL_CONE_OUTER_ANGLE, coneOuterAngle);
         AL10.alSourcef(this.sourceId, AL10.AL_CONE_OUTER_GAIN, outOfConeVolume);
         this.setDirection(direction);
+        this.logger.trace(this.getClass(), "SoundSource successfully set to directional");
     }
 
 
@@ -167,6 +177,7 @@ public abstract class SoundSource {
     public void makeOmniDirectional() {
         this.directional = false;
         AL10.alSource3f(this.sourceId, AL10.AL_DIRECTION, 0f, 0f, 0f);
+        this.logger.trace(this.getClass(), "SoundSource successfully set to omnidirectional");
     }
 
 
@@ -400,6 +411,9 @@ public abstract class SoundSource {
     void dispose() {
         this.detachAllEffects();
         AL10.alDeleteSources(this.sourceId);
+        if (!this.errorLogger.checkLogError("Failed to dispose the SoundSource")) {
+            this.logger.debug(this.getClass(), "SoundSource successfully disposed");
+        }
     }
 
 }

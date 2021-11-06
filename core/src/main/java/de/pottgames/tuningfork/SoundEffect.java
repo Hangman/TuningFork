@@ -7,12 +7,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 public class SoundEffect implements Disposable {
-    private final int          auxSlotId;
-    private final int          effectId;
-    private Array<SoundSource> attachedSources = new Array<>();
+    private final ErrorLogger      errorLogger;
+    private final TuningForkLogger logger;
+    private final int              auxSlotId;
+    private final int              effectId;
+    private Array<SoundSource>     attachedSources = new Array<>();
 
 
     public SoundEffect(SoundEffectData data) {
+        this.logger = Audio.get().logger;
+        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+
         // CREATE AUX SLOT
         this.auxSlotId = EXTEfx.alGenAuxiliaryEffectSlots();
         this.setEnvironmental(false);
@@ -26,6 +31,10 @@ public class SoundEffect implements Disposable {
 
         // DELETE EFFECT
         EXTEfx.alDeleteEffects(this.effectId);
+
+        if (!this.errorLogger.checkLogError("Failed to create the SoundEffect")) {
+            this.logger.debug(this.getClass(), "SoundEffect successfully created");
+        }
     }
 
 
@@ -37,6 +46,10 @@ public class SoundEffect implements Disposable {
      */
     public void setEnvironmental(boolean value) {
         EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, value ? AL10.AL_TRUE : AL10.AL_FALSE);
+
+        if (!this.errorLogger.checkLogError("Something went wrong")) {
+            this.logger.trace(this.getClass(), "SoundEffect set to environmental");
+        }
     }
 
 
@@ -65,6 +78,10 @@ public class SoundEffect implements Disposable {
         }
         this.attachedSources.clear();
         EXTEfx.alDeleteAuxiliaryEffectSlots(this.auxSlotId);
+
+        if (!this.errorLogger.checkLogError("Something went wrong")) {
+            this.logger.trace(this.getClass(), "SoundEffect successfully disposed");
+        }
     }
 
 }
