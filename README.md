@@ -3,7 +3,7 @@
 # Introduction
 TuningFork is a library for libGDX that provides advanced audio features. To be upfront about it: This library only supports the desktop Lwjgl3 backend, sorry mobile and web users. The goal of TuningFork is to make as many features of OpenAL accessible as possible and still provide a comfortable and easy to use API.
 
-## Main Features
+### Main Features
 * SPATIAL AUDIO (3D)
 * DIRECTIONAL AUDIO (3D)
 * NORMAL AUDIO
@@ -14,11 +14,11 @@ TuningFork is a library for libGDX that provides advanced audio features. To be 
 * SUPPORT FOR OGG AND WAV FILES
 * OUTPUT TO ANY SOUND DEVICE (you are no longer tied to the default sound device)
 
-## Limitations
+### Limitations
 * LWJGL3 ONLY
 * NO SUPPORT FOR FILTERS AT THE MOMENT (an be imitated by the equalizer effect)
 
-## WHY
+### WHY
 The standard audio capabilities of libGDX are very limited. Especially if you are developing a 3D application and want to create realistic spatial sound, libGDX's on-board resources are in no way sufficient.
 Except for [Rafa Skoberg](https://github.com/rafaskb)s [Boom](https://github.com/rafaskb/Parrot) and [Parrot](https://github.com/rafaskb/Parrot), there are no alternatives available to my knowledge that blend in well with libGDX.
 Boom offers the possibility to use effects, but is limited to distortion, echo and reverb. A fraction of the palette that the OpenAL EFX extension has to offer.
