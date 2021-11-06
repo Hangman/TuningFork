@@ -21,9 +21,9 @@ TuningFork is a library for libGDX that provides advanced audio features. To be 
 ### WHY
 The standard audio capabilities of libGDX are very limited. Especially if you are developing a 3D application and want to create realistic spatial sound, libGDX's on-board resources are in no way sufficient.
 Except for [Rafa Skoberg](https://github.com/rafaskb)s [Boom](https://github.com/rafaskb/Parrot) and [Parrot](https://github.com/rafaskb/Parrot), there are no alternatives available to my knowledge that blend in well with libGDX.
-Boom offers the possibility to use effects, but is limited to distortion, echo and reverb. A fraction of the palette that the OpenAL EFX extension has to offer.
-Parrot on the other hand got some useful functions to play sounds, it even includes a music player. However, it implements its own linear algorithm to change the volume of sounds depending on the distance to the listener, etc., which is neither necessary nor realistic. OpenAL is already capable of doing these calculations for us and probably is much better at it.
-So these were the main reasons for me to create TuningFork.
+Boom offers the possibility to use effects, but only implements a subset of what's available.
+Parrot on the other hand got some useful functions to play sounds, it even includes a music player. Unfortunately, it implements its own attenuation algorhithm, which isn't realistic.
+If you're looking for a lighter alternative to TuningFork, Rafa's libs might be an option for you.
 
 ## Install
 TuningFork is available via Jitpack.
