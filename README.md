@@ -28,7 +28,7 @@ If you're looking for a lighter alternative to TuningFork, Rafa's libs might be 
 ## Install
 TuningFork is available via Jitpack.
 First make sure you have Jitpack declared as repository and your root build.gradle file. Also add the version variable (master-SNAPSHOT for now, a stable release will follow in the future):
-```
+```groovy
 allprojects {
 	repositories {
 		...
@@ -43,7 +43,7 @@ allprojects {
 
 Then add TuningFork as dependency in your core project: 
 
-```
+```groovy
 project(":core") {
     dependencies {
     	...
