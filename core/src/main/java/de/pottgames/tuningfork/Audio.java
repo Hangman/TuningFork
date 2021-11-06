@@ -531,6 +531,11 @@ public class Audio implements Disposable {
     }
 
 
+    void onBufferDisposal(SoundBuffer buffer) {
+        this.sourcePool.onBufferDisposal(buffer);
+    }
+
+
     @Override
     public void dispose() {
         // TERMINATE UPDATE THREAD
@@ -550,6 +555,9 @@ public class Audio implements Disposable {
         } catch (final InterruptedException e) {
             this.taskService.shutdownNow();
         }
+
+        // STOP ALL BUFFERED SOURCES
+        this.stopAllBufferedSources();
 
         // DISPOSE SOUND SOURCE POOL
         this.sourcePool.dispose();

@@ -70,7 +70,22 @@ class SoundSourcePool {
             final boolean obtainedState = source.obtained;
             source.obtained = true;
             source.stop();
+            if (!obtainedState) {
+                source.setBuffer(null);
+            }
             source.obtained = obtainedState;
+        }
+    }
+
+
+    void onBufferDisposal(SoundBuffer buffer) {
+        for (final BufferedSoundSource source : this.sources) {
+            if (source.getBuffer() == buffer) {
+                source.obtained = true;
+                source.stop();
+                source.setBuffer(null);
+                source.obtained = false;
+            }
         }
     }
 

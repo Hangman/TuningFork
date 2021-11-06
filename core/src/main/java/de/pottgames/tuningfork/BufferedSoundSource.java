@@ -193,6 +193,11 @@ public class BufferedSoundSource extends SoundSource {
     }
 
 
+    SoundBuffer getBuffer() {
+        return this.buffer;
+    }
+
+
     void reset(float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance) {
         this.obtained = true;
         AL10.alSourceRewind(this.sourceId);

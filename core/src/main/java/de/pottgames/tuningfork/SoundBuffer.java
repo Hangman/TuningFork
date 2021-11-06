@@ -59,6 +59,7 @@ public class SoundBuffer implements Disposable {
 
     @Override
     public void dispose() {
+        Audio.get().onBufferDisposal(this);
         AL10.alDeleteBuffers(this.bufferId);
         if (!this.errorLogger.checkLogError("Failed to dispose the SoundBuffer")) {
             this.logger.debug(this.getClass(), "SoundBuffer successfully disposed");
