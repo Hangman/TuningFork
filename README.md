@@ -16,7 +16,7 @@ TuningFork is a library for libGDX that provides advanced audio features. To be 
 
 ### Limitations
 * LWJGL3 ONLY
-* NO SUPPORT FOR FILTERS AT THE MOMENT (an be imitated by the equalizer effect)
+* NO SUPPORT FOR FILTERS AT THE MOMENT (can be imitated by the equalizer effect)
 
 ### WHY
 The standard audio capabilities of libGDX are very limited. Especially if you are developing a 3D application and want to create realistic spatial sound, libGDX's on-board resources are in no way sufficient.
