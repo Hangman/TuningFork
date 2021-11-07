@@ -33,7 +33,7 @@ public class Audio implements Disposable {
     private SoundSourcePool                        sourcePool;
     private final Thread                           updateThread;
     private volatile boolean                       running                       = true;
-    private final Array<StreamedSoundSource>             soundsToUpdate                = new Array<>();
+    private final Array<StreamedSoundSource>       soundsToUpdate                = new Array<>();
     private final ExecutorService                  taskService;
     private final ConcurrentLinkedQueue<AsyncTask> idleTasks                     = new ConcurrentLinkedQueue<>();
     private float                                  defaultMinAttenuationDistance = 1f;
@@ -572,14 +572,14 @@ public class Audio implements Disposable {
 
 
     enum TaskAction {
-        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL, STOP_ALL, PAUSE_ALL, RESUME_ALL;
+        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL, STOP_ALL, PAUSE_ALL, RESUME_ALL, DISPOSE_CALLBACK;
     }
 
 
     private class AsyncTask implements Runnable {
         private volatile StreamedSoundSource sound;
-        private volatile TaskAction    taskAction;
-        private volatile float         floatParam;
+        private volatile TaskAction          taskAction;
+        private volatile float               floatParam;
 
 
         @Override
@@ -623,6 +623,9 @@ public class Audio implements Disposable {
                                     sound.playAsync();
                                 }
                             }
+                            break;
+                        case DISPOSE_CALLBACK:
+                            this.sound.readyToDispose();
                             break;
                     }
                 }

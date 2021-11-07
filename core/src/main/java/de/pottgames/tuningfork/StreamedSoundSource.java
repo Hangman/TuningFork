@@ -21,6 +21,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private static final int       BUFFER_COUNT                    = 3;
     private static final int       BYTES_PER_SAMPLE                = 2;
     private final TuningForkLogger logger;
+    private final ErrorLogger      errorLogger;
     private final FileHandle       file;
     private AudioStream            audioStream;
     private final float            secondsPerBuffer;
@@ -35,6 +36,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private volatile int           processedBuffers                = 0;
     private AtomicInteger          lastQueuedBufferId              = new AtomicInteger();
     private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
+    private volatile boolean       readyToDispose                  = false;
 
 
     StreamedSoundSource(FileHandle file) {
@@ -45,6 +47,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         // FETCH AND SET DEPENDENCIES
         this.audio = Audio.get();
         this.logger = this.audio.logger;
+        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
         this.file = file;
 
         // SET DEFAULT ATTENUATION VALUES
@@ -311,12 +314,27 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
+    void readyToDispose() {
+        this.readyToDispose = true;
+    }
+
+
     @Override
     public void dispose() {
         this.audio.removeStreamedSound(this);
+        this.audio.postTask(this, TaskAction.STOP);
+        this.audio.postTask(this, TaskAction.DISPOSE_CALLBACK);
+        while (!this.readyToDispose) {
+            try {
+                Thread.sleep(1);
+            } catch (final InterruptedException e) {
+                // ignore
+            }
+        }
         super.dispose();
+        AL10.alDeleteBuffers(this.buffers);
+        this.errorLogger.checkLogError("Failed to dispose the SoundSources Buffers");
         StreamUtils.closeQuietly(this.audioStream);
-        // TODO: CLEANUP OPENAL STUFF: BUFFER, ETC.
     }
 
 }
