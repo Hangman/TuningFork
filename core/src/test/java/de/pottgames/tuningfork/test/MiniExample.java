@@ -23,6 +23,7 @@ public class MiniExample extends ApplicationAdapter {
         config.setTitle("MiniExample");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
+        config.disableAudio(true);
         new Lwjgl3Application(new MiniExample(), config);
     }
 

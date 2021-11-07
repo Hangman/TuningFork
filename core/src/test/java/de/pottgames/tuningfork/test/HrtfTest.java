@@ -29,6 +29,7 @@ public class HrtfTest extends ApplicationAdapter {
         final ConsoleLogger logger = new ConsoleLogger();
         logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
         final AudioConfig config = new AudioConfig();
+        config.getDeviceConfig().deviceSpecifier = "OpenAL Soft on Lautsprecher (3- Razer Nari Essential)";
         config.setLogger(logger);
         this.audio = Audio.init(config);
 
@@ -36,7 +37,6 @@ public class HrtfTest extends ApplicationAdapter {
         final Array<String> hrtfs = this.audio.getDevice().getAvailableHrtfs();
         if (hrtfs.isEmpty()) {
             System.out.println("no hrtfs available");
-            return;
         }
         hrtfs.forEach(name -> System.out.println("available hrtf: " + name));
         this.audio.getDevice().enableHrtf(hrtfs.get(0));
@@ -74,6 +74,7 @@ public class HrtfTest extends ApplicationAdapter {
         config.setTitle("HrtfTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
+        config.disableAudio(true);
         new Lwjgl3Application(new HrtfTest(), config);
     }
 
