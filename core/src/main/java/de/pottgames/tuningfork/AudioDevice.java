@@ -248,7 +248,7 @@ public class AudioDevice {
 
 
     /**
-     * Disables the current
+     * Disables hrtf on this device.
      */
     public void disableHrtf() {
         if (this.isHrtfSupported()) {
