@@ -1,4 +1,4 @@
-# ![logo](https://github.com/Hangman/TuningFork/blob/master/logo.png) TuningFork
+# ![logo](https://github.com/Hangman/TuningFork/blob/master/pageBin/logo.png) TuningFork
 
 # Introduction
 TuningFork is a library for libGDX that provides advanced audio features. To be upfront about it: This library only supports the desktop Lwjgl3 backend, sorry mobile and web users. The goal of TuningFork is to make as many features of OpenAL accessible as possible and still provide a comfortable and easy to use API.
