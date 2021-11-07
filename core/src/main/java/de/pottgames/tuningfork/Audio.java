@@ -485,7 +485,7 @@ public class Audio implements Disposable {
     }
 
 
-    public StreamedSoundSource createStreamedSound(FileHandle fileHandle) {
+    public StreamedSoundSource createStreamedSoundSource(FileHandle fileHandle) {
         final StreamedSoundSource sound = new StreamedSoundSource(fileHandle);
         synchronized (this.lock) {
             this.soundsToUpdate.add(sound);
