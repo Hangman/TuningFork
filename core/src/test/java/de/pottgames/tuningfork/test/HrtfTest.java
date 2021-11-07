@@ -35,12 +35,12 @@ public class HrtfTest extends ApplicationAdapter {
 
         // ENABLE HRTF
         final Array<String> hrtfs = this.audio.getDevice().getAvailableHrtfs();
-        if (hrtfs.isEmpty()) {
-            System.out.println("no hrtfs available");
-        }
         hrtfs.forEach(name -> System.out.println("available hrtf: " + name));
-        this.audio.getDevice().enableHrtf(hrtfs.get(0));
-        // this.audio.getDevice().disableHrtf();
+        if (!hrtfs.isEmpty()) {
+            this.audio.getDevice().enableHrtf(hrtfs.get(0));
+        } else {
+            logger.error(this.getClass(), "no hrtf available");
+        }
 
         // LOAD SOUND
         final File soundFile = new File("src/test/resources/numbers.wav");
