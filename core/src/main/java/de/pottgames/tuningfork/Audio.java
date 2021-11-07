@@ -33,7 +33,7 @@ public class Audio implements Disposable {
     private SoundSourcePool                        sourcePool;
     private final Thread                           updateThread;
     private volatile boolean                       running                       = true;
-    private final Array<StreamedSound>             soundsToUpdate                = new Array<>();
+    private final Array<StreamedSoundSource>             soundsToUpdate                = new Array<>();
     private final ExecutorService                  taskService;
     private final ConcurrentLinkedQueue<AsyncTask> idleTasks                     = new ConcurrentLinkedQueue<>();
     private float                                  defaultMinAttenuationDistance = 1f;
@@ -182,7 +182,7 @@ public class Audio implements Disposable {
     private void updateAsync() {
         synchronized (this.lock) {
             for (int i = 0; i < this.soundsToUpdate.size; i++) {
-                final StreamedSound sound = this.soundsToUpdate.get(i);
+                final StreamedSoundSource sound = this.soundsToUpdate.get(i);
                 sound.updateAsync();
             }
         }
@@ -485,8 +485,8 @@ public class Audio implements Disposable {
     }
 
 
-    public StreamedSound createStreamedSound(FileHandle fileHandle) {
-        final StreamedSound sound = new StreamedSound(fileHandle);
+    public StreamedSoundSource createStreamedSound(FileHandle fileHandle) {
+        final StreamedSoundSource sound = new StreamedSoundSource(fileHandle);
         synchronized (this.lock) {
             this.soundsToUpdate.add(sound);
         }
@@ -494,7 +494,7 @@ public class Audio implements Disposable {
     }
 
 
-    void removeStreamedSound(StreamedSound sound) {
+    void removeStreamedSound(StreamedSoundSource sound) {
         synchronized (this.lock) {
             this.soundsToUpdate.removeValue(sound, true);
         }
@@ -506,12 +506,12 @@ public class Audio implements Disposable {
     }
 
 
-    void postTask(StreamedSound sound, TaskAction action) {
+    void postTask(StreamedSoundSource sound, TaskAction action) {
         this.postTask(sound, action, 0f);
     }
 
 
-    void postTask(StreamedSound sound, TaskAction action, float floatParam) {
+    void postTask(StreamedSoundSource sound, TaskAction action, float floatParam) {
         AsyncTask task = this.idleTasks.poll();
         if (task == null) {
             task = new AsyncTask();
@@ -577,7 +577,7 @@ public class Audio implements Disposable {
 
 
     private class AsyncTask implements Runnable {
-        private volatile StreamedSound sound;
+        private volatile StreamedSoundSource sound;
         private volatile TaskAction    taskAction;
         private volatile float         floatParam;
 
@@ -604,13 +604,13 @@ public class Audio implements Disposable {
                             break;
                         case STOP_ALL:
                             for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                                final StreamedSound sound = Audio.this.soundsToUpdate.get(i);
+                                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
                                 sound.stopAsync();
                             }
                             break;
                         case PAUSE_ALL:
                             for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                                final StreamedSound sound = Audio.this.soundsToUpdate.get(i);
+                                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
                                 if (sound.isPlaying()) {
                                     sound.pauseAsync();
                                 }
@@ -618,7 +618,7 @@ public class Audio implements Disposable {
                             break;
                         case RESUME_ALL:
                             for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                                final StreamedSound sound = Audio.this.soundsToUpdate.get(i);
+                                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
                                 if (sound.isPaused()) {
                                     sound.playAsync();
                                 }

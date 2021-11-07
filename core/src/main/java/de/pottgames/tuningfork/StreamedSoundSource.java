@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 import de.pottgames.tuningfork.Audio.TaskAction;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
-public class StreamedSound extends SoundSource implements Disposable {
+public class StreamedSoundSource extends SoundSource implements Disposable {
     private static final int       BUFFER_SIZE                     = 4096 * 10;
     private static final int       BUFFER_COUNT                    = 3;
     private static final int       BYTES_PER_SAMPLE                = 2;
@@ -26,8 +26,8 @@ public class StreamedSound extends SoundSource implements Disposable {
     private final float            secondsPerBuffer;
     private final IntBuffer        buffers;
     private final int              audioFormat;
-    private final ByteBuffer       tempBuffer                      = BufferUtils.createByteBuffer(StreamedSound.BUFFER_SIZE);
-    private final byte[]           tempBytes                       = new byte[StreamedSound.BUFFER_SIZE];
+    private final ByteBuffer       tempBuffer                      = BufferUtils.createByteBuffer(StreamedSoundSource.BUFFER_SIZE);
+    private final byte[]           tempBytes                       = new byte[StreamedSoundSource.BUFFER_SIZE];
     private final Audio            audio;
     private AtomicBoolean          playing                         = new AtomicBoolean(false);
     private AtomicBoolean          stopped                         = new AtomicBoolean(true);
@@ -37,7 +37,7 @@ public class StreamedSound extends SoundSource implements Disposable {
     private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
 
 
-    StreamedSound(FileHandle file) {
+    StreamedSoundSource(FileHandle file) {
         if (file == null) {
             throw new TuningForkRuntimeException("file is null");
         }
@@ -61,8 +61,8 @@ public class StreamedSound extends SoundSource implements Disposable {
         this.audioFormat = channels > 1 ? AL10.AL_FORMAT_STEREO16 : AL10.AL_FORMAT_MONO16;
 
         // CREATE BUFFERS
-        this.secondsPerBuffer = (float) StreamedSound.BUFFER_SIZE / (StreamedSound.BYTES_PER_SAMPLE * channels * sampleRate);
-        this.buffers = BufferUtils.createIntBuffer(StreamedSound.BUFFER_COUNT);
+        this.secondsPerBuffer = (float) StreamedSoundSource.BUFFER_SIZE / (StreamedSoundSource.BYTES_PER_SAMPLE * channels * sampleRate);
+        this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
         AL10.alGenBuffers(this.buffers);
 
         // INITIAL BUFFER FILL
@@ -278,7 +278,7 @@ public class StreamedSound extends SoundSource implements Disposable {
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
         int filledBufferCount = 0;
-        for (int i = 0; i < StreamedSound.BUFFER_COUNT; i++) {
+        for (int i = 0; i < StreamedSoundSource.BUFFER_COUNT; i++) {
             final int bufferId = this.buffers.get(i);
             if (!this.fillBuffer(bufferId)) {
                 break;

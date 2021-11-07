@@ -29,7 +29,7 @@ public class AudioConfig {
      * @param deviceConfig
      * @param distanceAttenuationModel
      * @param simultaneousSources defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
-     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSound}s simultaneously
+     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s simultaneously
      * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
      *            available logger implementations that are shipped with TuningFork.
      */
@@ -103,7 +103,7 @@ public class AudioConfig {
 
 
     /**
-     * The initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSound}s simultaneously.
+     * The initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s simultaneously.
      *
      * @param idleTasks
      */
