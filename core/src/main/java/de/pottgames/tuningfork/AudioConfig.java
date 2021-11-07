@@ -1,5 +1,8 @@
 package de.pottgames.tuningfork;
 
+import de.pottgames.tuningfork.logger.GdxLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 public class AudioConfig {
     private AudioDeviceConfig        deviceConfig;
     private DistanceAttenuationModel distanceAttenuationModel;

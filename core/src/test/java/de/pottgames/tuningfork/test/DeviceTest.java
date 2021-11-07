@@ -9,11 +9,11 @@ import java.util.List;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDeviceConfig;
-import de.pottgames.tuningfork.ConsoleLogger;
-import de.pottgames.tuningfork.ConsoleLogger.LogLevel;
 import de.pottgames.tuningfork.DistanceAttenuationModel;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.logger.ConsoleLogger;
+import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class DeviceTest {
 

@@ -1,5 +1,7 @@
 package de.pottgames.tuningfork;
 
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 class MockLogger implements TuningForkLogger {
 
     @Override

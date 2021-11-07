@@ -2,6 +2,8 @@ package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL10;
 
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 class ErrorLogger {
     private static final String    TF_UNKNOWN_ERROR_CODE = "TF_UNKNOWN_ERROR_CODE";
     private static final String    AL_INVALID_NAME       = "AL_INVALID_NAME";

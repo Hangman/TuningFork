@@ -6,6 +6,8 @@ import org.lwjgl.openal.EXTEfx;
 
 import com.badlogic.gdx.math.Vector3;
 
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 /**
  * A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world. It enables you to play, pause, stop,
  * position sounds and let's you set different effects on it.

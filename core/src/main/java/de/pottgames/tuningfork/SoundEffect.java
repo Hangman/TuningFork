@@ -6,6 +6,8 @@ import org.lwjgl.openal.EXTEfx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 public class SoundEffect implements Disposable {
     private final ErrorLogger      errorLogger;
     private final TuningForkLogger logger;

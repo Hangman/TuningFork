@@ -1,4 +1,4 @@
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.logger;
 
 public class ConsoleLogger implements TuningForkLogger {
     private LogLevel logLevel = LogLevel.WARN_ERROR;

@@ -1,4 +1,4 @@
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.logger;
 
 import com.badlogic.gdx.Gdx;
 

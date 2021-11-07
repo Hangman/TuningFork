@@ -7,6 +7,8 @@ import org.lwjgl.openal.AL10;
 
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 /**
  * Stores sound data in an OpenAL buffer that can be used by sound sources. Needs to be disposed when no longer needed.
  *

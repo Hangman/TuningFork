@@ -14,6 +14,8 @@ import org.lwjgl.openal.SOFTHRTF;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 /**
  * A class that gives access to some audio hardware device specific settings. Allows to query and change hardware specific settings.
  *
