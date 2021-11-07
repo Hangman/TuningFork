@@ -29,7 +29,7 @@ public class HrtfTest extends ApplicationAdapter {
         final ConsoleLogger logger = new ConsoleLogger();
         logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
         final AudioConfig config = new AudioConfig();
-        config.getDeviceConfig().deviceSpecifier = "OpenAL Soft on Lautsprecher (3- Razer Nari Essential)";
+        config.getDeviceConfig().deviceSpecifier = "OpenAL Soft on Lautsprecher (3- Razer Nari Essential)"; // replace with your own device
         config.setLogger(logger);
         this.audio = Audio.init(config);
 
