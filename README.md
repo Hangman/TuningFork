@@ -23,7 +23,10 @@ The standard audio capabilities of libGDX are very limited. Especially if you ar
 Except for [Rafa Skoberg](https://github.com/rafaskb)s [Boom](https://github.com/rafaskb/Parrot) and [Parrot](https://github.com/rafaskb/Parrot), there are no alternatives available to my knowledge that blend in well with libGDX.
 If you're looking for a lighter alternative to TuningFork, Rafa's libs might be an option for you.
 
-## Install
+# Current State
+The library is still under development and not ready for use.
+
+# Install
 TuningFork is available via Jitpack.
 First make sure you have Jitpack declared as repository and your root build.gradle file. Also add the version variable (master-SNAPSHOT for now, a stable release will follow in the future):
 ```groovy
@@ -50,5 +53,5 @@ project(":core") {
 }
 ```
 
-## Get Started
+# Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
