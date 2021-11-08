@@ -32,11 +32,11 @@ TuningFork is available via Jitpack.
 First make sure you have Jitpack declared as repository and your root build.gradle file. Also add the version variable (master-SNAPSHOT for now, a stable release will follow in the future):
 ```groovy
 allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-	ext {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+    ext {
         ...
         tfVersion = 'master-SNAPSHOT'
     }
