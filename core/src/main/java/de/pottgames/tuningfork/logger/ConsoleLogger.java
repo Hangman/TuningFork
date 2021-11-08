@@ -4,6 +4,16 @@ public class ConsoleLogger implements TuningForkLogger {
     private LogLevel logLevel = LogLevel.WARN_ERROR;
 
 
+    public ConsoleLogger() {
+        // provide default constructor
+    }
+
+
+    public ConsoleLogger(LogLevel logLevel) {
+        this.setLogLevel(logLevel);
+    }
+
+
     public enum LogLevel {
         TRACE_DEBUG_INFO_WARN_ERROR(5), DEBUG_INFO_WARN_ERROR(4), INFO_WARN_ERROR(3), WARN_ERROR(2), ERROR(1), OFF(0);
 
