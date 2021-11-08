@@ -328,6 +328,22 @@ public abstract class SoundSource {
 
 
     /**
+     * Returns the current playback position in seconds.
+     *
+     * @return the playback position
+     */
+    abstract public float getPlaybackPosition();
+
+
+    /**
+     * Sets the playback position of this sound source. Invalid values are ignored but an error is logged.
+     *
+     * @param seconds
+     */
+    abstract public void setPlaybackPosition(float seconds);
+
+
+    /**
      * Attaches a sound effect to this sound source. You can only attach 2 different effects in total. If you attach more than 2 effects, the oldest attached
      * effect will be kicked out. Attaching an effect that is already attached to this source is a legal NOP.
      *

@@ -1,8 +1,11 @@
 package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 
 import com.badlogic.gdx.math.Vector3;
+
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
  * A sound source that is backed by a single buffer.
@@ -11,8 +14,17 @@ import com.badlogic.gdx.math.Vector3;
  *
  */
 public class BufferedSoundSource extends SoundSource {
-    private SoundBuffer buffer;
-    boolean             obtained = false;
+    private SoundBuffer            buffer;
+    private final TuningForkLogger logger;
+    private final ErrorLogger      errorLogger;
+    boolean                        obtained = false;
+
+
+    BufferedSoundSource() {
+        final Audio audio = Audio.get();
+        this.logger = audio.logger;
+        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+    }
 
 
     @Override
@@ -162,6 +174,17 @@ public class BufferedSoundSource extends SoundSource {
     @Override
     public float getDuration() {
         return this.buffer != null ? this.buffer.getDuration() : -1f;
+    }
+
+
+    public void setPlaybackPosition(float seconds) {
+        AL10.alSourcef(this.sourceId, AL11.AL_SEC_OFFSET, seconds);
+        this.errorLogger.checkLogError("Failed to set playback position");
+    }
+
+
+    public float getPlaybackPosition() {
+        return AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }
 
 
