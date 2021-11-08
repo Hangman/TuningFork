@@ -177,12 +177,14 @@ public class BufferedSoundSource extends SoundSource {
     }
 
 
+    @Override
     public void setPlaybackPosition(float seconds) {
         AL10.alSourcef(this.sourceId, AL11.AL_SEC_OFFSET, seconds);
         this.errorLogger.checkLogError("Failed to set playback position");
     }
 
 
+    @Override
     public float getPlaybackPosition() {
         return AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }

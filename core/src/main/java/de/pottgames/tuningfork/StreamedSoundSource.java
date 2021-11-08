@@ -133,11 +133,13 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
+    @Override
     public float getPlaybackPosition() {
         return this.processedBuffers * this.secondsPerBuffer + AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }
 
 
+    @Override
     public void setPlaybackPosition(float seconds) {
         if (seconds >= 0f) {
             this.audio.postTask(this, TaskAction.SET_PLAYBACK_POSITION, seconds);
