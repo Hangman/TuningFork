@@ -35,7 +35,7 @@ public class EffectTest extends ApplicationAdapter {
         this.soundSource.play();
 
         // create effects
-        this.effect1 = new SoundEffect(EaxReverb.dome_saintpauls());
+        this.effect1 = new SoundEffect(EaxReverb.domeSaintPauls());
         final Flanger flanger = new Flanger();
         flanger.rate = 7f;
         this.effect2 = new SoundEffect(flanger);
