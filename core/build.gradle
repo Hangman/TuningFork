@@ -28,6 +28,7 @@ repositories {
 }
 
 dependencies {
+	// compileOnly here is kinda hacky but probably (afaik) the best solution we can get
     compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
@@ -57,6 +58,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/DeviceTest.class'
      exclude 'de/pottgames/tuningfork/test/HrtfTest.class'
      exclude 'de/pottgames/tuningfork/test/AsyncLoadTest.class'
+     exclude 'de/pottgames/tuningfork/test/EffectTest.class'
  }
 
 publishing {
