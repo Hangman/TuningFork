@@ -25,7 +25,7 @@ Except for [Rafa Skoberg](https://github.com/rafaskb)s [Boom](https://github.com
 If you're looking for a lighter alternative to TuningFork, Rafa's libs might be an option for you.
 
 # Current State
-The library is still under development and not ready for use.
+The library is usable, but still in an early stage.
 
 # Install
 TuningFork is available via Jitpack.
