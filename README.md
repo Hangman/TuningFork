@@ -29,7 +29,7 @@ The library is usable, but still in an early stage.
 
 # Install
 TuningFork is available via Jitpack.
-First make sure you have Jitpack declared as repository and your root build.gradle file. Also add the version variable (master-SNAPSHOT for now, a stable release will follow in the future):
+First make sure you have Jitpack declared as repository and your root build.gradle file. Also add the version variable:
 ```groovy
 allprojects {
     repositories {
@@ -38,7 +38,7 @@ allprojects {
     }
     ext {
         ...
-        tfVersion = 'master-SNAPSHOT'
+        tfVersion = 'v0.1'
     }
 }
 ```
