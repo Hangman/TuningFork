@@ -43,7 +43,6 @@ public class EffectTest extends ApplicationAdapter {
         // attach the effects to the source
         this.soundSource.attachEffect(this.effect1);
         this.soundSource.attachEffect(this.effect2);
-
     }
 
 
