@@ -57,6 +57,7 @@ public class EffectTest extends ApplicationAdapter {
     public void dispose() {
         this.effect1.dispose();
         this.effect2.dispose();
+        this.soundSource.free();
         this.sound.dispose();
 
         // always dispose Audio last
