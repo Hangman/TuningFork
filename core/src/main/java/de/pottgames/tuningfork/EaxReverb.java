@@ -308,7 +308,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb paddedcell() {
+    public static EaxReverb paddedCell() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.1715f;
         result.diffusion = 1.0000f;
@@ -395,7 +395,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb livingroom() {
+    public static EaxReverb livingRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.9766f;
         result.diffusion = 1.0000f;
@@ -424,7 +424,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb stoneroom() {
+    public static EaxReverb stoneRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -482,7 +482,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb concerthall() {
+    public static EaxReverb concertHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -598,7 +598,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb carpetedhallway() {
+    public static EaxReverb carpetedHallway() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 1.0000f;
@@ -656,7 +656,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb stonecorridor() {
+    public static EaxReverb stoneCorridor() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -859,7 +859,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb parkinglot() {
+    public static EaxReverb parkingLot() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -1033,7 +1033,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_smallroom() {
+    public static EaxReverb castleSmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8900f;
@@ -1062,7 +1062,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_shortpassage() {
+    public static EaxReverb castleShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8900f;
@@ -1091,7 +1091,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_mediumroom() {
+    public static EaxReverb castleMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.9300f;
@@ -1120,7 +1120,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_largeroom() {
+    public static EaxReverb castleLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8200f;
@@ -1149,7 +1149,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_longpassage() {
+    public static EaxReverb castleLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8900f;
@@ -1178,7 +1178,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_hall() {
+    public static EaxReverb castleHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8100f;
@@ -1207,7 +1207,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_cupboard() {
+    public static EaxReverb castleCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8900f;
@@ -1236,7 +1236,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_courtyard() {
+    public static EaxReverb castleCourtyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.4200f;
@@ -1265,7 +1265,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb castle_alcove() {
+    public static EaxReverb castleAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8900f;
@@ -1294,7 +1294,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_smallroom() {
+    public static EaxReverb factorySmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
         result.diffusion = 0.8200f;
@@ -1323,7 +1323,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_shortpassage() {
+    public static EaxReverb factoryShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
         result.diffusion = 0.6400f;
@@ -1352,7 +1352,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_mediumroom() {
+    public static EaxReverb factoryMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 0.8200f;
@@ -1381,7 +1381,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_largeroom() {
+    public static EaxReverb factoryLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 0.7500f;
@@ -1410,7 +1410,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_longpassage() {
+    public static EaxReverb factoryLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
         result.diffusion = 0.6400f;
@@ -1439,7 +1439,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_hall() {
+    public static EaxReverb factoryHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 0.7500f;
@@ -1468,7 +1468,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_cupboard() {
+    public static EaxReverb factoryCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3071f;
         result.diffusion = 0.6300f;
@@ -1497,7 +1497,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_courtyard() {
+    public static EaxReverb factoryCourtyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3071f;
         result.diffusion = 0.5700f;
@@ -1526,7 +1526,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb factory_alcove() {
+    public static EaxReverb factoryAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
         result.diffusion = 0.5900f;
@@ -1555,7 +1555,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_smallroom() {
+    public static EaxReverb icepalaceSmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8400f;
@@ -1584,7 +1584,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_shortpassage() {
+    public static EaxReverb icepalaceShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7500f;
@@ -1613,7 +1613,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_mediumroom() {
+    public static EaxReverb icepalaceMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8700f;
@@ -1642,7 +1642,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_largeroom() {
+    public static EaxReverb icepalaceLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8100f;
@@ -1671,7 +1671,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_longpassage() {
+    public static EaxReverb icepalaceLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7700f;
@@ -1700,7 +1700,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_hall() {
+    public static EaxReverb icepalaceHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7600f;
@@ -1729,7 +1729,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_cupboard() {
+    public static EaxReverb icepalaceCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8300f;
@@ -1758,7 +1758,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_courtyard() {
+    public static EaxReverb icepalaceCourtyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.5900f;
@@ -1787,7 +1787,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb icepalace_alcove() {
+    public static EaxReverb icepalaceAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8400f;
@@ -1816,7 +1816,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_smallroom() {
+    public static EaxReverb spacestationSmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2109f;
         result.diffusion = 0.7000f;
@@ -1845,7 +1845,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_shortpassage() {
+    public static EaxReverb spaceStationShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2109f;
         result.diffusion = 0.8700f;
@@ -1874,7 +1874,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_mediumroom() {
+    public static EaxReverb spaceStationMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2109f;
         result.diffusion = 0.7500f;
@@ -1903,7 +1903,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_largeroom() {
+    public static EaxReverb spaceStationLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
         result.diffusion = 0.8100f;
@@ -1932,7 +1932,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_longpassage() {
+    public static EaxReverb spaceStationLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 0.8200f;
@@ -1961,7 +1961,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_hall() {
+    public static EaxReverb spaceStationHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 0.8700f;
@@ -1990,7 +1990,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_cupboard() {
+    public static EaxReverb spaceStationCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.1715f;
         result.diffusion = 0.5600f;
@@ -2019,7 +2019,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb spacestation_alcove() {
+    public static EaxReverb spaceStationAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2109f;
         result.diffusion = 0.7800f;
@@ -2048,7 +2048,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_smallroom() {
+    public static EaxReverb woodenSmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2077,7 +2077,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_shortpassage() {
+    public static EaxReverb woodenShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2106,7 +2106,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_mediumroom() {
+    public static EaxReverb woodenMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2135,7 +2135,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_largeroom() {
+    public static EaxReverb woodenLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2164,7 +2164,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_longpassage() {
+    public static EaxReverb woodenLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2193,7 +2193,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_hall() {
+    public static EaxReverb woodenHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2222,7 +2222,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_cupboard() {
+    public static EaxReverb woodenCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2251,7 +2251,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_courtyard() {
+    public static EaxReverb woodenCourtyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.6500f;
@@ -2280,7 +2280,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb wooden_alcove() {
+    public static EaxReverb woodenAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2309,7 +2309,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_emptystadium() {
+    public static EaxReverb sportEmptystadium() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2338,7 +2338,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_squashcourt() {
+    public static EaxReverb sportSquashCourt() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7500f;
@@ -2367,7 +2367,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_smallswimmingpool() {
+    public static EaxReverb sportSmallSwimmingpool() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7000f;
@@ -2396,7 +2396,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_largeswimmingpool() {
+    public static EaxReverb sportLargeSwimmingpool() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8200f;
@@ -2425,7 +2425,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_gymnasium() {
+    public static EaxReverb sportGymnasium() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8100f;
@@ -2454,7 +2454,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_fullstadium() {
+    public static EaxReverb sportFullStadium() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2483,7 +2483,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb sport_stadiumtannoy() {
+    public static EaxReverb sportStadiumTannoy() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7800f;
@@ -2512,7 +2512,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb prefab_workshop() {
+    public static EaxReverb prefabWorkshop() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 1.0000f;
@@ -2541,7 +2541,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb prefab_schoolroom() {
+    public static EaxReverb prefabSchoolRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4022f;
         result.diffusion = 0.6900f;
@@ -2570,7 +2570,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb prefab_practiseroom() {
+    public static EaxReverb prefabPractiseRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4022f;
         result.diffusion = 0.8700f;
@@ -2599,7 +2599,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb prefab_outhouse() {
+    public static EaxReverb prefabOuthouse() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8200f;
@@ -2628,7 +2628,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb prefab_caravan() {
+    public static EaxReverb prefabCaravan() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2657,7 +2657,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb dome_tomb() {
+    public static EaxReverb domeTomb() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7900f;
@@ -2686,7 +2686,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb pipe_small() {
+    public static EaxReverb pipeSmall() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2715,7 +2715,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb dome_saintpauls() {
+    public static EaxReverb domeSaintPauls() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8700f;
@@ -2744,7 +2744,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb pipe_longthin() {
+    public static EaxReverb pipeLongThin() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2560f;
         result.diffusion = 0.9100f;
@@ -2773,7 +2773,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb pipe_large() {
+    public static EaxReverb pipeLarge() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -2802,7 +2802,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb pipe_resonant() {
+    public static EaxReverb pipeResonant() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.1373f;
         result.diffusion = 0.9100f;
@@ -2831,7 +2831,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb outdoors_backyard() {
+    public static EaxReverb outdoorsBackyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.4500f;
@@ -2860,7 +2860,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb outdoors_rollingplains() {
+    public static EaxReverb outdoorsRollingPlains() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.0000f;
@@ -2889,7 +2889,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb outdoors_deepcanyon() {
+    public static EaxReverb outdoorsDeepCanyon() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7400f;
@@ -2918,7 +2918,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb outdoors_creek() {
+    public static EaxReverb outdoorsCreek() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.3500f;
@@ -2947,7 +2947,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb outdoors_valley() {
+    public static EaxReverb outdoorsValley() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.2800f;
@@ -2976,7 +2976,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb mood_heaven() {
+    public static EaxReverb moodHeaven() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.9400f;
@@ -3005,7 +3005,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb mood_hell() {
+    public static EaxReverb moodHell() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.5700f;
@@ -3034,7 +3034,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb mood_memory() {
+    public static EaxReverb moodMemory() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8500f;
@@ -3063,7 +3063,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_commentator() {
+    public static EaxReverb drivingCommentator() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.0000f;
@@ -3092,7 +3092,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_pitgarage() {
+    public static EaxReverb drivingPitGarage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
         result.diffusion = 0.5900f;
@@ -3121,7 +3121,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_incar_racer() {
+    public static EaxReverb drivingInCarRacer() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.0832f;
         result.diffusion = 0.8000f;
@@ -3150,7 +3150,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_incar_sports() {
+    public static EaxReverb drivingInCarSports() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.0832f;
         result.diffusion = 0.8000f;
@@ -3179,7 +3179,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_incar_luxury() {
+    public static EaxReverb drivingInCarLuxury() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2560f;
         result.diffusion = 1.0000f;
@@ -3208,7 +3208,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_fullgrandstand() {
+    public static EaxReverb drivingFullGrandStand() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -3237,7 +3237,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_emptygrandstand() {
+    public static EaxReverb drivingEmptyGrandStand() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 1.0000f;
@@ -3266,7 +3266,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb driving_tunnel() {
+    public static EaxReverb drivingTunnel() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8100f;
@@ -3295,7 +3295,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb city_streets() {
+    public static EaxReverb cityStreets() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7800f;
@@ -3324,7 +3324,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb city_subway() {
+    public static EaxReverb citySubway() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7400f;
@@ -3353,7 +3353,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb city_museum() {
+    public static EaxReverb cityMuseum() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8200f;
@@ -3382,7 +3382,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb city_library() {
+    public static EaxReverb cityLibrary() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8200f;
@@ -3411,7 +3411,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb city_underpass() {
+    public static EaxReverb cityUnderpass() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.8200f;
@@ -3440,7 +3440,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb city_abandoned() {
+    public static EaxReverb cityAbandoned() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.6900f;
@@ -3469,7 +3469,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb dustyroom() {
+    public static EaxReverb dustyRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
         result.diffusion = 0.5600f;
@@ -3527,7 +3527,7 @@ public class EaxReverb extends SoundEffectData {
     }
 
 
-    public static EaxReverb smallwaterroom() {
+    public static EaxReverb smallWaterRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
         result.diffusion = 0.7000f;
