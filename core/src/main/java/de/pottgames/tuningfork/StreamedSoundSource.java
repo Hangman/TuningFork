@@ -309,13 +309,6 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
-    @Override
-    public float getDuration() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-
     void readyToDispose() {
         this.readyToDispose = true;
     }

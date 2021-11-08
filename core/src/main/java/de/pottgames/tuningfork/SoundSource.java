@@ -320,14 +320,6 @@ public abstract class SoundSource {
 
 
     /**
-     * Returns the duration of the attached sound.
-     *
-     * @return the duration of the attached {@link de.pottgames.tuningfork.SoundBuffer SoundBuffer}. -1f if no buffer is attached to it.
-     */
-    abstract public float getDuration();
-
-
-    /**
      * Returns the current playback position in seconds.
      *
      * @return the playback position
