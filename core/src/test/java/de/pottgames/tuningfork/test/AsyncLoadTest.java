@@ -24,10 +24,8 @@ public class AsyncLoadTest extends ApplicationAdapter {
     @Override
     public void create() {
         // INIT AUDIO
-        final ConsoleLogger logger = new ConsoleLogger();
-        logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
         final AudioConfig config = new AudioConfig();
-        config.setLogger(logger);
+        config.setLogger(new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR));
         this.audio = Audio.init(config);
 
         // LOAD SOUND ASYNC
