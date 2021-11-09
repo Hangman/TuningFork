@@ -38,7 +38,7 @@ allprojects {
     }
     ext {
         ...
-        tfVersion = 'v0.1'
+        tfVersion = 'v0.1.1'
     }
 }
 ```
