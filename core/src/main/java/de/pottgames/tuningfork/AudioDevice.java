@@ -23,7 +23,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class AudioDevice {
-    private long                   device;
+    private long                   deviceHandle;
     private long                   context;
     private final TuningForkLogger logger;
     private final boolean          extensionHrtfSoftAvailable;
@@ -50,16 +50,23 @@ public class AudioDevice {
         }
 
         // OPEN THE SOUND DEVICE
-        this.device = ALC10.alcOpenDevice(config.deviceSpecifier);
+        this.deviceHandle = ALC10.alcOpenDevice(config.deviceSpecifier);
 
         // CHECK IF DEVICE IS OPEN
-        if (this.device == 0L) {
+        if (this.deviceHandle == 0L) {
             throw new OpenDeviceException("Failed to open the " + deviceName + " OpenAL device.");
         }
 
+        // SET CONTEXT ATTRIBUTES
+        final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
+        contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
+        contextAttributes.put(2);
+        contextAttributes.put(0);
+        contextAttributes.flip();
+
         // CREATE A CONTEXT AND SET IT ACTIVE
-        final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.device);
-        this.context = ALC10.alcCreateContext(this.device, (IntBuffer) null);
+        final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.deviceHandle);
+        this.context = ALC10.alcCreateContext(this.deviceHandle, contextAttributes);
         if (this.context == 0L) {
             throw new IllegalStateException("Failed to create OpenAL context.");
         }
@@ -67,7 +74,7 @@ public class AudioDevice {
         AL.createCapabilities(deviceCapabilities);
 
         // CHECK IF EXTENSIONS ARE PRESENT
-        if (!ALC10.alcIsExtensionPresent(this.device, "ALC_EXT_EFX")) {
+        if (!ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_EXT_EFX")) {
             try {
                 this.dispose(false);
             } catch (final Exception e) {
@@ -77,7 +84,7 @@ public class AudioDevice {
             throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the EFX extension which is a requirement of TuningFork.");
         }
         logger.debug(this.getClass(), "ALC_EXT_EFX extension is present.");
-        this.extensionHrtfSoftAvailable = ALC10.alcIsExtensionPresent(this.device, "ALC_SOFT_HRTF");
+        this.extensionHrtfSoftAvailable = ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_SOFT_HRTF");
         logger.debug(this.getClass(), "ALC_SOFT_HRTF extension is present.");
 
         // CHECK OPENAL 1.0 API SUPPORT
@@ -105,7 +112,7 @@ public class AudioDevice {
         logger.trace(this.getClass(), "OpenAL 1.1 supported.");
 
         // CHECK AND LOG HRTF SETTINGS
-        final int hrtfSoftStatus = ALC10.alcGetInteger(this.device, SOFTHRTF.ALC_HRTF_STATUS_SOFT);
+        final int hrtfSoftStatus = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_HRTF_STATUS_SOFT);
         switch (hrtfSoftStatus) {
             case SOFTHRTF.ALC_HRTF_DISABLED_SOFT:
                 this.hrtfEnabled = false;
@@ -139,7 +146,7 @@ public class AudioDevice {
 
         // CHECK AVAILABLE AUXILIARY SENDS
         final IntBuffer auxSends = BufferUtils.newIntBuffer(1);
-        ALC10.alcGetIntegerv(this.device, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
+        ALC10.alcGetIntegerv(this.deviceHandle, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
         logger.debug(this.getClass(), "Available auxiliary sends: " + auxSends.get(0));
         if (auxSends.get(0) < 2) {
             try {
@@ -148,8 +155,7 @@ public class AudioDevice {
                 logger.debug(this.getClass(),
                         "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
             }
-            throw new OpenDeviceException(
-                    "The audio device " + deviceName + " doesn't support at least 2 auxiliary sends, which is a requirement of TuningFork.");
+            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support 2 auxiliary sends, which is a requirement of TuningFork.");
         }
     }
 
@@ -183,9 +189,9 @@ public class AudioDevice {
         final Array<String> hrtfs = new Array<>();
 
         if (this.isHrtfSupported()) {
-            final int num_hrtf = ALC10.alcGetInteger(this.device, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
+            final int num_hrtf = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
             for (int i = 0; i < num_hrtf; i++) {
-                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.device, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
+                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
                 hrtfs.add(name);
             }
         }
@@ -203,12 +209,12 @@ public class AudioDevice {
      */
     public boolean enableHrtf(String specifier) {
         if (this.isHrtfSupported()) {
-            final int num_hrtf = ALC10.alcGetInteger(this.device, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
+            final int num_hrtf = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
 
             // FIND HRTF INDEX BY SPECIFIER
             int hrtfIndex = -1;
             for (int i = 0; i < num_hrtf; i++) {
-                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.device, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
+                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
                 if (specifier != null && name.equals(specifier)) {
                     hrtfIndex = i;
                     break;
@@ -224,16 +230,16 @@ public class AudioDevice {
                 attr.flip();
 
                 // RESET DEVICE
-                if (!SOFTHRTF.alcResetDeviceSOFT(this.device, attr)) {
-                    this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.device, ALC10.alcGetError(this.device)));
+                if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attr)) {
+                    this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
                     this.hrtfEnabled = false;
                     return false;
                 }
 
                 // CHECK CURRENT HRTF STATE
-                final int hrtfState = ALC10.alcGetInteger(this.device, SOFTHRTF.ALC_HRTF_SOFT);
+                final int hrtfState = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_HRTF_SOFT);
                 if (hrtfState != 0) {
-                    final String name = ALC10.alcGetString(this.device, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT);
+                    final String name = ALC10.alcGetString(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT);
                     this.logger.info(this.getClass(), "Using HRTF configuration: " + name);
                     this.hrtfEnabled = true;
                     return true;
@@ -259,11 +265,11 @@ public class AudioDevice {
             attr.flip();
 
             // RESET DEVICE
-            if (SOFTHRTF.alcResetDeviceSOFT(this.device, attr)) {
+            if (SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attr)) {
                 this.hrtfEnabled = false;
                 this.logger.info(this.getClass(), "HRTF disabled.");
             } else {
-                this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.device, ALC10.alcGetError(this.device)));
+                this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
             }
         } else {
             this.logger.warn(this.getClass(), "HRTF is not supported by this device and was therefore never enabled.");
@@ -275,8 +281,8 @@ public class AudioDevice {
         if (this.context != 0L) {
             ALC10.alcDestroyContext(this.context);
         }
-        if (this.device != 0L) {
-            if (!ALC10.alcCloseDevice(this.device) && log) {
+        if (this.deviceHandle != 0L) {
+            if (!ALC10.alcCloseDevice(this.deviceHandle) && log) {
                 this.logger.error(this.getClass(), "The audio device did not close properly.");
             }
         }

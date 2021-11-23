@@ -106,7 +106,7 @@ class OggInputStream extends InputStream implements AudioStream {
         try {
             this.total = input.available();
         } catch (final IOException ex) {
-            throw new GdxRuntimeException(ex);
+            throw new TuningForkRuntimeException(ex);
         }
 
         this.init();
