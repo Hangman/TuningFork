@@ -211,16 +211,38 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
+     * attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
+     * existing or already obtained sources. If you want to set this per source, you can do so: {@link SoundSource#setAttenuationMinDistance(float)}.
+     *
+     * @param distance (default depends on the attenuation model)
+     */
     public void setDefaultAttenuationMinDistance(float distance) {
         this.defaultMinAttenuationDistance = distance;
     }
 
 
+    /**
+     * Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
+     * attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
+     * existing or already obtained sources. If you want to set this per source, you can do so: {@link SoundSource#setAttenuationMaxDistance(float)}.
+     *
+     * @param distance (default depends on the attenuation model)
+     */
     public void setDefaultAttenuationMaxDistance(float distance) {
         this.defaultMaxAttenuationDistance = distance;
     }
 
 
+    /**
+     * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
+     * volume loss by half. With a factor of 2, the source loses volume twice as fast. This factor is used for all sources that are created/obtained afterwards,
+     * it doesn't affect existing or already obtained sources. If you want to set this per source, you can do so:
+     * {@link SoundSource#setAttenuationFactor(float)}.
+     *
+     * @param rolloff (default depends on the attenuation model)
+     */
     public void setDefaultAttenuationFactor(float rolloff) {
         this.defaultAttenuationFactor = rolloff;
     }
@@ -241,6 +263,11 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Sets the global volume that is applied to all sources.
+     *
+     * @param volume range: 0 - 1
+     */
     public void setMasterVolume(float volume) {
         this.listener.setMasterVolume(MathUtils.clamp(volume, 0f, 1f));
     }
@@ -260,11 +287,28 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to return it to the pool of available
+     * sources.
+     *
+     * @param buffer
+     *
+     * @return the {@link BufferedSoundSource}
+     */
     public BufferedSoundSource obtainSource(SoundBuffer buffer) {
         return this.obtainSource(buffer, false);
     }
 
 
+    /**
+     * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to return it to the pool of available
+     * sources. If allowNull is true, no exception is thrown and instead null is returned when no free source is available.
+     *
+     * @param buffer
+     * @param allowNull
+     *
+     * @return the {@link BufferedSoundSource} or null if no source is available and allowNull is set to true
+     */
     public BufferedSoundSource obtainSource(SoundBuffer buffer, boolean allowNull) {
         // FIND FREE SOUND SOURCE
         final BufferedSoundSource source = this.sourcePool.findFreeSource();
@@ -303,6 +347,11 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound.
+     *
+     * @param buffer
+     */
     public void play(SoundBuffer buffer) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.play();
@@ -310,6 +359,12 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a sound with an effect.
+     *
+     * @param buffer
+     * @param effect
+     */
     public void play(SoundBuffer buffer, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.attachEffect(effect);
@@ -318,6 +373,12 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound with the given volume.
+     *
+     * @param buffer
+     * @param volume
+     */
     public void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -326,6 +387,13 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound with the given volume and effect.
+     *
+     * @param buffer
+     * @param volume
+     * @param effect
+     */
     public void play(SoundBuffer buffer, float volume, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -335,6 +403,13 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound with the given volume and pitch.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     */
     public void play(SoundBuffer buffer, float volume, float pitch) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -344,6 +419,14 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound with the given volume, pitch and effect.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     * @param effect
+     */
     public void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -354,6 +437,14 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound with the given volume, pitch and pan.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     * @param pan
+     */
     public void play(SoundBuffer buffer, float volume, float pitch, float pan) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -364,6 +455,15 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays the sound with the given volume, pitch, pan and effect.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     * @param pan
+     * @param effect
+     */
     public void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -375,6 +475,12 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a spatial sound at the given position.
+     *
+     * @param buffer
+     * @param position
+     */
     public void play3D(SoundBuffer buffer, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
@@ -383,6 +489,13 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a spatial sound at the given position with an effect.
+     *
+     * @param buffer
+     * @param position
+     * @param effect
+     */
     public void play3D(SoundBuffer buffer, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
@@ -392,6 +505,13 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a spatial sound with the given volume at the given position.
+     *
+     * @param buffer
+     * @param volume
+     * @param position
+     */
     public void play3D(SoundBuffer buffer, float volume, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -401,6 +521,14 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a spatial sound with the given volume and effect at the given position.
+     *
+     * @param buffer
+     * @param volume
+     * @param position
+     * @param effect
+     */
     public void play3D(SoundBuffer buffer, float volume, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -411,6 +539,14 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a spatial sound with the given volume and pitch at the given position.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     * @param position
+     */
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -421,6 +557,15 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Plays a spatial sound with the given volume, pitch and effect at the given position.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     * @param position
+     * @param effect
+     */
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -432,49 +577,76 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Resumes to play all sounds that are paused.
+     */
     public void resumeAll() {
         this.resumeAllBufferedSources();
         this.resumeAllStreamedSources();
     }
 
 
+    /**
+     * Resumes to play all {@link StreamedSoundSource}s that are paused at the moment.
+     */
     public void resumeAllStreamedSources() {
         this.postTask(TaskAction.RESUME_ALL);
     }
 
 
+    /**
+     * Resumes to play all {@link BufferedSoundSource}s that are paused at the moment.
+     */
     public void resumeAllBufferedSources() {
         this.sourcePool.resumeAll();
     }
 
 
+    /**
+     * Pauses all sounds.
+     */
     public void pauseAll() {
         this.pauseAllBufferedSources();
         this.pauseAllStreamedSources();
     }
 
 
+    /**
+     * Pauses all {@link StreamedSoundSource}.
+     */
     public void pauseAllStreamedSources() {
         this.postTask(TaskAction.PAUSE_ALL);
     }
 
 
+    /**
+     * Pauses all {@link BufferedSoundSource}s.
+     */
     public void pauseAllBufferedSources() {
         this.sourcePool.pauseAll();
     }
 
 
+    /**
+     * Stops all sounds.
+     */
     public void stopAll() {
         this.stopAllBufferedSources();
         this.stopAllStreamedSources();
     }
 
 
+    /**
+     * Stops all {@link StreamedSoundSource}s.
+     */
     public void stopAllStreamedSources() {
         this.postTask(TaskAction.STOP_ALL);
     }
 
 
+    /**
+     * Stops all {@link BufferedSoundSource}s.
+     */
     public void stopAllBufferedSources() {
         this.sourcePool.stopAll();
     }
@@ -485,6 +657,13 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Creates a new {@link StreamedSoundSource} and loads the first bits of sound data.
+     *
+     * @param fileHandle
+     *
+     * @return the {@link StreamedSoundSource}
+     */
     public StreamedSoundSource createStreamedSoundSource(FileHandle fileHandle) {
         final StreamedSoundSource sound = new StreamedSoundSource(fileHandle);
         synchronized (this.lock) {
@@ -501,6 +680,11 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Returns the {@link SoundListener}.
+     *
+     * @return the {@link SoundListener}
+     */
     public SoundListener getListener() {
         return this.listener;
     }
@@ -538,6 +722,9 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Shuts down TuningFork.
+     */
     @Override
     public void dispose() {
         // TERMINATE UPDATE THREAD
