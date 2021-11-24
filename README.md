@@ -2,7 +2,7 @@
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 # Introduction
-TuningFork is a library for libGDX that provides advanced audio features. To be upfront about it: This library only supports the desktop Lwjgl3 backend, sorry mobile and web users. The goal of TuningFork is to make as many features of OpenAL accessible as possible and still provide a comfortable and easy to use API.
+TuningFork is a library for libGDX that provides advanced audio features. The goal of this library is to make most of the features of OpenAL accessible and still provide a comfortable and easy to use high-level API.
 
 ### Main Features
 * Spatial audio (3D)
@@ -16,8 +16,7 @@ TuningFork is a library for libGDX that provides advanced audio features. To be 
 * Output to any sound device (you are no longer tied to the default sound device)
 
 ### Limitations
-* Lwjgl3 only
-* No support for filters at the moment (can be imitated by the equalizer effect)
+* Lwjgl3 only, sorry mobile and web users
 
 ### Why
 The standard audio capabilities of libGDX are very limited. Especially if you are developing a 3D application and want to create realistic spatial sound, libGDX's on-board features are in no way sufficient.
@@ -45,10 +44,17 @@ Then add TuningFork as dependency in your core project:
 project(":core") {
     dependencies {
     	...
-        implementation 'com.github.Hangman:TuningFork:v0.1.1'
+        implementation 'com.github.Hangman:TuningFork:v0.2.2'
     }
 }
 ```
+### Compatibility
+| Version Of libGDX | Latest Compatible Version Of TuningFork |
+|      :----:         | :---                          |
+| 1.10.0 | v0.2.2 |
+| 1.9.14 | v0.2.2 |
+| 1.9.13 | v0.2.2 |
+| < 1.9.13 | not supported, might work though: v0.2.2 |
 
 # Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
