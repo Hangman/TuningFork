@@ -341,11 +341,7 @@ public abstract class SoundSource {
      * @param filter
      */
     public void setFilter(Filter filter) {
-        if (filter != null) {
-            AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, filter.getId());
-        } else {
-            AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, EXTEfx.AL_FILTER_NULL);
-        }
+        AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL);
     }
 
 
@@ -358,6 +354,21 @@ public abstract class SoundSource {
      * @return the effect that was kicked out or null otherwise
      */
     public SoundEffect attachEffect(SoundEffect effect) {
+        return this.attachEffect(effect, null);
+    }
+
+
+    /**
+     * Attaches a sound effect to this sound source. You can only attach 2 different effects in total. If you attach more than 2 effects, the oldest attached
+     * effect will be kicked out. Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used
+     * for this effect, or null if you don't want to apply a filter.
+     *
+     * @param effect
+     * @param filter
+     *
+     * @return the effect that was kicked out or null otherwise
+     */
+    public SoundEffect attachEffect(SoundEffect effect, Filter filter) {
         SoundEffect result = null;
 
         // CANCEL IF THE EFFECT IS ALREADY ATTACHED TO THIS SOURCE
@@ -375,7 +386,8 @@ public abstract class SoundSource {
         }
 
         // ADD EFFECT
-        AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, EXTEfx.AL_FILTER_NULL);
+        final int filterHandle = filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL;
+        AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, filterHandle);
         this.effects[this.nextSoundEffectSendId] = effect;
         effect.addSource(this);
         this.nextSoundEffectSendId = 1 - this.nextSoundEffectSendId;
