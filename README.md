@@ -54,7 +54,9 @@ project(":core") {
 | 1.10.0 | v0.2.2 |
 | 1.9.14 | v0.2.2 |
 | 1.9.13 | v0.2.2 |
-| < 1.9.13 | not supported, might work though: v0.2.2 |
+| 1.9.12 | v0.2.2 |
+| 1.9.11 | v0.2.2 |
+| < 1.9.11 | not supported, might work though: v0.2.2 |
 
 # Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
