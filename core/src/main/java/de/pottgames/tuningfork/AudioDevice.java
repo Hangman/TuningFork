@@ -231,7 +231,8 @@ public class AudioDevice {
 
                 // RESET DEVICE
                 if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attr)) {
-                    this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
+                    this.logger.error(this.getClass(),
+                            "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
                     this.hrtfEnabled = false;
                     return false;
                 }
