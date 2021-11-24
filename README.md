@@ -7,12 +7,11 @@ TuningFork is a library for libGDX that provides advanced audio features. The go
 ### Main Features
 * Spatial audio (3D)
 * Directional audio (3D)
-* Normal audio
-* Advanced real time effects (Reverb, Echo, Flanger, and many more)
+* Normal audio (2D)
+* Real-time effects such as Reverb, Echo, Flanger, Distortion (and many more)
+* Filters
 * HRTF support (aka binaural)
 * Easy to use API
-* Sound streaming
-* ogg and wav files supported
 * Output to any sound device (you are no longer tied to the default sound device)
 
 ### Limitations
