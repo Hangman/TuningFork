@@ -45,7 +45,7 @@ Then add TuningFork as dependency in your core project:
 project(":core") {
     dependencies {
     	...
-        implementation 'com.github.Hangman:TuningFork:v0.1.1'
+        implementation 'com.github.Hangman:TuningFork:v0.2.2'
     }
 }
 ```
