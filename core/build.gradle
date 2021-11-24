@@ -62,6 +62,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/AsyncLoadTest.class'
      exclude 'de/pottgames/tuningfork/test/EffectTest.class'
      exclude 'de/pottgames/tuningfork/test/PlaybackPositionBufferedSourceTest.class'
+     exclude 'de/pottgames/tuningfork/test/FilterTest.class'
  }
 
 publishing {

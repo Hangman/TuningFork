@@ -336,6 +336,20 @@ public abstract class SoundSource {
 
 
     /**
+     * Enables the given filter as direct filter (dry signal) on this sound source.
+     *
+     * @param filter
+     */
+    public void setFilter(Filter filter) {
+        if (filter != null) {
+            AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, filter.getId());
+        } else {
+            AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, EXTEfx.AL_FILTER_NULL);
+        }
+    }
+
+
+    /**
      * Attaches a sound effect to this sound source. You can only attach 2 different effects in total. If you attach more than 2 effects, the oldest attached
      * effect will be kicked out. Attaching an effect that is already attached to this source is a legal NOP.
      *

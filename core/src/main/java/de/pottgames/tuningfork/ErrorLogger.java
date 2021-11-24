@@ -21,6 +21,11 @@ class ErrorLogger {
     }
 
 
+    void dismissError() {
+        AL10.alGetError();
+    }
+
+
     boolean checkLogError(String message) {
         final int alError = AL10.alGetError();
         if (alError != AL10.AL_NO_ERROR) {
