@@ -49,6 +49,13 @@ project(":core") {
     }
 }
 ```
+### Compatibility
+| Version Of libGDX | Latest Compatible Version Of TuningFork |
+|      :----:         | :---                          |
+| 1.10.0 | v0.2.2 |
+| 1.9.14 | v0.2.2 |
+| 1.9.13 | v0.2.2 |
+| < 1.9.13 | not supported, might work though: v0.2.2 |
 
 # Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
