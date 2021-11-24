@@ -360,6 +360,20 @@ public class Audio implements Disposable {
 
 
     /**
+     * Plays the sound with the given filter.
+     *
+     * @param buffer
+     * @param filter
+     */
+    public void play(SoundBuffer buffer, Filter filter) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.setFilter(filter);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    /**
      * Plays a sound with an effect.
      *
      * @param buffer
@@ -382,6 +396,22 @@ public class Audio implements Disposable {
     public void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    /**
+     * Plays the sound with the given volume and filter.
+     *
+     * @param buffer
+     * @param volume
+     * @param filter
+     */
+    public void play(SoundBuffer buffer, float volume, Filter filter) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.setVolume(volume);
+        source.setFilter(filter);
         source.play();
         source.obtained = false;
     }
@@ -414,6 +444,24 @@ public class Audio implements Disposable {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    /**
+     * Plays the sound with the given volume, pitch and filter.
+     *
+     * @param buffer
+     * @param volume
+     * @param pitch
+     * @param filter
+     */
+    public void play(SoundBuffer buffer, float volume, float pitch, Filter filter) {
+        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
+        source.setVolume(volume);
+        source.setPitch(pitch);
+        source.setFilter(filter);
         source.play();
         source.obtained = false;
     }
@@ -490,6 +538,22 @@ public class Audio implements Disposable {
 
 
     /**
+     * Plays a spatial sound with the given filter at the given position.
+     *
+     * @param buffer
+     * @param position
+     * @param filter
+     */
+    public void play3D(SoundBuffer buffer, Vector3 position, Filter filter) {
+        final BufferedSoundSource source = this.obtainSource(buffer);
+        source.setPosition(position);
+        source.setFilter(filter);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    /**
      * Plays a spatial sound at the given position with an effect.
      *
      * @param buffer
@@ -506,6 +570,24 @@ public class Audio implements Disposable {
 
 
     /**
+     * Plays a spatial sound at the given position with the given effect and filter.
+     *
+     * @param buffer
+     * @param position
+     * @param filter
+     * @param effect
+     */
+    public void play3D(SoundBuffer buffer, Vector3 position, Filter filter, SoundEffect effect) {
+        final BufferedSoundSource source = this.obtainSource(buffer);
+        source.setPosition(position);
+        source.attachEffect(effect);
+        source.setFilter(filter);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    /**
      * Plays a spatial sound with the given volume at the given position.
      *
      * @param buffer
@@ -516,6 +598,24 @@ public class Audio implements Disposable {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPosition(position);
+        source.play();
+        source.obtained = false;
+    }
+
+
+    /**
+     * Plays a spatial sound with the given volume and filter at the given position.
+     *
+     * @param buffer
+     * @param volume
+     * @param position
+     * @param filter
+     */
+    public void play3D(SoundBuffer buffer, float volume, Vector3 position, Filter filter) {
+        final BufferedSoundSource source = this.obtainSource(buffer);
+        source.setVolume(volume);
+        source.setPosition(position);
+        source.setFilter(filter);
         source.play();
         source.obtained = false;
     }
