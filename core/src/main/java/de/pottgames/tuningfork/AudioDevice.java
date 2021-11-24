@@ -85,7 +85,7 @@ public class AudioDevice {
         }
         logger.debug(this.getClass(), "ALC_EXT_EFX extension is present.");
         this.extensionHrtfSoftAvailable = ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_SOFT_HRTF");
-        logger.debug(this.getClass(), "ALC_SOFT_HRTF extension is present.");
+        logger.debug(this.getClass(), "ALC_SOFT_HRTF extension is " + (this.extensionHrtfSoftAvailable ? "present" : "not present") + ".");
 
         // CHECK OPENAL 1.0 API SUPPORT
         if (!deviceCapabilities.OpenALC10) {
