@@ -34,7 +34,7 @@ public class AudioDevice {
     private boolean                                hrtfEnabled           = false;
     private final AudioDeviceConfig                config;
     private final int[]                            tempSingleIntResult   = new int[1];
-    private final ObjectMap<ALExtensions, Boolean> extensionAvailableMap = new ObjectMap<>();
+    private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
 
 
     AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
@@ -110,20 +110,20 @@ public class AudioDevice {
 
         // CHECK IF EXTENSIONS ARE PRESENT
         this.checkAvailableExtensions();
-        this.checkRequiredExtension(ALExtensions.ALC_EXT_EFX);
+        this.checkRequiredExtension(ALExtension.ALC_EXT_EFX);
 
         // LOG OUTPUT LIMITER STATE
         if (config.enableOutputLimiter) {
             final int[] outputLimiterEnabled = new int[1];
             outputLimiterEnabled[0] = ALC10.ALC_FALSE;
-            if (this.isExtensionAvailable(ALExtensions.ALC_SOFT_OUTPUT_LIMITER)) {
+            if (this.isExtensionAvailable(ALExtension.ALC_SOFT_OUTPUT_LIMITER)) {
                 ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, outputLimiterEnabled);
             }
             logger.debug(this.getClass(), "Output limiter: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "enabled" : "disabled"));
         }
 
         // CHECK AND LOG HRTF SETTINGS
-        if (this.isExtensionAvailable(ALExtensions.ALC_SOFT_HRTF)) {
+        if (this.isExtensionAvailable(ALExtension.ALC_SOFT_HRTF)) {
             final int hrtfSoftStatus = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_HRTF_STATUS_SOFT);
             switch (hrtfSoftStatus) {
                 case SOFTHRTF.ALC_HRTF_DISABLED_SOFT:
@@ -177,7 +177,7 @@ public class AudioDevice {
     }
 
 
-    private void checkRequiredExtension(ALExtensions extension) throws OpenDeviceException {
+    private void checkRequiredExtension(ALExtension extension) throws OpenDeviceException {
         final Boolean checkResult = this.extensionAvailableMap.get(extension);
         if (checkResult == null || !checkResult) {
             try {
@@ -194,7 +194,7 @@ public class AudioDevice {
 
 
     private void checkAvailableExtensions() {
-        for (final ALExtensions extension : ALExtensions.values()) {
+        for (final ALExtension extension : ALExtension.values()) {
             if (extension.isAlc()) {
                 this.extensionAvailableMap.put(extension, ALC10.alcIsExtensionPresent(this.deviceHandle, extension.getAlSpecifier()));
             } else {
@@ -204,7 +204,7 @@ public class AudioDevice {
     }
 
 
-    boolean isExtensionAvailable(ALExtensions extension) {
+    boolean isExtensionAvailable(ALExtension extension) {
         final Boolean result = this.extensionAvailableMap.get(extension);
         if (result == null) {
             return false;
@@ -223,7 +223,7 @@ public class AudioDevice {
      * @return true if the device is connected, false otherwise
      */
     public boolean isConnected() {
-        if (this.isExtensionAvailable(ALExtensions.ALC_EXT_DISCONNECT)) {
+        if (this.isExtensionAvailable(ALExtension.ALC_EXT_DISCONNECT)) {
             ALC10.alcGetIntegerv(this.deviceHandle, EXTDisconnect.ALC_CONNECTED, this.tempSingleIntResult);
             return this.tempSingleIntResult[0] == ALC10.ALC_TRUE;
         }
@@ -240,7 +240,7 @@ public class AudioDevice {
      * @return true if supported
      */
     public boolean isHrtfSupported() {
-        return this.isExtensionAvailable(ALExtensions.ALC_SOFT_HRTF);
+        return this.isExtensionAvailable(ALExtension.ALC_SOFT_HRTF);
     }
 
 

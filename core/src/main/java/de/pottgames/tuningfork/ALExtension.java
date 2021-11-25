@@ -1,6 +1,6 @@
 package de.pottgames.tuningfork;
 
-enum ALExtensions {
+enum ALExtension {
     ALC_ENUMERATE_ALL_EXT("ALC_ENUMERATE_ALL_EXT", true),
     ALC_ENUMERATION_EXT("ALC_ENUMERATION_EXT", true),
     ALC_EXT_CAPTURE("ALC_EXT_CAPTURE", true),
@@ -48,7 +48,7 @@ enum ALExtensions {
     private final boolean alc;
 
 
-    ALExtensions(String alSpecifier, boolean alc) {
+    ALExtension(String alSpecifier, boolean alc) {
         this.alSpecifier = alSpecifier;
         this.alc = alc;
     }
