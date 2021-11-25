@@ -10,6 +10,7 @@ import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTHRTF;
+import org.lwjgl.openal.SOFTOutputLimiter;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
@@ -23,14 +24,16 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class AudioDevice {
-    private long                   deviceHandle;
-    private long                   context;
-    private final TuningForkLogger logger;
-    private final boolean          extensionHrtfSoftAvailable;
-    private boolean                hrtfEnabled = false;
+    private long                    deviceHandle;
+    private long                    context;
+    private final TuningForkLogger  logger;
+    private final boolean           extensionHrtfSoftAvailable;
+    private boolean                 hrtfEnabled = false;
+    private final AudioDeviceConfig config;
 
 
     AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
+        this.config = config;
         this.logger = logger;
 
         if (config == null) {
@@ -61,6 +64,8 @@ public class AudioDevice {
         final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
         contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
         contextAttributes.put(2);
+        contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
+        contextAttributes.put(config.enableOutputLimiter ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
         contextAttributes.put(0);
         contextAttributes.flip();
 
@@ -72,6 +77,10 @@ public class AudioDevice {
         }
         ALC10.alcMakeContextCurrent(this.context);
         AL.createCapabilities(deviceCapabilities);
+
+        final int[] result = new int[1];
+        ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, result);
+        System.out.println("result of output limiter: " + result[0]);
 
         // CHECK IF EXTENSIONS ARE PRESENT
         if (!ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_EXT_EFX")) {
@@ -223,14 +232,18 @@ public class AudioDevice {
 
             if (hrtfIndex >= 0) {
                 // SET NEW DEVICE ATTRIBUTES
-                final IntBuffer attr = BufferUtils.newIntBuffer(10);
-                attr.put(SOFTHRTF.ALC_HRTF_SOFT).put(ALC10.ALC_TRUE); // enable hrtf
-                attr.put(SOFTHRTF.ALC_HRTF_ID_SOFT).put(hrtfIndex); // set hrtf configuration
-                attr.put(0);
-                attr.flip();
+                final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
+                contextAttributes.put(SOFTHRTF.ALC_HRTF_SOFT).put(ALC10.ALC_TRUE); // enable hrtf
+                contextAttributes.put(SOFTHRTF.ALC_HRTF_ID_SOFT).put(hrtfIndex); // set hrtf configuration
+                contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
+                contextAttributes.put(2);
+                contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
+                contextAttributes.put(this.config.enableOutputLimiter ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
+                contextAttributes.put(0);
+                contextAttributes.flip();
 
                 // RESET DEVICE
-                if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attr)) {
+                if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, contextAttributes)) {
                     this.logger.error(this.getClass(),
                             "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
                     this.hrtfEnabled = false;

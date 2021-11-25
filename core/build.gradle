@@ -1,5 +1,5 @@
 buildscript {
-	project.version = '0.4.2'
+	project.version = '0.5.2'
 	project.group = 'de.pottgames'
 }
 
