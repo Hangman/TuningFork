@@ -78,9 +78,10 @@ public class AudioDevice {
         ALC10.alcMakeContextCurrent(this.context);
         AL.createCapabilities(deviceCapabilities);
 
-        final int[] result = new int[1];
-        ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, result);
-        System.out.println("result of output limiter: " + result[0]);
+        // CHECK OUTPUT LIMITER STATE
+        final int[] outputLimiterEnabled = new int[1];
+        ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, outputLimiterEnabled);
+        logger.trace(this.getClass(), "Output limiter enabled: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "true" : "false"));
 
         // CHECK IF EXTENSIONS ARE PRESENT
         if (!ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_EXT_EFX")) {
