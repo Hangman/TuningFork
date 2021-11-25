@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.Objects;
 
 import org.lwjgl.openal.AL;
+import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.ObjectMap;
 
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -24,17 +27,20 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class AudioDevice {
-    private long                    deviceHandle;
-    private long                    context;
-    private final TuningForkLogger  logger;
-    private final boolean           extensionHrtfSoftAvailable;
-    private boolean                 hrtfEnabled = false;
-    private final AudioDeviceConfig config;
+    private long                                   deviceHandle;
+    private long                                   context;
+    private final TuningForkLogger                 logger;
+    private final ErrorLogger                      errorLogger;
+    private boolean                                hrtfEnabled           = false;
+    private final AudioDeviceConfig                config;
+    private final int[]                            tempSingleIntResult   = new int[1];
+    private final ObjectMap<ALExtensions, Boolean> extensionAvailableMap = new ObjectMap<>();
 
 
     AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
         this.config = config;
         this.logger = logger;
+        this.errorLogger = new ErrorLogger(this.getClass(), logger);
 
         if (config == null) {
             throw new TuningForkRuntimeException("AudioDeviceConfig is null");
@@ -78,25 +84,6 @@ public class AudioDevice {
         ALC10.alcMakeContextCurrent(this.context);
         AL.createCapabilities(deviceCapabilities);
 
-        // CHECK OUTPUT LIMITER STATE
-        final int[] outputLimiterEnabled = new int[1];
-        ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, outputLimiterEnabled);
-        logger.trace(this.getClass(), "Output limiter enabled: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "true" : "false"));
-
-        // CHECK IF EXTENSIONS ARE PRESENT
-        if (!ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_EXT_EFX")) {
-            try {
-                this.dispose(false);
-            } catch (final Exception e) {
-                logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
-            }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the EFX extension which is a requirement of TuningFork.");
-        }
-        logger.debug(this.getClass(), "ALC_EXT_EFX extension is present.");
-        this.extensionHrtfSoftAvailable = ALC10.alcIsExtensionPresent(this.deviceHandle, "ALC_SOFT_HRTF");
-        logger.debug(this.getClass(), "ALC_SOFT_HRTF extension is " + (this.extensionHrtfSoftAvailable ? "present" : "not present") + ".");
-
         // CHECK OPENAL 1.0 API SUPPORT
         if (!deviceCapabilities.OpenALC10) {
             try {
@@ -121,37 +108,53 @@ public class AudioDevice {
         }
         logger.trace(this.getClass(), "OpenAL 1.1 supported.");
 
+        // CHECK IF EXTENSIONS ARE PRESENT
+        this.checkAvailableExtensions();
+        this.checkRequiredExtension(ALExtensions.ALC_EXT_EFX);
+
+        // LOG OUTPUT LIMITER STATE
+        if (config.enableOutputLimiter) {
+            final int[] outputLimiterEnabled = new int[1];
+            outputLimiterEnabled[0] = ALC10.ALC_FALSE;
+            if (this.isExtensionAvailable(ALExtensions.ALC_SOFT_OUTPUT_LIMITER)) {
+                ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, outputLimiterEnabled);
+            }
+            logger.debug(this.getClass(), "Output limiter: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "enabled" : "disabled"));
+        }
+
         // CHECK AND LOG HRTF SETTINGS
-        final int hrtfSoftStatus = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_HRTF_STATUS_SOFT);
-        switch (hrtfSoftStatus) {
-            case SOFTHRTF.ALC_HRTF_DISABLED_SOFT:
-                this.hrtfEnabled = false;
-                logger.trace(this.getClass(), "HRTF status is: ALC_HRTF_DISABLED_SOFT");
-                break;
-            case SOFTHRTF.ALC_HRTF_ENABLED_SOFT:
-                this.hrtfEnabled = true;
-                logger.trace(this.getClass(), "HRTF status is: ALC_HRTF_ENABLED_SOFT");
-                break;
-            case SOFTHRTF.ALC_HRTF_DENIED_SOFT:
-                this.hrtfEnabled = false;
-                logger.trace(this.getClass(), "HRTF status is: ALC_HRTF_DENIED_SOFT");
-                break;
-            case SOFTHRTF.ALC_HRTF_REQUIRED_SOFT:
-                this.hrtfEnabled = true;
-                logger.trace(this.getClass(), "HRTF status is: ALC_HRTF_REQUIRED_SOFT");
-                break;
-            case SOFTHRTF.ALC_HRTF_HEADPHONES_DETECTED_SOFT:
-                this.hrtfEnabled = true;
-                logger.trace(this.getClass(), "HRTF status is: ALC_HRTF_HEADPHONES_DETECTED_SOFT");
-                break;
-            case SOFTHRTF.ALC_HRTF_UNSUPPORTED_FORMAT_SOFT:
-                this.hrtfEnabled = false;
-                logger.trace(this.getClass(), "HRTF status is: ALC_HRTF_UNSUPPORTED_FORMAT_SOFT");
-                break;
-            default:
-                this.hrtfEnabled = false;
-                logger.trace(this.getClass(), "HRTF status is unknown: " + hrtfSoftStatus + " - TuningFork will report it as disabled.");
-                break;
+        if (this.isExtensionAvailable(ALExtensions.ALC_SOFT_HRTF)) {
+            final int hrtfSoftStatus = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_HRTF_STATUS_SOFT);
+            switch (hrtfSoftStatus) {
+                case SOFTHRTF.ALC_HRTF_DISABLED_SOFT:
+                    this.hrtfEnabled = false;
+                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_DISABLED_SOFT");
+                    break;
+                case SOFTHRTF.ALC_HRTF_ENABLED_SOFT:
+                    this.hrtfEnabled = true;
+                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_ENABLED_SOFT");
+                    break;
+                case SOFTHRTF.ALC_HRTF_DENIED_SOFT:
+                    this.hrtfEnabled = false;
+                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_DENIED_SOFT");
+                    break;
+                case SOFTHRTF.ALC_HRTF_REQUIRED_SOFT:
+                    this.hrtfEnabled = true;
+                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_REQUIRED_SOFT");
+                    break;
+                case SOFTHRTF.ALC_HRTF_HEADPHONES_DETECTED_SOFT:
+                    this.hrtfEnabled = true;
+                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_HEADPHONES_DETECTED_SOFT");
+                    break;
+                case SOFTHRTF.ALC_HRTF_UNSUPPORTED_FORMAT_SOFT:
+                    this.hrtfEnabled = false;
+                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_UNSUPPORTED_FORMAT_SOFT");
+                    break;
+                default:
+                    this.hrtfEnabled = false;
+                    logger.debug(this.getClass(), "HRTF status is unknown: " + hrtfSoftStatus + " - TuningFork will report it as disabled.");
+                    break;
+            }
         }
 
         // CHECK AVAILABLE AUXILIARY SENDS
@@ -167,16 +170,77 @@ public class AudioDevice {
             }
             throw new OpenDeviceException("The audio device " + deviceName + " doesn't support 2 auxiliary sends, which is a requirement of TuningFork.");
         }
+
+        // LOG ERRORS
+        this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
+        this.errorLogger.checkLogError("There was at least one AL error upon audio device initialization");
+    }
+
+
+    private void checkRequiredExtension(ALExtensions extension) throws OpenDeviceException {
+        final Boolean checkResult = this.extensionAvailableMap.get(extension);
+        if (checkResult == null || !checkResult) {
+            try {
+                this.dispose(false);
+            } catch (final Exception e) {
+                this.logger.error(this.getClass(),
+                        "The device was opened successfully, but didn't support " + extension.getAlSpecifier() + ". The attempt to close the device failed.");
+            }
+            throw new OpenDeviceException("The audio device doesn't support " + extension.getAlSpecifier() + " which is a requirement of TuningFork.");
+        }
+
+        this.logger.trace(this.getClass(), "Extension available: " + extension.getAlSpecifier());
+    }
+
+
+    private void checkAvailableExtensions() {
+        for (final ALExtensions extension : ALExtensions.values()) {
+            if (extension.isAlc()) {
+                this.extensionAvailableMap.put(extension, ALC10.alcIsExtensionPresent(this.deviceHandle, extension.getAlSpecifier()));
+            } else {
+                this.extensionAvailableMap.put(extension, AL10.alIsExtensionPresent(extension.getAlSpecifier()));
+            }
+        }
+    }
+
+
+    boolean isExtensionAvailable(ALExtensions extension) {
+        final Boolean result = this.extensionAvailableMap.get(extension);
+        if (result == null) {
+            return false;
+        }
+        return result;
     }
 
 
     /**
-     * Returns true if HRTF is supported by this device.
+     * Returns whether the audio output device is still connected. While most people are using either PCI audio cards or a chip welded to their motherboard,
+     * there are many devices that are more dynamic in nature, such as USB and Firewire based-units. Such units may lose external power or may have their cables
+     * unplugged at runtime.<br>
+     * <br>
+     * <b>Note:</b> Not all operating systems and/or drivers will report a disconnected device.
+     *
+     * @return true if the device is connected, false otherwise
+     */
+    public boolean isConnected() {
+        if (this.isExtensionAvailable(ALExtensions.ALC_EXT_DISCONNECT)) {
+            ALC10.alcGetIntegerv(this.deviceHandle, EXTDisconnect.ALC_CONNECTED, this.tempSingleIntResult);
+            return this.tempSingleIntResult[0] == ALC10.ALC_TRUE;
+        }
+
+        // If the extension is not available, always report true
+        return true;
+    }
+
+
+    /**
+     * Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is available, call {@link #getAvailableHrtfs()} to
+     * query for profiles.
      *
      * @return true if supported
      */
     public boolean isHrtfSupported() {
-        return this.extensionHrtfSoftAvailable;
+        return this.isExtensionAvailable(ALExtensions.ALC_SOFT_HRTF);
     }
 
 
@@ -213,7 +277,7 @@ public class AudioDevice {
     /**
      * Enables hrtf on this device.
      *
-     * @param specifier the hrtf configuration specifier. Must be one of the strings included in the list from {@link AudioDevice#getAvailableHrtfs()}
+     * @param specifier the hrtf configuration specifier. Must be one of the strings included in the list from {@link #getAvailableHrtfs()}
      *
      * @return true on success, false on failure
      */
