@@ -56,8 +56,8 @@ java {
 }
 
 test {
-	 exclude 'de/pottgames/tuningfork/test/InputAdapter.class'
-	 exclude 'de/pottgames/tuningfork/test/Rng.class'
+     exclude 'de/pottgames/tuningfork/test/InputAdapter.class'
+     exclude 'de/pottgames/tuningfork/test/Rng.class'
      exclude 'de/pottgames/tuningfork/test/MiniExample.class'
      exclude 'de/pottgames/tuningfork/test/DeviceTest.class'
      exclude 'de/pottgames/tuningfork/test/HrtfTest.class'
