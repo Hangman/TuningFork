@@ -336,6 +336,15 @@ public abstract class SoundSource {
 
 
     /**
+     * Returns the duration of the attached sound in seconds.
+     *
+     * @return the duration of the attached sound.<br>
+     *         Returns -1f if no buffer is attached or the duration couldn't be measured.
+     */
+    abstract public float getDuration();
+
+
+    /**
      * Enables the given filter as direct filter (dry signal) on this sound source.
      *
      * @param filter

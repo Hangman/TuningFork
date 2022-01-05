@@ -29,7 +29,10 @@ repositories {
 
 dependencies {
 	// compileOnly here is kinda hacky but probably (afaik) the best solution we can get
-    compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	
+	implementation 'com.github.Hangman:jorbis:3783bbc0f1'
+	
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -46,7 +49,6 @@ allprojects {
             options.release.set(8)
         }
     }
-
 }
 
 java {

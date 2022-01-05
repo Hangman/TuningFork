@@ -23,7 +23,10 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 
 class WavInputStream extends FilterInputStream implements AudioStream {
-    int             channels, sampleRate, dataRemaining;
+    int             channels;
+    int             sampleRate;
+    int             dataRemaining;
+    private int     bitsPerSample;
     private boolean closed = false;
 
 
@@ -67,9 +70,9 @@ class WavInputStream extends FilterInputStream implements AudioStream {
 
             this.skipFully(6);
 
-            final int bitsPerSample = this.read() & 0xff | (this.read() & 0xff) << 8;
-            if (bitsPerSample != 16) {
-                throw new GdxRuntimeException("WAV files must have 16 bits per sample: " + bitsPerSample);
+            this.bitsPerSample = this.read() & 0xff | (this.read() & 0xff) << 8;
+            if (this.bitsPerSample != 16) {
+                throw new GdxRuntimeException("WAV files must have 16 bits per sample: " + this.bitsPerSample);
             }
 
             this.skipFully(fmtChunkLength - 16);
@@ -91,6 +94,16 @@ class WavInputStream extends FilterInputStream implements AudioStream {
     @Override
     public int getSampleRate() {
         return this.sampleRate;
+    }
+
+
+    public int getBitsPerSample() {
+        return this.bitsPerSample;
+    }
+
+
+    public int getRemainingByteCount() {
+        return this.dataRemaining;
     }
 
 
@@ -155,7 +168,7 @@ class WavInputStream extends FilterInputStream implements AudioStream {
             super.close();
         } catch (final IOException e) {
             // ignore but log it
-            Gdx.app.error("TuningFork", "WavInputStream was not successfully closed: " + e.getMessage());
+            Gdx.app.error("TuningFork", "WavInputStream was not successfully closed: " + e.getMessage()); // FIXME: Wrong logger
         } finally {
             this.closed = true;
         }

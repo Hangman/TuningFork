@@ -171,11 +171,7 @@ public class BufferedSoundSource extends SoundSource {
     }
 
 
-    /**
-     * Returns the duration of the attached sound.
-     *
-     * @return the duration of the attached {@link de.pottgames.tuningfork.SoundBuffer SoundBuffer}. -1f if no buffer is attached to it.
-     */
+    @Override
     public float getDuration() {
         return this.buffer != null ? this.buffer.getDuration() : -1f;
     }

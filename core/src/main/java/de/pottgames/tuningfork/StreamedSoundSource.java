@@ -13,6 +13,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.com.jcraft.jorbis.JOrbisException;
+import de.pottgames.com.jcraft.jorbis.VorbisFile;
 import de.pottgames.tuningfork.Audio.TaskAction;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -37,6 +39,9 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private AtomicInteger          lastQueuedBufferId              = new AtomicInteger();
     private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
     private volatile boolean       readyToDispose                  = false;
+    private float                  duration                        = -1f;
+    private boolean                ogg                             = false;
+    private boolean                wav                             = false;
 
 
     StreamedSoundSource(FileHandle file) {
@@ -55,8 +60,32 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         this.setAttenuationMinDistance(this.audio.getDefaultAttenuationMinDistance());
         this.setAttenuationMaxDistance(this.audio.getDefaultAttenuationMaxDistance());
 
+        // CHECK FILE TYPE
+        final String fileExtension = file.extension();
+        if ("ogg".equalsIgnoreCase(fileExtension) || "oga".equalsIgnoreCase(fileExtension) || "ogx".equalsIgnoreCase(fileExtension)
+                || "opus".equalsIgnoreCase(fileExtension)) {
+            this.ogg = true;
+        } else if ("wav".equalsIgnoreCase(fileExtension) || "wave".equalsIgnoreCase(fileExtension)) {
+            this.wav = true;
+        } else {
+            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "', only ogg and wav files are supported.");
+        }
+
         // CREATE INPUT STREAM
         this.initInputStream(false);
+
+        // CHECK DURATION
+        if (this.ogg) {
+            try {
+                final VorbisFile vorbisFile = new VorbisFile(file.file());
+                this.duration = vorbisFile.time_total(-1);
+            } catch (final JOrbisException e) {
+                this.logger.error(this.getClass(), "Couldn't measure the sound duration of: " + file.path());
+            }
+        } else if (this.wav) {
+            final WavInputStream stream = (WavInputStream) this.audioStream;
+            this.duration = stream.getRemainingByteCount() / (stream.getSampleRate() * stream.getChannels() * stream.getBitsPerSample() / 8f);
+        }
 
         // FETCH DATA & FORMAT FROM INPUT STREAM
         final int sampleRate = this.audioStream.getSampleRate();
@@ -79,15 +108,11 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
             StreamUtils.closeQuietly(this.audioStream);
         }
 
-        final String fileExtension = this.file.extension();
-        if ("ogg".equalsIgnoreCase(fileExtension) || "oga".equalsIgnoreCase(fileExtension) || "ogx".equalsIgnoreCase(fileExtension)
-                || "opus".equalsIgnoreCase(fileExtension)) {
+        if (this.ogg) {
             this.audioStream = new OggInputStream(this.file.read(),
                     reuseInputStream && this.audioStream instanceof OggInputStream ? (OggInputStream) this.audioStream : null);
-        } else if ("wav".equalsIgnoreCase(fileExtension) || "wave".equalsIgnoreCase(fileExtension)) {
+        } else if (this.wav) {
             this.audioStream = new WavInputStream(this.file);
-        } else {
-            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "', only ogg and wav files are supported.");
         }
     }
 
@@ -306,6 +331,12 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     @Override
     public boolean isPaused() {
         return !this.playing.get() && !this.stopped.get();
+    }
+
+
+    @Override
+    public float getDuration() {
+        return this.duration;
     }
 
 
