@@ -9,6 +9,12 @@ import com.badlogic.gdx.utils.IntArray;
 
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
+/**
+ * A low level sound source class that can be fed with raw pcm data.
+ *
+ * @author Matthias
+ *
+ */
 public class PcmSoundSource extends SoundSource {
     private static final int BUFFER_SIZE          = 4096 * 10;
     private static final int INITIAL_BUFFER_COUNT = 10;
@@ -35,6 +41,20 @@ public class PcmSoundSource extends SoundSource {
     }
 
 
+    /**
+     * Adds pcm data to the queue of this sound source.<br>
+     * <br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+     * <br>
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
+     *
+     * @param pcm
+     * @param offset
+     * @param length
+     */
     public void queueSamples(byte[] pcm, int offset, int length) {
         // UNQUEUE PROCESSED BUFFERS
         final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);

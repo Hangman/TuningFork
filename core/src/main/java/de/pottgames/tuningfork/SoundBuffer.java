@@ -23,7 +23,11 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Creates a SoundBuffer with the given pcm data.
+     * Creates a SoundBuffer with the given pcm data.<br>
+     * <br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.
      *
      * @param pcm
      * @param channels
