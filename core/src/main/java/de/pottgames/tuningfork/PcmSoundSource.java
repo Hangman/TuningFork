@@ -52,8 +52,8 @@ public class PcmSoundSource extends SoundSource {
      * queueing samples.
      *
      * @param pcm
-     * @param offset
-     * @param length
+     * @param offset the start index where to begin reading pcm data in the pcm byte array
+     * @param length the length of the pcm data that should be read
      */
     public void queueSamples(byte[] pcm, int offset, int length) {
         // UNQUEUE PROCESSED BUFFERS
