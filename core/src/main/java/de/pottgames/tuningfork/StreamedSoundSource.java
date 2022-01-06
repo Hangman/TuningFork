@@ -44,7 +44,12 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private boolean                wav                             = false;
 
 
-    StreamedSoundSource(FileHandle file) {
+    /**
+     * Creates a new {@link StreamedSoundSource} and loads the first bits of sound data.
+     *
+     * @param file
+     */
+    public StreamedSoundSource(FileHandle file) {
         if (file == null) {
             throw new TuningForkRuntimeException("file is null");
         }
@@ -99,6 +104,9 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
 
         // INITIAL BUFFER FILL
         this.audio.postTask(this, TaskAction.INITIAL_BUFFER_FILL);
+
+        // REGISTER IN AUDIO
+        this.audio.registerStreamedSoundSource(this);
     }
 
 

@@ -13,10 +13,10 @@ import de.pottgames.tuningfork.WavInputStream;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
-public class SimplePcmSoundSourceTest extends ApplicationAdapter {
+public class PcmSoundSourceTest extends ApplicationAdapter {
     private static final int BUFFER_SIZE = 4096 * 10;
     private Audio            audio;
-    private byte[]           pcm         = new byte[SimplePcmSoundSourceTest.BUFFER_SIZE];
+    private byte[]           pcm         = new byte[PcmSoundSourceTest.BUFFER_SIZE];
     private WavInputStream   stream;
     private PcmSoundSource   pcmSource;
     private long             lastPcmPush;
@@ -59,7 +59,7 @@ public class SimplePcmSoundSourceTest extends ApplicationAdapter {
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
-        new Lwjgl3Application(new SimplePcmSoundSourceTest(), config);
+        new Lwjgl3Application(new PcmSoundSourceTest(), config);
     }
 
 }

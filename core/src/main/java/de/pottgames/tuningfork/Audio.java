@@ -10,7 +10,6 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALUtil;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -757,19 +756,10 @@ public class Audio implements Disposable {
     }
 
 
-    /**
-     * Creates a new {@link StreamedSoundSource} and loads the first bits of sound data.
-     *
-     * @param fileHandle
-     *
-     * @return the {@link StreamedSoundSource}
-     */
-    public StreamedSoundSource createStreamedSoundSource(FileHandle fileHandle) {
-        final StreamedSoundSource sound = new StreamedSoundSource(fileHandle);
+    void registerStreamedSoundSource(StreamedSoundSource source) {
         synchronized (this.lock) {
-            this.soundsToUpdate.add(sound);
+            this.soundsToUpdate.add(source);
         }
-        return sound;
     }
 
 
