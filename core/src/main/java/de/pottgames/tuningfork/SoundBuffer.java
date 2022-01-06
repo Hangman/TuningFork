@@ -22,7 +22,14 @@ public class SoundBuffer implements Disposable {
     private final float            duration;
 
 
-    SoundBuffer(byte[] pcm, int channels, int sampleRate) {
+    /**
+     * Creates a SoundBuffer with the given pcm data.
+     *
+     * @param pcm
+     * @param channels
+     * @param sampleRate
+     */
+    public SoundBuffer(byte[] pcm, int channels, int sampleRate) {
         this.logger = Audio.get().logger;
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
