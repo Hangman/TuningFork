@@ -25,7 +25,7 @@ import com.jcraft.jorbis.Info;
  *
  * @author kevin
  */
-class OggInputStream extends InputStream implements AudioStream {
+public class OggInputStream extends InputStream implements AudioStream {
     private final static int BUFFER_SIZE = 512;
 
     /** The conversion buffer size */
@@ -93,7 +93,7 @@ class OggInputStream extends InputStream implements AudioStream {
      * @param input The input stream from which to read the OGG file
      * @param previousStream The stream instance to reuse buffers from, may be null
      */
-    OggInputStream(InputStream input, OggInputStream previousStream) {
+    public OggInputStream(InputStream input, OggInputStream previousStream) {
         if (previousStream == null) {
             this.convbuffer = new byte[this.convsize];
             this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
@@ -118,7 +118,7 @@ class OggInputStream extends InputStream implements AudioStream {
      *
      * @return The number of the bytes on the stream
      */
-    int getLength() {
+    public int getLength() {
         return this.total;
     }
 

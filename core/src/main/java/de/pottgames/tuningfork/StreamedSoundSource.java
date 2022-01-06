@@ -158,13 +158,21 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
-    @Override
+    /**
+     * Returns the current playback position in seconds.
+     *
+     * @return the playback position
+     */
     public float getPlaybackPosition() {
         return this.processedBuffers * this.secondsPerBuffer + AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }
 
 
-    @Override
+    /**
+     * Sets the playback position of this sound source. Invalid values are ignored but an error is logged.
+     *
+     * @param seconds
+     */
     public void setPlaybackPosition(float seconds) {
         if (seconds >= 0f) {
             this.audio.postTask(this, TaskAction.SET_PLAYBACK_POSITION, seconds);
@@ -334,7 +342,12 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
-    @Override
+    /**
+     * Returns the duration of the attached sound in seconds.
+     *
+     * @return the duration of the attached sound<br>
+     *         Returns -1f if the duration couldn't be measured.
+     */
     public float getDuration() {
         return this.duration;
     }

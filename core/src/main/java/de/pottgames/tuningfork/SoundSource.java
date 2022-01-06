@@ -63,7 +63,9 @@ public abstract class SoundSource {
      * Starts the playback of this sound source.
      */
     public void play() {
-        AL10.alSourcePlay(this.sourceId);
+        if (!this.isPlaying()) {
+            AL10.alSourcePlay(this.sourceId);
+        }
     }
 
 
@@ -317,31 +319,6 @@ public abstract class SoundSource {
     public void stop() {
         AL10.alSourceRewind(this.sourceId);
     }
-
-
-    /**
-     * Returns the current playback position in seconds.
-     *
-     * @return the playback position
-     */
-    abstract public float getPlaybackPosition();
-
-
-    /**
-     * Sets the playback position of this sound source. Invalid values are ignored but an error is logged.
-     *
-     * @param seconds
-     */
-    abstract public void setPlaybackPosition(float seconds);
-
-
-    /**
-     * Returns the duration of the attached sound in seconds.
-     *
-     * @return the duration of the attached sound.<br>
-     *         Returns -1f if no buffer is attached or the duration couldn't be measured.
-     */
-    abstract public float getDuration();
 
 
     /**

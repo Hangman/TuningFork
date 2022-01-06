@@ -171,20 +171,33 @@ public class BufferedSoundSource extends SoundSource {
     }
 
 
-    @Override
+    /**
+     * Returns the duration of the attached sound in seconds.
+     *
+     * @return the duration of the attached sound.<br>
+     *         Returns -1f if no buffer is attached or the duration couldn't be measured.
+     */
     public float getDuration() {
         return this.buffer != null ? this.buffer.getDuration() : -1f;
     }
 
 
-    @Override
+    /**
+     * Sets the playback position of this sound source. Invalid values are ignored but an error is logged.
+     *
+     * @param seconds
+     */
     public void setPlaybackPosition(float seconds) {
         AL10.alSourcef(this.sourceId, AL11.AL_SEC_OFFSET, seconds);
         this.errorLogger.checkLogError("Failed to set playback position");
     }
 
 
-    @Override
+    /**
+     * Returns the current playback position in seconds.
+     *
+     * @return the playback position
+     */
     public float getPlaybackPosition() {
         return AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }

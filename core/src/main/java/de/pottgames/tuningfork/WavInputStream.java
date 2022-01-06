@@ -17,27 +17,31 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 
-class WavInputStream extends FilterInputStream implements AudioStream {
-    int             channels;
-    int             sampleRate;
-    int             dataRemaining;
-    private int     bitsPerSample;
-    private boolean closed = false;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
+public class WavInputStream extends FilterInputStream implements AudioStream {
+    private final TuningForkLogger logger;
+    int                            channels;
+    int                            sampleRate;
+    int                            dataRemaining;
+    private int                    bitsPerSample;
+    private boolean                closed = false;
 
 
     WavInputStream(InputStream input, String fileName) {
         super(input);
+        this.logger = Audio.get().logger;
         this.initialRead(fileName);
     }
 
 
-    WavInputStream(FileHandle file) {
+    public WavInputStream(FileHandle file) {
         super(file.read());
+        this.logger = Audio.get().logger;
         this.initialRead(file.toString());
     }
 
@@ -168,7 +172,7 @@ class WavInputStream extends FilterInputStream implements AudioStream {
             super.close();
         } catch (final IOException e) {
             // ignore but log it
-            Gdx.app.error("TuningFork", "WavInputStream was not successfully closed: " + e.getMessage()); // FIXME: Wrong logger
+            this.logger.error(this.getClass(), "WavInputStream was not successfully closed: " + e.getMessage());
         } finally {
             this.closed = true;
         }
