@@ -66,6 +66,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/PlaybackPositionBufferedSourceTest.class'
      exclude 'de/pottgames/tuningfork/test/FilterTest.class'
      exclude 'de/pottgames/tuningfork/test/PcmSoundSourceTest'
+     exclude 'de/pottgames/tuningfork/test/StreamedSoundSourceTest'
  }
 
 publishing {
