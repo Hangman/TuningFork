@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntArray;
 
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -15,7 +16,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  *
  */
-public class PcmSoundSource extends SoundSource {
+public class PcmSoundSource extends SoundSource implements Disposable {
     private static final int BUFFER_SIZE          = 4096 * 10;
     private static final int INITIAL_BUFFER_COUNT = 10;
 
@@ -84,6 +85,9 @@ public class PcmSoundSource extends SoundSource {
     }
 
 
+    /**
+     * Disposes the sound sources native resources. You should never use this sound source after disposing it.
+     */
     @Override
     public void dispose() {
         this.stop();

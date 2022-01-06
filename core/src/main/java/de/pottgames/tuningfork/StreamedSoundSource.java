@@ -366,6 +366,9 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
+    /**
+     * Disposes the sound sources native resources. You should never use this sound source after disposing it.
+     */
     @Override
     public void dispose() {
         this.audio.removeStreamedSound(this);
