@@ -43,7 +43,7 @@ project(":core") {
 }
 ```
 ### Compatibility
-| Version Of libGDX | Latest Compatible Version Of TuningFork |
+| Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :---                          |
 | 1.9.11 - 1.10.0 | 1.0.0 |
 | < 1.9.11 | not supported, might work though: 1.0.0 |
