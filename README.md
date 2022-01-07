@@ -2,7 +2,7 @@
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 # Introduction
-TuningFork is a library for libGDX that provides advanced audio features. The goal of this library is to make most of the features of OpenAL accessible and still provide a comfortable and easy to use high-level API.
+TuningFork is a library for libGDX that provides advanced audio features. The goal of this library is to make most of the features of OpenAL accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API.
 
 ### Main Features
 * Spatial audio (3D)
@@ -11,16 +11,14 @@ TuningFork is a library for libGDX that provides advanced audio features. The go
 * Real-time effects such as Reverb, Echo, Flanger, Distortion (and many more)
 * Filters
 * HRTF support (aka binaural)
-* Easy to use API
-* Output to any sound device (you are no longer tied to the default sound device)
+* Load wav, ogg, or bring your own pcm data
+* Output to any sound device<br>(you are no longer tied to the default sound device)
 
 ### Limitations
 * Lwjgl3 only, sorry mobile and web users
 
 ### Why
-The standard audio capabilities of libGDX are very limited. Especially if you are developing a 3D application and want to create realistic spatial sound, libGDX's on-board features are in no way sufficient.
-Except for [Rafa Skoberg](https://github.com/rafaskb)s [Boom](https://github.com/rafaskb/Parrot) and [Parrot](https://github.com/rafaskb/Parrot), there are no alternatives available to my knowledge that blend in well with libGDX.
-If you're looking for an alternative to TuningFork, Rafa's libs might be an option for you.
+The standard audio capabilities of libGDX are kinda limited compared to sound APIs like OpenAL - probably due to its cross-platform nature. Especially if you are developing a 3D application and want to create realistic spatial sound, you'll face some problems with libGDX. Other existing sound libraries that I found always emulated a semi-realistic spatiality in their own code. That works but I didn't really like the approach as it creates unnecessary overhead. OpenAL already handles all that for us if you let it. 
 
 # Install
 TuningFork is available via Jitpack.
