@@ -33,6 +33,7 @@ dependencies {
 	
 	implementation 'com.github.Hangman:jorbis:3783bbc0f1'
 	
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
