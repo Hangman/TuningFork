@@ -2,7 +2,7 @@ package de.pottgames.tuningfork.test;
 
 abstract class SongGenerator {
 
-    static SongNote[] createImp() {
+    static SongNote[] createImperialMarch() {
         final SongNote[] song = new SongNote[55];
 
         song[0] = new SongNote(Note.A4, 0.25f);

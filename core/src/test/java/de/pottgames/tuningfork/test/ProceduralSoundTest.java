@@ -26,7 +26,7 @@ public class ProceduralSoundTest extends ApplicationAdapter {
         this.audio = Audio.init();
         this.pcmSource = new PcmSoundSource(ProceduralSoundTest.SAMPLE_RATE, PcmFormat.MONO_8_BIT);
         this.pcmSource.setVolume(0.5f);
-        this.song = SongGenerator.createImp();
+        this.song = SongGenerator.createImperialMarch();
     }
 
 
