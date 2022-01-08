@@ -1,5 +1,7 @@
 package de.pottgames.tuningfork.test;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -11,8 +13,8 @@ import de.pottgames.tuningfork.PcmSoundSource;
 
 public class ProceduralSoundTest extends ApplicationAdapter {
     private static final int      SAMPLE_RATE = 44100;
-    private static final int      NPM         = 40;
-    private static final WaveForm WAVEFORM    = WaveForm.SQUARE;
+    private static final int      NPM         = 30;
+    private static final WaveForm WAVEFORM    = WaveForm.SINE;
     private Audio                 audio;
     private PcmSoundSource        pcmSource;
     private final byte[]          pcm         = new byte[ProceduralSoundTest.SAMPLE_RATE];
@@ -59,8 +61,12 @@ public class ProceduralSoundTest extends ApplicationAdapter {
 
 
     private void createSineTonePcm(Note note, byte[] target) {
-        final float samplesPerCycle = ProceduralSoundTest.SAMPLE_RATE / note.getFrequency();
+        if (note == Note.SILENCE) {
+            Arrays.fill(target, (byte) 128);
+            return;
+        }
 
+        final float samplesPerCycle = ProceduralSoundTest.SAMPLE_RATE / note.getFrequency();
         float cycleCounter = 0f;
         for (int i = 0; i < target.length; i++) {
             final float cycleProgress = cycleCounter / samplesPerCycle;
@@ -74,8 +80,12 @@ public class ProceduralSoundTest extends ApplicationAdapter {
 
 
     private void createSquareTonePcm(Note note, byte[] target) {
-        final float samplesPerCycle = ProceduralSoundTest.SAMPLE_RATE / note.getFrequency();
+        if (note == Note.SILENCE) {
+            Arrays.fill(target, (byte) 128);
+            return;
+        }
 
+        final float samplesPerCycle = ProceduralSoundTest.SAMPLE_RATE / note.getFrequency();
         float cycleCounter = 0f;
         for (int i = 0; i < target.length; i++) {
             final float cycleProgress = cycleCounter / samplesPerCycle;
