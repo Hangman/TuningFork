@@ -66,8 +66,12 @@ test {
      exclude 'de/pottgames/tuningfork/test/EffectTest.class'
      exclude 'de/pottgames/tuningfork/test/PlaybackPositionBufferedSourceTest.class'
      exclude 'de/pottgames/tuningfork/test/FilterTest.class'
-     exclude 'de/pottgames/tuningfork/test/PcmSoundSourceTest'
-     exclude 'de/pottgames/tuningfork/test/StreamedSoundSourceTest'
+     exclude 'de/pottgames/tuningfork/test/PcmSoundSourceTest.class'
+     exclude 'de/pottgames/tuningfork/test/StreamedSoundSourceTest.class'
+     exclude 'de/pottgames/tuningfork/test/ProceduralSoundTest.class'
+     exclude 'de/pottgames/tuningfork/test/Note.class'
+     exclude 'de/pottgames/tuningfork/test/SongNote.class'
+     exclude 'de/pottgames/tuningfork/test/SongGenerator.class'
  }
 
 publishing {
