@@ -12,6 +12,7 @@ TuningFork is a library for libGDX that provides advanced audio features. The go
 * Filters
 * HRTF support (aka binaural)
 * Load wav, ogg, or bring your own pcm data
+* Record audio
 * Output to any sound device<br>(you are no longer tied to the default sound device)
 
 ### Limitations
