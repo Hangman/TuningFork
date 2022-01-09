@@ -28,9 +28,10 @@ public class CaptureDevice implements Disposable {
     private final String           alDeviceName;
     private final PcmFormat        format;
     private final int              frequency;
+    private final int              bufferSize;
 
 
-    private CaptureDevice(long handle, PcmFormat format, int frequency, TuningForkLogger logger) {
+    private CaptureDevice(long handle, PcmFormat format, int frequency, int bufferSize, TuningForkLogger logger) {
         if (logger == null) {
             this.logger = new MockLogger();
         } else {
@@ -40,6 +41,7 @@ public class CaptureDevice implements Disposable {
         this.alDeviceHandle = handle;
         this.format = format;
         this.frequency = frequency;
+        this.bufferSize = bufferSize;
         this.alDeviceName = ALC10.alcGetString(handle, ALC11.ALC_CAPTURE_DEVICE_SPECIFIER);
     }
 
@@ -120,7 +122,7 @@ public class CaptureDevice implements Disposable {
 
 
     /**
-     * Returns the current pcm format of the device.
+     * Returns the pcm format of the device.
      *
      * @return the format
      */
@@ -130,12 +132,22 @@ public class CaptureDevice implements Disposable {
 
 
     /**
-     * Returns the current frequency of the device.
+     * Returns the frequency of the device.
      *
      * @return the frequency
      */
     public int getFrequency() {
         return this.frequency;
+    }
+
+
+    /**
+     * Returns the size of the internal buffer of the device.
+     *
+     * @return the buffer size
+     */
+    public int getBufferSize() {
+        return this.bufferSize;
     }
 
 
@@ -190,7 +202,7 @@ public class CaptureDevice implements Disposable {
         final long deviceHandle = ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(), config.getPcmFormat().getAlId(),
                 config.getBufferSize());
         if (deviceHandle != 0L) {
-            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(), config.getLogger());
+            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(), config.getBufferSize(), config.getLogger());
         }
 
         return captureDevice;
