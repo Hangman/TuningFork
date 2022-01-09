@@ -1,8 +1,6 @@
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.logger;
 
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-
-class MockLogger implements TuningForkLogger {
+public class MockLogger implements TuningForkLogger {
 
     @Override
     public void error(Class<?> clazz, String message) {

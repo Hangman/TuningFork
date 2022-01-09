@@ -14,7 +14,7 @@ public enum PcmFormat {
     }
 
 
-    int getAlId() {
+    public int getAlId() {
         return this.alId;
     }
 

@@ -1,6 +1,7 @@
 package de.pottgames.tuningfork;
 
 import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
@@ -11,7 +12,7 @@ import com.badlogic.gdx.utils.IntArray;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
- * A low level sound source class that can be fed with raw pcm data.
+ * A low level sound source class that can be fed with raw pcm data in a real-time fashion.
  *
  * @author Matthias
  *
@@ -28,6 +29,12 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     private final int              sampleRate;
 
 
+    /**
+     * Creates a new {@link PcmSoundSource} with the given specs.
+     *
+     * @param sampleRate
+     * @param pcmFormat
+     */
     public PcmSoundSource(int sampleRate, PcmFormat pcmFormat) {
         this.logger = Audio.get().logger;
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
@@ -57,30 +64,73 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param length the length of the pcm data that should be read
      */
     public void queueSamples(byte[] pcm, int offset, int length) {
-        // UNQUEUE PROCESSED BUFFERS
-        final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
-        for (int i = 0; i < processedBuffers; i++) {
-            this.freeBufferIds.add(AL10.alSourceUnqueueBuffers(this.sourceId));
-        }
+        this.unqueueProcessedBuffers();
 
-        // QUEUE PCM
         while (length > 0) {
-            // FIND FREE BUFFER
-            int freeBufferId;
-            if (this.freeBufferIds.isEmpty()) {
-                freeBufferId = AL10.alGenBuffers();
-            } else {
-                freeBufferId = this.freeBufferIds.pop();
-            }
-
-            // WRITE PCM
+            final int alBufferId = this.getFreeBufferId();
             final int writtenLength = Math.min(PcmSoundSource.BUFFER_SIZE, length);
             this.tempBuffer.clear();
             this.tempBuffer.put(pcm, offset, writtenLength).flip();
-            AL10.alBufferData(freeBufferId, this.format.getAlId(), this.tempBuffer, this.sampleRate);
-            AL10.alSourceQueueBuffers(this.sourceId, freeBufferId);
+            AL10.alBufferData(alBufferId, this.format.getAlId(), this.tempBuffer, this.sampleRate);
+            AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
             length -= writtenLength;
             offset += writtenLength;
+        }
+    }
+
+
+    /**
+     * Adds pcm data to the queue of this sound source.<br>
+     * <br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+     * <br>
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
+     *
+     * @param pcm in native order
+     */
+    public void queueSamples(ByteBuffer pcm) {
+        this.unqueueProcessedBuffers();
+        final int alBufferId = this.getFreeBufferId();
+        AL10.alBufferData(alBufferId, this.format.getAlId(), pcm, this.sampleRate);
+        AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+    }
+
+
+    /**
+     * Adds pcm data to the queue of this sound source.<br>
+     * <br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+     * <br>
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
+     *
+     * @param pcm in native order
+     */
+    public void queueSamples(ShortBuffer pcm) {
+        this.unqueueProcessedBuffers();
+        final int alBufferId = this.getFreeBufferId();
+        AL10.alBufferData(alBufferId, this.format.getAlId(), pcm, this.sampleRate);
+        AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+    }
+
+
+    private int getFreeBufferId() {
+        if (this.freeBufferIds.isEmpty()) {
+            return AL10.alGenBuffers();
+        }
+        return this.freeBufferIds.pop();
+    }
+
+
+    private void unqueueProcessedBuffers() {
+        final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
+        for (int i = 0; i < processedBuffers; i++) {
+            this.freeBufferIds.add(AL10.alSourceUnqueueBuffers(this.sourceId));
         }
     }
 

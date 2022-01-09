@@ -1,6 +1,7 @@
 package de.pottgames.tuningfork;
 
 import de.pottgames.tuningfork.logger.GdxLogger;
+import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class AudioConfig {
@@ -29,7 +30,8 @@ public class AudioConfig {
      * @param deviceConfig
      * @param distanceAttenuationModel
      * @param simultaneousSources defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
-     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s simultaneously
+     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s
+     *            simultaneously
      * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
      *            available logger implementations that are shipped with TuningFork.
      */
@@ -52,12 +54,15 @@ public class AudioConfig {
      * Sets the audio device config.
      *
      * @param deviceConfig
+     *
+     * @return this
      */
-    public void setDeviceConfig(AudioDeviceConfig deviceConfig) {
+    public AudioConfig setDeviceConfig(AudioDeviceConfig deviceConfig) {
         this.deviceConfig = deviceConfig;
         if (deviceConfig == null) {
             this.deviceConfig = new AudioDeviceConfig();
         }
+        return this;
     }
 
 
@@ -70,12 +75,15 @@ public class AudioConfig {
      * Sets the distance attenuation model.
      *
      * @param distanceAttenuationModel
+     *
+     * @return this
      */
-    public void setDistanceAttenuationModel(DistanceAttenuationModel distanceAttenuationModel) {
+    public AudioConfig setDistanceAttenuationModel(DistanceAttenuationModel distanceAttenuationModel) {
         this.distanceAttenuationModel = distanceAttenuationModel;
         if (distanceAttenuationModel == null) {
             this.distanceAttenuationModel = DistanceAttenuationModel.NONE;
         }
+        return this;
     }
 
 
@@ -88,12 +96,15 @@ public class AudioConfig {
      * Defines how many {@link BufferedSoundSource}s are allowed to play simultaneously.
      *
      * @param simultaneousSources
+     *
+     * @return this
      */
-    public void setSimultaneousSources(int simultaneousSources) {
+    public AudioConfig setSimultaneousSources(int simultaneousSources) {
         this.simultaneousSources = simultaneousSources;
         if (simultaneousSources < 2) {
             this.simultaneousSources = 2;
         }
+        return this;
     }
 
 
@@ -106,12 +117,15 @@ public class AudioConfig {
      * The initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s simultaneously.
      *
      * @param idleTasks
+     *
+     * @return this
      */
-    public void setIdleTasks(int idleTasks) {
+    public AudioConfig setIdleTasks(int idleTasks) {
         this.idleTasks = idleTasks;
         if (idleTasks < 2) {
             this.idleTasks = 2;
         }
+        return this;
     }
 
 
@@ -125,12 +139,15 @@ public class AudioConfig {
      * logger implementations that are shipped with TuningFork.
      *
      * @param logger
+     *
+     * @return this
      */
-    public void setLogger(TuningForkLogger logger) {
+    public AudioConfig setLogger(TuningForkLogger logger) {
         this.logger = logger;
         if (logger == null) {
             this.logger = new MockLogger();
         }
+        return this;
     }
 
 }

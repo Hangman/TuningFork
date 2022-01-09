@@ -38,6 +38,7 @@ public class DeviceTest {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter device number: ");
         final int number = Integer.parseInt(br.readLine());
+        br.close();
 
         // INIT AUDIO
         final ConsoleLogger logger = new ConsoleLogger();

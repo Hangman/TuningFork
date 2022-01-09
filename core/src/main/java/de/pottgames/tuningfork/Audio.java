@@ -163,7 +163,12 @@ public class Audio implements Disposable {
     }
 
 
-    static Audio get() {
+    /**
+     * Returns the currently active instance of Audio.
+     *
+     * @return the instance
+     */
+    public static Audio get() {
         return Audio.instance;
     }
 
