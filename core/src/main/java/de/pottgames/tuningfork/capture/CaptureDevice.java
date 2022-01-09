@@ -25,9 +25,10 @@ public class CaptureDevice implements Disposable {
     private final long             alDeviceHandle;
     private final String           alDeviceName;
     private final PcmFormat        format;
+    private final int              frequency;
 
 
-    private CaptureDevice(long handle, PcmFormat format, TuningForkLogger logger) {
+    private CaptureDevice(long handle, PcmFormat format, int frequency, TuningForkLogger logger) {
         if (logger == null) {
             this.logger = new MockLogger();
         } else {
@@ -35,6 +36,7 @@ public class CaptureDevice implements Disposable {
         }
         this.alDeviceHandle = handle;
         this.format = format;
+        this.frequency = frequency;
         this.alDeviceName = ALC10.alcGetString(handle, ALC11.ALC_CAPTURE_DEVICE_SPECIFIER);
     }
 
@@ -118,6 +120,16 @@ public class CaptureDevice implements Disposable {
     }
 
 
+    /**
+     * Returns the current frequency of the device.
+     *
+     * @return the frequency
+     */
+    public int getFrequency() {
+        return this.frequency;
+    }
+
+
     @Override
     public void dispose() {
         if (!ALC11.alcCaptureCloseDevice(this.alDeviceHandle)) {
@@ -169,7 +181,7 @@ public class CaptureDevice implements Disposable {
         final long deviceHandle = ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(), config.getPcmFormat().getAlId(),
                 config.getBufferSize());
         if (deviceHandle != 0L) {
-            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getLogger());
+            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(), config.getLogger());
         }
 
         return captureDevice;
