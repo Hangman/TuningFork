@@ -6,6 +6,7 @@ import org.lwjgl.openal.EXTEfx;
 
 import com.badlogic.gdx.math.Vector3;
 
+import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**

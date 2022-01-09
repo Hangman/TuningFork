@@ -11,6 +11,7 @@ import org.lwjgl.openal.ALUtil;
 import com.badlogic.gdx.utils.Disposable;
 
 import de.pottgames.tuningfork.PcmFormat;
+import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -22,6 +23,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  */
 public class CaptureDevice implements Disposable {
     private final TuningForkLogger logger;
+    private final ErrorLogger      errorLogger;
     private final long             alDeviceHandle;
     private final String           alDeviceName;
     private final PcmFormat        format;
@@ -34,6 +36,7 @@ public class CaptureDevice implements Disposable {
         } else {
             this.logger = logger;
         }
+        this.errorLogger = new ErrorLogger(this.getClass(), logger);
         this.alDeviceHandle = handle;
         this.format = format;
         this.frequency = frequency;
@@ -46,6 +49,9 @@ public class CaptureDevice implements Disposable {
      */
     public void startCapture() {
         ALC11.alcCaptureStart(this.alDeviceHandle);
+        if (!this.errorLogger.checkLogAlcError(this.alDeviceHandle, "failed to start capturing")) {
+            this.logger.trace(this.getClass(), "capturing started");
+        }
     }
 
 
@@ -97,6 +103,9 @@ public class CaptureDevice implements Disposable {
      */
     public void stopCapture() {
         ALC11.alcCaptureStop(this.alDeviceHandle);
+        if (!this.errorLogger.checkLogAlcError(this.alDeviceHandle, "failed to stop capturing")) {
+            this.logger.trace(this.getClass(), "capturing stopped");
+        }
     }
 
 

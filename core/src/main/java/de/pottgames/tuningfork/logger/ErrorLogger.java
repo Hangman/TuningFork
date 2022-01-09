@@ -1,11 +1,9 @@
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.logger;
 
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC10;
 
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-
-class ErrorLogger {
+public class ErrorLogger {
     private static final String    TF_UNKNOWN_ERROR_CODE = "TF_UNKNOWN_ERROR_CODE";
     private static final String    AL_INVALID_NAME       = "AL_INVALID_NAME";
     private static final String    AL_INVALID_ENUM       = "AL_INVALID_ENUM";
@@ -21,18 +19,18 @@ class ErrorLogger {
     private final TuningForkLogger logger;
 
 
-    ErrorLogger(Class<?> clazz, TuningForkLogger logger) {
+    public ErrorLogger(Class<?> clazz, TuningForkLogger logger) {
         this.clazz = clazz;
         this.logger = logger;
     }
 
 
-    void dismissError() {
+    public void dismissError() {
         AL10.alGetError();
     }
 
 
-    boolean checkLogAlcError(long deviceHandle, String message) {
+    public boolean checkLogAlcError(long deviceHandle, String message) {
         final int alcError = ALC10.alcGetError(deviceHandle);
         if (alcError != ALC10.ALC_NO_ERROR) {
             this.logger.error(this.clazz, message + " - " + ErrorLogger.alcErrorToString(alcError));
@@ -43,7 +41,7 @@ class ErrorLogger {
     }
 
 
-    boolean checkLogError(String message) {
+    public boolean checkLogError(String message) {
         final int alError = AL10.alGetError();
         if (alError != AL10.AL_NO_ERROR) {
             this.logger.error(this.clazz, message + " - " + ErrorLogger.alErrorToString(alError));
@@ -54,7 +52,7 @@ class ErrorLogger {
     }
 
 
-    static String alErrorToString(int alError) {
+    public static String alErrorToString(int alError) {
         switch (alError) {
             case AL10.AL_INVALID_NAME:
                 return ErrorLogger.AL_INVALID_NAME;
@@ -72,7 +70,7 @@ class ErrorLogger {
     }
 
 
-    static String alcErrorToString(int alcError) {
+    public static String alcErrorToString(int alcError) {
         switch (alcError) {
             case ALC10.ALC_INVALID_DEVICE:
                 return ErrorLogger.ALC_INVALID_DEVICE;

@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 import de.pottgames.com.jcraft.jorbis.JOrbisException;
 import de.pottgames.com.jcraft.jorbis.VorbisFile;
 import de.pottgames.tuningfork.Audio.TaskAction;
+import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class StreamedSoundSource extends SoundSource implements Disposable {

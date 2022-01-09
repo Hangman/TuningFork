@@ -7,6 +7,7 @@ import org.lwjgl.openal.AL10;
 
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
