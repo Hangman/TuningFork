@@ -2,7 +2,7 @@
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 # Introduction
-TuningFork is a library for libGDX that provides advanced audio features. The goal of this library is to make most of the features of OpenAL accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API.
+TuningFork is a library for libGDX that provides advanced audio features. The goal of this library is to make most of the features of OpenAL accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. Note that TuningFork is not an extension to libGDX audio but a replacement.
 
 ### Main Features
 * Spatial audio (3D)
