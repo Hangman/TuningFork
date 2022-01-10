@@ -49,7 +49,7 @@ project(":core") {
 | 1.9.11 - 1.10.0 | 1.0.0 |
 | < 1.9.11 | not supported, might work though: 1.0.0 |
 
-## Upgrading
+### Upgrading
 The latest patch notes can be found here: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
 
 # Get Started
