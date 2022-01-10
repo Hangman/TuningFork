@@ -24,6 +24,9 @@ import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 public class CaptureTest {
 
     public static void main(String[] args) throws NumberFormatException, IOException {
+        final int frequency = 44100;
+        final int bufferSize = frequency / 10;
+
         // FETCH AVAILABLE OUTPUT DEVICES
         final List<String> outputDeviceList = Audio.availableDevices();
         if (outputDeviceList == null || outputDeviceList.isEmpty()) {
@@ -46,13 +49,13 @@ public class CaptureTest {
 
         // INIT AUDIO
         final ConsoleLogger logger = new ConsoleLogger();
-        logger.setLogLevel(LogLevel.INFO_WARN_ERROR);
+        logger.setLogLevel(LogLevel.WARN_ERROR);
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
         audioDeviceConfig.deviceSpecifier = outputDeviceList.get(outputNumber);
         final Audio audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
 
         // CREATE SOUND SOURCE
-        final PcmSoundSource source = new PcmSoundSource(44100, PcmFormat.MONO_16_BIT);
+        final PcmSoundSource source = new PcmSoundSource(frequency, PcmFormat.MONO_16_BIT);
         final SoundEffect effect = new SoundEffect(new PitchShifter());
         source.attachEffect(effect);
 
@@ -85,15 +88,15 @@ public class CaptureTest {
         final CaptureDevice device = CaptureDevice.open(config);
         System.out.println("Device Name: " + device.getDeviceName());
 
-        final ShortBuffer buffer = BufferUtils.newShortBuffer(4410);
+        final ShortBuffer buffer = BufferUtils.newShortBuffer(bufferSize);
 
         final long captureStartTime = System.currentTimeMillis();
         device.startCapture();
 
         while (System.currentTimeMillis() < captureStartTime + 30000L) {
-            while (device.capturedSamples() > 4409) {
+            while (device.capturedSamples() >= bufferSize) {
                 buffer.clear();
-                device.fetch16BitSamples(buffer, 4410);
+                device.fetch16BitSamples(buffer, bufferSize);
                 source.queueSamples(buffer);
                 source.play();
             }
