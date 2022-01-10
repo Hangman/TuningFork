@@ -91,8 +91,7 @@ public class CaptureTest {
         device.startCapture();
 
         while (System.currentTimeMillis() < captureStartTime + 30000L) {
-            final int capturedSamples = device.capturedSamples();
-            if (capturedSamples > 4409) {
+            while (device.capturedSamples() > 4409) {
                 buffer.clear();
                 device.fetch16BitSamples(buffer, 4410);
                 source.queueSamples(buffer);
