@@ -39,15 +39,15 @@ Then add TuningFork as dependency in your core project:
 project(":core") {
     dependencies {
     	...
-        implementation 'com.github.Hangman:TuningFork:1.0.0'
+        implementation 'com.github.Hangman:TuningFork:1.1.0'
     }
 }
 ```
 ### Compatibility
 | Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :---                          |
-| 1.9.11 - 1.10.0 | 1.0.0 |
-| < 1.9.11 | not supported, might work though: 1.0.0 |
+| 1.9.11 - 1.10.0 | 1.1.0 |
+| < 1.9.11 | not supported, might work though: 1.1.0 |
 
 ### Upgrading
 The latest patch notes can be found here: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
