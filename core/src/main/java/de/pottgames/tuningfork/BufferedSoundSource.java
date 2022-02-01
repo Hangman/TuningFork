@@ -248,6 +248,7 @@ public class BufferedSoundSource extends SoundSource {
         this.setRelative(false);
         this.setPosition(0f, 0f, 0f);
         this.setSpeed(0f, 0f, 0f);
+        this.enableVirtualization(true);
         this.setAttenuationFactor(attenuationFactor);
         this.setAttenuationMaxDistance(attenuationMaxDistance);
         this.setAttenuationMinDistance(attenuationMinDistance);
