@@ -2,7 +2,7 @@
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 # Introduction
-TuningFork is a library for libGDX that provides advanced audio features. The goal of this library is to make most of the features of OpenAL accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. Note that TuningFork is not an extension to libGDX audio but a replacement.
+TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that provides advanced audio features. The goal of this library is to make most of the features of [OpenAL](https://github.com/kcat/openal-soft) accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. Note that TuningFork is not an extension to libGDX audio but a replacement.
 
 ### Main Features
 * Spatial audio (3D)
@@ -39,17 +39,17 @@ Then add TuningFork as dependency in your core project:
 project(":core") {
     dependencies {
     	...
-        implementation 'com.github.Hangman:TuningFork:1.0.0'
+        implementation 'com.github.Hangman:TuningFork:1.1.0'
     }
 }
 ```
 ### Compatibility
 | Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :---                          |
-| 1.9.11 - 1.10.0 | 1.0.0 |
-| < 1.9.11 | not supported, might work though: 1.0.0 |
+| 1.9.11 - 1.10.0 | 1.1.0 |
+| < 1.9.11 | not supported, might work though: 1.1.0 |
 
-## Upgrading
+### Upgrading
 The latest patch notes can be found here: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
 
 # Get Started
