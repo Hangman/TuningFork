@@ -28,13 +28,13 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class AudioDevice {
-    private long                                   deviceHandle;
-    private long                                   context;
-    private final TuningForkLogger                 logger;
-    private final ErrorLogger                      errorLogger;
-    private boolean                                hrtfEnabled           = false;
-    private final AudioDeviceConfig                config;
-    private final int[]                            tempSingleIntResult   = new int[1];
+    private long                                  deviceHandle;
+    private long                                  context;
+    private final TuningForkLogger                logger;
+    private final ErrorLogger                     errorLogger;
+    private boolean                               hrtfEnabled           = false;
+    private final AudioDeviceConfig               config;
+    private final int[]                           tempSingleIntResult   = new int[1];
     private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
 
 
@@ -112,6 +112,7 @@ public class AudioDevice {
         // CHECK IF EXTENSIONS ARE PRESENT
         this.checkAvailableExtensions();
         this.checkRequiredExtension(ALExtension.ALC_EXT_EFX);
+        this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS);
 
         // LOG OUTPUT LIMITER STATE
         if (config.enableOutputLimiter) {

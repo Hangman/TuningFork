@@ -3,6 +3,7 @@ package de.pottgames.tuningfork;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
+import org.lwjgl.openal.SOFTDirectChannels;
 
 import com.badlogic.gdx.math.Vector3;
 
@@ -273,6 +274,28 @@ public abstract class SoundSource {
      */
     public float getAttenuationMaxDistance() {
         return AL10.alGetSourcef(this.sourceId, AL10.AL_MAX_DISTANCE);
+    }
+
+
+    /**
+     * By default virtualization is enabled. OpenAL requires buffer channels to be down-mixed to the output channel configuration, possibly using HRTF or other
+     * virtualization techniques to give a sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output,
+     * so you can disable it for the source if desired.
+     *
+     * @param enabled
+     */
+    public void enableVirtualization(boolean enabled) {
+        AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, enabled ? AL10.AL_FALSE : AL10.AL_TRUE);
+    }
+
+
+    /**
+     * Checks wether this sound source is virtualized. If virtualized, source channels may be down-mixed to the device's output channel configuration.
+     *
+     * @return true if virtualized
+     */
+    public boolean isVirtualized() {
+        return AL10.alGetSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT) != AL10.AL_TRUE;
     }
 
 
