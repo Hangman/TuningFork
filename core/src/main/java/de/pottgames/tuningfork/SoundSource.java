@@ -280,7 +280,8 @@ public abstract class SoundSource {
     /**
      * By default virtualization is enabled. OpenAL requires buffer channels to be down-mixed to the output channel configuration, possibly using HRTF or other
      * virtualization techniques to give a sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output,
-     * so you can disable it for the source if desired.
+     * so you can disable it for the source if desired. Note that existing input channels may be dropped if they don't exist on the output configuration when
+     * virtualization is disabled.
      *
      * @param enabled
      */
