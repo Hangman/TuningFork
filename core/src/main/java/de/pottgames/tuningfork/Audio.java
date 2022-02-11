@@ -336,12 +336,6 @@ public class Audio implements Disposable {
         // FIND FREE SOUND SOURCE
         final BufferedSoundSource source = this.sourcePool.findFreeSource();
 
-        // THROW EXCEPTION IF ALL SOUND SOURCES ARE BUSY/OBTAINED
-        if (source == null) {
-            throw new TuningForkRuntimeException(
-                    "All SoundSources are busy. Make sure to call free on obtained SoundSources when the sound finished playing. Otherwise consider increasing the simultaneousSources.");
-        }
-
         // PREPARE SOURCE
         source.obtained = true;
         source.setBuffer(buffer);
