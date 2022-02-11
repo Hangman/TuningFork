@@ -24,8 +24,6 @@ class SoundSourcePool {
         while (result == null) {
             final BufferedSoundSource candidate = this.sources.get(this.nextSourceIndex);
             if (!candidate.obtained && !candidate.isPlaying()) {
-                candidate.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(),
-                        this.audio.getDefaultAttenuationMaxDistance());
                 result = candidate;
             }
             this.nextSourceIndex++;
@@ -36,6 +34,15 @@ class SoundSourcePool {
                 break;
             }
         }
+
+        // IF NO SOURCE WAS FOUND, CREATE A NEW ONE ON THE FLY
+        if (result == null) {
+            result = new BufferedSoundSource();
+            this.sources.add(result);
+        }
+
+        // RESET SOURCE
+        result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance());
 
         return result;
     }
