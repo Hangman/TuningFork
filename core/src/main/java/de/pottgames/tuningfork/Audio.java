@@ -38,10 +38,17 @@ public class Audio implements Disposable {
     private float                                  defaultMinAttenuationDistance = 1f;
     private float                                  defaultMaxAttenuationDistance = Float.MAX_VALUE;
     private float                                  defaultAttenuationFactor      = 1f;
+    private boolean                                virtualizationEnabled         = true;
     final TuningForkLogger                         logger;
     private final AudioDevice                      device;
 
 
+    /**
+     * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#deviceSpecifier} to request a specific
+     * sound device for audio playback.
+     *
+     * @return the list
+     */
     public static List<String> availableDevices() {
         return ALUtil.getStringList(0L, ALC11.ALC_ALL_DEVICES_SPECIFIER);
     }
@@ -114,14 +121,12 @@ public class Audio implements Disposable {
     private Audio(AudioDevice device, AudioConfig config) {
         this.logger = config.getLogger();
         this.device = device;
+        Audio.instance = this;
 
         // INITIAL IDLE TASK CREATION FOR THE POOL
         for (int i = 0; i < config.getIdleTasks() - 1; i++) {
             this.idleTasks.add(new AsyncTask());
         }
-
-        // SET INSTANCE
-        Audio.instance = this;
 
         // CREATE THE TASK SERVICE
         this.taskService = Executors.newSingleThreadExecutor(runnable -> {
@@ -134,8 +139,9 @@ public class Audio implements Disposable {
         // adding the last task by executing it for warm up
         this.taskService.execute(new AsyncTask());
 
-        // SET DISTANCE ATTENUATION MODEL
+        // SET DEFAULTS
         this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
+        this.virtualizationEnabled = config.isVirtualizationEnabled();
 
         // CREATE LISTENER
         this.listener = new SoundListener();
@@ -252,18 +258,44 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default attenuation model.
+     *
+     * @return the default attenuation min distance
+     */
     public float getDefaultAttenuationMinDistance() {
         return this.defaultMinAttenuationDistance;
     }
 
 
+    /**
+     * Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default attenuation model.
+     *
+     * @return the default attenuation max distance
+     */
     public float getDefaultAttenuationMaxDistance() {
         return this.defaultMaxAttenuationDistance;
     }
 
 
+    /**
+     * Returns the default attenuation factor that is used to calculate the attenuation by the current default attenuation model.
+     *
+     * @return the default attenuation factor
+     */
     public float getDefaultAttenuationFactor() {
         return this.defaultAttenuationFactor;
+    }
+
+
+    /**
+     * Returns whether virtualization is enabled or disabled by default for all sound sources. See {@link AudioConfig#setVirtualizationEnabled(boolean)} for
+     * more info.
+     *
+     * @return enabled
+     */
+    public boolean isVirtualizationEnabled() {
+        return this.virtualizationEnabled;
     }
 
 

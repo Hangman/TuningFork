@@ -61,7 +61,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
         this.file = file;
 
-        // SET DEFAULT ATTENUATION VALUES
+        // SET DEFAULTS
         this.setAttenuationFactor(this.audio.getDefaultAttenuationFactor());
         this.setAttenuationMinDistance(this.audio.getDefaultAttenuationMinDistance());
         this.setAttenuationMaxDistance(this.audio.getDefaultAttenuationMaxDistance());

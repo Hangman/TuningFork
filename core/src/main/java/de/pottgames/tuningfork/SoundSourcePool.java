@@ -42,7 +42,8 @@ class SoundSourcePool {
         }
 
         // RESET SOURCE
-        result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance());
+        result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance(),
+                this.audio.isVirtualizationEnabled());
 
         return result;
     }

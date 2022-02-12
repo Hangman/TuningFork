@@ -37,7 +37,8 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param pcmFormat
      */
     public PcmSoundSource(int sampleRate, PcmFormat pcmFormat) {
-        this.logger = Audio.get().logger;
+        final Audio audio = Audio.get();
+        this.logger = audio.logger;
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         this.sampleRate = sampleRate;
@@ -47,6 +48,11 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         for (int i = 0; i < PcmSoundSource.INITIAL_BUFFER_COUNT; i++) {
             this.freeBufferIds.add(AL10.alGenBuffers());
         }
+
+        // SET DEFAULTS
+        this.setAttenuationFactor(audio.getDefaultAttenuationFactor());
+        this.setAttenuationMinDistance(audio.getDefaultAttenuationMinDistance());
+        this.setAttenuationMaxDistance(audio.getDefaultAttenuationMaxDistance());
     }
 
 

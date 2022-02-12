@@ -29,7 +29,8 @@ public abstract class SoundSource {
 
 
     SoundSource() {
-        this.logger = Audio.get().logger;
+        final Audio audio = Audio.get();
+        this.logger = audio.logger;
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         this.sourceId = AL10.alGenSources();
@@ -38,6 +39,8 @@ public abstract class SoundSource {
         if (!this.errorLogger.checkLogError("Failed to create the SoundSource")) {
             this.logger.debug(this.getClass(), "SoundSource successfully created");
         }
+
+        this.enableVirtualization(audio.isVirtualizationEnabled());
     }
 
 

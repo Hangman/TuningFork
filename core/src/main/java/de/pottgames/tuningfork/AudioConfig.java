@@ -9,6 +9,7 @@ public class AudioConfig {
     private DistanceAttenuationModel distanceAttenuationModel;
     private int                      simultaneousSources;
     private int                      idleTasks;
+    private boolean                  virtualizationEnabled;
     private TuningForkLogger         logger;
 
 
@@ -21,6 +22,7 @@ public class AudioConfig {
         this.setLogger(new GdxLogger());
         this.setSimultaneousSources(20);
         this.setIdleTasks(10);
+        this.setVirtualizationEnabled(true);
     }
 
 
@@ -42,6 +44,30 @@ public class AudioConfig {
         this.setSimultaneousSources(simultaneousSources);
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
+        this.setVirtualizationEnabled(true);
+    }
+
+
+    /**
+     * Creates an AudioConfig with the given settings.
+     *
+     * @param deviceConfig
+     * @param distanceAttenuationModel
+     * @param simultaneousSources defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
+     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s
+     *            simultaneously
+     * @param virtualizationEnabled see {@link #setVirtualizationEnabled(boolean)} for info
+     * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
+     *            available logger implementations that are shipped with TuningFork.
+     */
+    public AudioConfig(AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources, int idleTasks,
+            boolean virtualizationEnabled, TuningForkLogger logger) {
+        this.setDeviceConfig(deviceConfig);
+        this.setDistanceAttenuationModel(distanceAttenuationModel);
+        this.setSimultaneousSources(simultaneousSources);
+        this.setIdleTasks(idleTasks);
+        this.setLogger(logger);
+        this.setVirtualizationEnabled(virtualizationEnabled);
     }
 
 
@@ -126,6 +152,26 @@ public class AudioConfig {
             this.idleTasks = 2;
         }
         return this;
+    }
+
+
+    public boolean isVirtualizationEnabled() {
+        return this.virtualizationEnabled;
+    }
+
+
+    /**
+     * Sets the default virtualization enabled state for any sound source. OpenAL requires buffer channels to be down-mixed to the output channel configuration,
+     * possibly using HRTF or other virtualization techniques to give a sense of speakers that may not be physically present. This leads to sometimes unexpected
+     * and unwanted audio output, so you can disable it. Note that existing input channels may be dropped if they don't exist on the output configuration when
+     * virtualization is disabled.<br>
+     * <br>
+     * By default virtualization is enabled and it's the recommended setting.
+     *
+     * @param enabled
+     */
+    public void setVirtualizationEnabled(boolean enabled) {
+        this.virtualizationEnabled = enabled;
     }
 
 

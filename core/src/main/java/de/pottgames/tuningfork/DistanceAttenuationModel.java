@@ -2,6 +2,14 @@ package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL11;
 
+/**
+ * An enum that holds a list of available attenuation models.<br>
+ * @see <a href=
+ * "https://github.com/Hangman/TuningFork/wiki/The-Distance-Attenuation-Model">https://github.com/Hangman/TuningFork/wiki/The-Distance-Attenuation-Model</a>
+ *
+ * @author Matthias
+ *
+ */
 public enum DistanceAttenuationModel {
     /**
      * Turns the distance attenuation off.
