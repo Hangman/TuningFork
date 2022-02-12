@@ -292,6 +292,20 @@ public class Audio implements Disposable {
 
 
     /**
+     * This method is deprecated, use {@link #obtainSource(SoundBuffer)} instead.
+     *
+     * @param buffer
+     * @param allowNull
+     *
+     * @return the {@link BufferedSoundSource}
+     */
+    @Deprecated
+    public BufferedSoundSource obtainSource(SoundBuffer buffer, boolean allowNull) {
+        return this.obtainSource(buffer);
+    }
+
+
+    /**
      * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to return it to the pool of available
      * sources.
      *
