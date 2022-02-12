@@ -300,28 +300,8 @@ public class Audio implements Disposable {
      * @return the {@link BufferedSoundSource}
      */
     public BufferedSoundSource obtainSource(SoundBuffer buffer) {
-        return this.obtainSource(buffer, false);
-    }
-
-
-    /**
-     * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to return it to the pool of available
-     * sources. If allowNull is true, no exception is thrown and instead null is returned when no free source is available.
-     *
-     * @param buffer
-     * @param allowNull
-     *
-     * @return the {@link BufferedSoundSource} or null if no source is available and allowNull is set to true
-     */
-    public BufferedSoundSource obtainSource(SoundBuffer buffer, boolean allowNull) {
         // FIND FREE SOUND SOURCE
         final BufferedSoundSource source = this.sourcePool.findFreeSource();
-
-        // THROW EXCEPTION IF ALL SOUND SOURCES ARE BUSY/OBTAINED
-        if (!allowNull && source == null) {
-            throw new TuningForkRuntimeException(
-                    "All SoundSources are busy. Make sure to call free on obtained SoundSources when the sound finished playing. Otherwise consider increasing the simultaneousSources.");
-        }
 
         // PREPARE SOURCE
         source.obtained = true;
