@@ -22,14 +22,13 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 public class StreamedSoundSource extends SoundSource implements Disposable {
     private static final int       BUFFER_SIZE                     = 4096 * 10;
     private static final int       BUFFER_COUNT                    = 3;
-    private static final int       BYTES_PER_SAMPLE                = 2;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
     private final FileHandle       file;
     private AudioStream            audioStream;
     private final float            secondsPerBuffer;
     private final IntBuffer        buffers;
-    private final int              audioFormat;
+    private final PcmFormat        pcmFormat;
     private final ByteBuffer       tempBuffer                      = BufferUtils.createByteBuffer(StreamedSoundSource.BUFFER_SIZE);
     private final byte[]           tempBytes                       = new byte[StreamedSoundSource.BUFFER_SIZE];
     private final Audio            audio;
@@ -96,10 +95,15 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         // FETCH DATA & FORMAT FROM INPUT STREAM
         final int sampleRate = this.audioStream.getSampleRate();
         final int channels = this.audioStream.getChannels();
-        this.audioFormat = channels > 1 ? AL10.AL_FORMAT_STEREO16 : AL10.AL_FORMAT_MONO16;
+        final int sampleDepth = this.audioStream.getBitsPerSample();
+        final int bytesPerSample = sampleDepth / 8;
+        this.pcmFormat = PcmFormat.getBySampleDepthAndChannels(channels, sampleDepth);
+        if (this.pcmFormat == null) {
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample rate: " + sampleRate);
+        }
 
         // CREATE BUFFERS
-        this.secondsPerBuffer = (float) StreamedSoundSource.BUFFER_SIZE / (StreamedSoundSource.BYTES_PER_SAMPLE * channels * sampleRate);
+        this.secondsPerBuffer = (float) StreamedSoundSource.BUFFER_SIZE / (bytesPerSample * channels * sampleRate);
         this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
         AL10.alGenBuffers(this.buffers);
 
@@ -315,7 +319,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         }
 
         this.tempBuffer.put(this.tempBytes, 0, length).flip();
-        AL10.alBufferData(bufferId, this.audioFormat, this.tempBuffer, this.audioStream.getSampleRate());
+        AL10.alBufferData(bufferId, this.pcmFormat.getAlId(), this.tempBuffer, this.audioStream.getSampleRate());
         return true;
     }
 

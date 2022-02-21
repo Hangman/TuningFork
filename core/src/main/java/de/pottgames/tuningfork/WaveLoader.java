@@ -15,7 +15,7 @@ public abstract class WaveLoader {
         WavInputStream input = null;
         try {
             input = new WavInputStream(file);
-            result = new SoundBuffer(StreamUtils.copyStreamToByteArray(input, input.dataRemaining), input.channels, input.sampleRate);
+            result = new SoundBuffer(StreamUtils.copyStreamToByteArray(input, input.dataRemaining), input.channels, input.sampleRate, input.getBitsPerSample());
         } catch (final IOException ex) {
             throw new TuningForkRuntimeException("Error reading WAV file: " + file, ex);
         } finally {
@@ -32,7 +32,7 @@ public abstract class WaveLoader {
         WavInputStream input = null;
         try {
             input = new WavInputStream(new FileInputStream(file), file.getPath());
-            result = new SoundBuffer(StreamUtils.copyStreamToByteArray(input, input.dataRemaining), input.channels, input.sampleRate);
+            result = new SoundBuffer(StreamUtils.copyStreamToByteArray(input, input.dataRemaining), input.channels, input.sampleRate, input.getBitsPerSample());
         } catch (final IOException ex) {
             throw new TuningForkRuntimeException("Error reading WAV file: " + file, ex);
         } finally {

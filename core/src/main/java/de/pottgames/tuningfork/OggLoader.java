@@ -21,7 +21,7 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate());
+            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
         } finally {
             StreamUtils.closeQuietly(input);
         }

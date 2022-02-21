@@ -75,9 +75,6 @@ public class WavInputStream extends FilterInputStream implements AudioStream {
             this.skipFully(6);
 
             this.bitsPerSample = this.read() & 0xff | (this.read() & 0xff) << 8;
-            if (this.bitsPerSample != 16) {
-                throw new GdxRuntimeException("WAV files must have 16 bits per sample: " + this.bitsPerSample);
-            }
 
             this.skipFully(fmtChunkLength - 16);
 
@@ -101,6 +98,7 @@ public class WavInputStream extends FilterInputStream implements AudioStream {
     }
 
 
+    @Override
     public int getBitsPerSample() {
         return this.bitsPerSample;
     }

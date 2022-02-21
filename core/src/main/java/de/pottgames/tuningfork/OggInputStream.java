@@ -135,6 +135,12 @@ public class OggInputStream extends InputStream implements AudioStream {
     }
 
 
+    @Override
+    public int getBitsPerSample() {
+        return 16;
+    }
+
+
     /** Initialise the streams and thread involved in the streaming of OGG data */
     private void init() {
         this.initVorbis();

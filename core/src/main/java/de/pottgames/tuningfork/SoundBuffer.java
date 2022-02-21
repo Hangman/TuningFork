@@ -26,30 +26,39 @@ public class SoundBuffer implements Disposable {
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
      * <br>
-     * The pcm data must be 16-bit. Check out {@link PcmSoundSource} for 8-bit support.<br>
+     * The pcm data must be 8 or 16-bit.<br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
      * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
      * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.
      *
      * @param pcm
-     * @param channels
-     * @param sampleRate
+     * @param channels number of channels
+     * @param sampleRate number of samples per second
+     * @param sampleDepth number of bits per sample
      */
-    public SoundBuffer(byte[] pcm, int channels, int sampleRate) {
+    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int sampleDepth) {
         this.logger = Audio.get().logger;
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
-        final int bytes = pcm.length - pcm.length % (channels > 1 ? 4 : 2);
-        final int samples = bytes / (2 * channels);
-        this.duration = samples / (float) sampleRate;
+        // DETERMINE PCM FORMAT AND DURATION
+        final int samplesPerChannel = pcm.length / (sampleDepth / 8 * channels);
+        this.duration = samplesPerChannel / (float) sampleRate;
+        final PcmFormat pcmFormat = PcmFormat.getBySampleDepthAndChannels(channels, sampleDepth);
+        if (pcmFormat == null) {
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample rate: " + sampleRate);
+        }
 
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(bytes);
+        // PCM ARRAY TO TEMP BUFFER
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(pcm.length);
         buffer.order(ByteOrder.nativeOrder());
-        buffer.put(pcm, 0, bytes);
+        buffer.put(pcm);
         buffer.flip();
 
+        // GEN BUFFER AND UPLOAD PCM DATA
         this.bufferId = AL10.alGenBuffers();
-        AL10.alBufferData(this.bufferId, channels > 1 ? AL10.AL_FORMAT_STEREO16 : AL10.AL_FORMAT_MONO16, buffer.asShortBuffer(), sampleRate);
+        AL10.alBufferData(this.bufferId, pcmFormat.getAlId(), buffer.asShortBuffer(), sampleRate);
 
+        // CHECK FOR ERRORS
         if (!this.errorLogger.checkLogError("Failed to create the SoundBuffer")) {
             this.logger.debug(this.getClass(), "SoundBuffer successfully created");
         }

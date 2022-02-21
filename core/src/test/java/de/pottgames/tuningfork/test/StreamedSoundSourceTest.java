@@ -2,6 +2,7 @@ package de.pottgames.tuningfork.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
@@ -17,7 +18,8 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.source = new StreamedSoundSource(Gdx.files.internal("src/test/resources/numbers2.ogg"));
+        this.source = new StreamedSoundSource(Gdx.files.internal("src/test/resources/numbers_8bit_mono.wav"));
+        System.out.println("Sound duration: " + this.source.getDuration() + "s");
         this.source.setLooping(true);
         this.source.play();
     }
@@ -25,7 +27,12 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        // we chill in a black window
+        System.out.println("current playback position: " + this.source.getPlaybackPosition() + "s");
+
+        // PRESS SPACE TO SKIP TO 5s
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            this.source.setPlaybackPosition(5f);
+        }
     }
 
 

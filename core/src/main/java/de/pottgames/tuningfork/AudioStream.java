@@ -10,6 +10,9 @@ interface AudioStream extends Closeable {
     int getSampleRate();
 
 
+    int getBitsPerSample();
+
+
     int read(byte[] bytes);
 
 
