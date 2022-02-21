@@ -45,7 +45,7 @@ public class SoundBuffer implements Disposable {
         this.duration = samplesPerChannel / (float) sampleRate;
         final PcmFormat pcmFormat = PcmFormat.getBySampleDepthAndChannels(channels, sampleDepth);
         if (pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample rate: " + sampleRate);
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
         }
 
         // PCM ARRAY TO TEMP BUFFER

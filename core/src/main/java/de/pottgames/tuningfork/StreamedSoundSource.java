@@ -99,7 +99,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         final int bytesPerSample = sampleDepth / 8;
         this.pcmFormat = PcmFormat.getBySampleDepthAndChannels(channels, sampleDepth);
         if (this.pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample rate: " + sampleRate);
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
         }
 
         // CREATE BUFFERS
