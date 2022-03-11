@@ -1,6 +1,7 @@
 package de.pottgames.tuningfork;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
@@ -8,6 +9,11 @@ import com.badlogic.gdx.utils.StreamUtils;
 public abstract class FlacLoader {
 
     public static SoundBuffer load(FileHandle file) {
+        return FlacLoader.load(file.file());
+    }
+
+
+    public static SoundBuffer load(File file) {
         SoundBuffer result = null;
         FlacInputStream input = null;
         try {

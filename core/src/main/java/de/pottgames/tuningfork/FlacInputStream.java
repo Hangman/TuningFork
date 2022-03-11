@@ -1,5 +1,6 @@
 package de.pottgames.tuningfork;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -16,8 +17,13 @@ public class FlacInputStream implements AudioStream {
 
 
     public FlacInputStream(FileHandle file) {
+        this(file.file());
+    }
+
+
+    public FlacInputStream(File file) {
         try {
-            this.decoder = new FlacDecoder(file.file());
+            this.decoder = new FlacDecoder(file);
             while (this.decoder.readAndHandleMetadataBlock() != null) {
                 // read all meta data blocks
             }
