@@ -13,7 +13,7 @@ TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that prov
 * Real-time effects such as Reverb, Echo, Flanger, Distortion (and many more)
 * Filters
 * HRTF support (aka binaural)
-* Load wav, ogg, or bring your own pcm data
+* Load **wav**, **ogg**, **flac** or bring your own pcm data
 * Record audio
 * Output to any sound device<br>(you are no longer tied to the default sound device)
 
@@ -49,8 +49,8 @@ project(":core") {
 Java 8 is required, make sure to have `sourceCompatibility = JavaVersion.VERSION_1_8` or any higher version than 8 in your gradle scripts.
 | Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :---                          |
-| 1.9.11 - 1.10.0 | 1.1.0 |
-| < 1.9.11 | not supported, might work though: 1.1.0 |
+| 1.9.11 - 1.10.0 | 2.0.0 |
+| < 1.9.11 | not supported, might work though: 2.0.0 |
 
 ### Upgrading
 The latest patch notes can be found here: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
