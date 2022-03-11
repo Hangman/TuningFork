@@ -43,13 +43,19 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
         final String fileExtension = file.extension();
-        if ("ogg".equalsIgnoreCase(fileExtension) || "oga".equalsIgnoreCase(fileExtension) || "ogx".equalsIgnoreCase(fileExtension)
-                || "opus".equalsIgnoreCase(fileExtension)) {
-            this.asset = OggLoader.load(file);
-        } else if ("wav".equalsIgnoreCase(fileExtension) || "wave".equalsIgnoreCase(fileExtension)) {
-            this.asset = WaveLoader.load(file);
-        } else {
-            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "', only ogg and wav files are supported.");
+        final SoundFileType type = SoundFileType.getByFileEnding(fileExtension);
+        switch (type) {
+            case FLAC:
+                this.asset = FlacLoader.load(file);
+                break;
+            case OGG:
+                this.asset = OggLoader.load(file);
+                break;
+            case WAV:
+                this.asset = WaveLoader.load(file);
+                break;
+            default:
+                throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac and wav files are supported.");
         }
     }
 

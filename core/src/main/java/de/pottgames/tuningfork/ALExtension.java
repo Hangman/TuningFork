@@ -28,6 +28,8 @@ enum ALExtension {
     AL_EXT_SOURCE_DISTANCE_MODEL("AL_EXT_source_distance_model", false),
     AL_EXT_SOURCE_RADIUS("AL_EXT_SOURCE_RADIUS", false),
     AL_EXT_STEREO_ANGLES("AL_EXT_STEREO_ANGLES", false),
+    AL_EXT_VORBIS("AL_EXT_vorbis", false), // not available in AL SOFT
+    AL_EXT_MP3("AL_EXT_mp3", false), // not available in AL SOFT
     AL_LOKI_QUADRIPHONIC("AL_LOKI_quadriphonic", false),
     AL_SOFT_BLOCK_ALIGNMENT("AL_SOFT_block_alignment", false),
     AL_SOFT_DEFERRED_UPDATES("AL_SOFT_deferred_updates", false),

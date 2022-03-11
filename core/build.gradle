@@ -32,6 +32,7 @@ dependencies {
 	compileOnly "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 	
 	implementation 'com.github.Hangman:jorbis:3783bbc0f1'
+	implementation 'com.github.Hangman:FLAC-library-Java:bcfe216a3e'
 	
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
@@ -74,6 +75,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/SongGenerator.class'
      exclude 'de/pottgames/tuningfork/test/CaptureTest.class'
      exclude 'de/pottgames/tuningfork/test/EightBitTest.class'
+     exclude 'de/pottgames/tuningfork/test/FlacTest.class'
  }
 
 publishing {

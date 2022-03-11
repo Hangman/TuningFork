@@ -20,7 +20,7 @@ import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class StreamedSoundSource extends SoundSource implements Disposable {
-    private static final int       BUFFER_SIZE                     = 4096 * 10;
+    static final int               BUFFER_SIZE                     = 4096 * 10;
     private static final int       BUFFER_COUNT                    = 3;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
@@ -40,8 +40,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
     private volatile boolean       readyToDispose                  = false;
     private float                  duration                        = -1f;
-    private boolean                ogg                             = false;
-    private boolean                wav                             = false;
+    private SoundFileType          soundFileType;
 
 
     /**
@@ -67,29 +66,32 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
 
         // CHECK FILE TYPE
         final String fileExtension = file.extension();
-        if ("ogg".equalsIgnoreCase(fileExtension) || "oga".equalsIgnoreCase(fileExtension) || "ogx".equalsIgnoreCase(fileExtension)
-                || "opus".equalsIgnoreCase(fileExtension)) {
-            this.ogg = true;
-        } else if ("wav".equalsIgnoreCase(fileExtension) || "wave".equalsIgnoreCase(fileExtension)) {
-            this.wav = true;
-        } else {
-            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "', only ogg and wav files are supported.");
+        this.soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        if (this.soundFileType == null) {
+            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac and wav files are supported.");
         }
 
         // CREATE INPUT STREAM
         this.initInputStream(false);
 
         // CHECK DURATION
-        if (this.ogg) {
-            try {
-                final VorbisFile vorbisFile = new VorbisFile(file.file());
-                this.duration = vorbisFile.time_total(-1);
-            } catch (final JOrbisException e) {
-                this.logger.error(this.getClass(), "Couldn't measure the sound duration of: " + file.path());
-            }
-        } else if (this.wav) {
-            final WavInputStream stream = (WavInputStream) this.audioStream;
-            this.duration = stream.getRemainingByteCount() / (stream.getSampleRate() * stream.getChannels() * stream.getBitsPerSample() / 8f);
+        switch (this.soundFileType) {
+            case FLAC:
+                final FlacInputStream flacStream = (FlacInputStream) this.audioStream;
+                this.duration = (float) flacStream.totalSamples() / flacStream.getSampleRate();
+                break;
+            case OGG:
+                try {
+                    final VorbisFile vorbisFile = new VorbisFile(file.file());
+                    this.duration = vorbisFile.time_total(-1);
+                } catch (final JOrbisException e) {
+                    this.logger.error(this.getClass(), "Couldn't measure the sound duration of: " + file.path());
+                }
+                break;
+            case WAV:
+                final WavInputStream wavStream = (WavInputStream) this.audioStream;
+                this.duration = wavStream.getRemainingByteCount() / (wavStream.getSampleRate() * wavStream.getChannels() * wavStream.getBitsPerSample() / 8f);
+                break;
         }
 
         // FETCH DATA & FORMAT FROM INPUT STREAM
@@ -121,11 +123,17 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
             StreamUtils.closeQuietly(this.audioStream);
         }
 
-        if (this.ogg) {
-            this.audioStream = new OggInputStream(this.file.read(),
-                    reuseInputStream && this.audioStream instanceof OggInputStream ? (OggInputStream) this.audioStream : null);
-        } else if (this.wav) {
-            this.audioStream = new WavInputStream(this.file);
+        switch (this.soundFileType) {
+            case FLAC:
+                this.audioStream = new FlacInputStream(this.file);
+                break;
+            case OGG:
+                this.audioStream = new OggInputStream(this.file.read(),
+                        reuseInputStream && this.audioStream instanceof OggInputStream ? (OggInputStream) this.audioStream : null);
+                break;
+            case WAV:
+                this.audioStream = new WavInputStream(this.file);
+                break;
         }
     }
 
