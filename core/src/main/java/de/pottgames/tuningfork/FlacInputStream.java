@@ -70,10 +70,12 @@ public class FlacInputStream implements AudioStream {
         while (availableBytes >= this.sampleBufferBlockSize * this.decoder.streamInfo.numChannels * this.bytesPerSample) {
             for (int i = 0; i < this.sampleBufferBlockSize; i++) {
                 for (int channelIndex = 0; channelIndex < this.decoder.streamInfo.numChannels; channelIndex++) {
-                    final int sample = this.sampleBuffer[channelIndex][i];
-                    for (int j = 0; j < this.bytesPerSample; j++) {
+                    int sample = this.sampleBuffer[channelIndex][i];
+                    if (this.bytesPerSample == 1) {
+                        sample += 128; // because OpenAL expects an unsigned byte
+                    }
+                    for (int j = 0; j < this.bytesPerSample; j++, bytesIndex++) {
                         bytes[bytesIndex] = (byte) (sample >>> (j << 3));
-                        bytesIndex++;
                     }
                 }
             }
@@ -118,6 +120,11 @@ public class FlacInputStream implements AudioStream {
     @Override
     public int getBitsPerSample() {
         return this.decoder.streamInfo.sampleDepth;
+    }
+
+
+    public int getBytesPerSample() {
+        return this.bytesPerSample;
     }
 
 
