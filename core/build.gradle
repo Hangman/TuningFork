@@ -83,7 +83,6 @@ test {
      exclude 'de/pottgames/tuningfork/test/CaptureTest.class'
      exclude 'de/pottgames/tuningfork/test/EightBitTest.class'
      exclude 'de/pottgames/tuningfork/test/FlacTest.class'
-     exclude 'de/pottgames/tuningfork/test/benchmark/LoadingBench.class'
  }
 
 publishing {
