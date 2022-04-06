@@ -134,11 +134,25 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     }
 
 
-    private void unqueueProcessedBuffers() {
+    /**
+     * Unqueues processed buffers. This is called automatically on each call to any of the queueSamples methods, so you never <b>have</b> to call it manually.
+     */
+    public void unqueueProcessedBuffers() {
         final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
         for (int i = 0; i < processedBuffers; i++) {
             this.freeBufferIds.add(AL10.alSourceUnqueueBuffers(this.sourceId));
         }
+    }
+
+
+    /**
+     * Returns the number of queued buffers. This number is automatically decreased once a buffer is processed (finished playing). Each call to any of the
+     * queueSamples methods queues a buffer.
+     *
+     * @return the number of buffers queued
+     */
+    public int queuedBuffers() {
+        return AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_QUEUED);
     }
 
 
