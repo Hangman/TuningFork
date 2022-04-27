@@ -1,6 +1,10 @@
 package de.pottgames.tuningfork.test;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -10,7 +14,9 @@ import com.badlogic.gdx.utils.Array;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
+import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
+import de.pottgames.tuningfork.DistanceAttenuationModel;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
@@ -25,13 +31,37 @@ public class HrtfTest extends ApplicationAdapter {
 
     @Override
     public void create() {
+        // FETCH AVAILABLE DEVICES
+        final List<String> deviceList = Audio.availableDevices();
+        if (deviceList == null) {
+            System.out.println("Error: deviceList is null");
+            return;
+        }
+
+        // PRINT AVAILABLE DEVICE LIST
+        final int[] i = new int[1];
+        deviceList.forEach(device -> {
+            System.out.println(i[0] + ": " + device);
+            i[0]++;
+        });
+
+        // READ USER INPUT
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter device number: ");
+        int number = 0;
+        try {
+            number = Integer.parseInt(br.readLine());
+            br.close();
+        } catch (NumberFormatException | IOException e) {
+            e.printStackTrace();
+        }
+
         // INIT AUDIO
         final ConsoleLogger logger = new ConsoleLogger();
         logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
-        final AudioConfig config = new AudioConfig();
-        config.getDeviceConfig().deviceSpecifier = "OpenAL Soft on Lautsprecher (3- Razer Nari Essential)"; // replace with your own device
-        config.setLogger(logger);
-        this.audio = Audio.init(config);
+        final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
+        audioDeviceConfig.deviceSpecifier = deviceList.get(number);
+        this.audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
 
         // ENABLE HRTF
         final Array<String> hrtfs = this.audio.getDevice().getAvailableHrtfs();
