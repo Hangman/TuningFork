@@ -25,6 +25,7 @@ import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
+import org.lwjgl.openal.SOFTSourceResampler;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
@@ -48,6 +49,7 @@ public class AudioDevice {
     private final AudioDeviceConfig               config;
     private final int[]                           tempSingleIntResult   = new int[1];
     private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
+    private final Array<String>                   resamplers            = new Array<>();
 
 
     AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
@@ -184,6 +186,9 @@ public class AudioDevice {
             }
             throw new OpenDeviceException("The audio device " + deviceName + " doesn't support 2 auxiliary sends, which is a requirement of TuningFork.");
         }
+
+        // FIND RESAMPLERS
+        this.getAvailableResamplers();
 
         // LOG ERRORS
         this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
@@ -367,6 +372,61 @@ public class AudioDevice {
         } else {
             this.logger.warn(this.getClass(), "HRTF is not supported by this device and was therefore never enabled.");
         }
+    }
+
+
+    /**
+     * Returns a list of available resamplers for this device. The list is ordered by performance impact. That is, indices closer to 0 are of lower impact, and
+     * the higher index values have higher impact.<br>
+     * Mostly, a higher performance impact also means a better result in terms of quality, though this isn't true in all cases.<br>
+     * <br>
+     * If you need more information on what resampler is best for you, here's a video recommendation:
+     * <a href="https://www.youtube.com/watch?v=62U6UnaUGDE">https://www.youtube.com/watch?v=62U6UnaUGDE</>
+     *
+     * @return list of available resamplers
+     */
+    public Array<String> getAvailableResamplers() {
+        this.resamplers.clear();
+
+        final int numberOfResamplers = AL10.alGetInteger(SOFTSourceResampler.AL_NUM_RESAMPLERS_SOFT);
+        for (int index = 0; index < numberOfResamplers; index++) {
+            final String resamplerName = SOFTSourceResampler.alGetStringiSOFT(SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT, index);
+            this.resamplers.add(resamplerName);
+        }
+
+        return new Array<>(this.resamplers);
+    }
+
+
+    /**
+     * Returns the index of first occurrence of value in the array, or -1 if no such value exists.
+     *
+     * @param name
+     *
+     * @return An index of first occurrence of value in array or -1 if no such value exists
+     */
+    int getResamplerIndexByName(String name) {
+        return this.resamplers.indexOf(name, false);
+    }
+
+
+    String getResamplerNameByIndex(int index) {
+        return SOFTSourceResampler.alGetStringiSOFT(SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT, index);
+    }
+
+
+    int getDefaultResamplerIndex() {
+        return AL10.alGetInteger(SOFTSourceResampler.AL_DEFAULT_RESAMPLER_SOFT);
+    }
+
+
+    /**
+     * Returns the name of the default resampler currently in use.
+     *
+     * @return name of the default resampler
+     */
+    public String getDefaultResampler() {
+        return this.getResamplerNameByIndex(this.getDefaultResamplerIndex());
     }
 
 

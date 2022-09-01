@@ -45,6 +45,7 @@ public class Audio implements Disposable {
     private final Thread                           updateThread;
     private volatile boolean                       running                       = true;
     private final Array<StreamedSoundSource>       soundsToUpdate                = new Array<>();
+    private final Array<SoundSource>               managedSources                = new Array<>();
     private final ExecutorService                  taskService;
     private final ConcurrentLinkedQueue<AsyncTask> idleTasks                     = new ConcurrentLinkedQueue<>();
     private float                                  defaultMinAttenuationDistance = 1f;
@@ -53,6 +54,7 @@ public class Audio implements Disposable {
     private boolean                                virtualizationEnabled         = true;
     final TuningForkLogger                         logger;
     private final AudioDevice                      device;
+    private int                                    defaultResamplerIndex         = -1;
 
 
     /**
@@ -108,7 +110,6 @@ public class Audio implements Disposable {
         } catch (final Exception e) {
             config.getLogger().error(Audio.class, "Failed to init Audio. Details: " + e.getMessage());
         }
-
         return audio;
     }
 
@@ -700,7 +701,43 @@ public class Audio implements Disposable {
 
 
     /**
-     * Resumes to play all sounds that are paused.
+     * Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
+     * Sources that are created afterwards are also initialized with the new default resampler.<br>
+     * <br>
+     * Check {@link AudioDevice#getAvailableResamplers()} for a list of available resamplers.
+     *
+     * @param resampler
+     *
+     * @return true if successful, false if the desired resampler isn't available
+     */
+    public boolean setDefaultResampler(String resampler) {
+        if (resampler != null) {
+            final int resamplerIndex = this.device.getResamplerIndexByName(resampler);
+            if (resamplerIndex >= 0) {
+                this.sourcePool.setResamplerByIndex(resamplerIndex);
+
+                synchronized (this.lock) {
+                    for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
+                        final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
+                        sound.setResamplerByIndex(resamplerIndex);
+                    }
+                }
+
+                for (int i = 0; i < this.managedSources.size; i++) {
+                    final SoundSource source = this.managedSources.get(i);
+                    if (source != null) {
+                        source.setResamplerByIndex(resamplerIndex);
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Resumes to play all {@link BufferedSoundSource}s and {@link StreamedSoundSource}s that are paused.
      */
     public void resumeAll() {
         this.resumeAllBufferedSources();
@@ -725,7 +762,7 @@ public class Audio implements Disposable {
 
 
     /**
-     * Pauses all sounds.
+     * Pauses all {@link BufferedSoundSource}s and {@link StreamedSoundSource}s.
      */
     public void pauseAll() {
         this.pauseAllBufferedSources();
@@ -750,7 +787,7 @@ public class Audio implements Disposable {
 
 
     /**
-     * Stops all sounds.
+     * Stops all {@link BufferedSoundSource}s and {@link StreamedSoundSource}s.
      */
     public void stopAll() {
         this.stopAllBufferedSources();
@@ -774,6 +811,11 @@ public class Audio implements Disposable {
     }
 
 
+    int getDefaultResamplerIndex() {
+        return this.defaultResamplerIndex;
+    }
+
+
     void addIdleTask(AsyncTask task) {
         this.idleTasks.offer(task);
     }
@@ -783,6 +825,16 @@ public class Audio implements Disposable {
         synchronized (this.lock) {
             this.soundsToUpdate.add(source);
         }
+    }
+
+
+    void registerManagedSource(SoundSource source) {
+        this.managedSources.add(source);
+    }
+
+
+    void removeManagedSource(SoundSource source) {
+        this.managedSources.removeValue(source, true);
     }
 
 

@@ -65,6 +65,9 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         this.setAttenuationFactor(audio.getDefaultAttenuationFactor());
         this.setAttenuationMinDistance(audio.getDefaultAttenuationMinDistance());
         this.setAttenuationMaxDistance(audio.getDefaultAttenuationMaxDistance());
+
+        // REGISTER
+        audio.registerManagedSource(this);
     }
 
 
@@ -183,6 +186,9 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         for (int i = 0; i < this.freeBufferIds.size; i++) {
             AL10.alDeleteBuffers(this.freeBufferIds.get(i));
         }
+
+        final Audio audio = Audio.get();
+        audio.removeManagedSource(this);
 
         this.errorLogger.checkLogError("Failed to dispose the SoundSource");
         super.dispose();

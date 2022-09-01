@@ -55,7 +55,7 @@ class SoundSourcePool {
 
         // RESET SOURCE
         result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance(),
-                this.audio.isVirtualizationEnabled());
+                this.audio.isVirtualizationEnabled(), this.audio.getDefaultResamplerIndex());
 
         return result;
     }
@@ -94,6 +94,13 @@ class SoundSourcePool {
                 source.setBuffer(null);
             }
             source.obtained = obtainedState;
+        }
+    }
+
+
+    void setResamplerByIndex(int index) {
+        for (final BufferedSoundSource source : this.sources) {
+            source.setResamplerByIndex(index);
         }
     }
 

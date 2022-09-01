@@ -249,7 +249,7 @@ public class BufferedSoundSource extends SoundSource {
     }
 
 
-    void reset(float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance, boolean enableVirtualization) {
+    void reset(float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance, boolean enableVirtualization, int resamplerIndex) {
         this.obtained = true;
         AL10.alSourceRewind(this.sourceId);
         this.setBuffer(null);
@@ -265,6 +265,7 @@ public class BufferedSoundSource extends SoundSource {
         this.setAttenuationMaxDistance(attenuationMaxDistance);
         this.setAttenuationMinDistance(attenuationMinDistance);
         this.detachAllEffects();
+        this.setResamplerByIndex(resamplerIndex);
         this.obtained = false;
     }
 

@@ -16,6 +16,7 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTDirectChannels;
+import org.lwjgl.openal.SOFTSourceResampler;
 
 import com.badlogic.gdx.math.Vector3;
 
@@ -38,6 +39,7 @@ public abstract class SoundSource {
     private float                  attenuationFactor     = 1f;
     private final Vector3          position              = new Vector3(0f, 0f, 0f);
     private boolean                directional           = false;
+    private volatile int           resamplerIndex        = -1;
 
 
     SoundSource() {
@@ -53,6 +55,7 @@ public abstract class SoundSource {
         }
 
         this.enableVirtualization(audio.isVirtualizationEnabled());
+        this.setResamplerByIndex(audio.getDefaultResamplerIndex());
     }
 
 
@@ -455,6 +458,48 @@ public abstract class SoundSource {
             }
         }
         this.nextSoundEffectSendId = 0;
+    }
+
+
+    void setResamplerByIndex(int index) {
+        if (index >= 0 && index != this.resamplerIndex) {
+            this.resamplerIndex = index;
+            AL10.alSourcei(this.sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT, index);
+        }
+    }
+
+
+    /**
+     * Sets the resampler for this sound source.<br>
+     * <br>
+     * Check {@link AudioDevice#getAvailableResamplers()} for a list of available resamplers.
+     *
+     * @param resampler
+     *
+     * @return true if successful, false if the desired resampler is not available
+     */
+    public boolean setResampler(String resampler) {
+        final AudioDevice device = Audio.get().getDevice();
+        final int resamplerIndex = device.getResamplerIndexByName(resampler);
+        if (resamplerIndex >= 0) {
+            this.setResamplerByIndex(resamplerIndex);
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Returns the name of the resampler currently in use.
+     *
+     * @return name of the resampler
+     */
+    public String getResampler() {
+        final AudioDevice device = Audio.get().getDevice();
+        final int resamplerIndex = AL10.alGetSourcei(this.sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT);
+        final String name = device.getResamplerNameByIndex(resamplerIndex);
+        return name;
     }
 
 
