@@ -177,7 +177,8 @@ public class AudioConfig {
      * possibly using HRTF or other virtualization techniques to give a sense of speakers that may not be physically present. This leads to sometimes unexpected
      * and unwanted audio output, so you can disable it. Note that existing input channels may be dropped if they don't exist on the output configuration when
      * virtualization is disabled.<br>
-     * <br>
+     * An example: You try to play a 4-channel sound file on a stereo system. With virtualization enabled, channel 1 and 3 are routed to the left speaker,
+     * channel 2 and 4 to the right speaker. With virtualization disabled, only channel 1 and 2 are played, channel 3 and 4 will be ignored.<br>
      * By default virtualization is enabled and it's the recommended setting.
      *
      * @param enabled
