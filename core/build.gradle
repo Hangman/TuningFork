@@ -48,7 +48,7 @@ dependencies {
 }
 
 allprojects {
-	sourceCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaLanguageVersion.of(8)
 	compileJava {
 		options.incremental = true
 	}
