@@ -381,7 +381,7 @@ public class AudioDevice {
      * Mostly, a higher performance impact also means a better result in terms of quality, though this isn't true in all cases.<br>
      * <br>
      * If you need more information on what resampler is best for you, here's a video recommendation:
-     * <a href="https://www.youtube.com/watch?v=62U6UnaUGDE">https://www.youtube.com/watch?v=62U6UnaUGDE</>
+     * <a href="https://www.youtube.com/watch?v=62U6UnaUGDE">https://www.youtube.com/watch?v=62U6UnaUGDE</a>
      *
      * @return list of available resamplers
      */
