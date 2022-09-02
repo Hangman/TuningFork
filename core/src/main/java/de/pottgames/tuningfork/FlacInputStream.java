@@ -52,15 +52,16 @@ public class FlacInputStream implements AudioStream {
             throw new TuningForkRuntimeException("Missing StreamInfo in flac file.");
         }
         final int numChannels = this.decoder.streamInfo.numChannels;
-        if (numChannels < 0 || numChannels > 2) {
-            throw new TuningForkRuntimeException("Unsupported number of channels in flac file. Must be 1 or 2 but is: " + numChannels);
+        if (!PcmFormat.isSupportedChannelCount(numChannels)) {
+            throw new TuningForkRuntimeException("Unsupported number of channels in flac file. Must be 1, 2, 4, 6, 7 or 8 but is: " + numChannels);
         }
         final int bitsPerSample = this.decoder.streamInfo.sampleDepth;
         if (bitsPerSample != 8 && bitsPerSample != 16) {
             throw new TuningForkRuntimeException("Unsupported bits per sample in flac file, only 8 and 16 Bit is supported.");
         }
-        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE) {
-            throw new TuningForkRuntimeException("Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.BUFFER_SIZE);
+        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * numChannels) {
+            throw new TuningForkRuntimeException(
+                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL + " per channel");
         }
 
         this.sampleBuffer = new int[this.decoder.streamInfo.numChannels][65536];

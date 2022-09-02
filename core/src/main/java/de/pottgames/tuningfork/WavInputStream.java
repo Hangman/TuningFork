@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -49,25 +48,25 @@ public class WavInputStream extends FilterInputStream implements AudioStream {
     private void initialRead(String fileName) {
         try {
             if (this.read() != 'R' || this.read() != 'I' || this.read() != 'F' || this.read() != 'F') {
-                throw new GdxRuntimeException("RIFF header not found: " + fileName);
+                throw new TuningForkRuntimeException("RIFF header not found: " + fileName);
             }
 
             this.skipFully(4);
 
             if (this.read() != 'W' || this.read() != 'A' || this.read() != 'V' || this.read() != 'E') {
-                throw new GdxRuntimeException("Invalid wave file header: " + fileName);
+                throw new TuningForkRuntimeException("Invalid wave file header: " + fileName);
             }
 
             final int fmtChunkLength = this.seekToChunk('f', 'm', 't', ' ');
 
             final int type = this.read() & 0xff | (this.read() & 0xff) << 8;
             if (type != 1) {
-                throw new GdxRuntimeException("WAV files must be PCM: " + type);
+                throw new TuningForkRuntimeException("WAV files must be PCM: " + type);
             }
 
             this.channels = this.read() & 0xff | (this.read() & 0xff) << 8;
-            if (this.channels != 1 && this.channels != 2) {
-                throw new GdxRuntimeException("WAV files must have 1 or 2 channels: " + this.channels);
+            if (!PcmFormat.isSupportedChannelCount(this.channels)) {
+                throw new TuningForkRuntimeException("Unsupported number of channels: " + this.channels);
             }
 
             this.sampleRate = this.read() & 0xff | (this.read() & 0xff) << 8 | (this.read() & 0xff) << 16 | (this.read() & 0xff) << 24;
@@ -81,7 +80,7 @@ public class WavInputStream extends FilterInputStream implements AudioStream {
             this.dataRemaining = this.seekToChunk('d', 'a', 't', 'a');
         } catch (final Throwable ex) {
             StreamUtils.closeQuietly(this);
-            throw new GdxRuntimeException("Error reading WAV file: " + fileName, ex);
+            throw new TuningForkRuntimeException("Error reading WAV file: " + fileName, ex);
         }
     }
 

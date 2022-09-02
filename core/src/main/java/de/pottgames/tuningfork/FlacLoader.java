@@ -25,7 +25,6 @@ public abstract class FlacLoader {
 
 
     public static SoundBuffer load(File file) {
-
         SoundBuffer result = null;
         FlacInputStream input = null;
 

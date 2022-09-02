@@ -32,7 +32,7 @@ import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class StreamedSoundSource extends SoundSource implements Disposable {
-    static final int               BUFFER_SIZE                     = 4096 * 10;
+    static final int               BUFFER_SIZE_PER_CHANNEL         = 32000;
     private static final int       BUFFER_COUNT                    = 3;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
@@ -41,8 +41,9 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private final float            secondsPerBuffer;
     private final IntBuffer        buffers;
     private final PcmFormat        pcmFormat;
-    private final ByteBuffer       tempBuffer                      = BufferUtils.createByteBuffer(StreamedSoundSource.BUFFER_SIZE);
-    private final byte[]           tempBytes                       = new byte[StreamedSoundSource.BUFFER_SIZE];
+    private final int              bufferSize;
+    private final ByteBuffer       tempBuffer;
+    private final byte[]           tempBytes;
     private final Audio            audio;
     private AtomicBoolean          playing                         = new AtomicBoolean(false);
     private AtomicBoolean          stopped                         = new AtomicBoolean(true);
@@ -117,7 +118,10 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         }
 
         // CREATE BUFFERS
-        this.secondsPerBuffer = (float) StreamedSoundSource.BUFFER_SIZE / (bytesPerSample * channels * sampleRate);
+        this.bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
+        this.tempBuffer = BufferUtils.createByteBuffer(this.bufferSize);
+        this.tempBytes = new byte[this.bufferSize];
+        this.secondsPerBuffer = (float) this.bufferSize / (bytesPerSample * channels * sampleRate);
         this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
         AL10.alGenBuffers(this.buffers);
 
