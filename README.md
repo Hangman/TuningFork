@@ -13,7 +13,10 @@ TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that prov
 * Real-time effects such as Reverb, Echo, Flanger, Distortion (and many more)
 * Filters
 * HRTF support (aka binaural)
+* Streaming is handled on a background thread
+* No more fiddling with sound IDs - proper OOP design
 * Load **wav**, **ogg**, **flac** or bring your own pcm data
+* Supports surround sound formats
 * Record audio
 * Output to any sound device<br>(you are no longer tied to the default sound device)
 
