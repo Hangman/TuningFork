@@ -49,7 +49,7 @@ project(":core") {
 }
 ```
 ### Compatibility
-Java 8 is required, make sure to set `sourceCompatibility = JavaVersion.VERSION_1_8` (or higher) in your gradle scripts.
+Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.of(8)` (or higher) in your gradle scripts.
 | Version of libGDX   | Latest compatible version of TuningFork  |
 |      :----:         | :---                                     |
 | 1.9.11 - 1.11.0     | 2.0.1                                    |
