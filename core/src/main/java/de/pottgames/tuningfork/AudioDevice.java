@@ -127,6 +127,7 @@ public class AudioDevice {
         this.checkAvailableExtensions();
         this.checkRequiredExtension(ALExtension.ALC_EXT_EFX);
         this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS);
+        this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS_REMIX);
         this.checkRequiredExtension(ALExtension.AL_EXT_MCFORMATS);
 
         // LOG OUTPUT LIMITER STATE

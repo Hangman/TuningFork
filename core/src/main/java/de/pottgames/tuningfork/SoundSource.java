@@ -16,10 +16,12 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTDirectChannels;
+import org.lwjgl.openal.SOFTDirectChannelsRemix;
 import org.lwjgl.openal.SOFTSourceResampler;
 
 import com.badlogic.gdx.math.Vector3;
 
+import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -54,7 +56,7 @@ public abstract class SoundSource {
             this.logger.debug(this.getClass(), "SoundSource successfully created");
         }
 
-        this.enableVirtualization(audio.isVirtualizationEnabled());
+        this.setVirtualization(audio.getDefaultVirtualization());
         this.setResamplerByIndex(audio.getDefaultResamplerIndex());
     }
 
@@ -296,25 +298,45 @@ public abstract class SoundSource {
 
 
     /**
-     * By default virtualization is enabled. OpenAL requires buffer channels to be down-mixed to the output channel configuration, possibly using HRTF or other
-     * virtualization techniques to give a sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output,
-     * so you can disable it for the source if desired. Note that existing input channels may be dropped if they don't exist on the output configuration when
-     * virtualization is disabled.
+     * Sets the virtualization enabled state for this sound source.<br>
+     * OpenAL requires input channels to be down-mixed to the output channel configuration, possibly using HRTF or other virtualization techniques to give a
+     * sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output, so you can disable it.<br>
+     * <br>
+     * Check {@link Virtualization} for the different methods available.<br>
+     * <br>
+     * Recommended settings:<br>
+     * <ul>
+     * <li>{@link Virtualization#ON} for 3D sound</li>
+     * <li>{@link Virtualization#OFF_REMIX_CHANNELS} for music and other non-3D sounds</li>
+     * </ul>
      *
-     * @param enabled
+     * @param virtualization
      */
-    public void enableVirtualization(boolean enabled) {
-        AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, enabled ? AL10.AL_FALSE : AL10.AL_TRUE);
+    public void setVirtualization(Virtualization virtualization) {
+        switch (virtualization) {
+            case OFF_DROP_CHANNELS:
+                AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, SOFTDirectChannelsRemix.AL_DROP_UNMATCHED_SOFT);
+                break;
+            case OFF_REMIX_CHANNELS:
+                AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, SOFTDirectChannelsRemix.AL_REMIX_UNMATCHED_SOFT);
+                break;
+            case ON:
+                AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, AL10.AL_FALSE);
+                break;
+            default:
+                break;
+        }
     }
 
 
     /**
-     * Checks wether this sound source is virtualized. If virtualized, source channels may be down-mixed to the device's output channel configuration.
+     * Retrieves the virtualization mode.
      *
-     * @return true if virtualized
+     * @return the virtualization mode
      */
-    public boolean isVirtualized() {
-        return AL10.alGetSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT) != AL10.AL_TRUE;
+    public Virtualization getVirtualization() {
+        final int alId = AL10.alGetSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT);
+        return Virtualization.getByAlId(alId);
     }
 
 

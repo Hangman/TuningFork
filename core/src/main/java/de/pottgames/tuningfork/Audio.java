@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
@@ -51,7 +52,7 @@ public class Audio implements Disposable {
     private float                                  defaultMinAttenuationDistance = 1f;
     private float                                  defaultMaxAttenuationDistance = Float.MAX_VALUE;
     private float                                  defaultAttenuationFactor      = 1f;
-    private boolean                                virtualizationEnabled         = true;
+    private Virtualization                         defaultVirtualization         = Virtualization.ON;
     final TuningForkLogger                         logger;
     private final AudioDevice                      device;
     private int                                    defaultResamplerIndex         = -1;
@@ -154,7 +155,7 @@ public class Audio implements Disposable {
 
         // SET DEFAULTS
         this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
-        this.virtualizationEnabled = config.isVirtualizationEnabled();
+        this.defaultVirtualization = config.getVirtualization();
 
         // CREATE LISTENER
         this.listener = new SoundListener();
@@ -302,13 +303,13 @@ public class Audio implements Disposable {
 
 
     /**
-     * Returns whether virtualization is enabled or disabled by default for all sound sources. See {@link AudioConfig#setVirtualizationEnabled(boolean)} for
+     * Returns whether virtualization is enabled or disabled by default for all sound sources. See {@link AudioConfig#setVirtualization(Virtualization)} for
      * more info.
      *
-     * @return enabled
+     * @return the virtualization method
      */
-    public boolean isVirtualizationEnabled() {
-        return this.virtualizationEnabled;
+    public Virtualization getDefaultVirtualization() {
+        return this.defaultVirtualization;
     }
 
 
@@ -733,6 +734,35 @@ public class Audio implements Disposable {
         }
 
         return false;
+    }
+
+
+    /**
+     * Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
+     * Sources that are created afterwards are also initialized with the new default virtualization method.<br>
+     * Unless you have a specific reason to change this at runtime, it's recommended to set the default via {@link AudioConfig} on
+     * {@link Audio#init(AudioConfig)}.<br>
+     * <br>
+     * See {@link Virtualization} for the different options available.
+     *
+     * @param virtualization
+     */
+    public void setDefaultVirtualization(Virtualization virtualization) {
+        this.sourcePool.setVirtualization(virtualization);
+
+        synchronized (this.lock) {
+            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
+                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
+                sound.setVirtualization(virtualization);
+            }
+        }
+
+        for (int i = 0; i < this.managedSources.size; i++) {
+            final SoundSource source = this.managedSources.get(i);
+            if (source != null) {
+                source.setVirtualization(virtualization);
+            }
+        }
     }
 
 

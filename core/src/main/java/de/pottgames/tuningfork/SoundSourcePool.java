@@ -14,6 +14,8 @@ package de.pottgames.tuningfork;
 
 import com.badlogic.gdx.utils.Array;
 
+import de.pottgames.tuningfork.AudioConfig.Virtualization;
+
 class SoundSourcePool {
     private final Array<BufferedSoundSource> sources         = new Array<>();
     private int                              nextSourceIndex = 0;
@@ -55,7 +57,7 @@ class SoundSourcePool {
 
         // RESET SOURCE
         result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance(),
-                this.audio.isVirtualizationEnabled(), this.audio.getDefaultResamplerIndex());
+                this.audio.getDefaultVirtualization(), this.audio.getDefaultResamplerIndex());
 
         return result;
     }
@@ -101,6 +103,13 @@ class SoundSourcePool {
     void setResamplerByIndex(int index) {
         for (final BufferedSoundSource source : this.sources) {
             source.setResamplerByIndex(index);
+        }
+    }
+
+
+    void setVirtualization(Virtualization virtualization) {
+        for (final BufferedSoundSource source : this.sources) {
+            source.setVirtualization(virtualization);
         }
     }
 
