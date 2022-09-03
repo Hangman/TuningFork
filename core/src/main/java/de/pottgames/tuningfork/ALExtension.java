@@ -46,6 +46,7 @@ enum ALExtension {
     AL_SOFT_BLOCK_ALIGNMENT("AL_SOFT_block_alignment", false),
     AL_SOFT_DEFERRED_UPDATES("AL_SOFT_deferred_updates", false),
     AL_SOFT_DIRECT_CHANNELS("AL_SOFT_direct_channels", false),
+    AL_SOFT_DIRECT_CHANNELS_REMIX("AL_SOFT_direct_channels_remix", false),
     AL_SOFTX_EVENTS("AL_SOFTX_events", false),
     AL_SOFTX_FILTER_GAIN_EX("AL_SOFTX_filter_gain_ex", false),
     AL_SOFT_GAIN_CLAMP_EX("AL_SOFT_gain_clamp_ex", false),
