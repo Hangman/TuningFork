@@ -47,7 +47,7 @@ public interface InputAdapter extends InputProcessor {
 
 
     @Override
-    default boolean scrolled(int amount) {
+    default boolean scrolled(float amountX, float amountY) {
         return false;
     }
 
