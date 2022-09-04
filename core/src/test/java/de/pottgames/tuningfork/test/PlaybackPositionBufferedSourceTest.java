@@ -29,7 +29,7 @@ public class PlaybackPositionBufferedSourceTest extends ApplicationAdapter imple
         this.audio = Audio.init(config);
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("src/test/resources/numbers.wav"));
+        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
 
         // play the sound
         this.soundSource = this.audio.obtainSource(this.sound);

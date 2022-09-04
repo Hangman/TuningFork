@@ -20,7 +20,7 @@ public class EightBitTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("src/test/resources/numbers_8bit_stereo.wav"));
+        this.sound = WaveLoader.load(Gdx.files.internal("numbers_8bit_stereo.wav"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
 
         // play the sound

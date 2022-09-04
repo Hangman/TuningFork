@@ -30,7 +30,7 @@ public class FilterTest extends ApplicationAdapter {
         this.audio = Audio.init(config);
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("src/test/resources/numbers.wav"));
+        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
 
         // obtain sound source
         this.soundSource = this.audio.obtainSource(this.sound);

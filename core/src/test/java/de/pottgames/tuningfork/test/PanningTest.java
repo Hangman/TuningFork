@@ -21,7 +21,7 @@ public class PanningTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.sound = WaveLoader.load(Gdx.files.internal("src/test/resources/rhythm.wav"));
+        this.sound = WaveLoader.load(Gdx.files.internal("rhythm.wav"));
         this.soundDuration = this.sound.getDuration() * 1000f;
     }
 

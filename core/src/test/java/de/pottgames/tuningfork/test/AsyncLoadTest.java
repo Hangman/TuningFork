@@ -15,7 +15,7 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class AsyncLoadTest extends ApplicationAdapter {
-    private static final String FILE_PATH = "src/test/resources/numbers.wav";
+    private static final String FILE_PATH = "numbers.wav";
     private Audio               audio;
     private AssetManager        assetManager;
     private SoundBuffer         soundBuffer;

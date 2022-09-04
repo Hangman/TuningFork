@@ -1,12 +1,12 @@
 package de.pottgames.tuningfork.test;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.MathUtils;
@@ -73,8 +73,7 @@ public class HrtfTest extends ApplicationAdapter {
         }
 
         // LOAD SOUND
-        final File soundFile = new File("src/test/resources/numbers.wav");
-        this.soundBuffer = WaveLoader.load(soundFile);
+        this.soundBuffer = WaveLoader.load(Gdx.files.internal("numbers.wav"));
 
         // OBTAIN SOURCE & PLAY SOUND
         this.soundSource = this.audio.obtainSource(this.soundBuffer);
