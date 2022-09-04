@@ -249,6 +249,11 @@ public class AudioConfig {
         }
 
 
+        int getAlId() {
+            return this.alId;
+        }
+
+
         static Virtualization getByAlId(int id) {
             for (final Virtualization virtualization : Virtualization.MAP) {
                 if (id == virtualization.alId) {

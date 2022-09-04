@@ -16,7 +16,6 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTDirectChannels;
-import org.lwjgl.openal.SOFTDirectChannelsRemix;
 import org.lwjgl.openal.SOFTSourceResampler;
 
 import com.badlogic.gdx.math.Vector3;
@@ -313,18 +312,8 @@ public abstract class SoundSource {
      * @param virtualization
      */
     public void setVirtualization(Virtualization virtualization) {
-        switch (virtualization) {
-            case OFF_DROP_CHANNELS:
-                AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, SOFTDirectChannelsRemix.AL_DROP_UNMATCHED_SOFT);
-                break;
-            case OFF_REMIX_CHANNELS:
-                AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, SOFTDirectChannelsRemix.AL_REMIX_UNMATCHED_SOFT);
-                break;
-            case ON:
-                AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, AL10.AL_FALSE);
-                break;
-            default:
-                break;
+        if (virtualization != null) {
+            AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, virtualization.getAlId());
         }
     }
 
