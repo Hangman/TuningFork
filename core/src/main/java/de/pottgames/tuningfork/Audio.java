@@ -520,7 +520,8 @@ public class Audio implements Disposable {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
-        AL10.alSource3f(source.sourceId, AL10.AL_POSITION, MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
+        source.setAttenuationFactor(0f);
+        source.setPosition(MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
         source.play();
         source.obtained = false;
     }
@@ -539,7 +540,8 @@ public class Audio implements Disposable {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
-        AL10.alSource3f(source.sourceId, AL10.AL_POSITION, MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
+        source.setAttenuationFactor(0f);
+        source.setPosition(MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
         source.attachEffect(effect);
         source.play();
         source.obtained = false;
