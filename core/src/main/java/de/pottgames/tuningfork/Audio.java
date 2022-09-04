@@ -414,7 +414,7 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
     public void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -428,7 +428,7 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume and filter.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param filter
      */
     public void play(SoundBuffer buffer, float volume, Filter filter) {
@@ -444,7 +444,7 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume and effect.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param effect
      */
     public void play(SoundBuffer buffer, float volume, SoundEffect effect) {
@@ -460,8 +460,8 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume and pitch.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      */
     public void play(SoundBuffer buffer, float volume, float pitch) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -476,8 +476,8 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch and filter.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param filter
      */
     public void play(SoundBuffer buffer, float volume, float pitch, Filter filter) {
@@ -494,8 +494,8 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch and effect.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param effect
      */
     public void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
@@ -512,9 +512,9 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch and pan.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
-     * @param pan
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
+     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      */
     public void play(SoundBuffer buffer, float volume, float pitch, float pan) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -531,9 +531,9 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch, pan and effect.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
-     * @param pan
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
+     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      * @param effect
      */
     public void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
@@ -616,7 +616,7 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume at the given position.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
      */
     public void play3D(SoundBuffer buffer, float volume, Vector3 position) {
@@ -632,7 +632,7 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume and filter at the given position.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
      * @param filter
      */
@@ -650,7 +650,7 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume and effect at the given position.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
      * @param effect
      */
@@ -668,8 +668,8 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume and pitch at the given position.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param position
      */
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
@@ -686,8 +686,8 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume, pitch and effect at the given position.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param position
      * @param effect
      */
