@@ -60,7 +60,7 @@ public class WavInputStream extends FilterInputStream implements AudioStream {
             final int fmtChunkLength = this.seekToChunk('f', 'm', 't', ' ');
 
             final int type = this.read() & 0xff | (this.read() & 0xff) << 8;
-            if (type != 1) {
+            if (type != 1 && type != 0xfffe) {
                 throw new TuningForkRuntimeException("WAV files must be PCM: " + type);
             }
 
