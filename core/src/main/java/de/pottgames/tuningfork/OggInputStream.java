@@ -39,6 +39,8 @@ import com.jcraft.jorbis.Comment;
 import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+
 /**
  * An input stream to read Ogg Vorbis.
  *
@@ -523,6 +525,12 @@ public class OggInputStream extends InputStream implements AudioStream {
 
 
     @Override
+    public PcmDataType getPcmDataType() {
+        return PcmDataType.INTEGER;
+    }
+
+
+    @Override
     public void close() {
         StreamUtils.closeQuietly(this.input);
         this.closed = true;
@@ -533,4 +541,5 @@ public class OggInputStream extends InputStream implements AudioStream {
     public boolean isClosed() {
         return this.closed;
     }
+
 }

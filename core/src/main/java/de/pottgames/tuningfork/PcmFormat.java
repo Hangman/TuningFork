@@ -13,6 +13,8 @@
 package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.EXTDouble;
+import org.lwjgl.openal.EXTFloat32;
 import org.lwjgl.openal.EXTMCFormats;
 
 public enum PcmFormat {
@@ -24,8 +26,12 @@ public enum PcmFormat {
     SURROUND_5DOT1_8_BIT(EXTMCFormats.AL_FORMAT_51CHN8),
     QUAD_16_BIT(EXTMCFormats.AL_FORMAT_QUAD16),
     QUAD_8_BIT(EXTMCFormats.AL_FORMAT_QUAD8),
+    FLOAT_STEREO_64_BIT(EXTDouble.AL_FORMAT_STEREO_DOUBLE_EXT),
+    FLOAT_STEREO_32_BIT(EXTFloat32.AL_FORMAT_STEREO_FLOAT32),
     STEREO_16_BIT(AL10.AL_FORMAT_STEREO16),
     STEREO_8_BIT(AL10.AL_FORMAT_STEREO8),
+    FLOAT_MONO_64_BIT(EXTDouble.AL_FORMAT_MONO_DOUBLE_EXT),
+    FLOAT_MONO_32_BIT(EXTFloat32.AL_FORMAT_MONO_FLOAT32),
     MONO_16_BIT(AL10.AL_FORMAT_MONO16),
     MONO_8_BIT(AL10.AL_FORMAT_MONO8);
 
@@ -60,63 +66,89 @@ public enum PcmFormat {
 
 
     public static boolean isSupportedBitRate(int bits) {
-        return bits == 8 || bits == 16;
+        return bits == 8 || bits == 16 || bits == 32 || bits == 64;
     }
 
 
-    public static PcmFormat getBySampleDepthAndChannels(int channels, int bitsPerSample) {
-        switch (channels) {
-            case 1:
-                switch (bitsPerSample) {
-                    case 8:
-                        return PcmFormat.MONO_8_BIT;
-                    case 16:
-                        return PcmFormat.MONO_16_BIT;
-                }
-                break;
-            case 2:
-                switch (bitsPerSample) {
-                    case 8:
-                        return PcmFormat.STEREO_8_BIT;
-                    case 16:
-                        return PcmFormat.STEREO_16_BIT;
-                }
-                break;
-            case 4:
-                switch (bitsPerSample) {
-                    case 8:
-                        return PcmFormat.QUAD_8_BIT;
-                    case 16:
-                        return PcmFormat.QUAD_16_BIT;
-                }
-                break;
-            case 6:
-                switch (bitsPerSample) {
-                    case 8:
-                        return PcmFormat.SURROUND_5DOT1_8_BIT;
-                    case 16:
-                        return PcmFormat.SURROUND_5DOT1_16_BIT;
-                }
-                break;
-            case 7:
-                switch (bitsPerSample) {
-                    case 8:
-                        return PcmFormat.SURROUND_6DOT1_8_BIT;
-                    case 16:
-                        return PcmFormat.SURROUND_6DOT1_16_BIT;
-                }
-                break;
-            case 8:
-                switch (bitsPerSample) {
-                    case 8:
-                        return PcmFormat.SURROUND_7DOT1_8_BIT;
-                    case 16:
-                        return PcmFormat.SURROUND_7DOT1_16_BIT;
-                }
-                break;
+    public static PcmFormat determineFormat(int channels, int bitsPerSample, PcmDataType pcmDataType) {
+        if (pcmDataType == PcmDataType.INTEGER) {
+            switch (channels) {
+                case 1:
+                    switch (bitsPerSample) {
+                        case 8:
+                            return PcmFormat.MONO_8_BIT;
+                        case 16:
+                            return PcmFormat.MONO_16_BIT;
+                    }
+                    break;
+                case 2:
+                    switch (bitsPerSample) {
+                        case 8:
+                            return PcmFormat.STEREO_8_BIT;
+                        case 16:
+                            return PcmFormat.STEREO_16_BIT;
+                    }
+                    break;
+                case 4:
+                    switch (bitsPerSample) {
+                        case 8:
+                            return PcmFormat.QUAD_8_BIT;
+                        case 16:
+                            return PcmFormat.QUAD_16_BIT;
+                    }
+                    break;
+                case 6:
+                    switch (bitsPerSample) {
+                        case 8:
+                            return PcmFormat.SURROUND_5DOT1_8_BIT;
+                        case 16:
+                            return PcmFormat.SURROUND_5DOT1_16_BIT;
+                    }
+                    break;
+                case 7:
+                    switch (bitsPerSample) {
+                        case 8:
+                            return PcmFormat.SURROUND_6DOT1_8_BIT;
+                        case 16:
+                            return PcmFormat.SURROUND_6DOT1_16_BIT;
+                    }
+                    break;
+                case 8:
+                    switch (bitsPerSample) {
+                        case 8:
+                            return PcmFormat.SURROUND_7DOT1_8_BIT;
+                        case 16:
+                            return PcmFormat.SURROUND_7DOT1_16_BIT;
+                    }
+                    break;
+            }
+        } else if (pcmDataType == PcmDataType.FLOAT) {
+            switch (channels) {
+                case 1:
+                    switch (bitsPerSample) {
+                        case 32:
+                            return PcmFormat.FLOAT_MONO_32_BIT;
+                        case 64:
+                            return PcmFormat.FLOAT_MONO_64_BIT;
+                    }
+                    break;
+                case 2:
+                    switch (bitsPerSample) {
+                        case 32:
+                            return PcmFormat.FLOAT_STEREO_64_BIT;
+                        case 64:
+                            return PcmFormat.FLOAT_STEREO_64_BIT;
+                    }
+                    break;
+            }
         }
 
         return null;
+    }
+
+
+    public static enum PcmDataType {
+        INTEGER, FLOAT;
     }
 
 }

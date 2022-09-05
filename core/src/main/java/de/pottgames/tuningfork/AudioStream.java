@@ -14,6 +14,8 @@ package de.pottgames.tuningfork;
 
 import java.io.Closeable;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+
 interface AudioStream extends Closeable {
 
     int getChannels();
@@ -26,6 +28,9 @@ interface AudioStream extends Closeable {
 
 
     int read(byte[] bytes);
+
+
+    PcmDataType getPcmDataType();
 
 
     boolean isClosed();

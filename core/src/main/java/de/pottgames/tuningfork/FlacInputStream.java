@@ -18,6 +18,7 @@ import java.io.IOException;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import io.nayuki.flac.decode.FlacDecoder;
 
 public class FlacInputStream implements AudioStream {
@@ -138,6 +139,12 @@ public class FlacInputStream implements AudioStream {
 
     public int getBytesPerSample() {
         return this.bytesPerSample;
+    }
+
+
+    @Override
+    public PcmDataType getPcmDataType() {
+        return PcmDataType.INTEGER;
     }
 
 

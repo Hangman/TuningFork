@@ -39,7 +39,7 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
+            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

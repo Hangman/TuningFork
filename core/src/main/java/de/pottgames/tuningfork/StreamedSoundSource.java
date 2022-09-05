@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 import de.pottgames.com.jcraft.jorbis.JOrbisException;
 import de.pottgames.com.jcraft.jorbis.VorbisFile;
 import de.pottgames.tuningfork.Audio.TaskAction;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -103,7 +104,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
                 break;
             case WAV:
                 final WavInputStream wavStream = (WavInputStream) this.audioStream;
-                this.duration = wavStream.totalSamples() / wavStream.getSampleRate();
+                this.duration = wavStream.totalSamples() / wavStream.getSampleRate(); // FIXME: cast to float
                 break;
         }
 
@@ -112,7 +113,8 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         final int channels = this.audioStream.getChannels();
         final int sampleDepth = this.audioStream.getBitsPerSample();
         final int bytesPerSample = sampleDepth / 8;
-        this.pcmFormat = PcmFormat.getBySampleDepthAndChannels(channels, sampleDepth);
+        final PcmDataType pcmDataType = this.audioStream.getPcmDataType();
+        this.pcmFormat = PcmFormat.determineFormat(channels, sampleDepth, pcmDataType);
         if (this.pcmFormat == null) {
             throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
         }

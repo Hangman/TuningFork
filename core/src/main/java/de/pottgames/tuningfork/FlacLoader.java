@@ -32,7 +32,7 @@ public abstract class FlacLoader {
             input = new FlacInputStream(file);
             final byte[] buffer = new byte[(int) input.totalSamples() * input.getBytesPerSample() * input.getChannels()];
             input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
+            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

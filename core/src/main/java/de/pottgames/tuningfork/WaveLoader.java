@@ -29,7 +29,7 @@ public abstract class WaveLoader {
             input = new WavInputStream(file);
             final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
+            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }
@@ -46,7 +46,7 @@ public abstract class WaveLoader {
             input = new WavInputStream(new FileInputStream(file));
             final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
+            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } catch (final IOException ex) {
             throw new TuningForkRuntimeException(ex);
         } finally {

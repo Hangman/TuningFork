@@ -19,6 +19,7 @@ import org.lwjgl.openal.AL10;
 
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -46,18 +47,19 @@ public class SoundBuffer implements Disposable {
      * @param pcm
      * @param channels number of channels
      * @param sampleRate number of samples per second
-     * @param sampleDepth number of bits per sample
+     * @param bitsPerSample number of bits per sample
+     * @param pcmDataType
      */
-    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int sampleDepth) {
+    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
         this.logger = Audio.get().logger;
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         // DETERMINE PCM FORMAT AND DURATION
-        final int samplesPerChannel = pcm.length / (sampleDepth / 8 * channels);
+        final int samplesPerChannel = pcm.length / (bitsPerSample / 8 * channels);
         this.duration = samplesPerChannel / (float) sampleRate;
-        final PcmFormat pcmFormat = PcmFormat.getBySampleDepthAndChannels(channels, sampleDepth);
+        final PcmFormat pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
         if (pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
         }
 
         // PCM ARRAY TO TEMP BUFFER

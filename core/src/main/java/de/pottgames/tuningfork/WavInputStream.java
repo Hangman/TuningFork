@@ -17,18 +17,20 @@ import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class WavInputStream implements AudioStream {
     private static final int       FORMAT_PCM        = 0x1;
-    private static final int       FORMAT_EXTENSIBLE = 0xFFFE;
+    private static final int       FORMAT_FLOAT      = 0x3;
+    private static final int       FORMAT_EXTENSIBLE = 0xfffe;
     private final InputStream      stream;
     private final TuningForkLogger logger;
     private final String           fileName;
-    private long                   fileSize;
     private int                    channels;
     private int                    sampleRate;
     private int                    bitsPerSample;
+    private PcmDataType            pcmDataType;
     private long                   bytesRemaining;
     private long                   totalSamples;
     private boolean                closed            = false;
@@ -77,11 +79,10 @@ public class WavInputStream implements AudioStream {
         }
 
         // CHUNK SIZE
-        this.fileSize = this.read4Bytes();
-        if (this.fileSize < 0) {
+        final long fileSizeMinus8 = this.read4Bytes();
+        if (fileSizeMinus8 < 0) {
             this.throwRuntimeError("Invalid wav file, unexpected end of file");
         }
-        this.fileSize += 8;
 
         // WAVE LITERAL
         final boolean wave = this.stream.read() == 'W' && this.stream.read() == 'A' && this.stream.read() == 'V' && this.stream.read() == 'E';
@@ -106,10 +107,15 @@ public class WavInputStream implements AudioStream {
 
         // AUDIO FORMAT
         final int audioFormat = this.stream.read() | this.stream.read() << 8;
-        if (audioFormat != WavInputStream.FORMAT_PCM && audioFormat != WavInputStream.FORMAT_EXTENSIBLE) {
+        if (audioFormat != WavInputStream.FORMAT_PCM && audioFormat != WavInputStream.FORMAT_EXTENSIBLE && audioFormat != WavInputStream.FORMAT_FLOAT) {
             this.throwRuntimeError("Only uncompressed (PCM) wav files are supported, this file seems to hold compressed data");
         }
         chunkSize -= 2L;
+        if (audioFormat == WavInputStream.FORMAT_FLOAT) {
+            this.pcmDataType = PcmDataType.FLOAT;
+        } else {
+            this.pcmDataType = PcmDataType.INTEGER;
+        }
 
         // NUMBER OF CHANNELS
         this.channels = this.stream.read() | this.stream.read() << 8;
@@ -136,7 +142,7 @@ public class WavInputStream implements AudioStream {
             this.throwRuntimeError("Unsupported bits per sample in wav file: " + this.bitsPerSample + ", TuningFork only supports ("
                     + PcmFormat.BITS_PER_SAMPLE_STRING + ") bitrates");
         }
-        if (PcmFormat.getBySampleDepthAndChannels(this.channels, this.bitsPerSample) == null) {
+        if (PcmFormat.determineFormat(this.channels, this.bitsPerSample, this.pcmDataType) == null) {
             this.throwRuntimeError("Unsupported format (supported by TuningFork: " + PcmFormat.NAMES_STRING + ") in wav file");
         }
         chunkSize -= 2L;
@@ -250,13 +256,9 @@ public class WavInputStream implements AudioStream {
     }
 
 
-    /**
-     * Returns the total number of bytes contained in this file/stream.
-     *
-     * @return the size of this file/stream in bytes.
-     */
-    public long getSize() {
-        return this.fileSize;
+    @Override
+    public PcmDataType getPcmDataType() {
+        return this.pcmDataType;
     }
 
 
