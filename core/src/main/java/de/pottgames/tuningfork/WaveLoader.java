@@ -27,9 +27,9 @@ public abstract class WaveLoader {
         WavInputStream input = null;
         try {
             input = new WavInputStream(file);
-            result = new SoundBuffer(StreamUtils.copyStreamToByteArray(input, input.dataRemaining), input.channels, input.sampleRate, input.getBitsPerSample());
-        } catch (final IOException ex) {
-            throw new TuningForkRuntimeException("Error reading WAV file: " + file, ex);
+            final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            input.read(buffer);
+            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
         } finally {
             StreamUtils.closeQuietly(input);
         }
@@ -43,10 +43,12 @@ public abstract class WaveLoader {
 
         WavInputStream input = null;
         try {
-            input = new WavInputStream(new FileInputStream(file), file.getPath());
-            result = new SoundBuffer(StreamUtils.copyStreamToByteArray(input, input.dataRemaining), input.channels, input.sampleRate, input.getBitsPerSample());
+            input = new WavInputStream(new FileInputStream(file));
+            final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            input.read(buffer);
+            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
         } catch (final IOException ex) {
-            throw new TuningForkRuntimeException("Error reading WAV file: " + file, ex);
+            throw new TuningForkRuntimeException(ex);
         } finally {
             StreamUtils.closeQuietly(input);
         }

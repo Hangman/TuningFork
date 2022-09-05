@@ -30,7 +30,18 @@ public enum PcmFormat {
     MONO_8_BIT(AL10.AL_FORMAT_MONO8);
 
 
-    private final int alId;
+    static final String NAMES_STRING;
+    static final String CHANNELS_STRING        = "1, 2, 4, 6, 7, 8";
+    static final String BITS_PER_SAMPLE_STRING = "8, 16";
+    private final int   alId;
+
+    static {
+        final StringBuilder builderNames = new StringBuilder(" ");
+        for (final PcmFormat format : PcmFormat.values()) {
+            builderNames.append(format.toString() + " ");
+        }
+        NAMES_STRING = builderNames.toString().trim();
+    }
 
 
     PcmFormat(int alId) {
@@ -45,6 +56,11 @@ public enum PcmFormat {
 
     public static boolean isSupportedChannelCount(int channels) {
         return channels > 0 && channels != 3 && channels != 5 && channels <= 8;
+    }
+
+
+    public static boolean isSupportedBitRate(int bits) {
+        return bits == 8 || bits == 16;
     }
 
 
