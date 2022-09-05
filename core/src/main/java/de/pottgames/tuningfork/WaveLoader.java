@@ -19,6 +19,8 @@ import java.io.IOException;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.decoder.WavInputStream;
+
 public abstract class WaveLoader {
 
     public static SoundBuffer load(FileHandle file) {

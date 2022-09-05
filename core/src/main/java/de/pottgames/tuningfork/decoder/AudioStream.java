@@ -10,13 +10,13 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.decoder;
 
 import java.io.Closeable;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 
-interface AudioStream extends Closeable {
+public interface AudioStream extends Closeable {
 
     int getChannels();
 

@@ -18,6 +18,8 @@ import java.io.InputStream;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.decoder.OggInputStream;
+
 public abstract class OggLoader {
 
     public static SoundBuffer load(FileHandle file) {

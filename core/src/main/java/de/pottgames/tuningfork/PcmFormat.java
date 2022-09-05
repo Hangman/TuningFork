@@ -36,10 +36,10 @@ public enum PcmFormat {
     MONO_8_BIT(AL10.AL_FORMAT_MONO8);
 
 
-    static final String NAMES_STRING;
-    static final String CHANNELS_STRING        = "1, 2, 4, 6, 7, 8";
-    static final String BITS_PER_SAMPLE_STRING = "8, 16";
-    private final int   alId;
+    public static final String NAMES_STRING;
+    public static final String CHANNELS_STRING        = "1, 2, 4, 6, 7, 8";
+    public static final String BITS_PER_SAMPLE_STRING = "8, 16";
+    private final int          alId;
 
     static {
         final StringBuilder builderNames = new StringBuilder(" ");

@@ -51,7 +51,7 @@ public class SoundBuffer implements Disposable {
      * @param pcmDataType
      */
     public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
-        this.logger = Audio.get().logger;
+        this.logger = Audio.get().getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         // DETERMINE PCM FORMAT AND DURATION

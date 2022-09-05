@@ -10,14 +10,17 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.decoder;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
 
+import de.pottgames.tuningfork.Audio;
+import de.pottgames.tuningfork.PcmFormat;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class WavInputStream implements AudioStream {
@@ -39,7 +42,7 @@ public class WavInputStream implements AudioStream {
     public WavInputStream(InputStream input) {
         this.stream = input;
         this.fileName = null;
-        this.logger = Audio.get().logger;
+        this.logger = Audio.get().getLogger();
         try {
             this.readHeader();
         } catch (final IOException e) {
@@ -51,7 +54,7 @@ public class WavInputStream implements AudioStream {
     public WavInputStream(FileHandle file) {
         this.stream = file.read();
         this.fileName = file.toString();
-        this.logger = Audio.get().logger;
+        this.logger = Audio.get().getLogger();
         try {
             this.readHeader();
         } catch (final IOException e) {

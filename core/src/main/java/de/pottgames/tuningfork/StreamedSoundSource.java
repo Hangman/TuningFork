@@ -29,12 +29,16 @@ import de.pottgames.com.jcraft.jorbis.JOrbisException;
 import de.pottgames.com.jcraft.jorbis.VorbisFile;
 import de.pottgames.tuningfork.Audio.TaskAction;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.decoder.AudioStream;
+import de.pottgames.tuningfork.decoder.FlacInputStream;
+import de.pottgames.tuningfork.decoder.OggInputStream;
+import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class StreamedSoundSource extends SoundSource implements Disposable {
-    static final int               BUFFER_SIZE_PER_CHANNEL         = 32000;
-    private static final int       BUFFER_COUNT                    = 3;
+    public static final int        BUFFER_SIZE_PER_CHANNEL         = 32000;
+    public static final int        BUFFER_COUNT                    = 3;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
     private final FileHandle       file;
@@ -69,7 +73,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
 
         // FETCH AND SET DEPENDENCIES
         this.audio = Audio.get();
-        this.logger = this.audio.logger;
+        this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
         this.file = file;
 

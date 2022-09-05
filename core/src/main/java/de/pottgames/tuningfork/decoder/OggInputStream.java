@@ -17,7 +17,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.decoder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +40,7 @@ import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.TuningForkRuntimeException;
 
 /**
  * An input stream to read Ogg Vorbis.
@@ -496,7 +497,7 @@ public class OggInputStream extends InputStream implements AudioStream {
     }
 
 
-    boolean atEnd() {
+    public boolean atEnd() {
         return this.endOfStream && this.readIndex >= this.pcmBuffer.position();
     }
 

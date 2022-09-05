@@ -52,7 +52,7 @@ public class Audio implements Disposable {
     private float                                  defaultMaxAttenuationDistance = Float.MAX_VALUE;
     private float                                  defaultAttenuationFactor      = 1f;
     private boolean                                virtualizationEnabled         = true;
-    final TuningForkLogger                         logger;
+    private final TuningForkLogger                 logger;
     private final AudioDevice                      device;
     private int                                    defaultResamplerIndex         = -1;
 
@@ -889,6 +889,11 @@ public class Audio implements Disposable {
     }
 
 
+    public TuningForkLogger getLogger() {
+        return this.logger;
+    }
+
+
     /**
      * Shuts down TuningFork.
      */
@@ -906,7 +911,7 @@ public class Audio implements Disposable {
         this.taskService.shutdown();
         try {
             if (!this.taskService.awaitTermination(500L, TimeUnit.MILLISECONDS)) {
-                this.logger.debug(this.getClass(), "The task service timed out on shutdown.");
+                this.getLogger().debug(this.getClass(), "The task service timed out on shutdown.");
             }
         } catch (final InterruptedException e) {
             this.taskService.shutdownNow();

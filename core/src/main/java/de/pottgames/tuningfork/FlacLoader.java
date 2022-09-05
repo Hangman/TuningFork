@@ -17,6 +17,8 @@ import java.io.File;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.decoder.FlacInputStream;
+
 public abstract class FlacLoader {
 
     public static SoundBuffer load(FileHandle file) {

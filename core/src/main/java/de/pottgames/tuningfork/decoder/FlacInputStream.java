@@ -10,7 +10,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package de.pottgames.tuningfork;
+package de.pottgames.tuningfork.decoder;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,9 @@ import java.io.IOException;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.PcmFormat;
+import de.pottgames.tuningfork.StreamedSoundSource;
+import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import io.nayuki.flac.decode.FlacDecoder;
 
