@@ -3,6 +3,8 @@ package de.pottgames.tuningfork.decoder;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.badlogic.gdx.math.MathUtils;
+
 public class Int24To16Resampler implements Resampler {
     private static final int    END_OF_STREAM            = Integer.MAX_VALUE;
     protected final InputStream stream;
@@ -70,6 +72,7 @@ public class Int24To16Resampler implements Resampler {
             this.bytesRemaining = 0;
             return Int24To16Resampler.END_OF_STREAM;
         }
+        this.bytesRemaining = MathUtils.clamp(this.bytesRemaining - 3, 0, Integer.MAX_VALUE);
 
         return byte1 | byte2 << 8 | byte3 << 16;
     }
