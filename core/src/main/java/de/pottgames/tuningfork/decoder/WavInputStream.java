@@ -28,13 +28,13 @@ public class WavInputStream implements AudioStream {
     private static final int       FORMAT_FLOAT      = 0x3;
     private static final int       FORMAT_EXTENSIBLE = 0xfffe;
     private final InputStream      stream;
+    private Resampler              resampler;
     private final TuningForkLogger logger;
     private final String           fileName;
     private int                    channels;
     private int                    sampleRate;
     private int                    bitsPerSample;
     private PcmDataType            pcmDataType;
-    private long                   bytesRemaining;
     private long                   totalSamples;
     private boolean                closed            = false;
 
@@ -44,7 +44,7 @@ public class WavInputStream implements AudioStream {
         this.fileName = null;
         this.logger = Audio.get().getLogger();
         try {
-            this.readHeader();
+            this.setup();
         } catch (final IOException e) {
             throw new TuningForkRuntimeException(e);
         }
@@ -56,21 +56,32 @@ public class WavInputStream implements AudioStream {
         this.fileName = file.toString();
         this.logger = Audio.get().getLogger();
         try {
-            this.readHeader();
+            this.setup();
         } catch (final IOException e) {
             throw new TuningForkRuntimeException(e);
         }
     }
 
 
-    private void readHeader() throws IOException {
+    private void setup() throws IOException {
         this.readRiffChunk();
         this.readFmtChunk();
-        this.bytesRemaining = this.skipToChunk('d', 'a', 't', 'a');
-        if (this.bytesRemaining < 0L) {
+        final long bytesRemaining = this.skipToChunk('d', 'a', 't', 'a');
+        if (bytesRemaining < 0L) {
             this.throwRuntimeError("Not a valid wav file, audio data not found");
         }
-        this.totalSamples = this.bytesRemaining * 8L / this.bitsPerSample / this.channels;
+        this.totalSamples = bytesRemaining * 8L / this.bitsPerSample / this.channels;
+
+        // FIND RESAMPLER
+        final ResamplerProvider provider = Audio.get().getResamplerProvider();
+        this.resampler = provider.getResampler(this.stream, bytesRemaining, this.bitsPerSample, this.pcmDataType);
+        if (this.resampler == null) {
+            this.throwRuntimeError("Unsupported wav file format");
+        }
+        this.bitsPerSample = this.resampler.outputBitsPerSample();
+        if (PcmFormat.determineFormat(this.channels, this.bitsPerSample, this.pcmDataType) == null) {
+            this.throwRuntimeError("Unsupported format (supported by TuningFork: " + PcmFormat.NAMES_STRING + ") in wav file");
+        }
     }
 
 
@@ -141,12 +152,9 @@ public class WavInputStream implements AudioStream {
 
         // BITS PER SAMPLE
         this.bitsPerSample = this.stream.read() | this.stream.read() << 8;
-        if (!PcmFormat.isSupportedBitRate(this.bitsPerSample)) {
+        if (!PcmFormat.isSupportedBitRate(this.bitsPerSample) && this.bitsPerSample != 24) {
             this.throwRuntimeError("Unsupported bits per sample in wav file: " + this.bitsPerSample + ", TuningFork only supports ("
-                    + PcmFormat.BITS_PER_SAMPLE_STRING + ") bitrates");
-        }
-        if (PcmFormat.determineFormat(this.channels, this.bitsPerSample, this.pcmDataType) == null) {
-            this.throwRuntimeError("Unsupported format (supported by TuningFork: " + PcmFormat.NAMES_STRING + ") in wav file");
+                    + PcmFormat.BITS_PER_SAMPLE_STRING + ", 24) bitrates");
         }
         chunkSize -= 2L;
 
@@ -207,32 +215,12 @@ public class WavInputStream implements AudioStream {
 
     @Override
     public int read(byte[] bytes) {
-        if (this.bytesRemaining == 0) {
-            return -1;
+        try {
+            return this.resampler.read(bytes);
+        } catch (final Exception e) {
+            this.throwRuntimeError("An error occured while reading wav file", e);
         }
-
-        int bytesToRead = bytes.length;
-        int offset = 0;
-
-        while (bytesToRead > 0 && this.bytesRemaining > 0) {
-            int bytesRead = 0;
-            try {
-                bytesRead = this.stream.read(bytes, offset, (int) Math.min(bytesToRead, this.bytesRemaining));
-            } catch (final IOException e) {
-                this.throwRuntimeError("An error occured while reading wav file", e);
-            }
-            if (bytesRead == -1) {
-                if (offset > 0) {
-                    return offset;
-                }
-                return -1;
-            }
-            this.bytesRemaining -= bytesRead;
-            bytesToRead -= bytesRead;
-            offset += bytesRead;
-        }
-
-        return offset;
+        return -1;
     }
 
 
@@ -293,7 +281,11 @@ public class WavInputStream implements AudioStream {
     @Override
     public void close() throws IOException {
         try {
-            this.stream.close();
+            if (this.resampler != null) {
+                this.resampler.close();
+            } else {
+                this.stream.close();
+            }
         } catch (final IOException e) {
             // ignore but log it
             this.logger.error(this.getClass(), "WavInputStream didn't close successfully: " + e.getMessage());

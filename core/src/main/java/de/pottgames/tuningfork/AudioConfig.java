@@ -12,6 +12,10 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
+import de.pottgames.tuningfork.decoder.DefaultResamplerProvider;
+import de.pottgames.tuningfork.decoder.ResamplerProvider;
 import de.pottgames.tuningfork.logger.GdxLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -23,6 +27,7 @@ public class AudioConfig {
     private int                      idleTasks;
     private boolean                  virtualizationEnabled;
     private TuningForkLogger         logger;
+    private ResamplerProvider        resamplerProvider;
 
 
     /**
@@ -35,6 +40,7 @@ public class AudioConfig {
         this.setSimultaneousSources(20);
         this.setIdleTasks(10);
         this.setVirtualizationEnabled(true);
+        this.setResamplerProvider(new DefaultResamplerProvider());
     }
 
 
@@ -57,6 +63,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualizationEnabled(true);
+        this.setResamplerProvider(new DefaultResamplerProvider());
     }
 
 
@@ -80,6 +87,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualizationEnabled(virtualizationEnabled);
+        this.setResamplerProvider(new DefaultResamplerProvider());
     }
 
 
@@ -197,7 +205,7 @@ public class AudioConfig {
      * Sets the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the available
      * logger implementations that are shipped with TuningFork.
      *
-     * @param logger
+     * @param logger may be null to turn off logging
      *
      * @return this
      */
@@ -207,6 +215,23 @@ public class AudioConfig {
             this.logger = new MockLogger();
         }
         return this;
+    }
+
+
+    public ResamplerProvider getResamplerProvider() {
+        return this.resamplerProvider;
+    }
+
+
+    /**
+     * Sets the resampler provider that is used by decoders to get a resampler. Whenever a wav file with a bit depth not supported by OpenAL is detected,
+     * TuningFork tries to resample it.
+     *
+     * @param resamplerProvider must not be null
+     */
+    public void setResamplerProvider(ResamplerProvider resamplerProvider) {
+        Objects.requireNonNull(resamplerProvider);
+        this.resamplerProvider = resamplerProvider;
     }
 
 }

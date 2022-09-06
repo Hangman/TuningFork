@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.decoder.ResamplerProvider;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
@@ -39,6 +40,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 public class Audio implements Disposable {
     private static Audio instance;
 
+    private final ResamplerProvider                resamplerProvider;
     final Object                                   lock                          = new Object();
     private SoundListener                          listener;
     private SoundSourcePool                        sourcePool;
@@ -134,6 +136,7 @@ public class Audio implements Disposable {
     private Audio(AudioDevice device, AudioConfig config) {
         this.logger = config.getLogger();
         this.device = device;
+        this.resamplerProvider = config.getResamplerProvider();
         Audio.instance = this;
 
         // INITIAL IDLE TASK CREATION FOR THE POOL
@@ -854,6 +857,16 @@ public class Audio implements Disposable {
      */
     public SoundListener getListener() {
         return this.listener;
+    }
+
+
+    /**
+     * Returns the resampler provider that is used by the decoders.
+     *
+     * @return the resampler provider
+     */
+    public ResamplerProvider getResamplerProvider() {
+        return this.resamplerProvider;
     }
 
 
