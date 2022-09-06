@@ -33,8 +33,7 @@ public class DefaultResamplerProvider implements ResamplerProvider {
                     return new ForwardResampler(stream, streamLength, inputBitsPerSample);
                 }
                 if (inputDataType == PcmDataType.INTEGER) {
-                    // TODO: planned
-                    return null;
+                    return new Int32To16Resampler(stream, streamLength);
                 }
                 break;
             case 64:
