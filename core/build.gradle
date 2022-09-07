@@ -89,6 +89,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/WavFloat64PcmTest.class'
      exclude 'de/pottgames/tuningfork/test/WavInt24PcmTest.class'
      exclude 'de/pottgames/tuningfork/test/WavInt32PcmTest.class'
+     exclude 'de/pottgames/tuningfork/test/WavExtensibleFormatTest.class'
  }
 
 publishing {

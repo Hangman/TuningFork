@@ -191,8 +191,9 @@ public class WavInputStream implements AudioStream {
             if (!valid) {
                 this.throwRuntimeError("Invalid wav file, EXTENSIBLE format header is incorrect");
             }
+            chunkSize -= 14L;
 
-            this.logger.warn(this.getClass(), (this.fileName != null ? this.fileName : this.stream.toString())
+            this.logger.debug(this.getClass(), (this.fileName != null ? this.fileName : this.stream.toString())
                     + " uses the EXTENSIBLE format which is only partly supported by TuningFork.");
         }
 
