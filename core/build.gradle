@@ -90,6 +90,8 @@ test {
      exclude 'de/pottgames/tuningfork/test/WavInt24PcmTest.class'
      exclude 'de/pottgames/tuningfork/test/WavInt32PcmTest.class'
      exclude 'de/pottgames/tuningfork/test/WavExtensibleFormatTest.class'
+     exclude 'de/pottgames/tuningfork/test/ImaAdpcmWavMonoTest.class'
+     exclude 'de/pottgames/tuningfork/test/ImaAdpcmWavStereoTest.class'
  }
 
 publishing {

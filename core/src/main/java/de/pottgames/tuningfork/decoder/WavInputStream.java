@@ -30,6 +30,7 @@ public class WavInputStream implements AudioStream {
     private final TuningForkLogger logger;
     private final String           fileName;
     private int                    channels;
+    private int                    blockAlign;
     private int                    sampleRate;
     private int                    bitsPerSample;
     private long                   totalSamples;
@@ -71,7 +72,7 @@ public class WavInputStream implements AudioStream {
 
         // FIND DECODER
         final WavDecoderProvider provider = Audio.get().getWavDecoderProvider();
-        this.decoder = provider.getDecoder(this.bitsPerSample, this.audioFormat);
+        this.decoder = provider.getDecoder(this.bitsPerSample, this.channels, this.audioFormat, this.blockAlign);
         if (this.decoder == null) {
             this.throwRuntimeError("Unsupported wav file format");
         }
@@ -136,9 +137,13 @@ public class WavInputStream implements AudioStream {
         }
         chunkSize -= 4;
 
-        // BYTE RATE & BLOCK ALIGN
-        this.skipBytes(6L);
-        chunkSize -= 6L;
+        // BYTE RATE
+        this.skipBytes(4L);
+        chunkSize -= 4L;
+
+        // BLOCK ALIGN
+        this.blockAlign = this.stream.read() | this.stream.read() << 8;
+        chunkSize -= 2L;
 
         // BITS PER SAMPLE
         this.bitsPerSample = this.stream.read() | this.stream.read() << 8;
@@ -151,12 +156,12 @@ public class WavInputStream implements AudioStream {
             }
             chunkSize -= 2L;
 
-            // SKIP VALID BITS PER SAMPLE
+            // VALID BITS PER SAMPLE
             this.stream.read();
             this.stream.read();
             chunkSize -= 2L;
 
-            // SKIP CHANNEL MASK
+            // CHANNEL MASK
             this.stream.read();
             this.stream.read();
             this.stream.read();
@@ -252,10 +257,9 @@ public class WavInputStream implements AudioStream {
     public int read(byte[] bytes) {
         try {
             return this.decoder.read(bytes);
-        } catch (final Exception e) {
-            this.throwRuntimeError("An error occured while reading wav file", e);
+        } catch (final IOException e) {
+            throw new TuningForkRuntimeException(e);
         }
-        return -1;
     }
 
 
@@ -301,9 +305,9 @@ public class WavInputStream implements AudioStream {
             throw new TuningForkRuntimeException(message + ": " + this.stream.toString());
         }
         if (this.fileName != null) {
-            throw new TuningForkRuntimeException(message + ": " + this.fileName, e);
+            throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + this.fileName, e);
         }
-        throw new TuningForkRuntimeException(message + ": " + this.stream.toString(), e);
+        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + this.stream.toString(), e);
     }
 
 
