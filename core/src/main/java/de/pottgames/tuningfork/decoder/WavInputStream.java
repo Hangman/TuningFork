@@ -142,10 +142,6 @@ public class WavInputStream implements AudioStream {
 
         // BITS PER SAMPLE
         this.bitsPerSample = this.stream.read() | this.stream.read() << 8;
-        if (!PcmFormat.isSupportedBitRate(this.bitsPerSample) && this.bitsPerSample != 24) {
-            this.throwRuntimeError("Unsupported bits per sample in wav file: " + this.bitsPerSample + ", TuningFork only supports ("
-                    + PcmFormat.BITS_PER_SAMPLE_STRING + ", 24) bitrates");
-        }
         chunkSize -= 2L;
 
         if (this.audioFormat == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber()) {
