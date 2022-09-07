@@ -14,8 +14,9 @@ package de.pottgames.tuningfork;
 
 import java.util.Objects;
 
-import de.pottgames.tuningfork.decoder.DefaultResamplerProvider;
-import de.pottgames.tuningfork.decoder.ResamplerProvider;
+import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
+import de.pottgames.tuningfork.decoder.WavDecoderProvider;
+import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.GdxLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -27,7 +28,7 @@ public class AudioConfig {
     private int                      idleTasks;
     private boolean                  virtualizationEnabled;
     private TuningForkLogger         logger;
-    private ResamplerProvider        resamplerProvider;
+    private WavDecoderProvider       wavDecoderProvider;
 
 
     /**
@@ -40,7 +41,7 @@ public class AudioConfig {
         this.setSimultaneousSources(20);
         this.setIdleTasks(10);
         this.setVirtualizationEnabled(true);
-        this.setResamplerProvider(new DefaultResamplerProvider());
+        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
@@ -63,7 +64,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualizationEnabled(true);
-        this.setResamplerProvider(new DefaultResamplerProvider());
+        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
@@ -87,7 +88,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualizationEnabled(virtualizationEnabled);
-        this.setResamplerProvider(new DefaultResamplerProvider());
+        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
@@ -218,20 +219,19 @@ public class AudioConfig {
     }
 
 
-    public ResamplerProvider getResamplerProvider() {
-        return this.resamplerProvider;
+    public WavDecoderProvider getResamplerProvider() {
+        return this.wavDecoderProvider;
     }
 
 
     /**
-     * Sets the resampler provider that is used by decoders to get a resampler. Whenever a wav file with a bit depth not supported by OpenAL is detected,
-     * TuningFork tries to resample it.
+     * Sets the decoder provider that is used by {@link WavInputStream}.
      *
-     * @param resamplerProvider must not be null
+     * @param decoderProvider must not be null
      */
-    public void setResamplerProvider(ResamplerProvider resamplerProvider) {
-        Objects.requireNonNull(resamplerProvider);
-        this.resamplerProvider = resamplerProvider;
+    public void setWavDecoderProvider(WavDecoderProvider decoderProvider) {
+        Objects.requireNonNull(decoderProvider);
+        this.wavDecoderProvider = decoderProvider;
     }
 
 }

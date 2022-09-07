@@ -24,19 +24,16 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class WavInputStream implements AudioStream {
-    private static final int       FORMAT_PCM        = 0x1;
-    private static final int       FORMAT_FLOAT      = 0x3;
-    private static final int       FORMAT_EXTENSIBLE = 0xfffe;
     private final InputStream      stream;
-    private Resampler              resampler;
+    private int                    audioFormat;
+    private WavDecoder             decoder;
     private final TuningForkLogger logger;
     private final String           fileName;
     private int                    channels;
     private int                    sampleRate;
     private int                    bitsPerSample;
-    private PcmDataType            pcmDataType;
     private long                   totalSamples;
-    private boolean                closed            = false;
+    private boolean                closed = false;
 
 
     public WavInputStream(InputStream input) {
@@ -72,15 +69,16 @@ public class WavInputStream implements AudioStream {
         }
         this.totalSamples = bytesRemaining * 8L / this.bitsPerSample / this.channels;
 
-        // FIND RESAMPLER
-        final ResamplerProvider provider = Audio.get().getResamplerProvider();
-        this.resampler = provider.getResampler(this.stream, bytesRemaining, this.bitsPerSample, this.pcmDataType);
-        if (this.resampler == null) {
+        // FIND DECODER
+        final WavDecoderProvider provider = Audio.get().getWavDecoderProvider();
+        this.decoder = provider.getDecoder(this.bitsPerSample, this.audioFormat);
+        if (this.decoder == null) {
             this.throwRuntimeError("Unsupported wav file format");
         }
-        this.bitsPerSample = this.resampler.outputBitsPerSample();
-        if (PcmFormat.determineFormat(this.channels, this.bitsPerSample, this.pcmDataType) == null) {
-            this.throwRuntimeError("Unsupported format (supported by TuningFork: " + PcmFormat.NAMES_STRING + ") in wav file");
+        this.decoder.setup(this.stream, bytesRemaining);
+        this.bitsPerSample = this.decoder.outputBitsPerSample();
+        if (PcmFormat.determineFormat(this.channels, this.bitsPerSample, this.decoder.getPcmDataType()) == null) {
+            this.throwRuntimeError("Unsupported format found in wav file");
         }
     }
 
@@ -120,16 +118,8 @@ public class WavInputStream implements AudioStream {
         }
 
         // AUDIO FORMAT
-        final int audioFormat = this.stream.read() | this.stream.read() << 8;
-        if (audioFormat != WavInputStream.FORMAT_PCM && audioFormat != WavInputStream.FORMAT_EXTENSIBLE && audioFormat != WavInputStream.FORMAT_FLOAT) {
-            this.throwRuntimeError("Only uncompressed (PCM) wav files are supported, this file seems to hold compressed data");
-        }
+        this.audioFormat = this.stream.read() | this.stream.read() << 8;
         chunkSize -= 2L;
-        if (audioFormat == WavInputStream.FORMAT_FLOAT) {
-            this.pcmDataType = PcmDataType.FLOAT;
-        } else {
-            this.pcmDataType = PcmDataType.INTEGER;
-        }
 
         // NUMBER OF CHANNELS
         this.channels = this.stream.read() | this.stream.read() << 8;
@@ -157,6 +147,54 @@ public class WavInputStream implements AudioStream {
                     + PcmFormat.BITS_PER_SAMPLE_STRING + ", 24) bitrates");
         }
         chunkSize -= 2L;
+
+        if (this.audioFormat == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber()) {
+            final int cbSize = this.stream.read() | this.stream.read() << 8;
+            if (cbSize != 22) {
+                this.throwRuntimeError("Invalid wav file, EXTENSIBLE format is used, cbSize must be 22");
+            }
+            chunkSize -= 2L;
+
+            // SKIP VALID BITS PER SAMPLE
+            this.stream.read();
+            this.stream.read();
+            chunkSize -= 2L;
+
+            // SKIP CHANNEL MASK
+            this.stream.read();
+            this.stream.read();
+            this.stream.read();
+            this.stream.read();
+            chunkSize -= 4L;
+
+            // AUDIO FORMAT
+            this.audioFormat = this.stream.read() | this.stream.read() << 8;
+            chunkSize -= 2L;
+
+            // FIXED GUID STRING
+            final boolean guid1 = this.stream.read() == 0x00;
+            final boolean guid2 = this.stream.read() == 0x00;
+            final boolean guid3 = this.stream.read() == 0x00;
+            final boolean guid4 = this.stream.read() == 0x00;
+            final boolean guid5 = this.stream.read() == 0x10;
+            final boolean guid6 = this.stream.read() == 0x00;
+            final boolean guid7 = this.stream.read() == 0x80;
+            final boolean guid8 = this.stream.read() == 0x00;
+            final boolean guid9 = this.stream.read() == 0x00;
+            final boolean guid10 = this.stream.read() == 0xAA;
+            final boolean guid11 = this.stream.read() == 0x00;
+            final boolean guid12 = this.stream.read() == 0x38;
+            final boolean guid13 = this.stream.read() == 0x9b;
+            final boolean guid14 = this.stream.read() == 0x71;
+            final boolean valid = guid1 && guid2 && guid3 && guid4 && guid5 && guid6 && guid7 && guid8 && guid9 && guid10 && guid11 && guid12 && guid13
+                    && guid14;
+            if (!valid) {
+                this.throwRuntimeError("Invalid wav file, EXTENSIBLE format header is incorrect");
+            }
+
+            this.logger.warn(this.getClass(), (this.fileName != null ? this.fileName : this.stream.toString())
+                    + " uses the EXTENSIBLE format which is only partly supported by TuningFork.");
+        }
 
         // SKIP TO END OF CHUNK
         this.skipBytes(chunkSize);
@@ -216,7 +254,7 @@ public class WavInputStream implements AudioStream {
     @Override
     public int read(byte[] bytes) {
         try {
-            return this.resampler.read(bytes);
+            return this.decoder.read(bytes);
         } catch (final Exception e) {
             this.throwRuntimeError("An error occured while reading wav file", e);
         }
@@ -249,7 +287,7 @@ public class WavInputStream implements AudioStream {
 
     @Override
     public PcmDataType getPcmDataType() {
-        return this.pcmDataType;
+        return this.decoder.getPcmDataType();
     }
 
 
@@ -281,8 +319,8 @@ public class WavInputStream implements AudioStream {
     @Override
     public void close() throws IOException {
         try {
-            if (this.resampler != null) {
-                this.resampler.close();
+            if (this.decoder != null) {
+                this.decoder.close();
             } else {
                 this.stream.close();
             }

@@ -3,21 +3,32 @@ package de.pottgames.tuningfork.decoder;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ForwardResampler implements Resampler {
-    protected final InputStream stream;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+
+public class PcmDecoder implements WavDecoder {
+    protected InputStream       stream;
+    protected final PcmDataType pcmDataType;
     protected long              bytesRemaining;
     private final int           bitsPerSample;
 
 
-    public ForwardResampler(InputStream stream, long streamLength, int bitsPerSample) {
+    public PcmDecoder(int bitsPerSample, PcmDataType pcmDataType) {
+        this.bitsPerSample = bitsPerSample;
+        this.pcmDataType = pcmDataType;
+    }
+
+
+    @Override
+    public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
         this.bytesRemaining = streamLength;
-        this.bitsPerSample = bitsPerSample;
     }
 
 
     @Override
     public int read(byte[] output) throws IOException {
+        // we don't check if the decoder has been set up properly because this method is crucial for performance
+
         if (this.bytesRemaining <= 0) {
             return -1;
         }
@@ -56,7 +67,13 @@ public class ForwardResampler implements Resampler {
 
 
     @Override
-    public void close() throws IOException {
+    public PcmDataType getPcmDataType() {
+        return this.pcmDataType;
+    }
+
+
+    @Override
+    public void close() throws IOException, NullPointerException {
         this.stream.close();
     }
 
