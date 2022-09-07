@@ -72,7 +72,7 @@ public class Int32To16PcmDecoder implements WavDecoder {
         final int byte2 = this.stream.read();
         final int byte3 = this.stream.read();
         final int byte4 = this.stream.read();
-        if (byte1 < 0 || byte2 < 0 || byte3 < 0 || byte4 < 0) {
+        if (byte4 < 0) {
             this.bytesRemaining = 0;
             return Int32To16PcmDecoder.END_OF_STREAM;
         }
