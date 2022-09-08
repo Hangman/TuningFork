@@ -12,9 +12,12 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
 
         switch (inputBitsPerSample) {
             case 4:
-                if (audioFormat == WavAudioFormat.WAVE_FORMAT_DVI_ADPCM.getRegNumber()) {
-                    if (channels == 1 || channels == 2) {
+                if (channels == 1 || channels == 2) {
+                    if (audioFormat == WavAudioFormat.WAVE_FORMAT_DVI_ADPCM.getRegNumber()) {
                         return new ImaAdpcmDecoder(blockAlign, channels);
+                    }
+                    if (audioFormat == WavAudioFormat.WAVE_FORMAT_ADPCM.getRegNumber()) {
+                        return new MsAdpcmDecoder(blockAlign, channels);
                     }
                 }
                 break;
