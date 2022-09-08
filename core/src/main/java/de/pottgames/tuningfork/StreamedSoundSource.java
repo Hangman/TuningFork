@@ -108,7 +108,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
                 break;
             case WAV:
                 final WavInputStream wavStream = (WavInputStream) this.audioStream;
-                this.duration = (float) wavStream.totalSamples() / wavStream.getSampleRate();
+                this.duration = (float) wavStream.totalSamplesPerChannel() / wavStream.getSampleRate();
                 break;
         }
 

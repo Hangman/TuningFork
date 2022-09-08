@@ -9,14 +9,24 @@ public class Int24To16PcmDecoder implements WavDecoder {
     private static final int END_OF_STREAM            = Integer.MAX_VALUE;
     protected InputStream    stream;
     protected long           bytesRemaining;
+    private final int        channels;
+    private final int        sampleRate;
     private int              outputSample;
+    private long             totalOutputSamplesPerChannel;
     private int              outputSampleFetchedBytes = 2;
+
+
+    public Int24To16PcmDecoder(int channels, int sampleRate) {
+        this.channels = channels;
+        this.sampleRate = sampleRate;
+    }
 
 
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
         this.bytesRemaining = streamLength;
+        this.totalOutputSamplesPerChannel = this.bytesRemaining / 3L / this.channels;
     }
 
 
@@ -97,7 +107,25 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
 
     @Override
-    public PcmDataType getPcmDataType() {
+    public int outputChannels() {
+        return this.channels;
+    }
+
+
+    @Override
+    public int outputSampleRate() {
+        return this.sampleRate;
+    }
+
+
+    @Override
+    public long outputTotalSamplesPerChannel() {
+        return this.totalOutputSamplesPerChannel;
+    }
+
+
+    @Override
+    public PcmDataType outputPcmDataType() {
         return PcmDataType.INTEGER;
     }
 

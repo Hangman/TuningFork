@@ -19,9 +19,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.PcmFormat;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import io.nayuki.flac.decode.FlacDecoder;
 
 public class FlacInputStream implements AudioStream {

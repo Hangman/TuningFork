@@ -9,11 +9,16 @@ public class PcmDecoder implements WavDecoder {
     protected InputStream       stream;
     protected final PcmDataType pcmDataType;
     protected long              bytesRemaining;
+    private final int           channels;
+    private long                totalOutputSamplesPerChannel;
+    private final int           sampleRate;
     private final int           bitsPerSample;
 
 
-    public PcmDecoder(int bitsPerSample, PcmDataType pcmDataType) {
+    public PcmDecoder(int bitsPerSample, int channels, int sampleRate, PcmDataType pcmDataType) {
         this.bitsPerSample = bitsPerSample;
+        this.channels = channels;
+        this.sampleRate = sampleRate;
         this.pcmDataType = pcmDataType;
     }
 
@@ -22,6 +27,7 @@ public class PcmDecoder implements WavDecoder {
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
         this.bytesRemaining = streamLength;
+        this.totalOutputSamplesPerChannel = this.bytesRemaining / (this.bitsPerSample / 8L) / this.channels;
     }
 
 
@@ -67,7 +73,25 @@ public class PcmDecoder implements WavDecoder {
 
 
     @Override
-    public PcmDataType getPcmDataType() {
+    public int outputChannels() {
+        return this.channels;
+    }
+
+
+    @Override
+    public int outputSampleRate() {
+        return this.sampleRate;
+    }
+
+
+    @Override
+    public long outputTotalSamplesPerChannel() {
+        return this.totalOutputSamplesPerChannel;
+    }
+
+
+    @Override
+    public PcmDataType outputPcmDataType() {
         return this.pcmDataType;
     }
 

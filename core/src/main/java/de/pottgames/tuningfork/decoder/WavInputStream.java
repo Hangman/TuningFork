@@ -25,15 +25,10 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class WavInputStream implements AudioStream {
     private final InputStream      stream;
-    private int                    audioFormat;
+    private WavFmtChunk            fmtChunk;
     private WavDecoder             decoder;
     private final TuningForkLogger logger;
     private final String           fileName;
-    private int                    channels;
-    private int                    blockAlign;
-    private int                    sampleRate;
-    private int                    bitsPerSample;
-    private long                   totalSamples;
     private boolean                closed = false;
 
 
@@ -41,11 +36,7 @@ public class WavInputStream implements AudioStream {
         this.stream = input;
         this.fileName = null;
         this.logger = Audio.get().getLogger();
-        try {
-            this.setup();
-        } catch (final IOException e) {
-            throw new TuningForkRuntimeException(e);
-        }
+        this.setup();
     }
 
 
@@ -53,153 +44,82 @@ public class WavInputStream implements AudioStream {
         this.stream = file.read();
         this.fileName = file.toString();
         this.logger = Audio.get().getLogger();
-        try {
-            this.setup();
-        } catch (final IOException e) {
-            throw new TuningForkRuntimeException(e);
-        }
+        this.setup();
     }
 
 
-    private void setup() throws IOException {
+    private void setup() {
         this.readRiffChunk();
-        this.readFmtChunk();
+        this.fmtChunk = this.readFmtChunk();
+
         final long bytesRemaining = this.skipToChunk('d', 'a', 't', 'a');
         if (bytesRemaining < 0L) {
             this.throwRuntimeError("Not a valid wav file, audio data not found");
         }
-        this.totalSamples = bytesRemaining * 8L / this.bitsPerSample / this.channels;
 
         // FIND DECODER
         final WavDecoderProvider provider = Audio.get().getWavDecoderProvider();
-        this.decoder = provider.getDecoder(this.bitsPerSample, this.channels, this.audioFormat, this.blockAlign);
+        this.decoder = provider.getDecoder(this.fmtChunk);
         if (this.decoder == null) {
             this.throwRuntimeError("Unsupported wav file format");
         }
         this.decoder.setup(this.stream, bytesRemaining);
-        this.bitsPerSample = this.decoder.outputBitsPerSample();
-        if (PcmFormat.determineFormat(this.channels, this.bitsPerSample, this.decoder.getPcmDataType()) == null) {
+        if (PcmFormat.determineFormat(this.decoder.outputChannels(), this.decoder.outputBitsPerSample(), this.decoder.outputPcmDataType()) == null) {
             this.throwRuntimeError("Unsupported format found in wav file");
         }
     }
 
 
-    private void readRiffChunk() throws IOException {
-        // RIFF LITERAL
-        final boolean riff = this.stream.read() == 'R' && this.stream.read() == 'I' && this.stream.read() == 'F' && this.stream.read() == 'F';
-        if (!riff) {
-            this.throwRuntimeError("Not a valid wav file, RIFF header missing");
-        }
+    private void readRiffChunk() {
+        try {
+            // RIFF LITERAL
+            final boolean riff = this.stream.read() == 'R' && this.stream.read() == 'I' && this.stream.read() == 'F' && this.stream.read() == 'F';
+            if (!riff) {
+                this.throwRuntimeError("Not a valid wav file, RIFF header missing");
+            }
 
-        // CHUNK SIZE
-        final long fileSizeMinus8 = this.read4Bytes();
-        if (fileSizeMinus8 < 0) {
-            this.throwRuntimeError("Invalid wav file, unexpected end of file");
-        }
+            // CHUNK SIZE
+            final long fileSizeMinus8 = this.read4Bytes();
+            if (fileSizeMinus8 < 0) {
+                this.throwRuntimeError("Invalid wav file, unexpected end of file");
+            }
 
-        // WAVE LITERAL
-        final boolean wave = this.stream.read() == 'W' && this.stream.read() == 'A' && this.stream.read() == 'V' && this.stream.read() == 'E';
-        if (!wave) {
-            this.throwRuntimeError("Not a valid wav file, WAVE literal missing");
+            // WAVE LITERAL
+            final boolean wave = this.stream.read() == 'W' && this.stream.read() == 'A' && this.stream.read() == 'V' && this.stream.read() == 'E';
+            if (!wave) {
+                this.throwRuntimeError("Not a valid wav file, WAVE literal missing");
+            }
+        } catch (final IOException e) {
+            this.throwRuntimeError("An error occured while reading the wav file", e);
         }
     }
 
 
-    private void readFmtChunk() throws IOException {
-        // FMT LITERAL
-        final boolean fmt = this.stream.read() == 'f' && this.stream.read() == 'm' && this.stream.read() == 't' && this.stream.read() == ' ';
-        if (!fmt) {
-            this.throwRuntimeError("Not a valid wav file, FMT  header missing");
-        }
-
-        // SUB CHUNK SIZE
-        long chunkSize = this.read4Bytes();
-        if (chunkSize < 0) {
-            this.throwRuntimeError("Invalid wav file, unexpected end of file");
-        }
-
-        // AUDIO FORMAT
-        this.audioFormat = this.stream.read() | this.stream.read() << 8;
-        chunkSize -= 2L;
-
-        // NUMBER OF CHANNELS
-        this.channels = this.stream.read() | this.stream.read() << 8;
-        if (!PcmFormat.isSupportedChannelCount(this.channels)) {
-            this.throwRuntimeError(
-                    "Unsupported number of channels in wav file: " + this.channels + ", TuningFork only supports (" + PcmFormat.CHANNELS_STRING + ") channels");
-        }
-        chunkSize -= 2L;
-
-        // SAMPLE RATE
-        this.sampleRate = (int) this.read4Bytes();
-        if (this.sampleRate < 0) {
-            this.throwRuntimeError("Invalid wav file, unexpected end of file");
-        }
-        chunkSize -= 4;
-
-        // BYTE RATE
-        this.skipBytes(4L);
-        chunkSize -= 4L;
-
-        // BLOCK ALIGN
-        this.blockAlign = this.stream.read() | this.stream.read() << 8;
-        chunkSize -= 2L;
-
-        // BITS PER SAMPLE
-        this.bitsPerSample = this.stream.read() | this.stream.read() << 8;
-        chunkSize -= 2L;
-
-        if (this.audioFormat == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber()) {
-            final int cbSize = this.stream.read() | this.stream.read() << 8;
-            if (cbSize != 22) {
-                this.throwRuntimeError("Invalid wav file, EXTENSIBLE format is used, cbSize must be 22");
+    private WavFmtChunk readFmtChunk() {
+        try {
+            // FMT LITERAL
+            final boolean fmt = this.stream.read() == 'f' && this.stream.read() == 'm' && this.stream.read() == 't' && this.stream.read() == ' ';
+            if (!fmt) {
+                this.throwRuntimeError("Not a valid wav file, FMT  header missing");
             }
-            chunkSize -= 2L;
 
-            // VALID BITS PER SAMPLE
-            this.stream.read();
-            this.stream.read();
-            chunkSize -= 2L;
-
-            // CHANNEL MASK
-            this.stream.read();
-            this.stream.read();
-            this.stream.read();
-            this.stream.read();
-            chunkSize -= 4L;
-
-            // AUDIO FORMAT
-            this.audioFormat = this.stream.read() | this.stream.read() << 8;
-            chunkSize -= 2L;
-
-            // FIXED GUID STRING
-            final boolean guid1 = this.stream.read() == 0x00;
-            final boolean guid2 = this.stream.read() == 0x00;
-            final boolean guid3 = this.stream.read() == 0x00;
-            final boolean guid4 = this.stream.read() == 0x00;
-            final boolean guid5 = this.stream.read() == 0x10;
-            final boolean guid6 = this.stream.read() == 0x00;
-            final boolean guid7 = this.stream.read() == 0x80;
-            final boolean guid8 = this.stream.read() == 0x00;
-            final boolean guid9 = this.stream.read() == 0x00;
-            final boolean guid10 = this.stream.read() == 0xAA;
-            final boolean guid11 = this.stream.read() == 0x00;
-            final boolean guid12 = this.stream.read() == 0x38;
-            final boolean guid13 = this.stream.read() == 0x9b;
-            final boolean guid14 = this.stream.read() == 0x71;
-            final boolean valid = guid1 && guid2 && guid3 && guid4 && guid5 && guid6 && guid7 && guid8 && guid9 && guid10 && guid11 && guid12 && guid13
-                    && guid14;
-            if (!valid) {
-                this.throwRuntimeError("Invalid wav file, EXTENSIBLE format header is incorrect");
+            // SUB CHUNK SIZE
+            final int chunkSize = (int) this.read4Bytes();
+            if (chunkSize < 0) {
+                this.throwRuntimeError("Invalid wav file, unexpected end of file");
             }
-            chunkSize -= 14L;
 
-            this.logger.debug(this.getClass(), (this.fileName != null ? this.fileName : this.stream.toString())
-                    + " uses the EXTENSIBLE format which is only partly supported by TuningFork.");
+            final int[] chunkData = new int[chunkSize];
+            for (int i = 0; i < chunkSize; i++) {
+                chunkData[i] = this.stream.read();
+            }
+
+            return new WavFmtChunk(chunkData);
+        } catch (final IOException e) {
+            this.throwRuntimeError("An error occured while reading the wav file", e);
         }
 
-        // SKIP TO END OF CHUNK
-        this.skipBytes(chunkSize);
+        return null;
     }
 
 
@@ -226,30 +146,36 @@ public class WavInputStream implements AudioStream {
     }
 
 
-    private long skipToChunk(char byte1, char byte2, char byte3, char byte4) throws IOException {
-        while (true) {
-            // READ CHUNK ID
-            final int read1 = this.stream.read();
-            final int read2 = this.stream.read();
-            final int read3 = this.stream.read();
-            final int read4 = this.stream.read();
-            if (read1 < 0 || read2 < 0 || read3 < 0 || read4 < 0) {
-                return -1L;
-            }
+    private long skipToChunk(char byte1, char byte2, char byte3, char byte4) {
+        long chunkSize = -1L;
+        try {
+            while (true) {
+                // READ CHUNK ID
+                final int read1 = this.stream.read();
+                final int read2 = this.stream.read();
+                final int read3 = this.stream.read();
+                final int read4 = this.stream.read();
+                if (read1 < 0 || read2 < 0 || read3 < 0 || read4 < 0) {
+                    return -1L;
+                }
 
-            // CHECK IF FOUND
-            final boolean foundChunk = read1 == byte1 && read2 == byte2 && read3 == byte3 && read4 == byte4;
-            final long chunkSize = this.read4Bytes();
-            if (chunkSize < 0) {
-                return -1L;
-            }
-            if (foundChunk) {
-                return chunkSize;
-            }
+                // CHECK IF FOUND
+                final boolean foundChunk = read1 == byte1 && read2 == byte2 && read3 == byte3 && read4 == byte4;
+                chunkSize = this.read4Bytes();
+                if (chunkSize < 0) {
+                    return -1L;
+                }
+                if (foundChunk) {
+                    return chunkSize;
+                }
 
-            // NOT FOUND, SKIP TO NEXT CHUNK
-            this.skipBytes(chunkSize);
+                // NOT FOUND, SKIP TO NEXT CHUNK
+                this.skipBytes(chunkSize);
+            }
+        } catch (final IOException e) {
+            this.throwRuntimeError("An error occured while reading the wav file", e);
         }
+        return chunkSize;
     }
 
 
@@ -263,32 +189,32 @@ public class WavInputStream implements AudioStream {
     }
 
 
-    public long totalSamples() {
-        return this.totalSamples;
+    public long totalSamplesPerChannel() {
+        return this.decoder.outputTotalSamplesPerChannel();
     }
 
 
     @Override
     public int getChannels() {
-        return this.channels;
+        return this.decoder.outputChannels();
     }
 
 
     @Override
     public int getSampleRate() {
-        return this.sampleRate;
+        return this.decoder.outputSampleRate();
     }
 
 
     @Override
     public int getBitsPerSample() {
-        return this.bitsPerSample;
+        return this.decoder.outputBitsPerSample();
     }
 
 
     @Override
     public PcmDataType getPcmDataType() {
-        return this.decoder.getPcmDataType();
+        return this.decoder.outputPcmDataType();
     }
 
 

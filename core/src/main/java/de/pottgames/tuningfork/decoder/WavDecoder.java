@@ -17,7 +17,16 @@ public interface WavDecoder extends Closeable {
     int outputBitsPerSample();
 
 
-    PcmDataType getPcmDataType();
+    int outputChannels();
+
+
+    int outputSampleRate();
+
+
+    long outputTotalSamplesPerChannel();
+
+
+    PcmDataType outputPcmDataType();
 
 
     int read(byte[] output) throws IOException;

@@ -69,7 +69,7 @@ public class SoundBuffer implements Disposable {
         buffer.flip();
 
         // GEN BUFFER AND UPLOAD PCM DATA
-        this.bufferId = AL10.alGenBuffers();
+        this.bufferId = AL10.alGenBuffers(); 
         AL10.alBufferData(this.bufferId, pcmFormat.getAlId(), buffer.asShortBuffer(), sampleRate);
 
         // CHECK FOR ERRORS

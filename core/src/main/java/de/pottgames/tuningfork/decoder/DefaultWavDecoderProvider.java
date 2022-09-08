@@ -5,7 +5,14 @@ import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 public class DefaultWavDecoderProvider implements WavDecoderProvider {
 
     @Override
-    public WavDecoder getDecoder(int inputBitsPerSample, int channels, int audioFormat, int blockAlign) {
+    public WavDecoder getDecoder(WavFmtChunk fmtChunk) {
+        final int inputBitsPerSample = fmtChunk.getwBitsPerSample();
+        final int format = fmtChunk.getwFormatTag();
+        final int audioFormat = format == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber() ? fmtChunk.getSubFormatDataCode() : format;
+        final int channels = fmtChunk.getnChannels();
+        final int blockAlign = fmtChunk.getnBlockAlign();
+        final int sampleRate = (int) fmtChunk.getnSamplesPerSec();
+
         if (inputBitsPerSample <= 0) {
             return null;
         }
@@ -14,36 +21,36 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
             case 4:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_DVI_ADPCM.getRegNumber()) {
                     if (channels == 1 || channels == 2) {
-                        return new ImaAdpcmDecoder(blockAlign, channels);
+                        return new ImaAdpcmDecoder(blockAlign, channels, sampleRate);
                     }
                 }
                 break;
             case 8:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
-                    return new PcmDecoder(inputBitsPerSample, PcmDataType.INTEGER);
+                    return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.INTEGER);
                 }
                 break;
             case 16:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
-                    return new PcmDecoder(inputBitsPerSample, PcmDataType.INTEGER);
+                    return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.INTEGER);
                 }
                 break;
             case 24:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
-                    return new Int24To16PcmDecoder();
+                    return new Int24To16PcmDecoder(channels, sampleRate);
                 }
                 break;
             case 32:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_IEEE_FLOAT.getRegNumber()) {
-                    return new PcmDecoder(inputBitsPerSample, PcmDataType.FLOAT);
+                    return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.FLOAT);
                 }
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
-                    return new Int32To16PcmDecoder();
+                    return new Int32To16PcmDecoder(channels, sampleRate);
                 }
                 break;
             case 64:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_IEEE_FLOAT.getRegNumber()) {
-                    return new PcmDecoder(inputBitsPerSample, PcmDataType.FLOAT);
+                    return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.FLOAT);
                 }
                 break;
         }

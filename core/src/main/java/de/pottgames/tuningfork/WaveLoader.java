@@ -37,7 +37,7 @@ public abstract class WaveLoader {
         WavInputStream input = null;
         try {
             input = new WavInputStream(file);
-            final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
@@ -61,7 +61,7 @@ public abstract class WaveLoader {
         WavInputStream input = null;
         try {
             input = new WavInputStream(stream);
-            final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
@@ -85,7 +85,7 @@ public abstract class WaveLoader {
         WavInputStream input = null;
         try {
             input = new WavInputStream(new FileInputStream(file));
-            final byte[] buffer = new byte[(int) input.totalSamples() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } catch (final IOException ex) {
