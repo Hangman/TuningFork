@@ -1,5 +1,6 @@
 package de.pottgames.tuningfork.decoder;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,6 +13,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
     private final int          blockSize;
     private InputStream        stream;
     private final int          channels;
+    private final boolean      stereo;
     private long               bytesRemaining;
     private final byte         outputSamples[];
     private int                outputSamplePosition;
@@ -24,6 +26,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
     public ImaAdpcmDecoder(int blockSize, int channels, int sampleRate) {
         assert channels == 1 || channels == 2;
         this.channels = channels;
+        this.stereo = channels == 2;
         this.blockSize = blockSize;
         this.sampleRate = sampleRate;
         this.outputSamples = new byte[blockSize * 4 - 4 * channels];
@@ -34,7 +37,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
     @Override
     public void setup(InputStream stream, long streamLength) {
-        this.stream = stream;
+        this.stream = new BufferedInputStream(stream, this.blockSize * 2);
         this.bytesRemaining = streamLength;
 
         // CALC TOTAL SAMPLES
@@ -67,7 +70,6 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
     private int decodeNextBlock() throws IOException {
         int preambleBytes = 0;
-        final boolean interleaved = this.channels == 2;
 
         // READ LEFT CHANNEL PREAMBLE
         this.prediction[0].predictor = (short) (this.readByte() | this.readByte() << 8);
@@ -80,7 +82,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
         preambleBytes += 4;
 
         // READ RIGHT CHANNEL PREAMBLE
-        if (interleaved) {
+        if (this.stereo) {
             this.prediction[1].predictor = (short) (this.readByte() | this.readByte() << 8);
             this.prediction[1].stepIndex = MathUtils.clamp(this.readByte(), 0, 88);
             this.prediction[1].step = Prediction.STEP_TABLE[this.prediction[1].stepIndex];
@@ -98,7 +100,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
         int predictionIndex = 0;
         int outputSamplesIndexLeft = 0;
         int outputSamplesIndexRight = 2;
-        final int outputSampleStep = interleaved ? 3 : 1;
+        final int outputSampleStep = this.stereo ? 3 : 1;
         for (int i = 0; i < this.blockSize - preambleBytes; i++) {
 
             // READ INPUT BYTE
@@ -141,7 +143,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
             outputSamples += 2;
 
             // SETUP PREDICTION FOR NEXT BYTE
-            if (interleaved) {
+            if (this.stereo) {
                 byteChannelCounter += 1;
                 if (byteChannelCounter >= 4) {
                     byteChannelCounter = 0;
