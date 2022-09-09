@@ -12,10 +12,10 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.SOFTDirectChannelsRemix;
-
-import java.util.Objects;
 
 import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
@@ -220,6 +220,22 @@ public class AudioConfig {
     }
 
 
+    public WavDecoderProvider getResamplerProvider() {
+        return this.wavDecoderProvider;
+    }
+
+
+    /**
+     * Sets the decoder provider that is used by {@link WavInputStream}.
+     *
+     * @param decoderProvider must not be null
+     */
+    public void setWavDecoderProvider(WavDecoderProvider decoderProvider) {
+        Objects.requireNonNull(decoderProvider);
+        this.wavDecoderProvider = decoderProvider;
+    }
+
+
     /**
      * Holds different options for enabling/disabling the virtualization.
      *
@@ -271,21 +287,6 @@ public class AudioConfig {
             }
             return null;
         }
-    }
-
-    public WavDecoderProvider getResamplerProvider() {
-        return this.wavDecoderProvider;
-    }
-
-
-    /**
-     * Sets the decoder provider that is used by {@link WavInputStream}.
-     *
-     * @param decoderProvider must not be null
-     */
-    public void setWavDecoderProvider(WavDecoderProvider decoderProvider) {
-        Objects.requireNonNull(decoderProvider);
-        this.wavDecoderProvider = decoderProvider;
     }
 
 }
