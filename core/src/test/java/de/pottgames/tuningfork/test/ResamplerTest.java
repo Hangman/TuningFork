@@ -35,10 +35,10 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
         System.out.println("Press A to play the BufferedSoundSource");
         System.out.println("Press B to play the StreamedSoundSource");
 
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal("src/test/resources/numbers_8bit_mono_8kHz.wav"));
+        this.streamedSource = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
         this.streamedSource.setLooping(true);
 
-        this.sound = WaveLoader.load(Gdx.files.internal("src/test/resources/numbers_8bit_mono_8kHz.wav"));
+        this.sound = WaveLoader.load(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
         this.soundSource = this.audio.obtainSource(this.sound);
         this.soundSource.setLooping(true);
     }

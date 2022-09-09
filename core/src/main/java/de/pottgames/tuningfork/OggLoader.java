@@ -13,18 +13,53 @@
 package de.pottgames.tuningfork;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.decoder.OggInputStream;
+
 public abstract class OggLoader {
 
+    /**
+     * Loads an ogg into a {@link SoundBuffer}.
+     *
+     * @param file
+     *
+     * @return the SoundBuffer
+     */
     public static SoundBuffer load(FileHandle file) {
         return OggLoader.load(file.read());
     }
 
 
+    /**
+     * Loads an ogg into a {@link SoundBuffer}.
+     *
+     * @param file
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(File file) {
+        try {
+            return OggLoader.load(new FileInputStream(file));
+        } catch (final FileNotFoundException e) {
+            throw new TuningForkRuntimeException(e);
+        }
+    }
+
+
+    /**
+     * Loads sound data from an {@link InputStream} into a {@link SoundBuffer} using the ogg decoder and closes the stream afterwards.
+     *
+     * @param stream
+     *
+     * @return the SoundBuffer
+     */
     public static SoundBuffer load(InputStream stream) {
         SoundBuffer result = null;
         OggInputStream input = null;
@@ -39,7 +74,7 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample());
+            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

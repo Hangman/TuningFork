@@ -9,7 +9,7 @@ import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.PcmFormat;
 import de.pottgames.tuningfork.PcmSoundSource;
-import de.pottgames.tuningfork.WavInputStream;
+import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
@@ -27,7 +27,7 @@ public class PcmSoundSourceTest extends ApplicationAdapter {
         final AudioConfig config = new AudioConfig();
         config.setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
         this.audio = Audio.init(config);
-        this.stream = new WavInputStream(Gdx.files.internal("src/test/resources/numbers.wav"));
+        this.stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
         this.pcmSource = new PcmSoundSource(this.stream.getSampleRate(), PcmFormat.MONO_16_BIT);
         this.pcmSource.setLooping(false);
     }

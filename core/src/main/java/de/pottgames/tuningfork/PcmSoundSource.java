@@ -50,7 +50,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      */
     public PcmSoundSource(int sampleRate, PcmFormat pcmFormat) {
         final Audio audio = Audio.get();
-        this.logger = audio.logger;
+        this.logger = audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         this.sampleRate = sampleRate;

@@ -36,7 +36,7 @@ public class BufferedSoundSource extends SoundSource {
 
     BufferedSoundSource() {
         final Audio audio = Audio.get();
-        this.logger = audio.logger;
+        this.logger = audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
     }
 

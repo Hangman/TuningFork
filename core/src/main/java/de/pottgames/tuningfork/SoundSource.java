@@ -45,7 +45,7 @@ public abstract class SoundSource {
 
     SoundSource() {
         final Audio audio = Audio.get();
-        this.logger = audio.logger;
+        this.logger = audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         this.sourceId = AL10.alGenSources();
@@ -73,7 +73,7 @@ public abstract class SoundSource {
     /**
      * Sets the pitch of this sound source.
      *
-     * @param pitch (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      */
     public void setPitch(float pitch) {
         AL10.alSourcef(this.sourceId, AL10.AL_PITCH, pitch);

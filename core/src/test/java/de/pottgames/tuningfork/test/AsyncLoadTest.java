@@ -15,10 +15,10 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class AsyncLoadTest extends ApplicationAdapter {
-    private static final String FILE_PATH = "src/test/resources/numbers.wav";
+    private static final String FILE_PATH = "numbers.wav";
     private Audio               audio;
     private AssetManager        assetManager;
-    private SoundBuffer         soundBuffer;
+    private boolean             played    = false;
 
 
     @Override
@@ -33,23 +33,21 @@ public class AsyncLoadTest extends ApplicationAdapter {
         final FileHandleResolver resolver = new InternalFileHandleResolver();
         this.assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
         this.assetManager.load(AsyncLoadTest.FILE_PATH, SoundBuffer.class);
-        this.assetManager.finishLoading();
-        this.soundBuffer = this.assetManager.get(AsyncLoadTest.FILE_PATH, SoundBuffer.class);
-
-        // PLAY SOUND
-        this.audio.play(this.soundBuffer);
     }
 
 
     @Override
     public void render() {
-
+        if (this.assetManager.update(15) && !this.played) {
+            final SoundBuffer soundBuffer = this.assetManager.get(AsyncLoadTest.FILE_PATH, SoundBuffer.class);
+            this.audio.play(soundBuffer);
+            this.played = true;
+        }
     }
 
 
     @Override
     public void dispose() {
-        this.assetManager.unload(AsyncLoadTest.FILE_PATH);
         this.assetManager.dispose();
         this.audio.dispose();
     }

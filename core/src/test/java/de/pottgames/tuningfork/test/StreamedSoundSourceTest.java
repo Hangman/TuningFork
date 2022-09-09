@@ -18,7 +18,7 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.source = new StreamedSoundSource(Gdx.files.internal("src/test/resources/numbers_8bit_mono.wav"));
+        this.source = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono.wav"));
         System.out.println("Sound duration: " + this.source.getDuration() + "s");
         this.source.setLooping(true);
         this.source.play();

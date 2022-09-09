@@ -30,7 +30,7 @@ public class SoundEffect implements Disposable {
 
 
     public SoundEffect(SoundEffectData data) {
-        this.logger = Audio.get().logger;
+        this.logger = Audio.get().getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         // CREATE AUX SLOT

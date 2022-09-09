@@ -40,7 +40,7 @@ public class Filter implements Disposable {
      * @param volumeHf volume of the high frequencies, range: 0 - 1
      */
     public Filter(float volumeLf, float volumeHf) {
-        this.logger = Audio.get().logger;
+        this.logger = Audio.get().getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
         this.errorLogger.dismissError();
 

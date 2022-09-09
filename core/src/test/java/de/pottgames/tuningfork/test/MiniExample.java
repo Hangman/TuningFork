@@ -20,7 +20,7 @@ public class MiniExample extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("src/test/resources/numbers.wav"));
+        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
 
         // play the sound

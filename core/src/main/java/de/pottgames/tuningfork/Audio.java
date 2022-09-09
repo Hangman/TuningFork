@@ -28,6 +28,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
+import de.pottgames.tuningfork.decoder.WavDecoderProvider;
+import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
@@ -40,6 +42,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 public class Audio implements Disposable {
     private static Audio instance;
 
+    private final WavDecoderProvider               wavDecoderProvider;
     final Object                                   lock                          = new Object();
     private SoundListener                          listener;
     private SoundSourcePool                        sourcePool;
@@ -53,7 +56,7 @@ public class Audio implements Disposable {
     private float                                  defaultMaxAttenuationDistance = Float.MAX_VALUE;
     private float                                  defaultAttenuationFactor      = 1f;
     private Virtualization                         defaultVirtualization         = Virtualization.ON;
-    final TuningForkLogger                         logger;
+    private final TuningForkLogger                 logger;
     private final AudioDevice                      device;
     private int                                    defaultResamplerIndex         = -1;
 
@@ -135,6 +138,7 @@ public class Audio implements Disposable {
     private Audio(AudioDevice device, AudioConfig config) {
         this.logger = config.getLogger();
         this.device = device;
+        this.wavDecoderProvider = config.getResamplerProvider();
         Audio.instance = this;
 
         // INITIAL IDLE TASK CREATION FOR THE POOL
@@ -415,7 +419,7 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
     public void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -429,7 +433,7 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume and filter.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param filter
      */
     public void play(SoundBuffer buffer, float volume, Filter filter) {
@@ -445,7 +449,7 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume and effect.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param effect
      */
     public void play(SoundBuffer buffer, float volume, SoundEffect effect) {
@@ -461,8 +465,8 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume and pitch.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      */
     public void play(SoundBuffer buffer, float volume, float pitch) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -477,8 +481,8 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch and filter.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param filter
      */
     public void play(SoundBuffer buffer, float volume, float pitch, Filter filter) {
@@ -495,8 +499,8 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch and effect.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param effect
      */
     public void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
@@ -513,15 +517,16 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch and pan.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
-     * @param pan
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
+     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      */
     public void play(SoundBuffer buffer, float volume, float pitch, float pan) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
-        AL10.alSource3f(source.sourceId, AL10.AL_POSITION, MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
+        source.setAttenuationFactor(0f);
+        source.setPosition(MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
         source.play();
         source.obtained = false;
     }
@@ -531,16 +536,17 @@ public class Audio implements Disposable {
      * Plays the sound with the given volume, pitch, pan and effect.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
-     * @param pan
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
+     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      * @param effect
      */
     public void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
-        AL10.alSource3f(source.sourceId, AL10.AL_POSITION, MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
+        source.setAttenuationFactor(0f);
+        source.setPosition(MathUtils.cos((pan - 1f) * MathUtils.PI / 2f), 0f, MathUtils.sin((pan + 1f) * MathUtils.PI / 2f));
         source.attachEffect(effect);
         source.play();
         source.obtained = false;
@@ -615,7 +621,7 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume at the given position.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
      */
     public void play3D(SoundBuffer buffer, float volume, Vector3 position) {
@@ -631,7 +637,7 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume and filter at the given position.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
      * @param filter
      */
@@ -649,7 +655,7 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume and effect at the given position.
      *
      * @param buffer
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
      * @param effect
      */
@@ -667,8 +673,8 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume and pitch at the given position.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param position
      */
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
@@ -685,8 +691,8 @@ public class Audio implements Disposable {
      * Plays a spatial sound with the given volume, pitch and effect at the given position.
      *
      * @param buffer
-     * @param volume
-     * @param pitch
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      * @param position
      * @param effect
      */
@@ -885,6 +891,16 @@ public class Audio implements Disposable {
     }
 
 
+    /**
+     * Returns the wav decoder provider that is used by {@link WavInputStream}.
+     *
+     * @return the resampler provider
+     */
+    public WavDecoderProvider getWavDecoderProvider() {
+        return this.wavDecoderProvider;
+    }
+
+
     void postTask(StreamedSoundSource sound, TaskAction action) {
         this.postTask(sound, action, 0f);
     }
@@ -917,6 +933,11 @@ public class Audio implements Disposable {
     }
 
 
+    public TuningForkLogger getLogger() {
+        return this.logger;
+    }
+
+
     /**
      * Shuts down TuningFork.
      */
@@ -934,7 +955,7 @@ public class Audio implements Disposable {
         this.taskService.shutdown();
         try {
             if (!this.taskService.awaitTermination(500L, TimeUnit.MILLISECONDS)) {
-                this.logger.debug(this.getClass(), "The task service timed out on shutdown.");
+                this.getLogger().debug(this.getClass(), "The task service timed out on shutdown.");
             }
         } catch (final InterruptedException e) {
             this.taskService.shutdownNow();

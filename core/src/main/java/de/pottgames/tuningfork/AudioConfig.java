@@ -15,6 +15,11 @@ package de.pottgames.tuningfork;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.SOFTDirectChannelsRemix;
 
+import java.util.Objects;
+
+import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
+import de.pottgames.tuningfork.decoder.WavDecoderProvider;
+import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.GdxLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -26,6 +31,7 @@ public class AudioConfig {
     private int                      idleTasks;
     private Virtualization           virtualization;
     private TuningForkLogger         logger;
+    private WavDecoderProvider       wavDecoderProvider;
 
 
     /**
@@ -38,6 +44,7 @@ public class AudioConfig {
         this.setSimultaneousSources(20);
         this.setIdleTasks(10);
         this.setVirtualization(Virtualization.ON);
+        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
@@ -60,6 +67,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualization(Virtualization.ON);
+        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
@@ -83,6 +91,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualization(virtualization);
+        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
@@ -198,7 +207,7 @@ public class AudioConfig {
      * Sets the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the available
      * logger implementations that are shipped with TuningFork.
      *
-     * @param logger
+     * @param logger may be null to turn off logging
      *
      * @return this
      */
@@ -262,6 +271,21 @@ public class AudioConfig {
             }
             return null;
         }
+    }
+
+    public WavDecoderProvider getResamplerProvider() {
+        return this.wavDecoderProvider;
+    }
+
+
+    /**
+     * Sets the decoder provider that is used by {@link WavInputStream}.
+     *
+     * @param decoderProvider must not be null
+     */
+    public void setWavDecoderProvider(WavDecoderProvider decoderProvider) {
+        Objects.requireNonNull(decoderProvider);
+        this.wavDecoderProvider = decoderProvider;
     }
 
 }

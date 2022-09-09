@@ -48,7 +48,7 @@ public class DeviceTest {
         final Audio audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
 
         // LOAD SOUND
-        final File soundFile = new File("src/test/resources/numbers.wav");
+        final File soundFile = new File("numbers.wav");
         final SoundBuffer sound = WaveLoader.load(soundFile);
 
         // PLAY SOUND
