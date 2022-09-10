@@ -1,7 +1,5 @@
 package de.pottgames.tuningfork.decoder;
 
-import de.pottgames.tuningfork.DataFormatException;
-
 public class WavFmtChunk {
     public final int    length;
     private final int[] data;
@@ -36,25 +34,9 @@ public class WavFmtChunk {
                     this.dwChannelMask = data[20] | data[21] << 8 | data[22] << 16 | data[23] << 24;
                     if (data.length > 24) {
                         this.subFormatDataCode = data[24] | data[25] << 8;
-                        final boolean guid1 = data[26] == 0x00;
-                        final boolean guid2 = data[27] == 0x00;
-                        final boolean guid3 = data[28] == 0x00;
-                        final boolean guid4 = data[29] == 0x00;
-                        final boolean guid5 = data[30] == 0x10;
-                        final boolean guid6 = data[31] == 0x00;
-                        final boolean guid7 = data[32] == 0x80;
-                        final boolean guid8 = data[33] == 0x00;
-                        final boolean guid9 = data[34] == 0x00;
-                        final boolean guid10 = data[35] == 0xAA;
-                        final boolean guid11 = data[36] == 0x00;
-                        final boolean guid12 = data[37] == 0x38;
-                        final boolean guid13 = data[38] == 0x9b;
-                        final boolean guid14 = data[39] == 0x71;
-                        final boolean validGuid = guid1 && guid2 && guid3 && guid4 && guid5 && guid6 && guid7 && guid8 && guid9 && guid10 && guid11 && guid12
-                                && guid13 && guid14;
-                        if (!validGuid) {
-                            throw new DataFormatException("Invalid extension GUID");
-                        }
+
+                        // The remaining 14 bytes contain a fixed string, \x00\x00\x00\x00\x10\x00\x80\x00\x00\xAA\x00\x38\x9B\x71. Encoders don't seem to
+                        // follow this specification, hence we don't validate it.
                     }
                 }
             }
