@@ -123,7 +123,12 @@ public class MsAdpcmDecoder implements WavDecoder {
             predictor = predictor >>> 8;
             predictor += (nibble1 & 0b111) * leftDelta;
             predictor *= (nibble1 & 0b1000) != 0 ? -1 : 1;
-            int sample = predictor & 0xFFFF;
+            int sample = predictor;
+            if (sample > Short.MAX_VALUE) {
+                sample = Short.MAX_VALUE;
+            } else if (sample < Short.MIN_VALUE) {
+                sample = Short.MIN_VALUE;
+            }
             this.outputSamples[this.outputSamplePosition++] = (byte) sample;
             this.outputSamples[this.outputSamplePosition++] = (byte) (sample >>> 8);
             this.prediction.leftSample2 = this.prediction.leftSample1;
@@ -136,7 +141,12 @@ public class MsAdpcmDecoder implements WavDecoder {
                 rightPredictor = rightPredictor >>> 8;
                 rightPredictor += (nibble2 & 0b111) * rightDelta;
                 rightPredictor *= (nibble2 & 0b1000) != 0 ? -1 : 1;
-                final int rightSample = rightPredictor & 0xFFFF;
+                int rightSample = rightPredictor;
+                if (rightSample > Short.MAX_VALUE) {
+                    rightSample = Short.MAX_VALUE;
+                } else if (rightSample < Short.MIN_VALUE) {
+                    rightSample = Short.MIN_VALUE;
+                }
                 this.outputSamples[this.outputSamplePosition++] = (byte) rightSample;
                 this.outputSamples[this.outputSamplePosition++] = (byte) (rightSample >>> 8);
                 this.prediction.rightSample2 = this.prediction.rightSample1;
@@ -147,7 +157,12 @@ public class MsAdpcmDecoder implements WavDecoder {
                 predictor = predictor >>> 8;
                 predictor += (nibble1 & 0b111) * leftDelta;
                 predictor *= (nibble1 & 0b1000) != 0 ? -1 : 1;
-                sample = predictor & 0xFFFF;
+                sample = predictor;
+                if (sample > Short.MAX_VALUE) {
+                    sample = Short.MAX_VALUE;
+                } else if (sample < Short.MIN_VALUE) {
+                    sample = Short.MIN_VALUE;
+                }
                 this.outputSamples[this.outputSamplePosition++] = (byte) sample;
                 this.outputSamples[this.outputSamplePosition++] = (byte) (sample >>> 8);
                 this.prediction.leftSample2 = this.prediction.leftSample1;
