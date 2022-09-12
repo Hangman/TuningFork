@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,9 +26,9 @@ import org.lwjgl.openal.AL11;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.StreamUtils;
+import com.jcraft.jorbis.JOrbisException;
+import com.jcraft.jorbis.VorbisFile;
 
-import de.pottgames.com.jcraft.jorbis.JOrbisException;
-import de.pottgames.com.jcraft.jorbis.VorbisFile;
 import de.pottgames.tuningfork.Audio.TaskAction;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.decoder.AudioStream;
@@ -99,10 +101,10 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
                 this.duration = (float) flacStream.totalSamples() / flacStream.getSampleRate();
                 break;
             case OGG:
-                try {
-                    final VorbisFile vorbisFile = new VorbisFile(file.file());
+                try (InputStream vorbisStream = file.read()) {
+                    final VorbisFile vorbisFile = new VorbisFile(vorbisStream, null, 0);
                     this.duration = vorbisFile.time_total(-1);
-                } catch (final JOrbisException e) {
+                } catch (final JOrbisException | IOException e) {
                     this.logger.error(this.getClass(), "Couldn't measure the sound duration of: " + file.path());
                 }
                 break;
