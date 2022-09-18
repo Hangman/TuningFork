@@ -91,6 +91,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/WavExtensibleFormatTest.class'
      exclude 'de/pottgames/tuningfork/test/ImaAdpcmWavMonoTest.class'
      exclude 'de/pottgames/tuningfork/test/ImaAdpcmWavStereoTest.class'
+     exclude 'de/pottgames/tuningfork/test/Mp3LoadDemo.class'
  }
 
 publishing {
