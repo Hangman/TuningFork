@@ -97,7 +97,7 @@ test {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'de.pottgames'
+            groupId = project.group
             artifactId = project.name
             version = project.version
 
