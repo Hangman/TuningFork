@@ -36,7 +36,7 @@ public class PanningTest extends ApplicationAdapter {
 
 
     private void playSound(float pan) {
-        this.audio.play(this.sound, 1f, 1f, pan);
+        this.sound.play(1f, 1f, pan);
         this.soundPlayStartTime = System.currentTimeMillis();
     }
 

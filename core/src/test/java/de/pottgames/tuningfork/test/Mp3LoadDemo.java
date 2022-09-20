@@ -72,7 +72,7 @@ public class Mp3LoadDemo extends ApplicationAdapter {
             throw new TuningForkRuntimeException("Error reading audio data.", ex);
         }
 
-        this.audio.play(this.sound);
+        this.sound.play();
     }
 
 

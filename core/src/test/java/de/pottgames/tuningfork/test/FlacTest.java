@@ -28,11 +28,11 @@ public class FlacTest extends ApplicationAdapter {
         // load and play SoundBuffer
         this.sound = FlacLoader.load(Gdx.files.internal("src/test/resources/numbers_8bit_mono.flac"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
-        this.audio.play(this.sound);
+        this.sound.play();
 
         // load and play StreamedSoundSource delayed
         this.streamedSound = new StreamedSoundSource(Gdx.files.internal("src/test/resources/numbers_16bit_stereo.flac"));
-        System.out.println("streamed sound duration: " + this.streamedSound.getDuration() + "s");
+        System.out.println("Streamed sound duration: " + this.streamedSound.getDuration() + "s");
         this.streamedSound.setLooping(true);
         try {
             Thread.sleep(100);

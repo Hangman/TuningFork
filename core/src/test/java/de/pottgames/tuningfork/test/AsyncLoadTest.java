@@ -40,7 +40,7 @@ public class AsyncLoadTest extends ApplicationAdapter {
     public void render() {
         if (this.assetManager.update(15) && !this.played) {
             final SoundBuffer soundBuffer = this.assetManager.get(AsyncLoadTest.FILE_PATH, SoundBuffer.class);
-            this.audio.play(soundBuffer);
+            soundBuffer.play();
             this.played = true;
         }
     }

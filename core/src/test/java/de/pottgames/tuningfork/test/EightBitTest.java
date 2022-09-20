@@ -24,7 +24,7 @@ public class EightBitTest extends ApplicationAdapter {
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
 
         // play the sound
-        this.audio.play(this.sound);
+        this.sound.play();
     }
 
 
