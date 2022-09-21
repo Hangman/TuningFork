@@ -29,20 +29,8 @@ public abstract class WaveLoader {
      *
      * @return the SoundBuffer
      */
-    public static SoundBuffer load(FileHandle file) {
-        SoundBuffer result = null;
-
-        WavInputStream input = null;
-        try {
-            input = new WavInputStream(file);
-            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
-            input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
-        } finally {
-            StreamUtils.closeQuietly(input);
-        }
-
-        return result;
+    public static SoundBuffer load(File file) {
+        return WaveLoader.load(Gdx.files.absolute(file.getAbsolutePath()));
     }
 
 
@@ -53,12 +41,12 @@ public abstract class WaveLoader {
      *
      * @return the SoundBuffer
      */
-    public static SoundBuffer load(File file) {
+    public static SoundBuffer load(FileHandle file) {
         SoundBuffer result = null;
 
         WavInputStream input = null;
         try {
-            input = new WavInputStream(Gdx.files.absolute(file.getAbsolutePath()));
+            input = new WavInputStream(file);
             final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
