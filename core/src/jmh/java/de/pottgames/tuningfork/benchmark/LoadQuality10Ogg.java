@@ -1,7 +1,6 @@
 package de.pottgames.tuningfork.benchmark;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -25,7 +24,7 @@ public class LoadQuality10Ogg {
 
     @Benchmark
     public void load() throws FileNotFoundException {
-        this.soundBuffer = OggLoader.load(new FileInputStream(new File("src/jmh/resources/bench_10.ogg")));
+        this.soundBuffer = OggLoader.load(new File("src/jmh/resources/bench_10.ogg"));
     }
 
 

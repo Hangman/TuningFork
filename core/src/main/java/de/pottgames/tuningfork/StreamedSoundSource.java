@@ -12,8 +12,6 @@
 
 package de.pottgames.tuningfork;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,8 +24,6 @@ import org.lwjgl.openal.AL11;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.StreamUtils;
-import com.jcraft.jorbis.JOrbisException;
-import com.jcraft.jorbis.VorbisFile;
 
 import de.pottgames.tuningfork.Audio.TaskAction;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
@@ -38,12 +34,17 @@ import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
+/**
+ * A {@link SoundSource} that streams audio data instead of loading all data at once into memory.
+ *
+ * @author Matthias
+ *
+ */
 public class StreamedSoundSource extends SoundSource implements Disposable {
-    public static final int        BUFFER_SIZE_PER_CHANNEL         = 32000;
-    public static final int        BUFFER_COUNT                    = 3;
+    public static int              bufferSizePerChannel            = 32000;
+    public static int              bufferCount                     = 3;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
-    private final FileHandle       file;
     private AudioStream            audioStream;
     private final float            secondsPerBuffer;
     private final IntBuffer        buffers;
@@ -60,7 +61,6 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
     private volatile boolean       readyToDispose                  = false;
     private float                  duration                        = -1f;
-    private SoundFileType          soundFileType;
 
 
     /**
@@ -69,52 +69,36 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
      * @param file
      */
     public StreamedSoundSource(FileHandle file) {
-        if (file == null) {
-            throw new TuningForkRuntimeException("file is null");
+        this(StreamedSoundSource.createAudioStream(file));
+    }
+
+
+    /**
+     * Creates a new {@link StreamedSoundSource} from a {@link AudioStream} and loads the first bits of sound data.
+     *
+     * @param stream
+     */
+    public StreamedSoundSource(AudioStream stream) {
+        if (stream == null) {
+            throw new TuningForkRuntimeException("stream is null");
         }
 
         // FETCH AND SET DEPENDENCIES
         this.audio = Audio.get();
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
-        this.file = file;
 
         // SET DEFAULTS
         this.setAttenuationFactor(this.audio.getDefaultAttenuationFactor());
         this.setAttenuationMinDistance(this.audio.getDefaultAttenuationMinDistance());
         this.setAttenuationMaxDistance(this.audio.getDefaultAttenuationMaxDistance());
 
-        // CHECK FILE TYPE
-        final String fileExtension = file.extension();
-        this.soundFileType = SoundFileType.getByFileEnding(fileExtension);
-        if (this.soundFileType == null) {
-            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac and wav files are supported.");
-        }
-
         // CREATE INPUT STREAM
-        this.initInputStream(false);
-
-        // CHECK DURATION
-        switch (this.soundFileType) {
-            case FLAC:
-                final FlacInputStream flacStream = (FlacInputStream) this.audioStream;
-                this.duration = (float) flacStream.totalSamples() / flacStream.getSampleRate();
-                break;
-            case OGG:
-                try (InputStream vorbisStream = file.read()) {
-                    final VorbisFile vorbisFile = new VorbisFile(vorbisStream, null, 0);
-                    this.duration = vorbisFile.time_total(-1);
-                } catch (final JOrbisException | IOException e) {
-                    this.logger.error(this.getClass(), "Couldn't measure the sound duration of: " + file.path());
-                }
-                break;
-            case WAV:
-                final WavInputStream wavStream = (WavInputStream) this.audioStream;
-                this.duration = (float) wavStream.totalSamplesPerChannel() / wavStream.getSampleRate();
-                break;
-        }
+        this.audioStream = stream;
+        this.resetProcessedBuffersOnBufferId.set(this.lastQueuedBufferId.get());
 
         // FETCH DATA & FORMAT FROM INPUT STREAM
+        this.duration = stream.getDuration();
         final int sampleRate = this.audioStream.getSampleRate();
         final int channels = this.audioStream.getChannels();
         final int sampleDepth = this.audioStream.getBitsPerSample();
@@ -126,11 +110,11 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         }
 
         // CREATE BUFFERS
-        this.bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
+        this.bufferSize = StreamedSoundSource.bufferSizePerChannel * channels;
         this.tempBuffer = BufferUtils.createByteBuffer(this.bufferSize);
         this.tempBytes = new byte[this.bufferSize];
         this.secondsPerBuffer = (float) this.bufferSize / (bytesPerSample * channels * sampleRate);
-        this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
+        this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.bufferCount);
         AL10.alGenBuffers(this.buffers);
 
         // INITIAL BUFFER FILL
@@ -141,24 +125,9 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     }
 
 
-    private void initInputStream(boolean reuseInputStream) {
+    private void resetStream() {
         this.resetProcessedBuffersOnBufferId.set(this.lastQueuedBufferId.get());
-        if (this.audioStream != null && !this.audioStream.isClosed()) {
-            StreamUtils.closeQuietly(this.audioStream);
-        }
-
-        switch (this.soundFileType) {
-            case FLAC:
-                this.audioStream = new FlacInputStream(this.file);
-                break;
-            case OGG:
-                this.audioStream = new OggInputStream(this.file.read(),
-                        reuseInputStream && this.audioStream instanceof OggInputStream ? (OggInputStream) this.audioStream : null);
-                break;
-            case WAV:
-                this.audioStream = new WavInputStream(this.file);
-                break;
-        }
+        this.audioStream = this.audioStream.reset();
     }
 
 
@@ -234,7 +203,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         // FULL RESET
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
-        this.initInputStream(false);
+        this.resetStream();
 
         // SKIP THE INPUT STREAM UNTIL THE NEW POSITION IS IN REACH
         float currentSeconds = 0f;
@@ -319,7 +288,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
         this.processedBuffers = 0;
-        this.initInputStream(false);
+        this.resetStream();
         this.fillAllBuffers();
         this.playing.set(false);
         this.stopped.set(true);
@@ -343,7 +312,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
             if (!this.looping) {
                 return false;
             }
-            this.initInputStream(true);
+            this.resetStream();
             length = this.audioStream.read(this.tempBytes);
             if (length <= 0) {
                 return false;
@@ -361,7 +330,7 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         this.resetProcessedBuffersOnBufferId.set(0);
         this.lastQueuedBufferId.set(0);
         int filledBufferCount = 0;
-        for (int i = 0; i < StreamedSoundSource.BUFFER_COUNT; i++) {
+        for (int i = 0; i < StreamedSoundSource.bufferCount; i++) {
             final int bufferId = this.buffers.get(i);
             if (!this.fillBuffer(bufferId)) {
                 break;
@@ -400,6 +369,23 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
 
     void readyToDispose() {
         this.readyToDispose = true;
+    }
+
+
+    private static AudioStream createAudioStream(FileHandle file) {
+        final String fileExtension = file.extension();
+        final SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+
+        switch (soundFileType) {
+            case FLAC:
+                return new FlacInputStream(file);
+            case OGG:
+                return new OggInputStream(file, null);
+            case WAV:
+                return new WavInputStream(file);
+        }
+
+        return null;
     }
 
 

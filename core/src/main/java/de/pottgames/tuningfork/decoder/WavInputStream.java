@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat;
@@ -28,23 +29,17 @@ public class WavInputStream implements AudioStream {
     private WavFmtChunk            fmtChunk;
     private WavDecoder             decoder;
     private final TuningForkLogger logger;
-    private final String           fileName;
+    private final FileHandle       file;
+    private final float            duration;
     private boolean                closed = false;
-
-
-    public WavInputStream(InputStream input) {
-        this.stream = input;
-        this.fileName = null;
-        this.logger = Audio.get().getLogger();
-        this.setup();
-    }
 
 
     public WavInputStream(FileHandle file) {
         this.stream = file.read();
-        this.fileName = file.toString();
+        this.file = file;
         this.logger = Audio.get().getLogger();
         this.setup();
+        this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
     }
 
 
@@ -189,6 +184,19 @@ public class WavInputStream implements AudioStream {
     }
 
 
+    @Override
+    public float getDuration() {
+        return this.duration;
+    }
+
+
+    @Override
+    public AudioStream reset() {
+        StreamUtils.closeQuietly(this);
+        return new WavInputStream(this.file);
+    }
+
+
     public long totalSamplesPerChannel() {
         return this.decoder.outputTotalSamplesPerChannel();
     }
@@ -225,15 +233,9 @@ public class WavInputStream implements AudioStream {
 
     private void throwRuntimeError(String message, Exception e) {
         if (e == null) {
-            if (this.fileName != null) {
-                throw new TuningForkRuntimeException(message + ": " + this.fileName);
-            }
-            throw new TuningForkRuntimeException(message + ": " + this.stream.toString());
+            throw new TuningForkRuntimeException(message + ": " + this.file.toString());
         }
-        if (this.fileName != null) {
-            throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + this.fileName, e);
-        }
-        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + this.stream.toString(), e);
+        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + this.file.toString(), e);
     }
 
 
