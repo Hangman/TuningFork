@@ -381,7 +381,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play()} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.play();
@@ -397,7 +397,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(Filter)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, Filter filter) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setFilter(filter);
@@ -414,7 +414,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.attachEffect(effect);
@@ -431,7 +431,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -449,7 +449,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, Filter)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, Filter filter) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -468,7 +468,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -487,7 +487,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, float)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, float pitch) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -507,7 +507,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, float, Filter)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, float pitch, Filter filter) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -528,7 +528,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, float, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -549,7 +549,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, float, float)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, float pitch, float pan) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -572,7 +572,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play(float, float, float, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
@@ -593,7 +593,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(Vector3)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
@@ -611,7 +611,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(Vector3, Filter)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, Vector3 position, Filter filter) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
@@ -630,7 +630,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(Vector3, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
@@ -650,7 +650,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(Vector3, Filter, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, Vector3 position, Filter filter, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
@@ -670,7 +670,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(float, Vector3)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, float volume, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -690,7 +690,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(float, Vector3, Filter)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, float volume, Vector3 position, Filter filter) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -711,7 +711,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(float, Vector3, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, float volume, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -732,7 +732,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(float, float, Vector3)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
@@ -754,7 +754,7 @@ public class Audio implements Disposable {
      *
      * @deprecated This method will be removed in the future. Use {@link SoundBuffer#play3D(float, float, Vector3, SoundEffect)} instead.
      */
-    @Deprecated(since = "3.1.0", forRemoval = true)
+    @Deprecated
     public void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
