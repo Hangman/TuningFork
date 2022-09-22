@@ -28,6 +28,7 @@ import java.nio.ByteOrder;
 import org.lwjgl.BufferUtils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 import com.jcraft.jogg.Packet;
@@ -38,6 +39,8 @@ import com.jcraft.jorbis.Block;
 import com.jcraft.jorbis.Comment;
 import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
+import com.jcraft.jorbis.JOrbisException;
+import com.jcraft.jorbis.VorbisFile;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
@@ -47,8 +50,11 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
  *
  * @author kevin
  */
-public class OggInputStream extends InputStream implements AudioStream {
+public class OggInputStream implements AudioStream {
     private final static int BUFFER_SIZE = 512;
+
+    private final FileHandle file;
+    private final float      duration;
 
     /** The conversion buffer size */
     private int         convsize = OggInputStream.BUFFER_SIZE * 4;
@@ -97,41 +103,47 @@ public class OggInputStream extends InputStream implements AudioStream {
     private boolean    closed = false;
 
 
-    /**
-     * Create a new stream to decode OGG data
-     *
-     * @param input The input stream from which to read the OGG file
-     */
-    public OggInputStream(InputStream input) {
-        this(input, null);
-    }
-
-
-    /**
-     * Create a new stream to decode OGG data, reusing buffers from another stream.
-     *
-     * It's not a good idea to use the old stream instance afterwards.
-     *
-     * @param input The input stream from which to read the OGG file
-     * @param previousStream The stream instance to reuse buffers from, may be null
-     */
-    public OggInputStream(InputStream input, OggInputStream previousStream) {
-        if (previousStream == null) {
-            this.convbuffer = new byte[this.convsize];
-            this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
-        } else {
+    public OggInputStream(FileHandle file, OggInputStream previousStream) {
+        if (previousStream != null) {
             this.convbuffer = previousStream.convbuffer;
             this.pcmBuffer = previousStream.pcmBuffer;
+        } else {
+            this.convbuffer = new byte[this.convsize];
+            this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
         }
 
-        this.input = input;
+        this.input = file.read();
         try {
-            this.total = input.available();
+            this.total = this.input.available();
         } catch (final IOException ex) {
             throw new TuningForkRuntimeException(ex);
         }
 
         this.init();
+
+        this.file = file;
+
+        float duration = -1f;
+        try (InputStream vorbisStream = file.read()) {
+            final VorbisFile vorbisFile = new VorbisFile(vorbisStream, null, 0);
+            duration = vorbisFile.time_total(-1);
+        } catch (final JOrbisException | IOException e) {
+            // ignore
+        }
+        this.duration = duration;
+    }
+
+
+    @Override
+    public AudioStream reset() {
+        this.close();
+        return new OggInputStream(this.file, this);
+    }
+
+
+    @Override
+    public float getDuration() {
+        return this.duration;
     }
 
 
@@ -167,13 +179,6 @@ public class OggInputStream extends InputStream implements AudioStream {
     private void init() {
         this.initVorbis();
         this.readPCM();
-    }
-
-
-    /** @see java.io.InputStream#available() */
-    @Override
-    public int available() {
-        return this.endOfStream ? 0 : 1;
     }
 
 
@@ -476,7 +481,6 @@ public class OggInputStream extends InputStream implements AudioStream {
     }
 
 
-    @Override
     public int read() {
         if (this.readIndex >= this.pcmBuffer.position()) {
             ((Buffer) this.pcmBuffer).clear();
@@ -502,7 +506,6 @@ public class OggInputStream extends InputStream implements AudioStream {
     }
 
 
-    @Override
     public int read(byte[] b, int off, int len) {
         for (int i = 0; i < len; i++) {
             final int value = this.read();

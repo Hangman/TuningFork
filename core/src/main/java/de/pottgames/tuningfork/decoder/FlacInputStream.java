@@ -30,6 +30,8 @@ public class FlacInputStream implements AudioStream {
     private int[][]     sampleBuffer;
     private int         sampleBufferBlockSize;
     private final int   bytesPerSample;
+    private final float duration;
+    private final File  file;
 
 
     public FlacInputStream(FileHandle file) {
@@ -38,6 +40,7 @@ public class FlacInputStream implements AudioStream {
 
 
     public FlacInputStream(File file) {
+        this.file = file;
         try {
             this.decoder = new FlacDecoder(file);
             while (this.decoder.readAndHandleMetadataBlock() != null) {
@@ -63,15 +66,30 @@ public class FlacInputStream implements AudioStream {
         if (bitsPerSample != 8 && bitsPerSample != 16) {
             throw new TuningForkRuntimeException("Unsupported bits per sample in flac file, only 8 and 16 Bit is supported.");
         }
-        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * numChannels) {
+        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.bufferSizePerChannel * numChannels) {
             throw new TuningForkRuntimeException(
-                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL + " per channel");
+                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.bufferSizePerChannel + " per channel");
         }
 
         this.sampleBuffer = new int[this.decoder.streamInfo.numChannels][65536];
         this.bytesPerSample = this.decoder.streamInfo.sampleDepth / 8;
 
         this.readBlock();
+
+        this.duration = (float) this.totalSamples() / this.getSampleRate();
+    }
+
+
+    @Override
+    public float getDuration() {
+        return this.duration;
+    }
+
+
+    @Override
+    public AudioStream reset() {
+        StreamUtils.closeQuietly(this);
+        return new FlacInputStream(this.file);
     }
 
 

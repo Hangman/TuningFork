@@ -1,7 +1,6 @@
 package de.pottgames.tuningfork.benchmark;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -10,6 +9,9 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
@@ -25,12 +27,13 @@ public class LoadQuality5Ogg {
 
     @Benchmark
     public void load() throws FileNotFoundException {
-        this.soundBuffer = OggLoader.load(new FileInputStream(new File("src/jmh/resources/bench_5.ogg")));
+        this.soundBuffer = OggLoader.load(new File("src/jmh/resources/bench_5.ogg"));
     }
 
 
     @Setup(Level.Iteration)
     public void setup() {
+        Gdx.files = new Lwjgl3Files();
         final AudioConfig config = new AudioConfig();
         config.setLogger(new MockLogger());
         this.audio = Audio.init(config);
