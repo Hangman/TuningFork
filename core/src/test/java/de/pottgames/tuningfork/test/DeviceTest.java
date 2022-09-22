@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
+
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDeviceConfig;
@@ -19,6 +22,7 @@ public class DeviceTest {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        Gdx.files = new Lwjgl3Files();
 
         // FETCH AVAILABLE DEVICES
         final List<String> deviceList = Audio.availableDevices();
