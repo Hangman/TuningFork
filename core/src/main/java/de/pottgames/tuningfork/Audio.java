@@ -327,7 +327,7 @@ public class Audio implements Disposable {
 
 
     /**
-     * Sets the global volume that is applied to all sources.
+     * Sets the global volume that is applied to all sources. Values above 1 or below 0 will be clamped.
      *
      * @param volume range: 0 - 1
      */
