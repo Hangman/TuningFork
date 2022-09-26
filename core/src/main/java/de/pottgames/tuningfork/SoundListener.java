@@ -32,6 +32,11 @@ public class SoundListener {
     }
 
 
+    float getMasterVolume() {
+        return AL10.alGetListenerf(AL10.AL_GAIN);
+    }
+
+
     public SoundListener setSpeed(Vector3 speed) {
         return this.setSpeed(speed.x, speed.y, speed.z);
     }

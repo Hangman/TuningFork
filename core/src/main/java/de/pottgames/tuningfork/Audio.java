@@ -317,6 +317,16 @@ public class Audio implements Disposable {
 
 
     /**
+     * Returns the global volume value that is applied to all sources.
+     *
+     * @return the master volume in the range: 0 - 1
+     */
+    public float getMasterVolume() {
+        return this.listener.getMasterVolume();
+    }
+
+
+    /**
      * Sets the global volume that is applied to all sources.
      *
      * @param volume range: 0 - 1
