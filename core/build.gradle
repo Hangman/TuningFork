@@ -92,6 +92,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/ImaAdpcmWavMonoTest.class'
      exclude 'de/pottgames/tuningfork/test/ImaAdpcmWavStereoTest.class'
      exclude 'de/pottgames/tuningfork/test/Mp3LoadDemo.class'
+     exclude 'de/pottgames/tuningfork/test/Mp3StreamDemo.class'
  }
 
 publishing {
