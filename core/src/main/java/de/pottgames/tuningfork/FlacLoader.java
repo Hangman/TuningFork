@@ -22,17 +22,14 @@ import de.pottgames.tuningfork.decoder.FlacInputStream;
 public abstract class FlacLoader {
 
     /**
-     * Loads a flac file into a {@link SoundBuffer}.<br>
-     * <br>
-     * <b>Important:</b> Flac files cannot be read from a jar file. The libGDX setup tool as well as liftoff both pack all assets into the jar in the
-     * desktop:dist gradle task by default. So you should take care to exclude flac files and deliver them separately.
+     * Loads a flac file into a {@link SoundBuffer}.
      *
      * @param file
      *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle file) {
-        return FlacLoader.load(file.file());
+        return FlacLoader.load(new FlacInputStream(file));
     }
 
 
@@ -44,16 +41,19 @@ public abstract class FlacLoader {
      * @return the SoundBuffer
      */
     public static SoundBuffer load(File file) {
+        return FlacLoader.load(new FlacInputStream(file));
+    }
+
+
+    private static SoundBuffer load(FlacInputStream flacStream) {
         SoundBuffer result = null;
-        FlacInputStream input = null;
 
         try {
-            input = new FlacInputStream(file);
-            final byte[] buffer = new byte[(int) input.totalSamples() * input.getBytesPerSample() * input.getChannels()];
-            input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            final byte[] buffer = new byte[(int) flacStream.totalSamples() * flacStream.getBytesPerSample() * flacStream.getChannels()];
+            flacStream.read(buffer);
+            result = new SoundBuffer(buffer, flacStream.getChannels(), flacStream.getSampleRate(), flacStream.getBitsPerSample(), flacStream.getPcmDataType());
         } finally {
-            StreamUtils.closeQuietly(input);
+            StreamUtils.closeQuietly(flacStream);
         }
 
         return result;

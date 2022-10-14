@@ -25,24 +25,24 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
 import io.nayuki.flac.decode.FlacDecoder;
 
 public class FlacInputStream implements AudioStream {
-    private FlacDecoder decoder;
-    private boolean     closed = false;
-    private int[][]     sampleBuffer;
-    private int         sampleBufferBlockSize;
-    private final int   bytesPerSample;
-    private final float duration;
-    private final File  file;
-
-
-    public FlacInputStream(FileHandle file) {
-        this(file.file());
-    }
+    private FlacDecoder      decoder;
+    private boolean          closed = false;
+    private int[][]          sampleBuffer;
+    private int              sampleBufferBlockSize;
+    private final int        bytesPerSample;
+    private final float      duration;
+    private final FileHandle fileHandle;
 
 
     public FlacInputStream(File file) {
-        this.file = file;
+        this(new FileHandle(file));
+    }
+
+
+    public FlacInputStream(FileHandle file) {
+        this.fileHandle = file;
         try {
-            this.decoder = new FlacDecoder(file);
+            this.decoder = new FlacDecoder(file.read());
             while (this.decoder.readAndHandleMetadataBlock() != null) {
                 // read all meta data blocks
             }
@@ -89,7 +89,7 @@ public class FlacInputStream implements AudioStream {
     @Override
     public AudioStream reset() {
         StreamUtils.closeQuietly(this);
-        return new FlacInputStream(this.file);
+        return new FlacInputStream(this.fileHandle);
     }
 
 
