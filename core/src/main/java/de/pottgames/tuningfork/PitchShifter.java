@@ -39,8 +39,9 @@ public class PitchShifter extends SoundEffectData {
 
 
     /**
-     * Sets {@link PitchShifter#coarseTune} and {@link PitchShifter#fineTune} to values that try to correct a pitch applied to a {@link SoundSource}, so that
-     * the sound appears to be played back at a pitch of 1. This way, it is possible to change the playback speed of a sound without changing its pitch.<br>
+     * Sets {@link PitchShifter#coarseTune coarseTune} and {@link PitchShifter#fineTune fineTune} to values that try to correct a pitch applied to a
+     * {@link SoundSource}, so that the sound appears to be played back at a pitch of 1. This way, it is possible to change the playback speed of a sound
+     * without changing its pitch.<br>
      * <br>
      * <b>Note:</b> In order to only hear the pitch corrected sound, the direct sound path must be muted with the help of a {@link Filter} set to [0,0].
      *
