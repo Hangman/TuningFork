@@ -45,12 +45,12 @@ public class PitchShifter extends SoundEffectData {
      * <br>
      * <b>Note:</b> In order to only hear the pitch corrected sound, the direct sound path must be muted with the help of a {@link Filter} set to [0,0].
      *
-     * @param pitch - pitch correction only works for 0.5 <= pitch <= 1.5
+     * @param pitch - pitch correction only works for 0.5 <= pitch <= 2
      *
      * @return the PitchShifter for chaining
      */
     public PitchShifter correctPitch(float pitch) {
-        pitch = MathUtils.clamp(pitch, 0.5f, 1.5f);
+        pitch = MathUtils.clamp(pitch, 0.5f, 2f);
 
         final float semitones = (float) (12d / Math.log(2d) * Math.log(1d / pitch));
         this.coarseTune = Math.round(semitones);
