@@ -71,7 +71,7 @@ public interface AudioStream extends Closeable {
      *
      * @param bytes the byte array to store the bytes in
      *
-     * @return number of bytes read
+     * @return number of bytes read or -1 if there are no bytes left
      */
     int read(byte[] bytes);
 
