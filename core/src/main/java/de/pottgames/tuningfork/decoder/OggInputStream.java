@@ -27,9 +27,7 @@ import java.nio.ByteOrder;
 
 import org.lwjgl.BufferUtils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 import com.jcraft.jogg.Packet;
 import com.jcraft.jogg.Page;
@@ -42,19 +40,23 @@ import com.jcraft.jorbis.Info;
 import com.jcraft.jorbis.JOrbisException;
 import com.jcraft.jorbis.VorbisFile;
 
+import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
  * An input stream to read Ogg Vorbis.
  *
  * @author kevin
+ * @author Matthias
  */
 public class OggInputStream implements AudioStream {
     private final static int BUFFER_SIZE = 512;
 
-    private final FileHandle file;
-    private final float      duration;
+    private final FileHandle       file;
+    private final float            duration;
+    private final TuningForkLogger logger;
 
     /** The conversion buffer size */
     private int         convsize = OggInputStream.BUFFER_SIZE * 4;
@@ -104,6 +106,8 @@ public class OggInputStream implements AudioStream {
 
 
     public OggInputStream(FileHandle file, OggInputStream previousStream) {
+        this.logger = Audio.get().getLogger();
+
         if (previousStream != null) {
             this.convbuffer = previousStream.convbuffer;
             this.pcmBuffer = previousStream.pcmBuffer;
@@ -214,7 +218,7 @@ public class OggInputStream implements AudioStream {
         try {
             this.bytes = this.input.read(this.buffer, index, OggInputStream.BUFFER_SIZE);
         } catch (final Exception e) {
-            throw new GdxRuntimeException("Failure reading Vorbis.", e);
+            throw new TuningForkRuntimeException("Failure reading Vorbis.", e);
         }
         this.syncState.wrote(this.bytes);
 
@@ -226,7 +230,7 @@ public class OggInputStream implements AudioStream {
             }
 
             // error case. Must not be Vorbis data
-            throw new GdxRuntimeException("Input does not appear to be an Ogg bitstream.");
+            throw new TuningForkRuntimeException("Input does not appear to be an Ogg bitstream.");
         }
 
         // Get the serial number and set up the rest of decode.
@@ -245,17 +249,17 @@ public class OggInputStream implements AudioStream {
         this.comment.init();
         if (this.streamState.pagein(this.page) < 0) {
             // error; stream version mismatch perhaps
-            throw new GdxRuntimeException("Error reading first page of Ogg bitstream.");
+            throw new TuningForkRuntimeException("Error reading first page of Ogg bitstream.");
         }
 
         if (this.streamState.packetout(this.packet) != 1) {
             // no page? must not be vorbis
-            throw new GdxRuntimeException("Error reading initial header packet.");
+            throw new TuningForkRuntimeException("Error reading initial header packet.");
         }
 
         if (this.oggInfo.synthesis_headerin(this.comment, this.packet) < 0) {
             // error case; not a vorbis header
-            throw new GdxRuntimeException("Ogg bitstream does not contain Vorbis audio data.");
+            throw new TuningForkRuntimeException("Ogg bitstream does not contain Vorbis audio data.");
         }
 
         // At this point, we're sure we're Vorbis. We've set up the logical
@@ -290,7 +294,7 @@ public class OggInputStream implements AudioStream {
                         if (result == -1) {
                             // Uh oh; data at some point was corrupted or missing!
                             // We can't tolerate that in a header. Die.
-                            throw new GdxRuntimeException("Corrupt secondary header.");
+                            throw new TuningForkRuntimeException("Corrupt secondary header.");
                         }
 
                         this.oggInfo.synthesis_headerin(this.comment, this.packet);
@@ -307,10 +311,10 @@ public class OggInputStream implements AudioStream {
             try {
                 this.bytes = this.input.read(this.buffer, index, OggInputStream.BUFFER_SIZE);
             } catch (final Exception e) {
-                throw new GdxRuntimeException("Failed to read Vorbis.", e);
+                throw new TuningForkRuntimeException("Failed to read Vorbis.", e);
             }
             if (this.bytes == 0 && i < 2) {
-                throw new GdxRuntimeException("End of file before finding all Vorbis headers.");
+                throw new TuningForkRuntimeException("End of file before finding all Vorbis headers.");
             }
             this.syncState.wrote(this.bytes);
         }
@@ -359,8 +363,7 @@ public class OggInputStream implements AudioStream {
                     }
 
                     if (result == -1) { // missing or corrupt data at this page position
-                        // throw new GdxRuntimeException("Corrupt or missing data in bitstream.");
-                        Gdx.app.log("gdx-audio", "Error reading OGG: Corrupt or missing data in bitstream.");
+                        this.logger.error(this.getClass(), "Error reading OGG: Corrupt or missing data in bitstream.");
                     } else {
                         this.streamState.pagein(this.page); // can safely ignore errors at
                         // this point
@@ -421,7 +424,7 @@ public class OggInputStream implements AudioStream {
 
                                     final int bytesToWrite = 2 * this.oggInfo.channels * bout;
                                     if (bytesToWrite > this.pcmBuffer.remaining()) {
-                                        throw new GdxRuntimeException(
+                                        throw new TuningForkRuntimeException(
                                                 "Ogg block too big to be buffered: " + bytesToWrite + " :: " + this.pcmBuffer.remaining());
                                     }
                                     this.pcmBuffer.put(this.convbuffer, 0, bytesToWrite);
@@ -451,7 +454,7 @@ public class OggInputStream implements AudioStream {
                         try {
                             this.bytes = this.input.read(this.buffer, index, OggInputStream.BUFFER_SIZE);
                         } catch (final Exception e) {
-                            throw new GdxRuntimeException("Error during Vorbis decoding.", e);
+                            throw new TuningForkRuntimeException("Error during Vorbis decoding.", e);
                         }
                     } else {
                         this.bytes = 0;
