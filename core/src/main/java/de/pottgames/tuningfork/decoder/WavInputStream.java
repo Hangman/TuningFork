@@ -24,6 +24,12 @@ import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
+/**
+ * An {@link AudioStream} implementation to read wav files.
+ *
+ * @author Matthias
+ *
+ */
 public class WavInputStream implements AudioStream {
     private final InputStream      stream;
     private WavFmtChunk            fmtChunk;

@@ -24,6 +24,12 @@ import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import io.nayuki.flac.decode.FlacDecoder;
 
+/**
+ * An {@link AudioStream} implementation to read flac files.
+ *
+ * @author Matthias
+ *
+ */
 public class FlacInputStream implements AudioStream {
     private FlacDecoder      decoder;
     private boolean          closed = false;
