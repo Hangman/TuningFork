@@ -40,9 +40,29 @@ public class WavInputStream implements AudioStream {
     private boolean                closed = false;
 
 
+    /**
+     * Initializes a {@link WavInputStream} from a {@link FileHandle}.
+     *
+     * @param file
+     */
     public WavInputStream(FileHandle file) {
         this.stream = file.read();
         this.file = file;
+        this.logger = Audio.get().getLogger();
+        this.setup();
+        this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
+    }
+
+
+    /**
+     * Initializes a {@link WavInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
+     * {@link #WavInputStream(FileHandle)} instead to get the full functionality.
+     *
+     * @param stream
+     */
+    public WavInputStream(InputStream stream) {
+        this.stream = stream;
+        this.file = null;
         this.logger = Audio.get().getLogger();
         this.setup();
         this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
@@ -198,6 +218,9 @@ public class WavInputStream implements AudioStream {
 
     @Override
     public AudioStream reset() {
+        if (this.file == null) {
+            throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
+        }
         StreamUtils.closeQuietly(this);
         return new WavInputStream(this.file);
     }

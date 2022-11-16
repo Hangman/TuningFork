@@ -14,6 +14,7 @@ package de.pottgames.tuningfork.decoder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
@@ -40,11 +41,68 @@ public class FlacInputStream implements AudioStream {
     private final FileHandle fileHandle;
 
 
+    /**
+     * Initializes a {@link FlacInputStream} from a {@link File}.
+     *
+     * @param file
+     */
     public FlacInputStream(File file) {
         this(new FileHandle(file));
     }
 
 
+    /**
+     * Initializes a {@link FlacInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
+     * {@link #FlacInputStream(FileHandle)} instead to get the full functionality.
+     *
+     * @param stream
+     */
+    public FlacInputStream(InputStream stream) {
+        this.fileHandle = null;
+        try {
+            this.decoder = new FlacDecoder(stream);
+            while (this.decoder.readAndHandleMetadataBlock() != null) {
+                // read all meta data blocks
+            }
+        } catch (final IOException e) {
+            StreamUtils.closeQuietly(this);
+            throw new TuningForkRuntimeException(e);
+        }
+
+        // CHECK IF THE FLAC FILE IS SUPPORTED
+        if (this.decoder == null) {
+            throw new TuningForkRuntimeException("FlacInputStream couldn't be opened.");
+        }
+        if (this.decoder.streamInfo == null) {
+            throw new TuningForkRuntimeException("Missing StreamInfo in flac file.");
+        }
+        final int numChannels = this.decoder.streamInfo.numChannels;
+        if (!PcmFormat.isSupportedChannelCount(numChannels)) {
+            throw new TuningForkRuntimeException("Unsupported number of channels in flac file. Must be 1, 2, 4, 6, 7 or 8 but is: " + numChannels);
+        }
+        final int bitsPerSample = this.decoder.streamInfo.sampleDepth;
+        if (bitsPerSample != 8 && bitsPerSample != 16) {
+            throw new TuningForkRuntimeException("Unsupported bits per sample in flac file, only 8 and 16 Bit is supported.");
+        }
+        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.bufferSizePerChannel * numChannels) {
+            throw new TuningForkRuntimeException(
+                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.bufferSizePerChannel + " per channel");
+        }
+
+        this.sampleBuffer = new int[this.decoder.streamInfo.numChannels][65536];
+        this.bytesPerSample = this.decoder.streamInfo.sampleDepth / 8;
+
+        this.readBlock();
+
+        this.duration = (float) this.totalSamples() / this.getSampleRate();
+    }
+
+
+    /**
+     * Initializes a {@link FlacInputStream} from a {@link FileHandle}.
+     *
+     * @param file
+     */
     public FlacInputStream(FileHandle file) {
         this.fileHandle = file;
         try {
@@ -94,6 +152,9 @@ public class FlacInputStream implements AudioStream {
 
     @Override
     public AudioStream reset() {
+        if (this.fileHandle == null) {
+            throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
+        }
         StreamUtils.closeQuietly(this);
         return new FlacInputStream(this.fileHandle);
     }

@@ -13,6 +13,7 @@
 package de.pottgames.tuningfork;
 
 import java.io.File;
+import java.io.InputStream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
@@ -45,6 +46,25 @@ public abstract class FlacLoader {
     }
 
 
+    /**
+     * Loads a flac stream into a {@link SoundBuffer} and closes it afterwards.
+     *
+     * @param stream
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(InputStream stream) {
+        return FlacLoader.load(new FlacInputStream(stream));
+    }
+
+
+    /**
+     * Loads a {@link SoundBuffer} from a {@link FlacInputStream}.
+     *
+     * @param input
+     *
+     * @return the SoundBuffer
+     */
     private static SoundBuffer load(FlacInputStream flacStream) {
         SoundBuffer result = null;
 

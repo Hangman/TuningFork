@@ -13,6 +13,7 @@
 package de.pottgames.tuningfork;
 
 import java.io.File;
+import java.io.InputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -42,11 +43,34 @@ public abstract class WaveLoader {
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle file) {
-        SoundBuffer result = null;
+        final WavInputStream input = new WavInputStream(file);
+        return WaveLoader.load(input);
+    }
 
-        WavInputStream input = null;
+
+    /**
+     * Loads a {@link SoundBuffer} from an {@link InputStream} and closes it afterwards.
+     *
+     * @param stream
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(InputStream stream) {
+        final WavInputStream input = new WavInputStream(stream);
+        return WaveLoader.load(input);
+    }
+
+
+    /**
+     * Loads a {@link SoundBuffer} from a {@link WavInputStream}.
+     *
+     * @param input
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(WavInputStream input) {
+        SoundBuffer result = null;
         try {
-            input = new WavInputStream(file);
             final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());

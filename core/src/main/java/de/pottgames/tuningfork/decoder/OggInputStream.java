@@ -105,6 +105,13 @@ public class OggInputStream implements AudioStream {
     private boolean    closed = false;
 
 
+    /**
+     * Initializes a {@link OggInputStream} from a {@link FileHandle} and an optional {@link OggInputStream} for buffer reusage, the old stream shouldn't be
+     * used afterwards.
+     *
+     * @param file
+     * @param previousStream may be null
+     */
     public OggInputStream(FileHandle file, OggInputStream previousStream) {
         this.logger = Audio.get().getLogger();
 
@@ -138,8 +145,39 @@ public class OggInputStream implements AudioStream {
     }
 
 
+    /**
+     * Initializes a {@link OggInputStream} from an {@link InputStream}. This stream does not support the reset and getDuration function. Use
+     * {@link #OggInputStream(FileHandle, OggInputStream)} instead to get the full functionality.
+     *
+     * @param stream
+     */
+    public OggInputStream(InputStream stream) {
+        this.logger = Audio.get().getLogger();
+
+        this.convbuffer = new byte[this.convsize];
+        this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
+
+        this.input = stream;
+        try {
+            this.total = this.input.available();
+        } catch (final IOException ex) {
+            throw new TuningForkRuntimeException(ex);
+        }
+
+        this.init();
+
+        this.file = null;
+
+        final float duration = -1f;
+        this.duration = duration;
+    }
+
+
     @Override
     public AudioStream reset() {
+        if (this.file == null) {
+            throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
+        }
         this.close();
         return new OggInputStream(this.file, this);
     }

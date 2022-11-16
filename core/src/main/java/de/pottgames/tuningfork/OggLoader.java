@@ -14,6 +14,7 @@ package de.pottgames.tuningfork;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -43,10 +44,34 @@ public abstract class OggLoader {
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle file) {
+        final OggInputStream input = new OggInputStream(file, null);
+        return OggLoader.load(input);
+    }
+
+
+    /**
+     * Loads an ogg input stream into a {@link SoundBuffer} and closes it afterwards.
+     *
+     * @param stream
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(InputStream stream) {
+        final OggInputStream input = new OggInputStream(stream);
+        return OggLoader.load(input);
+    }
+
+
+    /**
+     * Loads a {@link SoundBuffer} from a {@link OggInputStream}.
+     *
+     * @param input
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(OggInputStream input) {
         SoundBuffer result = null;
-        OggInputStream input = null;
         try {
-            input = new OggInputStream(file, null);
             final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
             final byte[] buffer = new byte[2048];
             while (!input.atEnd()) {

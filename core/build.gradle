@@ -1,5 +1,5 @@
 buildscript {
-	project.version = '4.0.0'
+	project.version = '3.1.0'
 	project.group = 'de.pottgames'
 }
 
@@ -94,6 +94,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/Mp3LoadDemo.class'
      exclude 'de/pottgames/tuningfork/test/Mp3StreamDemo.class'
      exclude 'de/pottgames/tuningfork/test/SpeedOnlyChangeTest.class'
+     exclude 'de/pottgames/tuningfork/test/LoaderInputStreamTest.class'
  }
 
 publishing {
