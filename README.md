@@ -23,7 +23,7 @@ TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that prov
 
 ### Limitations
 * Lwjgl3 only, sorry mobile and web users
-* **flac** files must not be in a **jar** file (this limitation will be resolved in 4.0.0)
+* **flac** files must not be in a **jar** file (this limitation will be resolved in the next release)
 * **mp3** not officially supported, but you can play it nevertheless
 
 ### Why
