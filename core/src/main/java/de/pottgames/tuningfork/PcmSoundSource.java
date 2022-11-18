@@ -38,7 +38,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     private final ErrorLogger      errorLogger;
     private final IntArray         freeBufferIds = new IntArray();
     private final ByteBuffer       tempBuffer;
-    private final PcmFormat        format;
+    private final int              formatAlId;
     private final int              sampleRate;
 
 
@@ -54,7 +54,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         this.sampleRate = sampleRate;
-        this.format = pcmFormat;
+        this.formatAlId = pcmFormat.getAlId();
         this.tempBuffer = BufferUtils.createByteBuffer(PcmSoundSource.BUFFER_SIZE);
 
         for (int i = 0; i < PcmSoundSource.INITIAL_BUFFER_COUNT; i++) {
@@ -93,7 +93,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
             final int writtenLength = Math.min(PcmSoundSource.BUFFER_SIZE, length);
             this.tempBuffer.clear();
             this.tempBuffer.put(pcm, offset, writtenLength).flip();
-            AL10.alBufferData(alBufferId, this.format.getAlId(), this.tempBuffer, this.sampleRate);
+            AL10.alBufferData(alBufferId, this.formatAlId, this.tempBuffer, this.sampleRate);
             AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
             length -= writtenLength;
             offset += writtenLength;
@@ -116,7 +116,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     public void queueSamples(ByteBuffer pcm) {
         this.unqueueProcessedBuffers();
         final int alBufferId = this.getFreeBufferId();
-        AL10.alBufferData(alBufferId, this.format.getAlId(), pcm, this.sampleRate);
+        AL10.alBufferData(alBufferId, this.formatAlId, pcm, this.sampleRate);
         AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
     }
 
@@ -136,7 +136,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     public void queueSamples(ShortBuffer pcm) {
         this.unqueueProcessedBuffers();
         final int alBufferId = this.getFreeBufferId();
-        AL10.alBufferData(alBufferId, this.format.getAlId(), pcm, this.sampleRate);
+        AL10.alBufferData(alBufferId, this.formatAlId, pcm, this.sampleRate);
         AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
     }
 
