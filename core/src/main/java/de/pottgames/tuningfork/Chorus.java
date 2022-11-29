@@ -67,7 +67,7 @@ public class Chorus extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_CHORUS);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_WAVEFORM, this.waveForm);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_PHASE, this.phase);

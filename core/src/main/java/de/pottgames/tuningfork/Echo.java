@@ -59,7 +59,7 @@ public class Echo extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_ECHO);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DELAY, this.delay);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_LRDELAY, this.lrDelay);

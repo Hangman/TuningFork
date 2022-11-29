@@ -62,7 +62,7 @@ public class Flanger extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FLANGER);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_WAVEFORM, this.waveform);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_PHASE, this.phase);

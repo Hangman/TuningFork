@@ -3569,7 +3569,7 @@ public class EaxReverb extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DENSITY, this.density);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DIFFUSION, this.diffusion);

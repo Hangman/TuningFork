@@ -57,7 +57,7 @@ public class Distortion extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_DISTORTION);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EDGE, this.edge);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_GAIN, this.gain);

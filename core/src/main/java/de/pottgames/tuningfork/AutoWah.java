@@ -51,7 +51,7 @@ public class AutoWah extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_AUTOWAH);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_ATTACK_TIME, this.attackTime);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RELEASE_TIME, this.releaseTime);

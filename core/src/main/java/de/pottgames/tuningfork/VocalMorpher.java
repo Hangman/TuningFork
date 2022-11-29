@@ -66,7 +66,7 @@ public class VocalMorpher extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_VOCAL_MORPHER);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA, this.phonemea);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB, this.phonemeb);

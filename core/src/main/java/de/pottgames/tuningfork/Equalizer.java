@@ -84,7 +84,7 @@ public class Equalizer extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EQUALIZER);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_GAIN, this.lowGain);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_CUTOFF, this.lowCutoff);

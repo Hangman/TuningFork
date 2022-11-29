@@ -140,7 +140,7 @@ public class Reverb extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_REVERB);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_DENSITY, this.density);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_DIFFUSION, this.diffusion);

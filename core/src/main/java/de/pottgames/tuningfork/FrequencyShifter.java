@@ -48,7 +48,7 @@ public class FrequencyShifter extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FREQUENCY_SHIFTER);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_FREQUENCY, this.frequency);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION, this.leftDirection);

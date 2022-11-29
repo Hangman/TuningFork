@@ -62,7 +62,7 @@ public class PitchShifter extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_PITCH_SHIFTER);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_COARSE_TUNE, this.coarseTune);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_FINE_TUNE, this.fineTune);

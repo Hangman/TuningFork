@@ -31,7 +31,7 @@ public class Compressor extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_COMPRESSOR);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_COMPRESSOR_ONOFF, this.onOff);
     }

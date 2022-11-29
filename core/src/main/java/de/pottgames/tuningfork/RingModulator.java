@@ -46,7 +46,7 @@ public class RingModulator extends SoundEffectData {
 
 
     @Override
-    void apply(int effectId) {
+    protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_RING_MODULATOR);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_FREQUENCY, this.frequency);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_HIGHPASS_CUTOFF, this.highpassCutoff);
