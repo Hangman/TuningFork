@@ -53,12 +53,12 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
     private final ByteBuffer       tempBuffer;
     private final byte[]           tempBytes;
     private final Audio            audio;
-    private AtomicBoolean          playing                         = new AtomicBoolean(false);
-    private AtomicBoolean          stopped                         = new AtomicBoolean(true);
+    private final AtomicBoolean    playing                         = new AtomicBoolean(false);
+    private final AtomicBoolean    stopped                         = new AtomicBoolean(true);
     private volatile boolean       looping                         = false;
     private volatile int           processedBuffers                = 0;
-    private AtomicInteger          lastQueuedBufferId              = new AtomicInteger();
-    private AtomicInteger          resetProcessedBuffersOnBufferId = new AtomicInteger();
+    private final AtomicInteger    lastQueuedBufferId              = new AtomicInteger();
+    private final AtomicInteger    resetProcessedBuffersOnBufferId = new AtomicInteger();
     private volatile boolean       readyToDispose                  = false;
     private float                  duration                        = -1f;
 
