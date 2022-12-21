@@ -29,7 +29,7 @@ import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 public class FilterTest extends ApplicationAdapter {
     private Audio               audio;
     private SoundBuffer         sound;
-    private Filter[]            filters     = new Filter[3];
+    private final Filter[]            filters     = new Filter[3];
     private int                 filterIndex = 0;
     private BufferedSoundSource soundSource;
 

@@ -38,7 +38,7 @@ enum Note {
     SILENCE(1f);
 
 
-    private float frequency;
+    private final float frequency;
 
 
     Note(float frequency) {

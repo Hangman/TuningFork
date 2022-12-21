@@ -68,8 +68,7 @@ public class Int32To16PcmDecoder implements WavDecoder {
             return Int32To16PcmDecoder.END_OF_STREAM;
         }
 
-        final long outputSample = inputSample >>> 16;
-        return outputSample;
+        return inputSample >>> 16;
     }
 
 
@@ -91,7 +90,7 @@ public class Int32To16PcmDecoder implements WavDecoder {
             this.bytesRemaining = 0;
         }
 
-        return byte1 | byte2 << 8 | byte3 << 16 | byte4 << 24;
+        return byte1 | (long) byte2 << 8 | (long) byte3 << 16 | (long) byte4 << 24;
     }
 
 

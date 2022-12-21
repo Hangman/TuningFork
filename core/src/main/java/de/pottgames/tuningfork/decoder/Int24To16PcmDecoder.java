@@ -68,8 +68,7 @@ public class Int24To16PcmDecoder implements WavDecoder {
             return Int24To16PcmDecoder.END_OF_STREAM;
         }
 
-        final short outputSample = (short) (inputSample >>> 8);
-        return outputSample;
+        return (short) (inputSample >>> 8);
     }
 
 

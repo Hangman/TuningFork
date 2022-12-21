@@ -29,8 +29,7 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
     @Override
     public void create() {
         this.audio = Audio.init();
-
-        this.source = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono.wav"));
+        this.source = new StreamedSoundSource(Gdx.files.absolute("src/test/resources/rhythm3.flac"));
         System.out.println("Sound duration: " + this.source.getDuration() + "s");
         this.source.setLooping(true);
         this.source.play();
@@ -39,11 +38,26 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        System.out.println("current playback position: " + this.source.getPlaybackPosition() + "s");
+        final float pos = this.source.getPlaybackPosition();
+        System.out.println("current playback position: " + pos + "s");
 
         // PRESS SPACE TO SKIP TO 5s
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             this.source.setPlaybackPosition(5f);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            if (this.source.isPlaying()) {
+                this.source.pause();
+            } else {
+                this.source.play();
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            if (this.source.isPlaying()) {
+                this.source.stop();
+            } else {
+                this.source.play();
+            }
         }
     }
 

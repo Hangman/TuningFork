@@ -32,7 +32,6 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  */
 public class WavInputStream implements AudioStream {
     private final InputStream      stream;
-    private WavFmtChunk            fmtChunk;
     private WavDecoder             decoder;
     private final TuningForkLogger logger;
     private final FileHandle       file;
@@ -71,7 +70,7 @@ public class WavInputStream implements AudioStream {
 
     private void setup() {
         this.readRiffChunk();
-        this.fmtChunk = this.readFmtChunk();
+        final WavFmtChunk fmtChunk = this.readFmtChunk();
 
         final long bytesRemaining = this.skipToChunk('d', 'a', 't', 'a');
         if (bytesRemaining < 0L) {
@@ -80,7 +79,7 @@ public class WavInputStream implements AudioStream {
 
         // FIND DECODER
         final WavDecoderProvider provider = Audio.get().getWavDecoderProvider();
-        this.decoder = provider.getDecoder(this.fmtChunk);
+        this.decoder = provider.getDecoder(fmtChunk);
         if (this.decoder == null) {
             this.throwRuntimeError("Unsupported wav file format");
         }

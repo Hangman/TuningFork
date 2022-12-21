@@ -27,6 +27,7 @@ import java.nio.ByteOrder;
 
 import org.lwjgl.BufferUtils;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 import com.jcraft.jogg.Packet;
@@ -37,7 +38,6 @@ import com.jcraft.jorbis.Block;
 import com.jcraft.jorbis.Comment;
 import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
-import com.jcraft.jorbis.JOrbisException;
 import com.jcraft.jorbis.VorbisFile;
 
 import de.pottgames.tuningfork.Audio;
@@ -59,31 +59,31 @@ public class OggInputStream implements AudioStream {
     private final TuningForkLogger logger;
 
     /** The conversion buffer size */
-    private int         convsize = OggInputStream.BUFFER_SIZE * 4;
+    private int               convsize = OggInputStream.BUFFER_SIZE * 4;
     /** The buffer used to read OGG file */
-    private byte[]      convbuffer;
+    private final byte[]      convbuffer;
     /** The stream we're reading the OGG file from */
-    private InputStream input;
+    private final InputStream input;
     /** The audio information from the OGG header */
-    private Info        oggInfo  = new Info();                    // struct that stores all the static vorbis bitstream settings
+    private final Info        oggInfo  = new Info();                    // struct that stores all the static vorbis bitstream settings
     /** True if we're at the end of the available data */
-    private boolean     endOfStream;
+    private boolean           endOfStream;
 
     /** The Vorbis SyncState used to decode the OGG */
-    private SyncState   syncState   = new SyncState();   // sync and verify incoming physical bitstream
+    private final SyncState   syncState   = new SyncState();   // sync and verify incoming physical bitstream
     /** The Vorbis Stream State used to decode the OGG */
-    private StreamState streamState = new StreamState(); // take physical pages, weld into a logical stream of packets
+    private final StreamState streamState = new StreamState(); // take physical pages, weld into a logical stream of packets
     /** The current OGG page */
-    private Page        page        = new Page();        // one Ogg bitstream page. Vorbis packets are inside
+    private final Page        page        = new Page();        // one Ogg bitstream page. Vorbis packets are inside
     /** The current packet page */
-    private Packet      packet      = new Packet();      // one raw packet of data for decode
+    private final Packet      packet      = new Packet();      // one raw packet of data for decode
 
     /** The comment read from the OGG file */
-    private Comment  comment     = new Comment();            // struct that stores all the bitstream user comments
+    private final Comment  comment     = new Comment();            // struct that stores all the bitstream user comments
     /** The Vorbis DSP stat eused to decode the OGG */
-    private DspState dspState    = new DspState();           // central working state for the packet->PCM decoder
+    private final DspState dspState    = new DspState();           // central working state for the packet->PCM decoder
     /** The OGG block we're currently working with to convert PCM */
-    private Block    vorbisBlock = new Block(this.dspState); // local working space for packet->PCM decode
+    private final Block    vorbisBlock = new Block(this.dspState); // local working space for packet->PCM decode
 
     /** Temporary scratch buffer */
     byte[]  buffer;
@@ -97,12 +97,12 @@ public class OggInputStream implements AudioStream {
     boolean inited         = false;
 
     /** The index into the byte array we currently read from */
-    private int        readIndex;
+    private int              readIndex;
     /** The byte array store used to hold the data read from the ogg */
-    private ByteBuffer pcmBuffer;
+    private final ByteBuffer pcmBuffer;
     /** The total number of bytes */
-    private int        total;
-    private boolean    closed = false;
+    private final int        total;
+    private boolean          closed = false;
 
 
     /**
@@ -118,9 +118,28 @@ public class OggInputStream implements AudioStream {
         if (previousStream != null) {
             this.convbuffer = previousStream.convbuffer;
             this.pcmBuffer = previousStream.pcmBuffer;
+            this.duration = previousStream.duration;
         } else {
             this.convbuffer = new byte[this.convsize];
             this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
+
+            float duration = -1f;
+            final FileType fileType = file.type();
+            if (fileType == FileType.Absolute || fileType == FileType.External) {
+                try {
+                    final VorbisFile vorbisFile = new VorbisFile(file.file().getAbsolutePath());
+                    duration = vorbisFile.time_total(-1);
+                } catch (final Throwable e) {
+                    this.logger.warn(this.getClass(), "Couldn't measure the duration: " + e.getMessage());
+                }
+            } else {
+                final StringBuilder builder = new StringBuilder();
+                builder.append("Can't measure the duration of: ");
+                builder.append(file.path());
+                builder.append(" - solution: use Gdx.files.absolute() and exclude it from being packed in the jar on distribution");
+                this.logger.warn(this.getClass(), builder.toString());
+            }
+            this.duration = duration;
         }
 
         this.input = file.read();
@@ -134,14 +153,6 @@ public class OggInputStream implements AudioStream {
 
         this.file = file;
 
-        float duration = -1f;
-        try (InputStream vorbisStream = file.read()) {
-            final VorbisFile vorbisFile = new VorbisFile(vorbisStream, null, 0);
-            duration = vorbisFile.time_total(-1);
-        } catch (final JOrbisException | IOException e) {
-            // ignore
-        }
-        this.duration = duration;
     }
 
 
@@ -168,8 +179,7 @@ public class OggInputStream implements AudioStream {
 
         this.file = null;
 
-        final float duration = -1f;
-        this.duration = duration;
+        this.duration = -1f;
     }
 
 

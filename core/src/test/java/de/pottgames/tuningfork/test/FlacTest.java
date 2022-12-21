@@ -64,6 +64,7 @@ public class FlacTest extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.sound.dispose();
+        this.streamedSound.dispose();
 
         // always dispose Audio last
         this.audio.dispose();

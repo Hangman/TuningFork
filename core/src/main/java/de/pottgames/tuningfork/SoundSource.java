@@ -33,8 +33,8 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 public abstract class SoundSource {
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
-    final int                      sourceId;
-    private SoundEffect[]          effects               = new SoundEffect[2];
+    protected final int            sourceId;
+    private final SoundEffect[]    effects               = new SoundEffect[2];
     private int                    nextSoundEffectSendId = 0;
     private float                  attenuationFactor     = 1f;
     private final Vector3          position              = new Vector3(0f, 0f, 0f);
@@ -42,7 +42,7 @@ public abstract class SoundSource {
     private volatile int           resamplerIndex        = -1;
 
 
-    SoundSource() {
+    protected SoundSource() {
         final Audio audio = Audio.get();
         this.logger = audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
@@ -461,7 +461,7 @@ public abstract class SoundSource {
     }
 
 
-    void setResamplerByIndex(int index) {
+    protected void setResamplerByIndex(int index) {
         if (index >= 0 && index != this.resamplerIndex) {
             this.resamplerIndex = index;
             AL10.alSourcei(this.sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT, index);
@@ -498,8 +498,7 @@ public abstract class SoundSource {
     public String getResampler() {
         final AudioDevice device = Audio.get().getDevice();
         final int resamplerIndex = AL10.alGetSourcei(this.sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT);
-        final String name = device.getResamplerNameByIndex(resamplerIndex);
-        return name;
+        return device.getResamplerNameByIndex(resamplerIndex);
     }
 
 
@@ -515,7 +514,7 @@ public abstract class SoundSource {
     }
 
 
-    void dispose() {
+    protected void dispose() {
         this.detachAllEffects();
         AL10.alDeleteSources(this.sourceId);
         if (!this.errorLogger.checkLogError("Failed to dispose the SoundSource")) {

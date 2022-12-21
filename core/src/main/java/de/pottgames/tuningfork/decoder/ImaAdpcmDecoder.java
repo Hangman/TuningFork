@@ -15,7 +15,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
     private final int          channels;
     private final boolean      stereo;
     private long               bytesRemaining;
-    private final byte         outputSamples[];
+    private final byte[]       outputSamples;
     private int                outputSamplePosition;
     private int                outputSampleSize;
     private final int          sampleRate;

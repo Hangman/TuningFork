@@ -34,7 +34,7 @@ First make sure you have Jitpack declared as repository in your root build.gradl
 ```groovy
 allprojects {
     repositories {
-        ...
+        // ...
         maven { url 'https://jitpack.io' }
     }
 }
@@ -45,7 +45,7 @@ Then add TuningFork as dependency in your core project:
 ```groovy
 project(":core") {
     dependencies {
-    	...
+    	// ...
         implementation 'com.github.Hangman:TuningFork:3.1.0'
     }
 }

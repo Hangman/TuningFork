@@ -27,7 +27,6 @@ public class WavExtensibleFormatTest extends ApplicationAdapter {
     private static final String SOUND_PATH = "extensible_88200hertz.wav";
     private Audio               audio;
     private SoundBuffer         sound;
-    private SoundSource         bufferedSource;
     private StreamedSoundSource streamedSource;
 
 
@@ -35,11 +34,11 @@ public class WavExtensibleFormatTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
         this.sound = WaveLoader.load(Gdx.files.internal(WavExtensibleFormatTest.SOUND_PATH));
-        this.bufferedSource = this.audio.obtainSource(this.sound);
+        SoundSource bufferedSource = this.audio.obtainSource(this.sound);
         this.streamedSource = new StreamedSoundSource(Gdx.files.internal(WavExtensibleFormatTest.SOUND_PATH));
-        this.bufferedSource.setLooping(true);
+        bufferedSource.setLooping(true);
         this.streamedSource.setLooping(true);
-        this.bufferedSource.play();
+        bufferedSource.play();
         try {
             Thread.sleep(50);
         } catch (final InterruptedException e) {
@@ -60,6 +59,7 @@ public class WavExtensibleFormatTest extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.sound.dispose();
+        this.streamedSource.dispose();
 
         // always dispose Audio last
         this.audio.dispose();

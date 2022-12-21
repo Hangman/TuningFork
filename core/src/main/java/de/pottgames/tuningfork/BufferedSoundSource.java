@@ -17,6 +17,7 @@ import org.lwjgl.openal.AL11;
 
 import com.badlogic.gdx.math.Vector3;
 
+import de.pottgames.tuningfork.jukebox.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -26,7 +27,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  *
  */
-public class BufferedSoundSource extends SoundSource {
+public class BufferedSoundSource extends SongSource {
     private SoundBuffer            buffer;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
@@ -190,6 +191,7 @@ public class BufferedSoundSource extends SoundSource {
      * @return the duration of the attached sound.<br>
      *         Returns -1f if no buffer is attached or the duration couldn't be measured.
      */
+    @Override
     public float getDuration() {
         return this.buffer != null ? this.buffer.getDuration() : -1f;
     }
@@ -211,6 +213,7 @@ public class BufferedSoundSource extends SoundSource {
      *
      * @return the playback position
      */
+    @Override
     public float getPlaybackPosition() {
         return AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
     }

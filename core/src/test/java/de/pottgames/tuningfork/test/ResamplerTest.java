@@ -130,6 +130,7 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
 
     @Override
     public void dispose() {
+        this.sound.dispose();
         this.audio.dispose();
     }
 

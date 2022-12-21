@@ -41,8 +41,8 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class AudioDevice {
-    private long                                  deviceHandle;
-    private long                                  context;
+    private final long                            deviceHandle;
+    private final long                            context;
     private final TuningForkLogger                logger;
     private final ErrorLogger                     errorLogger;
     private boolean                               hrtfEnabled           = false;
@@ -309,7 +309,7 @@ public class AudioDevice {
             int hrtfIndex = -1;
             for (int i = 0; i < num_hrtf; i++) {
                 final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
-                if (specifier != null && name.equals(specifier)) {
+                if (name.equals(specifier)) {
                     hrtfIndex = i;
                     break;
                 }

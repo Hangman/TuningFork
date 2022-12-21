@@ -21,8 +21,8 @@ public class WavFmtChunk {
 
         this.wFormatTag = data[0] | data[1] << 8;
         this.nChannels = data[2] | data[3] << 8;
-        this.nSamplesPerSec = data[4] | data[5] << 8L | data[6] << 16L | data[7] << 24L;
-        this.nAvgBytesPerSec = data[8] | data[9] << 8L | data[10] << 16L | data[11] << 24L;
+        this.nSamplesPerSec = data[4] | (long) data[5] << 8L | (long) data[6] << 16L | (long) data[7] << 24L;
+        this.nAvgBytesPerSec = data[8] | (long) data[9] << 8L | (long) data[10] << 16L | (long) data[11] << 24L;
         this.nBlockAlign = data[12] | data[13] << 8;
         this.wBitsPerSample = data[14] | data[15] << 8;
 

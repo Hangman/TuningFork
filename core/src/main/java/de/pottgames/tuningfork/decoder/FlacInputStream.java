@@ -32,13 +32,13 @@ import io.nayuki.flac.decode.FlacDecoder;
  *
  */
 public class FlacInputStream implements AudioStream {
-    private FlacDecoder      decoder;
-    private boolean          closed = false;
-    private int[][]          sampleBuffer;
-    private int              sampleBufferBlockSize;
-    private final int        bytesPerSample;
-    private final float      duration;
-    private final FileHandle fileHandle;
+    private final FlacDecoder decoder;
+    private boolean           closed = false;
+    private final int[][]     sampleBuffer;
+    private int               sampleBufferBlockSize;
+    private final int         bytesPerSample;
+    private final float       duration;
+    private final FileHandle  fileHandle;
 
 
     /**
@@ -70,9 +70,6 @@ public class FlacInputStream implements AudioStream {
         }
 
         // CHECK IF THE FLAC FILE IS SUPPORTED
-        if (this.decoder == null) {
-            throw new TuningForkRuntimeException("FlacInputStream couldn't be opened.");
-        }
         if (this.decoder.streamInfo == null) {
             throw new TuningForkRuntimeException("Missing StreamInfo in flac file.");
         }
@@ -84,9 +81,9 @@ public class FlacInputStream implements AudioStream {
         if (bitsPerSample != 8 && bitsPerSample != 16) {
             throw new TuningForkRuntimeException("Unsupported bits per sample in flac file, only 8 and 16 Bit is supported.");
         }
-        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.bufferSizePerChannel * numChannels) {
+        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * numChannels) {
             throw new TuningForkRuntimeException(
-                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.bufferSizePerChannel + " per channel");
+                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL + " per channel");
         }
 
         this.sampleBuffer = new int[this.decoder.streamInfo.numChannels][65536];
@@ -116,9 +113,6 @@ public class FlacInputStream implements AudioStream {
         }
 
         // CHECK IF THE FLAC FILE IS SUPPORTED
-        if (this.decoder == null) {
-            throw new TuningForkRuntimeException("FlacInputStream couldn't be opened.");
-        }
         if (this.decoder.streamInfo == null) {
             throw new TuningForkRuntimeException("Missing StreamInfo in flac file.");
         }
@@ -130,9 +124,9 @@ public class FlacInputStream implements AudioStream {
         if (bitsPerSample != 8 && bitsPerSample != 16) {
             throw new TuningForkRuntimeException("Unsupported bits per sample in flac file, only 8 and 16 Bit is supported.");
         }
-        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.bufferSizePerChannel * numChannels) {
+        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * numChannels) {
             throw new TuningForkRuntimeException(
-                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.bufferSizePerChannel + " per channel");
+                    "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL + " per channel");
         }
 
         this.sampleBuffer = new int[this.decoder.streamInfo.numChannels][65536];

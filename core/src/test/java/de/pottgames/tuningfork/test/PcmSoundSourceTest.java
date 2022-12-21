@@ -28,7 +28,7 @@ import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 public class PcmSoundSourceTest extends ApplicationAdapter {
     private static final int BUFFER_SIZE = 4096 * 10;
     private Audio            audio;
-    private byte[]           pcm         = new byte[PcmSoundSourceTest.BUFFER_SIZE];
+    private final byte[]           pcm         = new byte[PcmSoundSourceTest.BUFFER_SIZE];
     private WavInputStream   stream;
     private PcmSoundSource   pcmSource;
     private long             lastPcmPush;

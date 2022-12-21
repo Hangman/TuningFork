@@ -44,7 +44,7 @@ public enum PcmFormat {
     static {
         final StringBuilder builderNames = new StringBuilder(" ");
         for (final PcmFormat format : PcmFormat.values()) {
-            builderNames.append(format.toString() + " ");
+            builderNames.append(format.toString()).append(" ");
         }
         NAMES_STRING = builderNames.toString().trim();
     }
@@ -135,7 +135,7 @@ public enum PcmFormat {
                 case 2:
                     switch (bitsPerSample) {
                         case 32:
-                            return PcmFormat.FLOAT_STEREO_64_BIT;
+                            return PcmFormat.FLOAT_STEREO_32_BIT;
                         case 64:
                             return PcmFormat.FLOAT_STEREO_64_BIT;
                     }
@@ -147,7 +147,7 @@ public enum PcmFormat {
     }
 
 
-    public static enum PcmDataType {
+    public enum PcmDataType {
         INTEGER, FLOAT;
     }
 

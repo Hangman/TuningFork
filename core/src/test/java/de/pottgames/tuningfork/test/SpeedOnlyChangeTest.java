@@ -28,7 +28,6 @@ import de.pottgames.tuningfork.SoundSource;
 public class SpeedOnlyChangeTest extends ApplicationAdapter {
     private Audio       audio;
     private SoundBuffer sound;
-    private SoundSource source;
     private SoundEffect effect;
 
 
@@ -37,22 +36,22 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         this.sound = OggLoader.load(Gdx.files.internal("carnivalrides.ogg"));
-        this.source = this.audio.obtainSource(this.sound);
+        SoundSource source = this.audio.obtainSource(this.sound);
 
         // set source pitch to change the speed
         final float pitch = 1.2f;
-        this.source.setPitch(pitch);
+        source.setPitch(pitch);
 
         // apply pitch correction
         this.effect = new SoundEffect(new PitchShifter().correctPitch(pitch));
-        this.source.attachEffect(this.effect);
+        source.attachEffect(this.effect);
 
         // in order to only hear the pitch corrected sound, we must silence the original sound with a filter
         final Filter filter = new Filter(0f, 0f);
-        this.source.setFilter(filter);
+        source.setFilter(filter);
         filter.dispose();
 
-        this.source.play();
+        source.play();
     }
 
 

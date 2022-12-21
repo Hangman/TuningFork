@@ -22,11 +22,10 @@ import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class SoundEffect implements Disposable {
-    private final ErrorLogger      errorLogger;
-    private final TuningForkLogger logger;
-    private final int              auxSlotId;
-    private final int              effectId;
-    private Array<SoundSource>     attachedSources = new Array<>();
+    private final ErrorLogger        errorLogger;
+    private final TuningForkLogger   logger;
+    private final int                auxSlotId;
+    private final Array<SoundSource> attachedSources = new Array<>();
 
 
     public SoundEffect(SoundEffectData data) {
@@ -38,14 +37,14 @@ public class SoundEffect implements Disposable {
         this.setEnvironmental(false);
 
         // CREATE EFFECT
-        this.effectId = EXTEfx.alGenEffects();
-        data.apply(this.effectId);
+        final int effectId = EXTEfx.alGenEffects();
+        data.apply(effectId);
 
         // SET EFFECT TO AUX SLOT
-        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, this.effectId);
+        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
 
         // DELETE EFFECT
-        EXTEfx.alDeleteEffects(this.effectId);
+        EXTEfx.alDeleteEffects(effectId);
 
         if (!this.errorLogger.checkLogError("Failed to create the SoundEffect")) {
             this.logger.debug(this.getClass(), "SoundEffect successfully created");

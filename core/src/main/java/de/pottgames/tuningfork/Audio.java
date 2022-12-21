@@ -13,10 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC11;
@@ -32,8 +28,8 @@ import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
- * The main management and entry point of TuningFork. This class initializes the sound device and provides "fire & forget" features for sounds and also gives
- * access to SoundSource's for advanced manual playback control.
+ * The main management and entry point of TuningFork. This class initializes the sound device and gives access to SoundSource's for advanced manual playback
+ * control.
  *
  * @author Matthias
  *
@@ -41,23 +37,18 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 public class Audio implements Disposable {
     private static Audio instance;
 
-    private final WavDecoderProvider               wavDecoderProvider;
-    final Object                                   lock                          = new Object();
-    private SoundListener                          listener;
-    private SoundSourcePool                        sourcePool;
-    private final Thread                           updateThread;
-    private volatile boolean                       running                       = true;
-    private final Array<StreamedSoundSource>       soundsToUpdate                = new Array<>();
-    private final Array<SoundSource>               managedSources                = new Array<>();
-    private final ExecutorService                  taskService;
-    private final ConcurrentLinkedQueue<AsyncTask> idleTasks                     = new ConcurrentLinkedQueue<>();
-    private float                                  defaultMinAttenuationDistance = 1f;
-    private float                                  defaultMaxAttenuationDistance = Float.MAX_VALUE;
-    private float                                  defaultAttenuationFactor      = 1f;
-    private boolean                                virtualizationEnabled         = true;
-    private final TuningForkLogger                 logger;
-    private final AudioDevice                      device;
-    private int                                    defaultResamplerIndex         = -1;
+    final StreamManager              streamManager;
+    private final WavDecoderProvider wavDecoderProvider;
+    private final SoundListener      listener;
+    private final SoundSourcePool    sourcePool;
+    private final Array<SoundSource> managedSources                = new Array<>();
+    private float                    defaultMinAttenuationDistance = 1f;
+    private float                    defaultMaxAttenuationDistance = Float.MAX_VALUE;
+    private float                    defaultAttenuationFactor      = 1f;
+    private boolean                  virtualizationEnabled         = true;
+    private final TuningForkLogger   logger;
+    private final AudioDevice        device;
+    private int                      defaultResamplerIndex         = -1;
 
 
     /**
@@ -139,22 +130,7 @@ public class Audio implements Disposable {
         this.device = device;
         this.wavDecoderProvider = config.getResamplerProvider();
         Audio.instance = this;
-
-        // INITIAL IDLE TASK CREATION FOR THE POOL
-        for (int i = 0; i < config.getIdleTasks() - 1; i++) {
-            this.idleTasks.add(new AsyncTask());
-        }
-
-        // CREATE THE TASK SERVICE
-        this.taskService = Executors.newSingleThreadExecutor(runnable -> {
-            final Thread thread = Executors.defaultThreadFactory().newThread(runnable);
-            thread.setName("TuningFork-Task-Thread");
-            thread.setDaemon(true);
-            return thread;
-        });
-
-        // adding the last task by executing it for warm up
-        this.taskService.execute(new AsyncTask());
+        this.streamManager = new StreamManager(config, this.logger);
 
         // SET DEFAULTS
         this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
@@ -166,23 +142,6 @@ public class Audio implements Disposable {
         // CREATE SOURCES
         this.sourcePool = new SoundSourcePool(config.getSimultaneousSources());
 
-        // START UPDATE THREAD
-        this.updateThread = new Thread() {
-            @Override
-            public void run() {
-                while (Audio.this.running) {
-                    Audio.this.updateAsync();
-                    try {
-                        Thread.sleep(100);
-                    } catch (final InterruptedException e) {
-                        // ignore
-                    }
-                }
-            }
-        };
-        this.updateThread.setName("TuningFork-Update-Thread");
-        this.updateThread.setDaemon(true);
-        this.updateThread.start();
     }
 
 
@@ -203,16 +162,6 @@ public class Audio implements Disposable {
      */
     public AudioDevice getDevice() {
         return this.device;
-    }
-
-
-    private void updateAsync() {
-        synchronized (this.lock) {
-            for (int i = 0; i < this.soundsToUpdate.size; i++) {
-                final StreamedSoundSource sound = this.soundsToUpdate.get(i);
-                sound.updateAsync();
-            }
-        }
     }
 
 
@@ -792,12 +741,7 @@ public class Audio implements Disposable {
             if (resamplerIndex >= 0) {
                 this.sourcePool.setResamplerByIndex(resamplerIndex);
 
-                synchronized (this.lock) {
-                    for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                        final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
-                        sound.setResamplerByIndex(resamplerIndex);
-                    }
-                }
+                this.streamManager.setDefaultResampler(resamplerIndex);
 
                 for (int i = 0; i < this.managedSources.size; i++) {
                     final SoundSource source = this.managedSources.get(i);
@@ -806,6 +750,7 @@ public class Audio implements Disposable {
                     }
                 }
             }
+            return true;
         }
 
         return false;
@@ -825,7 +770,7 @@ public class Audio implements Disposable {
      * Resumes to play all {@link StreamedSoundSource}s that are paused at the moment.
      */
     public void resumeAllStreamedSources() {
-        this.postTask(TaskAction.RESUME_ALL);
+        this.streamManager.resumeAll();
     }
 
 
@@ -850,7 +795,7 @@ public class Audio implements Disposable {
      * Pauses all {@link StreamedSoundSource}.
      */
     public void pauseAllStreamedSources() {
-        this.postTask(TaskAction.PAUSE_ALL);
+        this.streamManager.pauseAll();
     }
 
 
@@ -875,7 +820,7 @@ public class Audio implements Disposable {
      * Stops all {@link StreamedSoundSource}s.
      */
     public void stopAllStreamedSources() {
-        this.postTask(TaskAction.STOP_ALL);
+        this.streamManager.stopAll();
     }
 
 
@@ -892,18 +837,6 @@ public class Audio implements Disposable {
     }
 
 
-    void addIdleTask(AsyncTask task) {
-        this.idleTasks.offer(task);
-    }
-
-
-    void registerStreamedSoundSource(StreamedSoundSource source) {
-        synchronized (this.lock) {
-            this.soundsToUpdate.add(source);
-        }
-    }
-
-
     void registerManagedSource(SoundSource source) {
         this.managedSources.add(source);
     }
@@ -911,13 +844,6 @@ public class Audio implements Disposable {
 
     void removeManagedSource(SoundSource source) {
         this.managedSources.removeValue(source, true);
-    }
-
-
-    void removeStreamedSound(StreamedSoundSource sound) {
-        synchronized (this.lock) {
-            this.soundsToUpdate.removeValue(sound, true);
-        }
     }
 
 
@@ -941,33 +867,6 @@ public class Audio implements Disposable {
     }
 
 
-    void postTask(StreamedSoundSource sound, TaskAction action) {
-        this.postTask(sound, action, 0f);
-    }
-
-
-    void postTask(StreamedSoundSource sound, TaskAction action, float floatParam) {
-        AsyncTask task = this.idleTasks.poll();
-        if (task == null) {
-            task = new AsyncTask();
-        }
-        task.sound = sound;
-        task.taskAction = action;
-        task.floatParam = floatParam;
-        this.taskService.execute(task);
-    }
-
-
-    void postTask(TaskAction action) {
-        AsyncTask task = this.idleTasks.poll();
-        if (task == null) {
-            task = new AsyncTask();
-        }
-        task.taskAction = action;
-        this.taskService.execute(task);
-    }
-
-
     void onBufferDisposal(SoundBuffer buffer) {
         this.sourcePool.onBufferDisposal(buffer);
     }
@@ -983,109 +882,14 @@ public class Audio implements Disposable {
      */
     @Override
     public void dispose() {
-        // TERMINATE UPDATE THREAD
-        this.running = false;
-        try {
-            this.updateThread.join();
-        } catch (final InterruptedException e1) {
-            // ignore
-        }
-
-        // SHUTDOWN TASK SERVICE
-        this.taskService.shutdown();
-        try {
-            if (!this.taskService.awaitTermination(500L, TimeUnit.MILLISECONDS)) {
-                this.getLogger().debug(this.getClass(), "The task service timed out on shutdown.");
-            }
-        } catch (final InterruptedException e) {
-            this.taskService.shutdownNow();
-        }
-
-        // STOP ALL BUFFERED SOURCES
+        this.streamManager.dispose();
         this.stopAllBufferedSources();
-
-        // DISPOSE SOUND SOURCE POOL
         this.sourcePool.dispose();
 
         // DISPOSE DEVICE LAST
         this.device.dispose(true);
 
         Audio.instance = null;
-    }
-
-
-    enum TaskAction {
-        PLAY, STOP, PAUSE, SET_PLAYBACK_POSITION, INITIAL_BUFFER_FILL, STOP_ALL, PAUSE_ALL, RESUME_ALL, DISPOSE_CALLBACK;
-    }
-
-
-    private class AsyncTask implements Runnable {
-        private volatile StreamedSoundSource sound;
-        private volatile TaskAction          taskAction;
-        private volatile float               floatParam;
-
-
-        @Override
-        public void run() {
-            if (this.sound != null) {
-                synchronized (Audio.this.lock) {
-                    switch (this.taskAction) {
-                        case PAUSE:
-                            this.sound.pauseAsync();
-                            break;
-                        case PLAY:
-                            this.sound.playAsync();
-                            break;
-                        case STOP:
-                            this.sound.stopAsync();
-                            break;
-                        case SET_PLAYBACK_POSITION:
-                            this.sound.setPlaybackPositionAsync(this.floatParam);
-                            break;
-                        case INITIAL_BUFFER_FILL:
-                            this.sound.fillAllBuffers();
-                            break;
-                        case STOP_ALL:
-                            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
-                                sound.stopAsync();
-                            }
-                            break;
-                        case PAUSE_ALL:
-                            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
-                                if (sound.isPlaying()) {
-                                    sound.pauseAsync();
-                                }
-                            }
-                            break;
-                        case RESUME_ALL:
-                            for (int i = 0; i < Audio.this.soundsToUpdate.size; i++) {
-                                final StreamedSoundSource sound = Audio.this.soundsToUpdate.get(i);
-                                if (sound.isPaused()) {
-                                    sound.playAsync();
-                                }
-                            }
-                            break;
-                        case DISPOSE_CALLBACK:
-                            this.sound.readyToDispose();
-                            break;
-                    }
-                }
-
-                // CLEAN UP
-                this.reset();
-                Audio.this.addIdleTask(this);
-            }
-        }
-
-
-        private void reset() {
-            this.sound = null;
-            this.taskAction = null;
-            this.floatParam = 0f;
-        }
-
     }
 
 }

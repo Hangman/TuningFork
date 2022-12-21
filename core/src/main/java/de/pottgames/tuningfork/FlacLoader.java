@@ -61,12 +61,12 @@ public abstract class FlacLoader {
     /**
      * Loads a {@link SoundBuffer} from a {@link FlacInputStream}.
      *
-     * @param input
+     * @param flacStream the stream
      *
      * @return the SoundBuffer
      */
     private static SoundBuffer load(FlacInputStream flacStream) {
-        SoundBuffer result = null;
+        SoundBuffer result;
 
         try {
             final byte[] buffer = new byte[(int) flacStream.totalSamples() * flacStream.getBytesPerSample() * flacStream.getChannels()];
