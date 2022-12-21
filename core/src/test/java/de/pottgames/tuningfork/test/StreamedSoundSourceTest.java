@@ -29,7 +29,7 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
     @Override
     public void create() {
         this.audio = Audio.init();
-        this.source = new StreamedSoundSource(Gdx.files.absolute("src/test/resources/rhythm3.flac"));
+        this.source = new StreamedSoundSource(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
         System.out.println("Sound duration: " + this.source.getDuration() + "s");
         this.source.setLooping(true);
         this.source.play();

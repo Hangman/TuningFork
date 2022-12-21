@@ -18,14 +18,12 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.BufferedSoundSource;
-import de.pottgames.tuningfork.FlacLoader;
 import de.pottgames.tuningfork.SoundBuffer;
+import de.pottgames.tuningfork.WaveLoader;
 
 public class MiniExample extends ApplicationAdapter {
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private BufferedSoundSource source;
+    private Audio       audio;
+    private SoundBuffer sound;
 
 
     @Override
@@ -34,20 +32,16 @@ public class MiniExample extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // load a sound
-        this.sound = FlacLoader.load(Gdx.files.internal("short.flac"));
+        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
 
-        this.source = this.audio.obtainSource(this.sound);
-        // play the sound
-        // this.sound.play();
-        this.source.play();
+        this.sound.play();
     }
 
 
     @Override
     public void render() {
         // we chill in a black window
-        System.out.println("playback position: " + this.source.getPlaybackPosition());
     }
 
 
