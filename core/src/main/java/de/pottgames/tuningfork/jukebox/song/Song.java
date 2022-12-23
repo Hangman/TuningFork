@@ -1,6 +1,8 @@
-package de.pottgames.tuningfork.jukebox;
+package de.pottgames.tuningfork.jukebox.song;
 
 import de.pottgames.tuningfork.TuningForkRuntimeException;
+import de.pottgames.tuningfork.jukebox.JukeBox;
+import de.pottgames.tuningfork.jukebox.playlist.PlayList;
 
 /**
  * An immutable data class containing a {@link SongSource} and a {@link SongSettings} object meant to be added to a {@link PlayList} that can be played via
@@ -49,18 +51,14 @@ public class Song {
         }
         this.source = source;
         this.metaData = metaData != null ? metaData : new SongMeta();
-        this.settings = this.getValidSettings(settings);
-    }
 
-
-    protected SongSettings getValidSettings(SongSettings settings) {
         if (settings == null) {
-            return SongSettings.DEFAULT;
+            this.settings = SongSettings.DEFAULT;
+        } else if (this.source.getDuration() < settings.getFadeInDuration() + settings.getFadeOutDuration()) {
+            this.settings = SongSettings.noFade(settings.getVolume());
+        } else {
+            this.settings = settings;
         }
-        if (this.source.getDuration() < settings.getFadeInDuration() + settings.getFadeOutDuration()) {
-            return SongSettings.noFade(settings.getVolume());
-        }
-        return settings;
     }
 
 

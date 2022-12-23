@@ -1,4 +1,4 @@
-package de.pottgames.tuningfork.jukebox;
+package de.pottgames.tuningfork.jukebox.song;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
@@ -76,12 +76,20 @@ public class SongSettings {
     }
 
 
-    protected float fadeVolume(FadeType type, float alpha) {
+    /**
+     * Returns the fade volume for a given fade type and alpha value.
+     *
+     * @param type
+     * @param alpha
+     *
+     * @return the fade volume
+     */
+    public float fadeVolume(FadeType type, float alpha) {
         if (type == FadeType.IN) {
-            return this.fadeInCurve.apply(alpha) * this.volume;
+            return MathUtils.clamp(this.fadeInCurve.apply(alpha) * this.volume, 0f, 1f);
         }
         if (type == FadeType.OUT) {
-            return this.fadeOutCurve.apply(alpha) * this.volume;
+            return MathUtils.clamp(this.fadeOutCurve.apply(alpha) * this.volume, 0f, 1f);
         }
         return this.volume;
     }
@@ -137,7 +145,7 @@ public class SongSettings {
     }
 
 
-    enum FadeType {
+    public enum FadeType {
         IN, OUT;
     }
 

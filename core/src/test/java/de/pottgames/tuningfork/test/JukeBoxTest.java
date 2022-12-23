@@ -2,6 +2,7 @@ package de.pottgames.tuningfork.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
@@ -11,11 +12,14 @@ import de.pottgames.tuningfork.FlacLoader;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.jukebox.JukeBox;
-import de.pottgames.tuningfork.jukebox.PlayList;
-import de.pottgames.tuningfork.jukebox.Song;
-import de.pottgames.tuningfork.jukebox.SongSettings;
+import de.pottgames.tuningfork.jukebox.JukeBoxObserver;
+import de.pottgames.tuningfork.jukebox.playlist.DefaultPlayListProvider;
+import de.pottgames.tuningfork.jukebox.playlist.PlayList;
+import de.pottgames.tuningfork.jukebox.song.Song;
+import de.pottgames.tuningfork.jukebox.song.SongMeta;
+import de.pottgames.tuningfork.jukebox.song.SongSettings;
 
-public class JukeBoxTest extends ApplicationAdapter {
+public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
     private Audio               audio;
     private StreamedSoundSource rhythm1;
     private SoundBuffer         rhythm2;
@@ -23,6 +27,7 @@ public class JukeBoxTest extends ApplicationAdapter {
     private StreamedSoundSource rhythm3;
     private SoundBuffer         rhythm4;
     private BufferedSoundSource rhythm4Source;
+    private StreamedSoundSource rhythm5;
     private JukeBox             jukeBox;
 
 
@@ -35,6 +40,7 @@ public class JukeBoxTest extends ApplicationAdapter {
         this.rhythm2 = FlacLoader.load(Gdx.files.internal("rhythm2.flac"));
         this.rhythm3 = new StreamedSoundSource(Gdx.files.internal("rhythm3.flac"));
         this.rhythm4 = FlacLoader.load(Gdx.files.internal("rhythm4.flac"));
+        this.rhythm5 = new StreamedSoundSource(Gdx.files.internal("short.flac"));
 
         // OBTAIN BUFFERED SOUND SOURCE
         this.rhythm2Source = this.audio.obtainSource(this.rhythm2);
@@ -42,33 +48,68 @@ public class JukeBoxTest extends ApplicationAdapter {
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
-        final Song song1 = new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f));
-        final Song song2 = new Song(this.rhythm2Source, settings);
-        final Song song3 = new Song(this.rhythm3, settings);
-        final Song song4 = new Song(this.rhythm4Source, settings);
+        final Song song1 = new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
+        final Song song2 = new Song(this.rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
+        final Song song3 = new Song(this.rhythm3, settings, new SongMeta().setTitle("rhythm3"));
+        final Song song4 = new Song(this.rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));
+        final Song song5 = new Song(this.rhythm5, settings, new SongMeta().setTitle("rhythm5"));
 
-        // CREATE PLAYLIST
-        final PlayList playList = new PlayList();
+        // CREATE PLAYLIST 1
+        final PlayList playList = new PlayList() {
+            @Override
+            public String toString() {
+                return "PlayList 1";
+            }
+        };
         playList.addSong(song1);
         playList.addSong(song2);
         playList.addSong(song3);
         playList.addSong(song4);
-        playList.setLooping(true);
+        playList.setShuffleAfterPlaytrough(true);
 
-        this.jukeBox = new JukeBox();
-        this.jukeBox.queuePlayList(playList);
+        // CREATE PLAYLIST 2
+        final PlayList playList2 = new PlayList() {
+            @Override
+            public String toString() {
+                return "PlayList 2";
+            }
+        };
+        playList2.addSong(song5);
+        playList2.setLooping(true);
+
+        // CREATE PLAYLIST PROVIDER
+        final DefaultPlayListProvider provider = new DefaultPlayListProvider().add(playList).add(playList2);
+
+        this.jukeBox = new JukeBox(provider);
+        this.jukeBox.addObserver(this);
         this.jukeBox.play();
     }
 
 
     @Override
     public void render() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            this.jukeBox.play();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            this.jukeBox.pause();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            this.jukeBox.stop();
+        }
+
         this.jukeBox.update();
     }
 
 
     @Override
     public void dispose() {
+        this.jukeBox.clear();
+        this.rhythm1.dispose();
+        this.rhythm2.dispose();
+        this.rhythm3.dispose();
+        this.rhythm4.dispose();
+        this.rhythm5.dispose();
 
         // always dispose Audio last
         this.audio.dispose();
@@ -82,5 +123,47 @@ public class JukeBoxTest extends ApplicationAdapter {
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new JukeBoxTest(), config);
+    }
+
+
+    @Override
+    public void onSongStart(Song song) {
+        System.out.println("Song started: " + song.getMeta().getTitle());
+    }
+
+
+    @Override
+    public void onSongEnd(Song song) {
+        System.out.println("Song ended: " + song.getMeta().getTitle());
+    }
+
+
+    @Override
+    public void onPlayListStart(PlayList playList) {
+        System.out.println("PlayList started: " + playList);
+    }
+
+
+    @Override
+    public void onPlayListEnd(PlayList playList) {
+        System.out.println("PlayList ended: " + playList);
+    }
+
+
+    @Override
+    public void onJukeBoxEnd() {
+        System.out.println("JukeBox ended");
+    }
+
+
+    @Override
+    public void onJukeBoxStart() {
+        System.out.println("JukeBox started");
+    }
+
+
+    @Override
+    public void onJukeBoxPause() {
+        System.out.println("JukeBox paused");
     }
 }

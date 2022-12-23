@@ -17,7 +17,7 @@ import org.lwjgl.openal.AL11;
 
 import com.badlogic.gdx.math.Vector3;
 
-import de.pottgames.tuningfork.jukebox.SongSource;
+import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 

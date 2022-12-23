@@ -31,7 +31,7 @@ import de.pottgames.tuningfork.decoder.AudioStream;
 import de.pottgames.tuningfork.decoder.FlacInputStream;
 import de.pottgames.tuningfork.decoder.OggInputStream;
 import de.pottgames.tuningfork.decoder.WavInputStream;
-import de.pottgames.tuningfork.jukebox.SongSource;
+import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 

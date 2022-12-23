@@ -1,4 +1,4 @@
-package de.pottgames.tuningfork.jukebox;
+package de.pottgames.tuningfork.jukebox.song;
 
 import de.pottgames.tuningfork.SoundSource;
 
@@ -14,9 +14,19 @@ public abstract class SongSource extends SoundSource {
     }
 
 
+    /**
+     * Returns the duration in seconds.
+     *
+     * @return the duration in seconds
+     */
     public abstract float getDuration();
 
 
+    /**
+     * Returns the playback position in seconds.
+     *
+     * @return the playback position in seconds
+     */
     public abstract float getPlaybackPosition();
 
 }

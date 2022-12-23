@@ -1,11 +1,13 @@
-package de.pottgames.tuningfork.jukebox;
+package de.pottgames.tuningfork.jukebox.playlist;
 
 import com.badlogic.gdx.utils.Array;
+
+import de.pottgames.tuningfork.jukebox.song.Song;
 
 public class PlayList {
     protected final Array<Song> songs                  = new Array<>();
     protected int               songIndex;
-    protected boolean           playedFully;
+    protected boolean           playedThrough          = false;
     protected boolean           loop                   = false;
     protected boolean           shuffleAfterPlaytrough = false;
 
@@ -15,23 +17,28 @@ public class PlayList {
     }
 
 
-    Song nextSong() {
+    public Song nextSong() {
         final Song song = this.songs.get(this.songIndex);
         this.songIndex++;
         if (this.songIndex >= this.songs.size) {
             this.songIndex = 0;
-            this.playedFully = true;
+            this.playedThrough = true;
+            if (this.shuffleAfterPlaytrough) {
+                this.shuffle();
+            }
         }
         return song;
     }
 
 
-    protected void reset() {
+    public void reset() {
         this.songIndex = 0;
-        this.playedFully = false;
-        if (this.shuffleAfterPlaytrough) {
-            this.shuffle();
-        }
+        this.playedThrough = false;
+    }
+
+
+    public boolean isPlayedThrough() {
+        return this.playedThrough;
     }
 
 
@@ -47,6 +54,11 @@ public class PlayList {
 
     public void setLooping(boolean loop) {
         this.loop = loop;
+    }
+
+
+    public boolean isLoop() {
+        return this.loop;
     }
 
 }

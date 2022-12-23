@@ -1,4 +1,4 @@
-package de.pottgames.tuningfork.jukebox;
+package de.pottgames.tuningfork.jukebox.song;
 
 import com.badlogic.gdx.utils.ObjectMap;
 
