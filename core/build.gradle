@@ -95,6 +95,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/Mp3StreamDemo.class'
      exclude 'de/pottgames/tuningfork/test/SpeedOnlyChangeTest.class'
      exclude 'de/pottgames/tuningfork/test/LoaderInputStreamTest.class'
+     exclude 'de/pottgames/tuningfork/test/JukeBoxTest.class'
 }
 
 publishing {
