@@ -150,6 +150,12 @@ public class SongSettings {
     }
 
 
+    /**
+     * An {@link Interpolation} implementation that does not interpolate and instead always returns 1.
+     *
+     * @author Matthias
+     *
+     */
     static class NoInterpolation extends Interpolation {
 
         @Override

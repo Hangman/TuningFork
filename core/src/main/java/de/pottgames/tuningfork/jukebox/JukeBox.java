@@ -9,6 +9,12 @@ import de.pottgames.tuningfork.jukebox.song.SongSettings;
 import de.pottgames.tuningfork.jukebox.song.SongSettings.FadeType;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 
+/**
+ * A music player class playing {@link Song}s from a {@link PlayList}. It's called JukeBox to avoid confusion with how libgdx uses the word 'Music'.
+ *
+ * @author Matthias
+ *
+ */
 public class JukeBox {
     protected final Array<JukeBoxObserver> observer = new Array<>();
     protected PlayList                     currentPlayList;
@@ -25,11 +31,19 @@ public class JukeBox {
     protected boolean  eventJukeBoxPause;
 
 
+    /**
+     * Creates a new JukeBox.
+     *
+     * @param playListProvider
+     */
     public JukeBox(PlayListProvider playListProvider) {
         this.playListProvider = playListProvider;
     }
 
 
+    /**
+     * Updates the JukeBox. This method should be called every frame.
+     */
     public void update() {
         if (this.stopped) {
             this.handleEvents();
@@ -84,6 +98,9 @@ public class JukeBox {
     }
 
 
+    /**
+     * Starts playback.
+     */
     public void play() {
         this.stopped = false;
         this.eventJukeBoxStart = true;
@@ -93,6 +110,9 @@ public class JukeBox {
     }
 
 
+    /**
+     * Pauses playback. Calling {@link #play()} will resume playback.
+     */
     public void pause() {
         this.stopped = true;
         this.eventJukeBoxPause = true;
@@ -102,6 +122,9 @@ public class JukeBox {
     }
 
 
+    /**
+     * Stops playback and resets the current PlayList if applicable.
+     */
     public void stop() {
         if (!this.stopped) {
             this.eventJukeBoxEnd = true;
@@ -117,6 +140,9 @@ public class JukeBox {
     }
 
 
+    /**
+     * Immediately stops playback, removes all observers and sets the JukeBox into a stopped state.
+     */
     public void clear() {
         this.stopped = true;
         if (this.currentSong != null) {
@@ -135,6 +161,11 @@ public class JukeBox {
     }
 
 
+    /**
+     * Returns the song that is currently playing. May be null.
+     *
+     * @return the song
+     */
     public Song getCurrentSong() {
         return this.currentSong;
     }
@@ -192,15 +223,23 @@ public class JukeBox {
     }
 
 
-    public JukeBox addObserver(JukeBoxObserver observer) {
+    /**
+     * Adds an observer.
+     *
+     * @param observer
+     */
+    public void addObserver(JukeBoxObserver observer) {
         this.observer.add(observer);
-        return this;
     }
 
 
-    public JukeBox removeObserver(JukeBoxObserver observer) {
+    /**
+     * Removes an observer.
+     *
+     * @param observer
+     */
+    public void removeObserver(JukeBoxObserver observer) {
         this.observer.removeValue(observer, true);
-        return this;
     }
 
 
