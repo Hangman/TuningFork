@@ -42,7 +42,7 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         this.rhythm4 = FlacLoader.load(Gdx.files.internal("rhythm4.flac"));
         this.rhythm5 = new StreamedSoundSource(Gdx.files.internal("short.flac"));
 
-        // OBTAIN BUFFERED SOUND SOURCE
+        // OBTAIN BUFFERED SOUND SOURCES
         this.rhythm2Source = this.audio.obtainSource(this.rhythm2);
         this.rhythm4Source = this.audio.obtainSource(this.rhythm4);
 
