@@ -123,7 +123,7 @@ public class JukeBox {
 
 
     /**
-     * Stops playback and resets the current PlayList if applicable.
+     * Stops playback and resets the current {@link PlayList} if applicable.
      */
     public void stop() {
         if (!this.stopped) {
@@ -141,7 +141,7 @@ public class JukeBox {
 
 
     /**
-     * Immediately stops playback, removes all observers and sets the JukeBox into a stopped state.
+     * Immediately stops playback, removes all observers and sets the {@link JukeBox} into a stopped state.
      */
     public void clear() {
         this.stopped = true;
@@ -162,7 +162,7 @@ public class JukeBox {
 
 
     /**
-     * Returns the song that is currently playing. May be null.
+     * Returns the {@link Song} that is currently playing. May be null.
      *
      * @return the song
      */
