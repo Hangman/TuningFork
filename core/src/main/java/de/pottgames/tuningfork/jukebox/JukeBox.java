@@ -51,24 +51,30 @@ public class JukeBox {
         }
 
         SongSource source = null;
+        SongSettings settings = null;
         if (this.currentSong != null) {
             source = this.currentSong.getSource();
+            settings = this.currentSong.getSettings();
         }
 
         if (source != null && source.isPlaying()) {
-            final float playbackPos = source.getPlaybackPosition();
-            final SongSettings settings = this.currentSong.getSettings();
-            final boolean fadeIn = this.fadeIn(source, settings, playbackPos);
-            final boolean fadeOut = this.fadeOut(source, settings, playbackPos, source.getDuration());
-            if (!fadeIn && !fadeOut) {
-                source.setVolume(settings.getVolume());
-            }
+            this.applyFading(source, settings);
         } else {
             this.eventSongEnd = this.currentSong;
             this.nextSong();
         }
 
         this.handleEvents();
+    }
+
+
+    protected void applyFading(SongSource source, SongSettings settings) {
+        final float playbackPos = source.getPlaybackPosition();
+        final boolean fadeIn = this.fadeIn(source, settings, playbackPos);
+        final boolean fadeOut = this.fadeOut(source, settings, playbackPos, source.getDuration());
+        if (!fadeIn && !fadeOut) {
+            source.setVolume(settings.getVolume());
+        }
     }
 
 
