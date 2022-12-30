@@ -47,7 +47,7 @@ Then add TuningFork as dependency in your core project:
 project(":core") {
     dependencies {
     	// ...
-        implementation 'com.github.Hangman:TuningFork:3.1.0'
+        implementation 'com.github.Hangman:TuningFork:3.2.0'
     }
 }
 ```
@@ -55,7 +55,7 @@ project(":core") {
 Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.of(8)` (or higher) in your gradle scripts.
 | Version of libGDX   | Latest compatible version of TuningFork  |
 |      :----:         | :---                                     |
-| 1.9.12 - 1.11.0     | 3.1.0                                    |
+| 1.9.12 - 1.11.0     | 3.2.0                                    |
 | 1.9.11              | 2.0.1                                    |
 | < 1.9.11            | not supported, might work though: 2.0.1  |
 
