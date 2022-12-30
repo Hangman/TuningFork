@@ -15,7 +15,7 @@ public abstract class SongSource extends SoundSource {
 
 
     /**
-     * Returns the duration in seconds.
+     * Returns the duration in seconds. Might return -1 if the duration is not available.
      *
      * @return the duration in seconds
      */

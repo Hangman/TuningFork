@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.math.Interpolation;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
@@ -96,6 +97,9 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             this.jukeBox.stop();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            this.jukeBox.softStop(Interpolation.linear, 1.5f);
         }
 
         this.jukeBox.update();

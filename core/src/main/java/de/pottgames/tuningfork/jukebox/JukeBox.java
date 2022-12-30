@@ -1,5 +1,6 @@
 package de.pottgames.tuningfork.jukebox;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Array;
 
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
@@ -21,6 +22,11 @@ public class JukeBox {
     protected final PlayListProvider       playListProvider;
     protected Song                         currentSong;
     protected boolean                      stopped  = true;
+    protected boolean                      softStop = false;
+    protected long                         softStopStartTime;
+    protected float                        softStopFadeDuration;
+    protected Interpolation                softStopFadeCurve;
+    protected float                        softStopFadeStartVolume;
 
     protected Song     eventSongStart;
     protected Song     eventSongEnd;
@@ -58,7 +64,12 @@ public class JukeBox {
         }
 
         if (source != null && source.isPlaying()) {
-            this.applyFading(source, settings);
+            final float fadeVolume = this.determineFadeVolume(source, settings);
+            if (this.softStop) {
+                this.softStopFade(source);
+            } else {
+                source.setVolume(fadeVolume);
+            }
         } else {
             this.eventSongEnd = this.currentSong;
             this.nextSong();
@@ -68,39 +79,53 @@ public class JukeBox {
     }
 
 
-    protected void applyFading(SongSource source, SongSettings settings) {
-        final float playbackPos = source.getPlaybackPosition();
-        final boolean fadeIn = this.fadeIn(source, settings, playbackPos);
-        final boolean fadeOut = this.fadeOut(source, settings, playbackPos, source.getDuration());
-        if (!fadeIn && !fadeOut) {
-            source.setVolume(settings.getVolume());
+    protected void softStopFade(SongSource source) {
+        final float secondsSinceSoftStop = (System.currentTimeMillis() - this.softStopStartTime) / 1000f;
+        final float alpha = secondsSinceSoftStop / this.softStopFadeDuration;
+        if (alpha < 1f) {
+            final float softFadeVolume = (1f - this.softStopFadeCurve.apply(alpha)) * this.softStopFadeStartVolume;
+            source.setVolume(softFadeVolume);
+        } else {
+            this.stop();
         }
     }
 
 
-    protected boolean fadeIn(SongSource source, SongSettings settings, float playbackPos) {
+    protected float determineFadeVolume(SongSource source, SongSettings settings) {
+        final float playbackPos = source.getPlaybackPosition();
+        final float fadeIn = this.fadeIn(source, settings, playbackPos);
+        final float fadeOut = this.fadeOut(source, settings, playbackPos, source.getDuration());
+
+        if (fadeIn >= 0f) {
+            return fadeIn;
+        }
+        if (fadeOut >= 0f) {
+            return fadeOut;
+        }
+
+        return settings.getVolume();
+    }
+
+
+    protected float fadeIn(SongSource source, SongSettings settings, float playbackPos) {
         final float fadeDuration = settings.getFadeInDuration();
         if (playbackPos < fadeDuration) {
             final float alpha = playbackPos / fadeDuration;
             final float volume = settings.fadeVolume(FadeType.IN, alpha);
-            source.setVolume(volume);
-            return true;
+            return volume;
         }
-
-        return false;
+        return -1f;
     }
 
 
-    protected boolean fadeOut(SongSource source, SongSettings settings, float playbackPos, float songDuration) {
+    protected float fadeOut(SongSource source, SongSettings settings, float playbackPos, float songDuration) {
         final float fadeDuration = settings.getFadeOutDuration();
         if (playbackPos > songDuration - fadeDuration) {
             final float alpha = (songDuration - playbackPos) / fadeDuration;
             final float volume = settings.fadeVolume(FadeType.OUT, alpha);
-            source.setVolume(volume);
-            return true;
+            return volume;
         }
-
-        return false;
+        return -1f;
     }
 
 
@@ -134,15 +159,61 @@ public class JukeBox {
     public void stop() {
         if (!this.stopped) {
             this.eventJukeBoxEnd = true;
-            if (this.currentSong != null) {
-                this.currentSong.getSource().stop();
-            }
-            if (this.currentPlayList != null) {
-                this.currentPlayList.reset();
-            }
+        }
+        if (this.currentSong != null) {
+            this.currentSong.getSource().stop();
+        }
+        if (this.currentPlayList != null) {
+            this.currentPlayList.reset();
         }
         this.currentSong = null;
         this.stopped = true;
+        this.resetSoftStop();
+    }
+
+
+    protected void resetSoftStop() {
+        this.softStop = false;
+        this.softStopFadeCurve = null;
+    }
+
+
+    /**
+     * Fades out the currently playing song and stops the {@link JukeBox} afterwards.<br>
+     * <br>
+     * There's a couple of reasons why the {@link JukeBox} might stop early:<br>
+     * - the rest of the song is shorter than the desired fadeOutDuration<br>
+     * - the song duration is not available<br>
+     * - fadeOutCurve is null<br>
+     * - fadeOutDuration is smaller or equal 0 <br>
+     *
+     * @param fadeOutCurve
+     * @param fadeOutDuration fade out duration in seconds
+     */
+    public void softStop(Interpolation fadeOutCurve, float fadeOutDuration) {
+        if (this.stopped || this.currentSong == null || fadeOutCurve == null || fadeOutDuration <= 0f) {
+            this.stop();
+            return;
+        }
+
+        final SongSource source = this.currentSong.getSource();
+        final SongSettings settings = this.currentSong.getSettings();
+        final float duration = source.getDuration();
+        final float position = source.getPlaybackPosition();
+
+        if (duration <= 0f) {
+            this.stop();
+            return;
+        }
+
+        this.softStop = true;
+        this.softStopStartTime = System.currentTimeMillis();
+        this.softStopFadeDuration = fadeOutDuration;
+        this.softStopFadeCurve = fadeOutCurve;
+        if (duration - position < fadeOutDuration) {
+            this.softStopFadeDuration = duration - position;
+        }
+        this.softStopFadeStartVolume = this.determineFadeVolume(source, settings);
     }
 
 
@@ -174,6 +245,16 @@ public class JukeBox {
      */
     public Song getCurrentSong() {
         return this.currentSong;
+    }
+
+
+    /**
+     * Returns true if this {@link JukeBox} is playing at the moment.
+     *
+     * @return true if playing
+     */
+    public boolean isPlaying() {
+        return !this.stopped;
     }
 
 

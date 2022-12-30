@@ -104,6 +104,9 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
         // FETCH DATA & FORMAT FROM INPUT STREAM
         this.duration = stream.getDuration();
+        if (this.duration < 0f) {
+            this.logger.debug(this.getClass(), "Unable to measure sound duration");
+        }
         final int sampleRate = this.audioStream.getSampleRate();
         final int channels = this.audioStream.getChannels();
         final int sampleDepth = this.audioStream.getBitsPerSample();
