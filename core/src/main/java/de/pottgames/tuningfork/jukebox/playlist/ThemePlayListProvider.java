@@ -30,9 +30,22 @@ public class ThemePlayListProvider implements PlayListProvider {
      * Sets the theme.
      *
      * @param theme
+     *
+     * @return the ThemePlayListProvider for chaining
      */
-    public void setTheme(int theme) {
+    public ThemePlayListProvider setTheme(int theme) {
         this.theme = theme;
+        return this;
+    }
+
+
+    /**
+     * Returns the theme.
+     *
+     * @return the theme
+     */
+    public int getTheme() {
+        return this.theme;
     }
 
 
