@@ -113,6 +113,9 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
             this.jukeBox.softStop(Interpolation.linear, 1.5f);
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            this.jukeBox.softStopAndResume(Interpolation.linear, 2f);
+        }
 
         this.jukeBox.update();
     }
@@ -144,42 +147,48 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
 
     @Override
     public void onSongStart(Song song) {
-        System.out.println("Song started: " + song.getMeta().getTitle());
+        System.out.println(JukeBoxTest.timeStamp() + " Song started: " + song.getMeta().getTitle());
     }
 
 
     @Override
     public void onSongEnd(Song song) {
-        System.out.println("Song ended: " + song.getMeta().getTitle());
+        System.out.println(JukeBoxTest.timeStamp() + " Song ended: " + song.getMeta().getTitle());
     }
 
 
     @Override
     public void onPlayListStart(PlayList playList) {
-        System.out.println("PlayList started: " + playList);
+        System.out.println(JukeBoxTest.timeStamp() + " PlayList started: ");
     }
 
 
     @Override
     public void onPlayListEnd(PlayList playList) {
-        System.out.println("PlayList ended: " + playList);
+        System.out.println(JukeBoxTest.timeStamp() + " PlayList ended: ");
     }
 
 
     @Override
     public void onJukeBoxEnd() {
-        System.out.println("JukeBox ended");
+        System.out.println(JukeBoxTest.timeStamp() + " JukeBox ended");
     }
 
 
     @Override
     public void onJukeBoxStart() {
-        System.out.println("JukeBox started");
+        System.out.println(JukeBoxTest.timeStamp() + " JukeBox started");
     }
 
 
     @Override
     public void onJukeBoxPause() {
-        System.out.println("JukeBox paused");
+        System.out.println(JukeBoxTest.timeStamp() + " JukeBox paused");
     }
+
+
+    private static String timeStamp() {
+        return "[" + System.currentTimeMillis() + "]";
+    }
+
 }

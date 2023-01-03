@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
 import de.pottgames.tuningfork.jukebox.playlist.PlayListProvider;
+import de.pottgames.tuningfork.jukebox.playlist.ThemePlayListProvider;
 import de.pottgames.tuningfork.jukebox.song.Song;
 import de.pottgames.tuningfork.jukebox.song.SongSettings;
 import de.pottgames.tuningfork.jukebox.song.SongSettings.FadeType;
@@ -34,11 +35,13 @@ public class JukeBox {
     protected final PlayListProvider       playListProvider;
     protected Song                         currentSong;
     protected boolean                      stopped  = true;
-    protected boolean                      softStop = false;
-    protected long                         softStopStartTime;
-    protected float                        softStopFadeDuration;
-    protected Interpolation                softStopFadeCurve;
-    protected float                        softStopFadeStartVolume;
+
+    protected boolean       softStop       = false;
+    private boolean         softStopResume = false;
+    protected long          softStopStartTime;
+    protected float         softStopFadeDuration;
+    protected Interpolation softStopFadeCurve;
+    protected float         softStopFadeStartVolume;
 
     protected Song     eventSongStart;
     protected Song     eventSongEnd;
@@ -83,6 +86,7 @@ public class JukeBox {
                 source.setVolume(fadeVolume);
             }
         } else {
+            this.resetSoftStop(true);
             this.eventSongEnd = this.currentSong;
             this.nextSong();
         }
@@ -99,6 +103,10 @@ public class JukeBox {
             source.setVolume(softFadeVolume);
         } else {
             this.stop();
+            if (this.softStopResume) {
+                this.currentPlayList = null;
+                this.play();
+            }
         }
     }
 
@@ -174,19 +182,23 @@ public class JukeBox {
         }
         if (this.currentSong != null) {
             this.currentSong.getSource().stop();
+            this.eventSongEnd = this.currentSong;
         }
         if (this.currentPlayList != null) {
             this.currentPlayList.reset();
         }
         this.currentSong = null;
         this.stopped = true;
-        this.resetSoftStop();
+        this.resetSoftStop(false);
     }
 
 
-    protected void resetSoftStop() {
+    protected void resetSoftStop(boolean clearResume) {
         this.softStop = false;
         this.softStopFadeCurve = null;
+        if (clearResume) {
+            this.softStopResume = false;
+        }
     }
 
 
@@ -197,15 +209,17 @@ public class JukeBox {
      * - the rest of the song is shorter than the desired fadeOutDuration<br>
      * - the song duration is not available<br>
      * - fadeOutCurve is null<br>
-     * - fadeOutDuration is smaller or equal 0 <br>
+     * - fadeOutDuration is smaller or equal 0<br>
      *
      * @param fadeOutCurve
      * @param fadeOutDuration fade out duration in seconds
+     *
+     * @return false if a soft stop couldn't be performed and it is stopped right away
      */
-    public void softStop(Interpolation fadeOutCurve, float fadeOutDuration) {
+    public boolean softStop(Interpolation fadeOutCurve, float fadeOutDuration) {
         if (this.stopped || this.currentSong == null || fadeOutCurve == null || fadeOutDuration <= 0f) {
             this.stop();
-            return;
+            return false;
         }
 
         final SongSource source = this.currentSong.getSource();
@@ -215,10 +229,11 @@ public class JukeBox {
 
         if (duration <= 0f) {
             this.stop();
-            return;
+            return false;
         }
 
         this.softStop = true;
+        this.softStopResume = false;
         this.softStopStartTime = System.currentTimeMillis();
         this.softStopFadeDuration = fadeOutDuration;
         this.softStopFadeCurve = fadeOutCurve;
@@ -226,6 +241,32 @@ public class JukeBox {
             this.softStopFadeDuration = duration - position;
         }
         this.softStopFadeStartVolume = this.determineFadeVolume(source, settings);
+
+        return true;
+    }
+
+
+    /**
+     * Soft stops (see {@link #softStop(Interpolation, float)}), ends the current {@link PlayList} and resumes playback afterwards if possible.<br>
+     * <br>
+     * Since it may not be clear at first glance what the use cases are, here is an example:<br>
+     * The World-PlayList is running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList should begin
+     * playing.<br>
+     * This is achievable in 2 steps:<br>
+     * 1. change the theme in ThemePlayListProvider {@link ThemePlayListProvider#setTheme(int)}<br>
+     * 2. call softStopAndResume on the JukeBox
+     *
+     * @param fadeOutCurve
+     * @param fadeOutDuration
+     */
+    public void softStopAndResume(Interpolation fadeOutCurve, float fadeOutDuration) {
+        final boolean softStopResult = this.softStop(fadeOutCurve, fadeOutDuration);
+        if (!softStopResult) {
+            this.currentPlayList = null;
+            this.play();
+            return;
+        }
+        this.softStopResume = true;
     }
 
 
@@ -323,7 +364,7 @@ public class JukeBox {
 
 
     /**
-     * Adds an observer.
+     * Adds an observer. See {@link JukeBoxObserver} for details.
      *
      * @param observer
      */

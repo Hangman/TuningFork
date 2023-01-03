@@ -27,6 +27,16 @@ public class ThemePlayListProvider implements PlayListProvider {
 
 
     /**
+     * Sets the theme.
+     *
+     * @param theme
+     */
+    public void setTheme(int theme) {
+        this.theme = theme;
+    }
+
+
+    /**
      * Adds a theme and the corresponding {@link PlayList}, potentially replacing a previously set {@link PlayList} for that theme.
      *
      * @param list

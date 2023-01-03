@@ -15,6 +15,13 @@ package de.pottgames.tuningfork.jukebox;
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
 import de.pottgames.tuningfork.jukebox.song.Song;
 
+/**
+ * An observer to listen for {@link JukeBox} state changes. Events are passed to the observer in the correct order if they occur in different
+ * {@link JukeBox#update()} calls. If there are multiple events in the same {@link JukeBox#update()} call, the order isn't be guaranteed.
+ *
+ * @author Matthias
+ *
+ */
 public interface JukeBoxObserver {
 
     /**
