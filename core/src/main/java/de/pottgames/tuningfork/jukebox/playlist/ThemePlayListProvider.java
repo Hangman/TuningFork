@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.IntMap;
  */
 public class ThemePlayListProvider implements PlayListProvider {
     private IntMap<PlayList> lists = new IntMap<>();
-    private int              theme;
+    protected int            theme;
 
 
     /**
