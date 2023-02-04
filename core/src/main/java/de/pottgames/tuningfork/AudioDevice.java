@@ -50,6 +50,7 @@ public class AudioDevice {
     private final int[]                           tempSingleIntResult   = new int[1];
     private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
     private final Array<String>                   resamplers            = new Array<>();
+    private final int                             effectSlots;
 
 
     AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
@@ -84,7 +85,7 @@ public class AudioDevice {
         // SET CONTEXT ATTRIBUTES
         final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
         contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-        contextAttributes.put(2);
+        contextAttributes.put(config.effectSlots);
         contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
         contextAttributes.put(config.enableOutputLimiter ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
         contextAttributes.put(0);
@@ -177,15 +178,10 @@ public class AudioDevice {
         // CHECK AVAILABLE AUXILIARY SENDS
         final IntBuffer auxSends = BufferUtils.newIntBuffer(1);
         ALC10.alcGetIntegerv(this.deviceHandle, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
-        logger.debug(this.getClass(), "Available auxiliary sends: " + auxSends.get(0));
-        if (auxSends.get(0) < 2) {
-            try {
-                this.dispose(false);
-            } catch (final Exception e) {
-                logger.debug(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
-            }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support 2 auxiliary sends, which is a requirement of TuningFork.");
+        this.effectSlots = auxSends.get(0);
+        logger.debug(this.getClass(), "Available auxiliary sends: " + this.effectSlots);
+        if (auxSends.get(0) != config.effectSlots) {
+            logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.effectSlots + ").");
         }
 
         // FIND RESAMPLERS
@@ -396,6 +392,16 @@ public class AudioDevice {
         }
 
         return new Array<>(this.resamplers);
+    }
+
+
+    /**
+     * Returns the number of available effect slots. If you want to change the number, see {@link AudioDeviceConfig#effectSlots} in the AudioDeviceConfig.
+     *
+     * @return the number of effect slots available for each source
+     */
+    public int getNumberOfEffectSlots() {
+        return this.effectSlots;
     }
 
 

@@ -34,7 +34,7 @@ public abstract class SoundSource {
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
     protected final int            sourceId;
-    private final SoundEffect[]    effects               = new SoundEffect[2];
+    private final SoundEffect[]    effects;
     private int                    nextSoundEffectSendId = 0;
     private float                  attenuationFactor     = 1f;
     private final Vector3          position              = new Vector3(0f, 0f, 0f);
@@ -46,6 +46,7 @@ public abstract class SoundSource {
         final Audio audio = Audio.get();
         this.logger = audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+        this.effects = new SoundEffect[audio.getDevice().getNumberOfEffectSlots()];
 
         this.sourceId = AL10.alGenSources();
         AL10.alSourcef(this.sourceId, EXTEfx.AL_AIR_ABSORPTION_FACTOR, 1f);
@@ -375,8 +376,11 @@ public abstract class SoundSource {
 
 
     /**
-     * Attaches a sound effect to this sound source. You can only attach 2 different effects in total. If you attach more than 2 effects, the oldest attached
-     * effect will be kicked out. Attaching an effect that is already attached to this source is a legal NOP.
+     * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+     * Attaching an effect that is already attached to this source is a legal NOP.<br>
+     * <br>
+     * Set {@link AudioDeviceConfig#effectSlots} to change the number of available effect slots.<br>
+     * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
      * @param effect
      *
@@ -388,9 +392,12 @@ public abstract class SoundSource {
 
 
     /**
-     * Attaches a sound effect to this sound source. You can only attach 2 different effects in total. If you attach more than 2 effects, the oldest attached
-     * effect will be kicked out. Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used
-     * for this effect, or null if you don't want to apply a filter.
+     * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+     * Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used for this effect, or null if
+     * you don't want to apply a filter. <br>
+     * <br>
+     * Set {@link AudioDeviceConfig#effectSlots} to change the number of available effect slots.<br>
+     * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
      * @param effect
      * @param filter
@@ -398,6 +405,11 @@ public abstract class SoundSource {
      * @return the effect that was kicked out or null otherwise
      */
     public SoundEffect attachEffect(SoundEffect effect, Filter filter) {
+        if (this.effects.length == 0) {
+            this.logger.error(this.getClass(), "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
+            return null;
+        }
+
         SoundEffect result = null;
 
         // CANCEL IF THE EFFECT IS ALREADY ATTACHED TO THIS SOURCE
@@ -419,7 +431,12 @@ public abstract class SoundSource {
         AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, filterHandle);
         this.effects[this.nextSoundEffectSendId] = effect;
         effect.addSource(this);
-        this.nextSoundEffectSendId = 1 - this.nextSoundEffectSendId;
+
+        // SET NEXT SOUND EFFECT SEND ID
+        this.nextSoundEffectSendId++;
+        if (this.nextSoundEffectSendId >= this.effects.length) {
+            this.nextSoundEffectSendId = 0;
+        }
 
         return result;
     }

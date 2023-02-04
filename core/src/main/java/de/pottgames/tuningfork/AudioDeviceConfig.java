@@ -22,4 +22,11 @@ public class AudioDeviceConfig {
      * Whether to use the OpenAL output limiter that prevents clipping on the output.
      */
     public boolean enableOutputLimiter = true;
+
+    /**
+     * Defines how many effects can be attached to sound sources. It's not guaranteed that the device will provide as many slots as requested. Call
+     * {@link AudioDevice#getNumberOfEffectSlots()} to check how many effects are actually available.<br>
+     * Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable numbers).
+     */
+    public int effectSlots = 2;
 }
