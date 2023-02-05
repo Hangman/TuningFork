@@ -66,6 +66,54 @@ public class Chorus extends SoundEffectData {
     public float delay = 0.016f;
 
 
+    public static Chorus chore() {
+        final Chorus result = new Chorus();
+        result.waveForm = 0;
+        result.phase = 0;
+        result.rate = 3f;
+        result.depth = 0.15f;
+        result.feedback = 0.55f;
+        result.delay = 0.016f;
+        return result;
+    }
+
+
+    public static Chorus voiceBreak() {
+        final Chorus result = new Chorus();
+        result.waveForm = 0;
+        result.phase = 0;
+        result.rate = 3f;
+        result.depth = 0.2f;
+        result.feedback = 0.75f;
+        result.delay = 0.016f;
+        return result;
+    }
+
+
+    public static Chorus goofy() {
+        final Chorus result = new Chorus();
+        result.waveForm = 0;
+        result.phase = 0;
+        result.rate = 3f;
+        result.depth = 0.6f;
+        result.feedback = 0.75f;
+        result.delay = 0.016f;
+        return result;
+    }
+
+
+    public static Chorus goofyRobot() {
+        final Chorus result = new Chorus();
+        result.waveForm = 1;
+        result.phase = 0;
+        result.rate = 3f;
+        result.depth = 0.6f;
+        result.feedback = 0.75f;
+        result.delay = 0.016f;
+        return result;
+    }
+
+
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_CHORUS);

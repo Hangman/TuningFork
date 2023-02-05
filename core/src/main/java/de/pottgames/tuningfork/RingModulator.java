@@ -45,6 +45,33 @@ public class RingModulator extends SoundEffectData {
     public int waveform = 0;
 
 
+    public static RingModulator tremolo() {
+        final RingModulator result = new RingModulator();
+        result.frequency = 3.5f;
+        result.highpassCutoff = 0f;
+        result.waveform = 0;
+        return result;
+    }
+
+
+    public static RingModulator slowTremolo() {
+        final RingModulator result = new RingModulator();
+        result.frequency = 1.5f;
+        result.highpassCutoff = 0f;
+        result.waveform = 0;
+        return result;
+    }
+
+
+    public static RingModulator fastTremolo() {
+        final RingModulator result = new RingModulator();
+        result.frequency = 5f;
+        result.highpassCutoff = 0f;
+        result.waveform = 0;
+        return result;
+    }
+
+
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_RING_MODULATOR);

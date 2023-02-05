@@ -58,6 +58,64 @@ public class Echo extends SoundEffectData {
     public float spread = -1.0f;
 
 
+    public static Echo veryFarAway() {
+        final Echo result = new Echo();
+        result.delay = 0.207f;
+        result.lrDelay = 0.404f;
+        result.damping = 0.6f;
+        result.feedback = 0.7f;
+        result.spread = 0f;
+        return result;
+    }
+
+
+    public static Echo farAway() {
+        final Echo result = new Echo();
+        result.delay = 0.207f;
+        result.lrDelay = 0.404f;
+        result.damping = 0.5f;
+        result.feedback = 0.5f;
+        result.spread = 0f;
+        return result;
+    }
+
+
+    public static Echo pingPongLeft() {
+        final Echo result = new Echo();
+        result.delay = 0.05f;
+        result.lrDelay = 0.1f;
+        result.damping = 0.1f;
+        result.feedback = 0.8f;
+        result.spread = 1f;
+        return result;
+    }
+
+
+    public static Echo pingPongRight() {
+        final Echo result = Echo.pingPongLeft();
+        result.spread = -1f;
+        return result;
+    }
+
+
+    public static Echo pingPongCenter() {
+        final Echo result = Echo.pingPongLeft();
+        result.spread = 0f;
+        return result;
+    }
+
+
+    public static Echo doppelganger() {
+        final Echo result = new Echo();
+        result.delay = 0.1f;
+        result.lrDelay = 0.1f;
+        result.damping = 0.4f;
+        result.feedback = 0.5f;
+        result.spread = 0.2f;
+        return result;
+    }
+
+
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_ECHO);

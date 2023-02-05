@@ -38,6 +38,36 @@ public class PitchShifter extends SoundEffectData {
     public int fineTune = 0;
 
 
+    public static PitchShifter chipmunk() {
+        final PitchShifter result = new PitchShifter();
+        result.coarseTune = 8;
+        return result;
+    }
+
+
+    public static PitchShifter demon() {
+        final PitchShifter result = new PitchShifter();
+        result.coarseTune = -9;
+        return result;
+    }
+
+
+    public static PitchShifter maxPitch() {
+        final PitchShifter result = new PitchShifter();
+        result.coarseTune = 12;
+        result.fineTune = 50;
+        return result;
+    }
+
+
+    public static PitchShifter minPitch() {
+        final PitchShifter result = new PitchShifter();
+        result.coarseTune = -12;
+        result.fineTune = -50;
+        return result;
+    }
+
+
     /**
      * Sets {@link PitchShifter#coarseTune coarseTune} and {@link PitchShifter#fineTune fineTune} to values that try to correct a pitch applied to a
      * {@link SoundSource}, so that the sound appears to be played back at a pitch of 1. This way, it is possible to change the playback speed of a sound

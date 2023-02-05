@@ -56,6 +56,25 @@ public class Distortion extends SoundEffectData {
     public float eqBandwidth = 3600f;
 
 
+    public static Distortion rattle() {
+        final Distortion result = new Distortion();
+        result.edge = 1f;
+        result.gain = 1f;
+        return result;
+    }
+
+
+    public static Distortion rumble() {
+        final Distortion result = new Distortion();
+        result.edge = 0.7f;
+        result.gain = 1f;
+        result.lowpassCutoff = 80f;
+        result.eqCenter = 1000f;
+        result.eqBandwidth = 1000f;
+        return result;
+    }
+
+
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_DISTORTION);

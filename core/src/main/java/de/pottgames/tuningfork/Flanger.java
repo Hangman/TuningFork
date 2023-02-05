@@ -61,6 +61,42 @@ public class Flanger extends SoundEffectData {
     public float delay = 0.002f;
 
 
+    public static Flanger robotHigh() {
+        final Flanger result = new Flanger();
+        result.waveform = 1;
+        result.phase = 180;
+        result.rate = 2f;
+        result.depth = 0.5f;
+        result.feedback = 0.9f;
+        result.delay = 0.002f;
+        return result;
+    }
+
+
+    public static Flanger robotLow() {
+        final Flanger result = new Flanger();
+        result.waveform = 1;
+        result.phase = 180;
+        result.rate = 2f;
+        result.depth = 0.5f;
+        result.feedback = 0.9f;
+        result.delay = 0.004f;
+        return result;
+    }
+
+
+    public static Flanger robotMetallic() {
+        final Flanger result = new Flanger();
+        result.waveform = 1;
+        result.phase = 180;
+        result.rate = 2f;
+        result.depth = 0.5f;
+        result.feedback = -0.95f;
+        result.delay = 0.004f;
+        return result;
+    }
+
+
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FLANGER);
