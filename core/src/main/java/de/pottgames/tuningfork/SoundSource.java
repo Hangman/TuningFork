@@ -52,7 +52,7 @@ public abstract class SoundSource {
         AL10.alSourcef(this.sourceId, EXTEfx.AL_AIR_ABSORPTION_FACTOR, 1f);
 
         if (!this.errorLogger.checkLogError("Failed to create the SoundSource")) {
-            this.logger.debug(this.getClass(), "SoundSource successfully created");
+            this.logger.trace(this.getClass(), "SoundSource successfully created");
         }
 
         this.enableVirtualization(audio.isVirtualizationEnabled());
