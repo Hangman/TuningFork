@@ -317,7 +317,7 @@ public class AudioDevice {
                 contextAttributes.put(SOFTHRTF.ALC_HRTF_SOFT).put(ALC10.ALC_TRUE); // enable hrtf
                 contextAttributes.put(SOFTHRTF.ALC_HRTF_ID_SOFT).put(hrtfIndex); // set hrtf configuration
                 contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-                contextAttributes.put(2);
+                contextAttributes.put(this.config.effectSlots);
                 contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
                 contextAttributes.put(this.config.enableOutputLimiter ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
                 contextAttributes.put(0);
