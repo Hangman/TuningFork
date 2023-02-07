@@ -50,6 +50,56 @@ public class AutoWah extends SoundEffectData {
     public float peakGain = 11.22f;
 
 
+    public static AutoWah scrambled() {
+        final AutoWah result = new AutoWah();
+        result.attackTime = 0.0001f;
+        result.releaseTime = 0.01f;
+        result.resonance = 1000f;
+        result.peakGain = 6900f;
+        return result;
+    }
+
+
+    public static AutoWah funkyBeats() {
+        final AutoWah result = new AutoWah();
+        result.attackTime = 0.0001f;
+        result.releaseTime = 0.07f;
+        result.resonance = 1000f;
+        result.peakGain = 4100f;
+        return result;
+    }
+
+
+    public static AutoWah resonantWaves() {
+        final AutoWah result = new AutoWah();
+        result.attackTime = 0.01f;
+        result.releaseTime = 0.13f;
+        result.resonance = 1000f;
+        result.peakGain = 12000f;
+        return result;
+    }
+
+
+    public static AutoWah wahGhosts() {
+        final AutoWah result = new AutoWah();
+        result.attackTime = 0.04f;
+        result.releaseTime = 0.73f;
+        result.resonance = 85f;
+        result.peakGain = 4750f;
+        return result;
+    }
+
+
+    public static AutoWah windyNights() {
+        final AutoWah result = new AutoWah();
+        result.attackTime = 0.12f;
+        result.releaseTime = 0.3f;
+        result.resonance = 650f;
+        result.peakGain = 24000f;
+        return result;
+    }
+
+
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_AUTOWAH);
