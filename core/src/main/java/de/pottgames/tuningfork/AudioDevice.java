@@ -180,7 +180,7 @@ public class AudioDevice {
         ALC10.alcGetIntegerv(this.deviceHandle, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
         this.effectSlots = auxSends.get(0);
         logger.debug(this.getClass(), "Available auxiliary sends: " + this.effectSlots);
-        if (auxSends.get(0) != config.effectSlots) {
+        if (this.effectSlots != config.effectSlots) {
             logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.effectSlots + ").");
         }
 
