@@ -406,11 +406,11 @@ public class AudioDevice {
 
 
     /**
-     * Returns the index of first occurrence of value in the array, or -1 if no such value exists.
+     * Returns the index of the first occurrence of the value in the array, or -1 if no such value exists.
      *
      * @param name
      *
-     * @return An index of first occurrence of value in array or -1 if no such value exists
+     * @return the index of the first occurrence of the value in the array or -1 if no such value exists
      */
     int getResamplerIndexByName(String name) {
         return this.resamplers.indexOf(name, false);
