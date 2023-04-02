@@ -18,6 +18,7 @@ import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTDirectChannels;
 import org.lwjgl.openal.SOFTSourceResampler;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import de.pottgames.tuningfork.logger.ErrorLogger;
@@ -66,7 +67,17 @@ public abstract class SoundSource {
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
     public void setVolume(float volume) {
-        AL10.alSourcef(this.sourceId, AL10.AL_GAIN, volume);
+        AL10.alSourcef(this.sourceId, AL10.AL_GAIN, MathUtils.clamp(volume, 0f, 1f));
+    }
+
+
+    /**
+     * Returns the base volume of this sound source.
+     *
+     * @return volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume
+     */
+    public float getVolume() {
+        return AL10.alGetSourcef(this.sourceId, AL10.AL_GAIN);
     }
 
 
