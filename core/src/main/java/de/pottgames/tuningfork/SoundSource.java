@@ -103,6 +103,16 @@ public abstract class SoundSource {
 
 
     /**
+     * Returns whether this sound source handles the position attribute as relative to the listeners position.
+     *
+     * @return relative
+     */
+    public boolean isRelative() {
+        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_RELATIVE) == AL10.AL_TRUE;
+    }
+
+
+    /**
      * Sets the positions of this sound source in the virtual world.
      *
      * @param position
