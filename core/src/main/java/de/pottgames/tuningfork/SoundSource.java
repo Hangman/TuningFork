@@ -87,7 +87,17 @@ public abstract class SoundSource {
      * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
      */
     public void setPitch(float pitch) {
-        AL10.alSourcef(this.sourceId, AL10.AL_PITCH, pitch);
+        AL10.alSourcef(this.sourceId, AL10.AL_PITCH, MathUtils.clamp(pitch, 0.5f, 2f));
+    }
+
+
+    /**
+     * Returns the pitch of this sound source.
+     *
+     * @return pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster
+     */
+    public float getPitch() {
+        return AL10.alGetSourcef(this.sourceId, AL10.AL_PITCH);
     }
 
 

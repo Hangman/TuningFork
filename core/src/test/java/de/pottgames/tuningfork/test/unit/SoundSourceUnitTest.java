@@ -18,7 +18,7 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SourceVolumeUnitTest {
+public class SoundSourceUnitTest {
     private Audio               audio;
     private SoundBuffer         sound;
     private BufferedSoundSource source;
@@ -35,7 +35,7 @@ public class SourceVolumeUnitTest {
 
 
     @Test
-    public void test() {
+    public void testVolume() {
         Assertions.assertEquals(this.source.getVolume(), 1f);
 
         this.source.setVolume(0f);
@@ -52,6 +52,39 @@ public class SourceVolumeUnitTest {
 
         this.source.setVolume(0.133333333333333333f);
         Assertions.assertEquals(this.source.getVolume(), 0.133333333333333333f);
+    }
+
+
+    @Test
+    public void testRelative() {
+        Assertions.assertEquals(this.source.isRelative(), false);
+        this.source.setRelative(true);
+        Assertions.assertEquals(this.source.isRelative(), true);
+        this.source.setRelative(false);
+        Assertions.assertEquals(this.source.isRelative(), false);
+    }
+
+
+    @Test
+    public void testPitch() {
+        Assertions.assertEquals(this.source.getPitch(), 1f);
+        this.source.setPitch(0f);
+        Assertions.assertEquals(this.source.getPitch(), 0.5f);
+
+        this.source.setPitch(2f);
+        Assertions.assertEquals(this.source.getPitch(), 2f);
+
+        this.source.setPitch(3f);
+        Assertions.assertEquals(this.source.getPitch(), 2f);
+
+        this.source.setPitch(-1f);
+        Assertions.assertEquals(this.source.getPitch(), 0.5f);
+
+        this.source.setPitch(0.5f);
+        Assertions.assertEquals(this.source.getPitch(), 0.5f);
+
+        this.source.setPitch(0.533333333333333333f);
+        Assertions.assertEquals(this.source.getPitch(), 0.533333333333333333f);
     }
 
 
