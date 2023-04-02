@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.utils.Array;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
+import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.DistanceAttenuationModel;
@@ -34,11 +36,12 @@ import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
-public class HrtfTest extends ApplicationAdapter {
+public class HrtfTest extends ApplicationAdapter implements InputAdapter {
     private Audio               audio;
     private SoundBuffer         soundBuffer;
     private BufferedSoundSource soundSource;
     private float               angle;
+    private String              hrtfName;
 
 
     @Override
@@ -74,11 +77,13 @@ public class HrtfTest extends ApplicationAdapter {
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
         audioDeviceConfig.deviceSpecifier = deviceList.get(number);
         this.audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
+        Gdx.input.setInputProcessor(this);
 
         // ENABLE HRTF
         final Array<String> hrtfs = this.audio.getDevice().getAvailableHrtfs();
         hrtfs.forEach(name -> System.out.println("available hrtf: " + name));
         if (!hrtfs.isEmpty()) {
+            this.hrtfName = hrtfs.get(0);
             this.audio.getDevice().enableHrtf(hrtfs.get(0));
         } else {
             logger.error(this.getClass(), "no hrtf available");
@@ -92,6 +97,8 @@ public class HrtfTest extends ApplicationAdapter {
         this.soundSource.setLooping(true);
         this.soundSource.setRelative(true);
         this.soundSource.play();
+
+        System.out.println("Focus the application window and press space to toggle HRTF");
     }
 
 
@@ -99,6 +106,22 @@ public class HrtfTest extends ApplicationAdapter {
     public void render() {
         this.angle += Math.PI / 4f / 100f;
         this.soundSource.setPosition(MathUtils.sin(this.angle), 0f, -MathUtils.cos(this.angle));
+    }
+
+
+    @Override
+    public boolean keyDown(int button) {
+        if (button == Input.Keys.SPACE) {
+            final AudioDevice device = this.audio.getDevice();
+            if (device.isHrtfEnabled()) {
+                device.disableHrtf();
+                System.out.println("hrtf disabled");
+            } else if (this.hrtfName != null) {
+                device.enableHrtf(this.hrtfName);
+                System.out.println("hrtf enabled");
+            }
+        }
+        return true;
     }
 
 
