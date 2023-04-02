@@ -41,6 +41,7 @@ public abstract class SoundSource {
     private final Vector3          position              = new Vector3(0f, 0f, 0f);
     private boolean                directional           = false;
     private volatile int           resamplerIndex        = -1;
+    private boolean                directFilter          = false;
 
 
     protected SoundSource() {
@@ -402,7 +403,18 @@ public abstract class SoundSource {
      * @param filter
      */
     public void setFilter(Filter filter) {
-        AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL);
+        this.directFilter = filter != null;
+        AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, this.directFilter ? filter.getId() : EXTEfx.AL_FILTER_NULL);
+    }
+
+
+    /**
+     * Returns true if a direct filter is active on this sound source.
+     *
+     * @return result
+     */
+    public boolean hasFilter() {
+        return this.directFilter;
     }
 
 
