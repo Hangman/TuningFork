@@ -24,7 +24,8 @@ public class Mp3InputStream implements AudioStream {
     protected int          channels;
     protected int          sampleRate;
     protected FileHandle   file;
-    protected boolean      closed = false;
+    protected float        duration = -1f;
+    protected boolean      closed   = false;
 
 
     public Mp3InputStream(FileHandle file) {
@@ -42,6 +43,7 @@ public class Mp3InputStream implements AudioStream {
                 throw new TuningForkRuntimeException("Empty MP3");
             }
             this.channels = header.mode() == Header.SINGLE_CHANNEL ? 1 : 2;
+            this.duration = header.total_ms((int) file.length()) / 1000f;
             this.outputBuffer = new OutputBuffer(this.channels, false);
             this.decoder.setOutputBuffer(this.outputBuffer);
             this.sampleRate = header.getSampleRate();
@@ -82,7 +84,7 @@ public class Mp3InputStream implements AudioStream {
 
     @Override
     public float getDuration() {
-        return -1f;
+        return this.duration;
     }
 
 

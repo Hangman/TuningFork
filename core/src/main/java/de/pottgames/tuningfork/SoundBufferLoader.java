@@ -66,6 +66,9 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
             case WAV:
                 this.asset = WaveLoader.load(file);
                 break;
+            case MP3:
+                this.asset = Mp3Loader.load(file);
+                break;
             default:
                 throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac and wav files are supported.");
         }

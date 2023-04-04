@@ -29,6 +29,7 @@ import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamManager.TaskAction;
 import de.pottgames.tuningfork.decoder.AudioStream;
 import de.pottgames.tuningfork.decoder.FlacInputStream;
+import de.pottgames.tuningfork.decoder.Mp3InputStream;
 import de.pottgames.tuningfork.decoder.OggInputStream;
 import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
@@ -430,6 +431,8 @@ public class StreamedSoundSource extends SongSource implements Disposable {
                 return new OggInputStream(file, null);
             case WAV:
                 return new WavInputStream(file);
+            case MP3:
+                return new Mp3InputStream(file);
         }
 
         return null;
