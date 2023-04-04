@@ -24,7 +24,6 @@ TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that prov
 
 ### Limitations
 * Lwjgl3 only, sorry mobile and web users
-* due to file format limitations not all features are supported for **mp3**s
 
 ### Why
 The standard audio capabilities of libGDX are very limited compared to sound APIs like OpenAL - probably due to its cross-platform nature. Especially if you are developing a 3D application and want to create realistic spatial sound, use modern features like HRTF etc., you'll face some problems with libGDX.
