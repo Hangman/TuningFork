@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamManager.TaskAction;
+import de.pottgames.tuningfork.decoder.AiffInputStream;
 import de.pottgames.tuningfork.decoder.AudioStream;
 import de.pottgames.tuningfork.decoder.FlacInputStream;
 import de.pottgames.tuningfork.decoder.Mp3InputStream;
@@ -433,6 +434,8 @@ public class StreamedSoundSource extends SongSource implements Disposable {
                 return new WavInputStream(file);
             case MP3:
                 return new Mp3InputStream(file);
+            case AIFF:
+                return new AiffInputStream(file);
         }
 
         return null;

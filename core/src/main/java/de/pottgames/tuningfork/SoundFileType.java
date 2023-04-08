@@ -13,7 +13,7 @@
 package de.pottgames.tuningfork;
 
 public enum SoundFileType {
-    OGG, WAV, FLAC, MP3;
+    OGG, WAV, FLAC, MP3, AIFF;
 
 
     public static SoundFileType getByFileEnding(String fileExtension) {
@@ -29,6 +29,9 @@ public enum SoundFileType {
         }
         if ("mp3".equalsIgnoreCase(fileExtension)) {
             return MP3;
+        }
+        if ("aiff".equalsIgnoreCase(fileExtension) || "aif".equalsIgnoreCase(fileExtension)) {
+            return AIFF;
         }
 
         return null;
