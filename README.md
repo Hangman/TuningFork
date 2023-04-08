@@ -15,7 +15,7 @@ TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that prov
 * HRTF support (aka binaural)
 * Streaming is handled on a background thread
 * No more fiddling with sound IDs - proper OOP design
-* Load **wav**, **ogg**, **flac**, **mp3**
+* Load **wav**, **aiff** (SNAPSHOT), **ogg**, **flac**, **mp3**
 * Load asynchronously via `AssetManager`
 * Play raw PCM data
 * Supports surround sound formats
