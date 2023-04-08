@@ -73,7 +73,7 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
                 this.asset = AiffLoader.load(file);
                 break;
             default:
-                throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac and wav files are supported.");
+                throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac, mp3, aiff and wav files are supported.");
         }
     }
 
