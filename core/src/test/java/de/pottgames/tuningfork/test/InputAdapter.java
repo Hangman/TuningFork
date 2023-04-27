@@ -63,4 +63,10 @@ public interface InputAdapter extends InputProcessor {
         return false;
     }
 
+
+    @Override
+    default boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
 }
