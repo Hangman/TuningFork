@@ -26,6 +26,7 @@ import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
 import org.lwjgl.openal.SOFTSourceResampler;
+import org.lwjgl.openal.SOFTXHoldOnDisconnect;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
@@ -76,8 +77,6 @@ public class AudioDevice {
 
         // OPEN THE SOUND DEVICE
         this.deviceHandle = ALC10.alcOpenDevice(config.deviceSpecifier);
-
-        // CHECK IF DEVICE IS OPEN
         if (this.deviceHandle == 0L) {
             throw new OpenDeviceException("Failed to open the " + deviceName + " OpenAL device.");
         }
@@ -100,35 +99,19 @@ public class AudioDevice {
         ALC10.alcMakeContextCurrent(this.context);
         AL.createCapabilities(deviceCapabilities);
 
-        // CHECK OPENAL 1.0 API SUPPORT
-        if (!deviceCapabilities.OpenALC10) {
-            try {
-                this.dispose(false);
-            } catch (final Exception e) {
-                logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
-            }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.0 API which is a requirement of TuningFork.");
-        }
-        logger.trace(this.getClass(), "OpenAL 1.0 supported.");
-
-        // CHECK OPENAL 1.1 API SUPPORT
-        if (!deviceCapabilities.OpenALC11) {
-            try {
-                this.dispose(false);
-            } catch (final Exception e) {
-                logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
-            }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.1 API which is a requirement of TuningFork.");
-        }
-        logger.trace(this.getClass(), "OpenAL 1.1 supported.");
+        // CHECK OPENAL API SUPPORT
+        this.checkAL10Support(logger, deviceName, deviceCapabilities);
+        this.checkAL11Support(logger, deviceName, deviceCapabilities);
 
         // CHECK IF EXTENSIONS ARE PRESENT
         this.checkAvailableExtensions();
         this.checkRequiredExtension(ALExtension.ALC_EXT_EFX);
         this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS);
         this.checkRequiredExtension(ALExtension.AL_EXT_MCFORMATS);
+        this.checkRequiredExtension(ALExtension.AL_SOFTX_HOLD_ON_DISCONNECT);
+
+        // CONFIGURE CONTEXT
+        AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 
         // LOG OUTPUT LIMITER STATE
         if (config.enableOutputLimiter) {
@@ -190,6 +173,34 @@ public class AudioDevice {
         // LOG ERRORS
         this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
         this.errorLogger.checkLogError("There was at least one AL error upon audio device initialization");
+    }
+
+
+    private void checkAL11Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities) throws OpenDeviceException {
+        if (!deviceCapabilities.OpenALC11) {
+            try {
+                this.dispose(false);
+            } catch (final Exception e) {
+                logger.error(this.getClass(),
+                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
+            }
+            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.1 API which is a requirement of TuningFork.");
+        }
+        logger.trace(this.getClass(), "OpenAL 1.1 supported.");
+    }
+
+
+    private void checkAL10Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities) throws OpenDeviceException {
+        if (!deviceCapabilities.OpenALC10) {
+            try {
+                this.dispose(false);
+            } catch (final Exception e) {
+                logger.error(this.getClass(),
+                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
+            }
+            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.0 API which is a requirement of TuningFork.");
+        }
+        logger.trace(this.getClass(), "OpenAL 1.0 supported.");
     }
 
 

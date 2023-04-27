@@ -47,8 +47,6 @@ enum ALExtension {
     AL_SOFT_DEFERRED_UPDATES("AL_SOFT_deferred_updates", false),
     AL_SOFT_DIRECT_CHANNELS("AL_SOFT_direct_channels", false),
     AL_SOFT_DIRECT_CHANNELS_REMIX("AL_SOFT_direct_channels_remix", false),
-    AL_SOFTX_EVENTS("AL_SOFTX_events", false),
-    AL_SOFTX_FILTER_GAIN_EX("AL_SOFTX_filter_gain_ex", false),
     AL_SOFT_GAIN_CLAMP_EX("AL_SOFT_gain_clamp_ex", false),
     AL_SOFT_LOOP_POINTS("AL_SOFT_loop_points", false),
     AL_SOFTX_MAP_BUFFER("AL_SOFTX_map_buffer", false),
@@ -56,7 +54,10 @@ enum ALExtension {
     AL_SOFT_SOURCE_LATENCY("AL_SOFT_source_latency", false),
     AL_SOFT_SOURCE_LENGTH("AL_SOFT_source_length", false),
     AL_SOFT_SOURCE_RESAMPLER("AL_SOFT_source_resampler", false),
-    AL_SOFT_SOURCE_SPATIALIZE("AL_SOFT_source_spatialize", false);
+    AL_SOFT_SOURCE_SPATIALIZE("AL_SOFT_source_spatialize", false),
+    AL_SOFTX_EVENTS("AL_SOFTX_events", false),
+    AL_SOFTX_FILTER_GAIN_EX("AL_SOFTX_filter_gain_ex", false),
+    AL_SOFTX_HOLD_ON_DISCONNECT("AL_SOFTX_hold_on_disconnect", false);
 
 
     private final String  alSpecifier;
