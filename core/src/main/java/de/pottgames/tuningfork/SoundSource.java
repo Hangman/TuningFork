@@ -406,12 +406,13 @@ public abstract class SoundSource {
      */
     public void setFilter(float lowFreqVolume, float highFreqVolume) {
         this.directFilter = lowFreqVolume != 1f || highFreqVolume != 1f;
+        Filter filter = null;
         if (this.directFilter) {
-            final Filter filter = Audio.get().publicFilter;
+            filter = Audio.get().publicFilter;
             filter.setLowFrequencyVolume(lowFreqVolume);
             filter.setHighFrequencyVolume(highFreqVolume);
-            AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, this.directFilter ? filter.getId() : EXTEfx.AL_FILTER_NULL);
         }
+        AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL);
     }
 
 

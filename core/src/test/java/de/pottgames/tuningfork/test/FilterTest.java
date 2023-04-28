@@ -64,6 +64,10 @@ public class FilterTest extends ApplicationAdapter {
     @Override
     public void render() {
         if (!this.soundSource.isPlaying()) {
+            System.out.println("filter: " + this.filterIndex);
+            System.out.println("using low freq: " + this.filters[this.filterIndex][0]);
+            System.out.println("using low freq: " + this.filters[this.filterIndex][1]);
+            System.out.println();
             this.soundSource.setFilter(this.filters[this.filterIndex][0], this.filters[this.filterIndex][1]);
             this.soundSource.play();
             this.filterIndex++;
