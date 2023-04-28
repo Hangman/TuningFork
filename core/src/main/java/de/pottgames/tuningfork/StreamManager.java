@@ -140,7 +140,7 @@ public class StreamManager {
         // TERMINATE UPDATE THREAD
         this.running = false;
         try {
-            this.updateThread.join();
+            this.updateThread.join(2000);
         } catch (final InterruptedException e1) {
             // ignore
         }

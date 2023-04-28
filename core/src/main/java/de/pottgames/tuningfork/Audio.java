@@ -15,8 +15,9 @@ package de.pottgames.tuningfork;
 import java.util.List;
 
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALUtil;
+import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.system.MemoryUtil;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -58,7 +59,7 @@ public class Audio implements Disposable {
      * @return the list
      */
     public static List<String> availableDevices() {
-        return ALUtil.getStringList(0L, ALC11.ALC_ALL_DEVICES_SPECIFIER);
+        return ALUtil.getStringList(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
     }
 
 

@@ -34,6 +34,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import de.pottgames.tuningfork.router.AudioDeviceRerouter;
 
 /**
  * A class that gives access to some audio hardware device specific settings. Allows to query and change hardware specific settings.
@@ -52,9 +53,10 @@ public class AudioDevice {
     private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
     private final Array<String>                   resamplers            = new Array<>();
     private final int                             effectSlots;
+    private AudioDeviceRerouter                   deviceRerouter;
 
 
-    AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
+    protected AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
         this.config = config;
         this.logger = logger;
         this.errorLogger = new ErrorLogger(this.getClass(), logger);
@@ -109,6 +111,8 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS);
         this.checkRequiredExtension(ALExtension.AL_EXT_MCFORMATS);
         this.checkRequiredExtension(ALExtension.AL_SOFTX_HOLD_ON_DISCONNECT);
+        this.checkRequiredExtension(ALExtension.ALC_SOFT_REOPEN_DEVICE);
+        this.checkRequiredExtension(ALExtension.ALC_ENUMERATE_ALL_EXT);
 
         // CONFIGURE CONTEXT
         AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
@@ -169,6 +173,13 @@ public class AudioDevice {
 
         // FIND RESAMPLERS
         this.getAvailableResamplers();
+
+        // DEVICE CONNECTION REROUTER
+        this.deviceRerouter = config.rerouter;
+        if (this.deviceRerouter != null) {
+            this.deviceRerouter.setup(this.deviceHandle, config.deviceSpecifier);
+            this.deviceRerouter.start();
+        }
 
         // LOG ERRORS
         this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
@@ -231,7 +242,7 @@ public class AudioDevice {
     }
 
 
-    boolean isExtensionAvailable(ALExtension extension) {
+    protected boolean isExtensionAvailable(ALExtension extension) {
         final Boolean result = this.extensionAvailableMap.get(extension);
         if (result == null) {
             return false;
@@ -423,7 +434,7 @@ public class AudioDevice {
      *
      * @return the index of the first occurrence of the value in the array or -1 if no such value exists
      */
-    int getResamplerIndexByName(String name) {
+    protected int getResamplerIndexByName(String name) {
         return this.resamplers.indexOf(name, false);
     }
 
@@ -433,7 +444,7 @@ public class AudioDevice {
     }
 
 
-    int getDefaultResamplerIndex() {
+    protected int getDefaultResamplerIndex() {
         return AL10.alGetInteger(SOFTSourceResampler.AL_DEFAULT_RESAMPLER_SOFT);
     }
 
@@ -448,7 +459,10 @@ public class AudioDevice {
     }
 
 
-    void dispose(boolean log) {
+    protected void dispose(boolean log) {
+        if (this.deviceRerouter != null) {
+            this.deviceRerouter.dispose();
+        }
         if (this.context != 0L) {
             ALC10.alcDestroyContext(this.context);
         }

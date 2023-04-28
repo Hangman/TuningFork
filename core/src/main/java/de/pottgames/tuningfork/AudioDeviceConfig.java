@@ -12,7 +12,11 @@
 
 package de.pottgames.tuningfork;
 
+import de.pottgames.tuningfork.router.AudioDeviceRerouter;
+import de.pottgames.tuningfork.router.KeepAliveDeviceRerouter;
+
 public class AudioDeviceConfig {
+
     /**
      * Must be one of the device specifiers you can query with {@link Audio#availableDevices()}. Leave it null to use the default audio device.
      */
@@ -29,4 +33,12 @@ public class AudioDeviceConfig {
      * Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable numbers).
      */
     public int effectSlots = 2;
+
+    /**
+     * A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to
+     * keep track of the default audio device of the OS and switch to it when a new default device is reported by the OS. Default:
+     * {@link KeepAliveDeviceRerouter}
+     */
+    public AudioDeviceRerouter rerouter = new KeepAliveDeviceRerouter();
+
 }
