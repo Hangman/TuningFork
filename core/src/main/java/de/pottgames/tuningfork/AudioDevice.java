@@ -61,8 +61,8 @@ public class AudioDevice {
 
 
     /**
-     * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#deviceSpecifier} to request a specific
-     * sound device for audio playback.
+     * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#setDeviceSpecifier(String)} to request a
+     * specific sound device for audio playback or switch to a device at runtime with {@link AudioDevice#switchToDevice(String)}.
      *
      * @return the list
      */
@@ -81,19 +81,20 @@ public class AudioDevice {
         }
 
         // CHECK IF THE SPECIFIED DEVICE IS AVAILABLE
-        if (config.deviceSpecifier != null) {
+        final String deviceSpecifier = config.getDeviceSpecifier();
+        if (deviceSpecifier != null) {
             final List<String> availableDevices = AudioDevice.availableDevices();
-            if (!availableDevices.contains(config.deviceSpecifier)) {
-                throw new UnsupportedAudioDeviceException("Unable to open unsupported audio device: " + config.deviceSpecifier);
+            if (!availableDevices.contains(deviceSpecifier)) {
+                throw new UnsupportedAudioDeviceException("Unable to open unsupported audio device: " + deviceSpecifier);
             }
         }
-        String deviceName = config.deviceSpecifier;
-        if (config.deviceSpecifier == null) {
+        String deviceName = deviceSpecifier;
+        if (deviceSpecifier == null) {
             deviceName = "default";
         }
 
         // OPEN THE SOUND DEVICE
-        this.deviceHandle = ALC10.alcOpenDevice(config.deviceSpecifier);
+        this.deviceHandle = ALC10.alcOpenDevice(deviceSpecifier);
         if (this.deviceHandle == 0L) {
             throw new OpenDeviceException("Failed to open the " + deviceName + " OpenAL device.");
         }
@@ -101,9 +102,9 @@ public class AudioDevice {
         // SET CONTEXT ATTRIBUTES
         final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
         contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-        contextAttributes.put(config.effectSlots);
+        contextAttributes.put(config.getEffectSlots());
         contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
-        contextAttributes.put(config.enableOutputLimiter ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
+        contextAttributes.put(config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
         contextAttributes.put(0);
         contextAttributes.flip();
 
@@ -133,7 +134,7 @@ public class AudioDevice {
         AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 
         // LOG OUTPUT LIMITER STATE
-        if (config.enableOutputLimiter) {
+        if (config.isEnableOutputLimiter()) {
             final int[] outputLimiterEnabled = new int[1];
             outputLimiterEnabled[0] = ALC10.ALC_FALSE;
             if (this.isExtensionAvailable(ALExtension.ALC_SOFT_OUTPUT_LIMITER)) {
@@ -182,17 +183,17 @@ public class AudioDevice {
         ALC10.alcGetIntegerv(this.deviceHandle, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
         this.effectSlots = auxSends.get(0);
         logger.debug(this.getClass(), "Available auxiliary sends: " + this.effectSlots);
-        if (this.effectSlots != config.effectSlots) {
-            logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.effectSlots + ").");
+        if (this.effectSlots != config.getEffectSlots()) {
+            logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.getEffectSlots() + ").");
         }
 
         // FIND RESAMPLERS
         this.getAvailableResamplers();
 
         // DEVICE CONNECTION REROUTER
-        this.deviceRerouter = config.rerouter;
+        this.deviceRerouter = config.getRerouter();
         if (this.deviceRerouter != null) {
-            this.deviceRerouter.setup(this.deviceHandle, config.deviceSpecifier);
+            this.deviceRerouter.setup(this.deviceHandle, deviceSpecifier);
             this.deviceRerouter.start();
         }
 
@@ -370,9 +371,9 @@ public class AudioDevice {
                 contextAttributes.put(SOFTHRTF.ALC_HRTF_SOFT).put(ALC10.ALC_TRUE); // enable hrtf
                 contextAttributes.put(SOFTHRTF.ALC_HRTF_ID_SOFT).put(hrtfIndex); // set hrtf configuration
                 contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-                contextAttributes.put(this.config.effectSlots);
+                contextAttributes.put(this.config.getEffectSlots());
                 contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
-                contextAttributes.put(this.config.enableOutputLimiter ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
+                contextAttributes.put(this.config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
                 contextAttributes.put(0);
                 contextAttributes.flip();
 
@@ -449,7 +450,7 @@ public class AudioDevice {
 
 
     /**
-     * Returns the number of available effect slots. If you want to change the number, see {@link AudioDeviceConfig#effectSlots} in the AudioDeviceConfig.
+     * Returns the number of available effect slots. If you want to change the number, see {@link AudioDeviceConfig#setEffectSlots(int)}.
      *
      * @return the number of effect slots available for each source
      */

@@ -33,7 +33,7 @@ public class AuxSendsTest extends ApplicationAdapter {
 
         // AUDIO DEVICE CONFIG
         final AudioDeviceConfig deviceConfig = config.getDeviceConfig();
-        deviceConfig.effectSlots = 3;
+        deviceConfig.setEffectSlots(3);
 
         // INIT
         this.audio = Audio.init(config);

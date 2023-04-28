@@ -64,7 +64,7 @@ public class CaptureTest {
         final ConsoleLogger logger = new ConsoleLogger();
         logger.setLogLevel(LogLevel.WARN_ERROR);
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
-        audioDeviceConfig.deviceSpecifier = outputDeviceList.get(outputNumber);
+        audioDeviceConfig.setDeviceSpecifier(outputDeviceList.get(outputNumber));
         final Audio audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
 
         // CREATE SOUND SOURCE

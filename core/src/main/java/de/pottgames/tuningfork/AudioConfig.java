@@ -22,13 +22,13 @@ import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 public class AudioConfig {
-    private AudioDeviceConfig        deviceConfig;
-    private DistanceAttenuationModel distanceAttenuationModel;
-    private int                      simultaneousSources;
-    private int                      idleTasks;
-    private boolean                  virtualizationEnabled;
-    private TuningForkLogger         logger;
-    private WavDecoderProvider       wavDecoderProvider;
+    protected AudioDeviceConfig        deviceConfig;
+    protected DistanceAttenuationModel distanceAttenuationModel;
+    protected int                      simultaneousSources;
+    protected int                      idleTasks;
+    protected boolean                  virtualizationEnabled;
+    protected TuningForkLogger         logger;
+    protected WavDecoderProvider       wavDecoderProvider;
 
 
     /**

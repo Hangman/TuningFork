@@ -75,7 +75,7 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         final ConsoleLogger logger = new ConsoleLogger();
         logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
-        audioDeviceConfig.deviceSpecifier = deviceList.get(number);
+        audioDeviceConfig.setDeviceSpecifier(deviceList.get(number));
         this.audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
         Gdx.input.setInputProcessor(this);
 

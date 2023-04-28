@@ -422,7 +422,7 @@ public abstract class SoundSource {
      * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
      * Attaching an effect that is already attached to this source is a legal NOP.<br>
      * <br>
-     * Set {@link AudioDeviceConfig#effectSlots} to change the number of available effect slots.<br>
+     * {@link AudioDeviceConfig#setEffectSlots(int)} to change the number of available effect slots.<br>
      * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
      * @param effect
@@ -439,7 +439,7 @@ public abstract class SoundSource {
      * Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used for this effect, or null if
      * you don't want to apply a filter. <br>
      * <br>
-     * Set {@link AudioDeviceConfig#effectSlots} to change the number of available effect slots.<br>
+     * {@link AudioDeviceConfig#setEffectSlots(int)} to change the number of available effect slots.<br>
      * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
      * @param effect
