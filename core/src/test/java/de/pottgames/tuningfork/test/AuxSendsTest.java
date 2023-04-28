@@ -11,7 +11,6 @@ import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.AutoWah;
 import de.pottgames.tuningfork.Chorus;
 import de.pottgames.tuningfork.Echo;
-import de.pottgames.tuningfork.Filter;
 import de.pottgames.tuningfork.PitchShifter;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundEffect;
@@ -43,7 +42,7 @@ public class AuxSendsTest extends ApplicationAdapter {
         // PLAY
         final SoundSource source = this.audio.obtainSource(this.sound);
         source.setLooping(true);
-        source.setFilter(new Filter(0f, 0f));
+        source.setFilter(0f, 0f);
         source.attachEffect(new SoundEffect(new PitchShifter())); // this effect should be kicked out because we configured only 3 effect slots
         source.attachEffect(new SoundEffect(new AutoWah()));
         source.attachEffect(new SoundEffect(new Echo()));

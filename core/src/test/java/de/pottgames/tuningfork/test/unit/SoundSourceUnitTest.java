@@ -24,7 +24,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
-import de.pottgames.tuningfork.Filter;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
@@ -35,7 +34,6 @@ public class SoundSourceUnitTest {
     private Audio               audio;
     private SoundBuffer         sound;
     private BufferedSoundSource source;
-    private Filter              filter;
 
 
     @BeforeAll
@@ -45,7 +43,6 @@ public class SoundSourceUnitTest {
         this.audio = Audio.init(new AudioConfig().setLogger(new ConsoleLogger(LogLevel.INFO_WARN_ERROR)));
         this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
         this.source = this.audio.obtainSource(this.sound);
-        this.filter = new Filter(1f, 1f);
     }
 
 
@@ -112,16 +109,15 @@ public class SoundSourceUnitTest {
     @Test
     public void testFilter() {
         Assertions.assertEquals(this.source.hasFilter(), false);
-        this.source.setFilter(this.filter);
+        this.source.setFilter(0f, 0.5f);
         Assertions.assertEquals(this.source.hasFilter(), true);
-        this.source.setFilter(null);
+        this.source.setFilter(1f, 1f);
         Assertions.assertEquals(this.source.hasFilter(), false);
     }
 
 
     @AfterAll
     public void cleanup() {
-        this.filter.dispose();
         this.source.free();
         this.sound.dispose();
         this.audio.dispose();

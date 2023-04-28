@@ -15,7 +15,6 @@ package de.pottgames.tuningfork;
 import org.lwjgl.openal.EXTEfx;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Disposable;
 
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -27,7 +26,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  *
  */
-public class Filter implements Disposable {
+class Filter {
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
     private final int              id;
@@ -39,7 +38,7 @@ public class Filter implements Disposable {
      * @param volumeLf volume of the low frequencies, range: 0 - 1
      * @param volumeHf volume of the high frequencies, range: 0 - 1
      */
-    public Filter(float volumeLf, float volumeHf) {
+    Filter(float volumeLf, float volumeHf) {
         this.logger = Audio.get().getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
         this.errorLogger.dismissError();
@@ -65,7 +64,7 @@ public class Filter implements Disposable {
      *
      * @param volume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
-    public void setLowFrequencyVolume(float volume) {
+    void setLowFrequencyVolume(float volume) {
         volume = MathUtils.clamp(volume, 0f, 1f);
         EXTEfx.alFilterf(this.id, EXTEfx.AL_BANDPASS_GAINLF, volume);
     }
@@ -76,14 +75,13 @@ public class Filter implements Disposable {
      *
      * @param volume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
-    public void setHighFrequencyVolume(float volume) {
+    void setHighFrequencyVolume(float volume) {
         volume = MathUtils.clamp(volume, 0f, 1f);
         EXTEfx.alFilterf(this.id, EXTEfx.AL_BANDPASS_GAINHF, volume);
     }
 
 
-    @Override
-    public void dispose() {
+    void dispose() {
         this.errorLogger.dismissError();
         EXTEfx.alDeleteFilters(this.id);
         if (!this.errorLogger.checkLogError("Failed to dispose filter")) {

@@ -73,7 +73,8 @@ public class PitchShifter extends SoundEffectData {
      * {@link SoundSource}, so that the sound appears to be played back at a pitch of 1. This way, it is possible to change the playback speed of a sound
      * without changing its pitch.<br>
      * <br>
-     * <b>Note:</b> In order to only hear the pitch corrected sound, the direct sound path must be muted with the help of a {@link Filter} set to [0,0].
+     * <b>Note:</b> In order to only hear the pitch corrected sound, the direct sound path must be muted with the help of
+     * {@link SoundSource#setFilter(float, float)} set to [0,0].
      *
      * @param pitch - pitch correction only works for 0.5 <= pitch <= 2
      *

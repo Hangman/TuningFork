@@ -20,7 +20,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.EaxReverb;
-import de.pottgames.tuningfork.Filter;
 import de.pottgames.tuningfork.Flanger;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundEffect;
@@ -58,9 +57,7 @@ public class EffectTest extends ApplicationAdapter {
         this.soundSource.attachEffect(this.effect2);
 
         // [optional] mute the original output if you want
-        final Filter muteFilter = new Filter(0f, 0f);
-        this.soundSource.setFilter(muteFilter);
-        muteFilter.dispose();
+        this.soundSource.setFilter(0f, 0f);
     }
 
 

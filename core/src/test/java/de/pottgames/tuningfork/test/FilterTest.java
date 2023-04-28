@@ -20,7 +20,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
-import de.pottgames.tuningfork.Filter;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
@@ -29,7 +28,7 @@ import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 public class FilterTest extends ApplicationAdapter {
     private Audio               audio;
     private SoundBuffer         sound;
-    private final Filter[]            filters     = new Filter[3];
+    private final float[][]     filters     = new float[3][2];
     private int                 filterIndex = 0;
     private BufferedSoundSource soundSource;
 
@@ -48,16 +47,24 @@ public class FilterTest extends ApplicationAdapter {
         this.soundSource = this.audio.obtainSource(this.sound);
 
         // create filters
-        this.filters[0] = new Filter(1f, 1f); // has no effect
-        this.filters[1] = new Filter(0.01f, 1f); // only high frequencies
-        this.filters[2] = new Filter(1f, 0.01f); // only low frequencies
+        // no effect
+        this.filters[0][0] = 1f;
+        this.filters[0][1] = 1f;
+
+        // only high frequencies
+        this.filters[1][0] = 0.01f;
+        this.filters[1][1] = 1f;
+
+        // only low frequencies
+        this.filters[2][0] = 1f;
+        this.filters[2][1] = 0.01f;
     }
 
 
     @Override
     public void render() {
         if (!this.soundSource.isPlaying()) {
-            this.soundSource.setFilter(this.filters[this.filterIndex]);
+            this.soundSource.setFilter(this.filters[this.filterIndex][0], this.filters[this.filterIndex][1]);
             this.soundSource.play();
             this.filterIndex++;
             if (this.filterIndex >= this.filters.length) {
@@ -69,9 +76,6 @@ public class FilterTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        for (final Filter filter : this.filters) {
-            filter.dispose();
-        }
         this.soundSource.free();
         this.sound.dispose();
 

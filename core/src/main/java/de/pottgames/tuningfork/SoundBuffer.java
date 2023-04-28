@@ -92,16 +92,6 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Plays the sound with the given filter.
-     *
-     * @param filter
-     */
-    public void play(Filter filter) {
-        this.audio.play(this, filter);
-    }
-
-
-    /**
      * Plays a sound with an effect.
      *
      * @param effect
@@ -118,17 +108,6 @@ public class SoundBuffer implements Disposable {
      */
     public void play(float volume) {
         this.audio.play(this, volume);
-    }
-
-
-    /**
-     * Plays the sound with the given volume and filter.
-     *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param filter
-     */
-    public void play(float volume, Filter filter) {
-        this.audio.play(this, volume, filter);
     }
 
 
@@ -159,10 +138,11 @@ public class SoundBuffer implements Disposable {
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param filter
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
-    public void play(float volume, float pitch, Filter filter) {
-        this.audio.play(this, volume, pitch, filter);
+    public void play(float volume, float pitch, float lowFreqVolume, float highFreqVolume) {
+        this.audio.play(this, volume, pitch, lowFreqVolume, highFreqVolume);
     }
 
 
@@ -217,10 +197,11 @@ public class SoundBuffer implements Disposable {
      * Plays a spatial sound with the given filter at the given position.
      *
      * @param position
-     * @param filter
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
-    public void play3D(Vector3 position, Filter filter) {
-        this.audio.play3D(this, position, filter);
+    public void play3D(Vector3 position, float lowFreqVolume, float highFreqVolume) {
+        this.audio.play3D(this, position, lowFreqVolume, highFreqVolume);
     }
 
 
@@ -239,11 +220,12 @@ public class SoundBuffer implements Disposable {
      * Plays a spatial sound at the given position with the given effect and filter.
      *
      * @param position
-     * @param filter
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param effect
      */
-    public void play3D(Vector3 position, Filter filter, SoundEffect effect) {
-        this.audio.play3D(this, position, filter, effect);
+    public void play3D(Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
+        this.audio.play3D(this, position, lowFreqVolume, highFreqVolume, effect);
     }
 
 
@@ -263,10 +245,11 @@ public class SoundBuffer implements Disposable {
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      * @param position
-     * @param filter
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
-    public void play3D(float volume, Vector3 position, Filter filter) {
-        this.audio.play3D(this, volume, position, filter);
+    public void play3D(float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
+        this.audio.play3D(this, volume, position, lowFreqVolume, highFreqVolume);
     }
 
 

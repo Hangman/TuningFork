@@ -400,11 +400,18 @@ public abstract class SoundSource {
     /**
      * Enables the given filter as direct filter (dry signal) on this sound source.
      *
-     * @param filter
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     *
      */
-    public void setFilter(Filter filter) {
-        this.directFilter = filter != null;
-        AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, this.directFilter ? filter.getId() : EXTEfx.AL_FILTER_NULL);
+    public void setFilter(float lowFreqVolume, float highFreqVolume) {
+        this.directFilter = lowFreqVolume != 1f || highFreqVolume != 1f;
+        if (this.directFilter) {
+            final Filter filter = Audio.get().publicFilter;
+            filter.setLowFrequencyVolume(lowFreqVolume);
+            filter.setHighFrequencyVolume(highFreqVolume);
+            AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, this.directFilter ? filter.getId() : EXTEfx.AL_FILTER_NULL);
+        }
     }
 
 
@@ -430,7 +437,7 @@ public abstract class SoundSource {
      * @return the effect that was kicked out or null otherwise
      */
     public SoundEffect attachEffect(SoundEffect effect) {
-        return this.attachEffect(effect, null);
+        return this.attachEffect(effect, 1f, 1f);
     }
 
 
@@ -443,11 +450,12 @@ public abstract class SoundSource {
      * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
      * @param effect
-     * @param filter
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      *
      * @return the effect that was kicked out or null otherwise
      */
-    public SoundEffect attachEffect(SoundEffect effect, Filter filter) {
+    public SoundEffect attachEffect(SoundEffect effect, float lowFreqVolume, float highFreqVolume) {
         if (this.effects.length == 0) {
             this.logger.error(this.getClass(), "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
             return null;
@@ -470,6 +478,12 @@ public abstract class SoundSource {
         }
 
         // ADD EFFECT
+        Filter filter = null;
+        if (lowFreqVolume != 1f || highFreqVolume != 1f) {
+            filter = Audio.get().publicFilter;
+            filter.setLowFrequencyVolume(lowFreqVolume);
+            filter.setHighFrequencyVolume(highFreqVolume);
+        }
         final int filterHandle = filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL;
         AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, filterHandle);
         this.effects[this.nextSoundEffectSendId] = effect;

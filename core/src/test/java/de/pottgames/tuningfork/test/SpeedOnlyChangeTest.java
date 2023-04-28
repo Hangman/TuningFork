@@ -18,7 +18,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.Filter;
 import de.pottgames.tuningfork.OggLoader;
 import de.pottgames.tuningfork.PitchShifter;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -36,7 +35,7 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         this.sound = OggLoader.load(Gdx.files.internal("carnivalrides.ogg"));
-        SoundSource source = this.audio.obtainSource(this.sound);
+        final SoundSource source = this.audio.obtainSource(this.sound);
 
         // set source pitch to change the speed
         final float pitch = 1.2f;
@@ -47,9 +46,7 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
         source.attachEffect(this.effect);
 
         // in order to only hear the pitch corrected sound, we must silence the original sound with a filter
-        final Filter filter = new Filter(0f, 0f);
-        source.setFilter(filter);
-        filter.dispose();
+        source.setFilter(0f, 0f);
 
         source.play();
     }

@@ -256,7 +256,7 @@ public class BufferedSoundSource extends SongSource {
         this.obtained = true;
         AL10.alSourceRewind(this.sourceId);
         this.setBuffer(null);
-        this.setFilter(null);
+        this.setFilter(1f, 1f);
         this.setLooping(false);
         this.setPitch(1f);
         this.setVolume(1f);

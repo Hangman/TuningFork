@@ -34,6 +34,7 @@ public class Audio implements Disposable {
     private static Audio instance;
 
     final StreamManager              streamManager;
+    final Filter                     publicFilter;
     private final WavDecoderProvider wavDecoderProvider;
     private final SoundListener      listener;
     private final SoundSourcePool    sourcePool;
@@ -115,6 +116,7 @@ public class Audio implements Disposable {
         this.device = device;
         this.wavDecoderProvider = config.getResamplerProvider();
         Audio.instance = this;
+        this.publicFilter = new Filter(1f, 1f);
         this.streamManager = new StreamManager(config, this.logger);
 
         // SET DEFAULTS
@@ -332,21 +334,6 @@ public class Audio implements Disposable {
 
 
     /**
-     * Plays the sound with the given filter.
-     *
-     * @param buffer
-     * @param filter
-     *
-     */
-    protected void play(SoundBuffer buffer, Filter filter) {
-        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
-        source.setFilter(filter);
-        source.play();
-        source.obtained = false;
-    }
-
-
-    /**
      * Plays a sound with an effect.
      *
      * @param buffer
@@ -371,23 +358,6 @@ public class Audio implements Disposable {
     protected void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
-        source.play();
-        source.obtained = false;
-    }
-
-
-    /**
-     * Plays the sound with the given volume and filter.
-     *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param filter
-     *
-     */
-    protected void play(SoundBuffer buffer, float volume, Filter filter) {
-        final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
-        source.setVolume(volume);
-        source.setFilter(filter);
         source.play();
         source.obtained = false;
     }
@@ -436,11 +406,11 @@ public class Audio implements Disposable {
      * @param filter
      *
      */
-    protected void play(SoundBuffer buffer, float volume, float pitch, Filter filter) {
+    protected void play(SoundBuffer buffer, float volume, float pitch, float lowFreqVolume, float highFreqVolume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
-        source.setFilter(filter);
+        source.setFilter(lowFreqVolume, highFreqVolume);
         source.play();
         source.obtained = false;
     }
@@ -530,10 +500,10 @@ public class Audio implements Disposable {
      * @param filter
      *
      */
-    protected void play3D(SoundBuffer buffer, Vector3 position, Filter filter) {
+    protected void play3D(SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
-        source.setFilter(filter);
+        source.setFilter(lowFreqVolume, highFreqVolume);
         source.play();
         source.obtained = false;
     }
@@ -565,11 +535,11 @@ public class Audio implements Disposable {
      * @param effect
      *
      */
-    protected void play3D(SoundBuffer buffer, Vector3 position, Filter filter, SoundEffect effect) {
+    protected void play3D(SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
         source.attachEffect(effect);
-        source.setFilter(filter);
+        source.setFilter(lowFreqVolume, highFreqVolume);
         source.play();
         source.obtained = false;
     }
@@ -601,11 +571,11 @@ public class Audio implements Disposable {
      * @param filter
      *
      */
-    protected void play3D(SoundBuffer buffer, float volume, Vector3 position, Filter filter) {
+    protected void play3D(SoundBuffer buffer, float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPosition(position);
-        source.setFilter(filter);
+        source.setFilter(lowFreqVolume, highFreqVolume);
         source.play();
         source.obtained = false;
     }
@@ -827,6 +797,7 @@ public class Audio implements Disposable {
      */
     @Override
     public void dispose() {
+        this.publicFilter.dispose();
         this.streamManager.dispose();
         this.stopAllBufferedSources();
         this.sourcePool.dispose();
