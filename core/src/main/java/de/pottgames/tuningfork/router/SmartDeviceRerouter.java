@@ -11,6 +11,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
+import de.pottgames.tuningfork.misc.ExperimentalFeature;
 
 /**
  * <b>Warning</b>: This is an experimental router that has not been tested on all platforms and OpenAL backends. Use at your own risk.<br>
@@ -20,6 +21,7 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
  * @author Matthias
  *
  */
+@ExperimentalFeature
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
     private volatile boolean active            = false;
     private Thread           thread;
