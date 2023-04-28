@@ -4,6 +4,13 @@ import com.badlogic.gdx.utils.Disposable;
 
 import de.pottgames.tuningfork.AudioDeviceConfig;
 
+/**
+ * A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to keep
+ * track of the default audio device of the OS and switch to it when a new default device is reported by the OS.
+ *
+ * @author Matthias
+ *
+ */
 public interface AudioDeviceRerouter extends Disposable {
 
     /**
@@ -15,6 +22,9 @@ public interface AudioDeviceRerouter extends Disposable {
     void setup(long device, String desiredDeviceSpecifier);
 
 
+    /**
+     * Gets called right after {@link #setup(long, String) setup} and should start a background thread which is then responsible for rerouting.
+     */
     void start();
 
 }
