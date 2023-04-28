@@ -12,12 +12,7 @@
 
 package de.pottgames.tuningfork;
 
-import java.util.List;
-
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALUtil;
-import org.lwjgl.openal.EnumerateAllExt;
-import org.lwjgl.system.MemoryUtil;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -50,17 +45,6 @@ public class Audio implements Disposable {
     private final TuningForkLogger   logger;
     private final AudioDevice        device;
     private int                      defaultResamplerIndex         = -1;
-
-
-    /**
-     * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#deviceSpecifier} to request a specific
-     * sound device for audio playback.
-     *
-     * @return the list
-     */
-    public static List<String> availableDevices() {
-        return ALUtil.getStringList(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
-    }
 
 
     /**

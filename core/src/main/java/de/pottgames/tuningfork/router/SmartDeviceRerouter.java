@@ -9,11 +9,11 @@ import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.system.MemoryUtil;
 
-import de.pottgames.tuningfork.Audio;
+import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 
 /**
- * <b>Warning</b>: This is an experimental router that has not been tested on all platforms and OpenAL audio backends. Use with care.<br>
+ * <b>Warning</b>: This is an experimental router that has not been tested on all platforms and OpenAL backends. Use at your own risk.<br>
  * A task that runs on a daemon thread which periodically checks if the audio device lost connection. If a connection loss is detected or AL was opened on the
  * default device and the OS reports a new one, the task reopens AL on the new default audio device.
  *
@@ -24,14 +24,21 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     private volatile boolean active            = false;
     private Thread           thread;
     private long             device;
-    private String           desiredDeviceSpecifier;
-    private boolean          defaultDeviceMode = true;
+    private volatile String  desiredDeviceSpecifier;
+    private volatile boolean defaultDeviceMode = true;
     private boolean          setup             = false;
 
 
     @Override
     public void setup(long device, String desiredDeviceSpecifier) {
         this.device = device;
+        this.setNewDesiredDevice(desiredDeviceSpecifier);
+        this.setup = true;
+    }
+
+
+    @Override
+    public void setNewDesiredDevice(String desiredDeviceSpecifier) {
         if (desiredDeviceSpecifier != null) {
             this.desiredDeviceSpecifier = desiredDeviceSpecifier;
             this.defaultDeviceMode = false;
@@ -39,7 +46,6 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
             this.desiredDeviceSpecifier = this.fetchDefaultDeviceName();
             this.defaultDeviceMode = true;
         }
-        this.setup = true;
     }
 
 
@@ -87,7 +93,7 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
 
     private void tryReopen() {
-        final List<String> availableDevices = Audio.availableDevices();
+        final List<String> availableDevices = AudioDevice.availableDevices();
         if (availableDevices.contains(this.desiredDeviceSpecifier)) {
             this.reopen(this.desiredDeviceSpecifier);
         } else {

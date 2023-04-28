@@ -2,6 +2,7 @@ package de.pottgames.tuningfork.router;
 
 import com.badlogic.gdx.utils.Disposable;
 
+import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
 
 /**
@@ -20,6 +21,14 @@ public interface AudioDeviceRerouter extends Disposable {
      * @param desiredDeviceSpecifier the device specifier that was specified in {@link AudioDeviceConfig#deviceSpecifier}
      */
     void setup(long device, String desiredDeviceSpecifier);
+
+
+    /**
+     * This method gets called when the user changes the device at runtime via {@link AudioDevice#switchToDevice(String)}.
+     *
+     * @param desiredDeviceSpecifier
+     */
+    void setNewDesiredDevice(String desiredDeviceSpecifier);
 
 
     /**

@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
+import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.DistanceAttenuationModel;
 import de.pottgames.tuningfork.PcmFormat;
@@ -40,7 +41,7 @@ public class CaptureTest {
         final int bufferSize = frequency / 10;
 
         // FETCH AVAILABLE OUTPUT DEVICES
-        final List<String> outputDeviceList = Audio.availableDevices();
+        final List<String> outputDeviceList = AudioDevice.availableDevices();
         if (outputDeviceList == null || outputDeviceList.isEmpty()) {
             System.out.println("Error: no output device found");
             return;

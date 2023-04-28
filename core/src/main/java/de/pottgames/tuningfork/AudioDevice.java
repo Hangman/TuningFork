@@ -21,12 +21,16 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALUtil;
 import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
+import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
+import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.openal.SOFTSourceResampler;
 import org.lwjgl.openal.SOFTXHoldOnDisconnect;
+import org.lwjgl.system.MemoryUtil;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
@@ -56,6 +60,17 @@ public class AudioDevice {
     private AudioDeviceRerouter                   deviceRerouter;
 
 
+    /**
+     * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#deviceSpecifier} to request a specific
+     * sound device for audio playback.
+     *
+     * @return the list
+     */
+    public static List<String> availableDevices() {
+        return ALUtil.getStringList(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+    }
+
+
     protected AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
         this.config = config;
         this.logger = logger;
@@ -67,7 +82,7 @@ public class AudioDevice {
 
         // CHECK IF THE SPECIFIED DEVICE IS AVAILABLE
         if (config.deviceSpecifier != null) {
-            final List<String> availableDevices = Audio.availableDevices();
+            final List<String> availableDevices = AudioDevice.availableDevices();
             if (!availableDevices.contains(config.deviceSpecifier)) {
                 throw new UnsupportedAudioDeviceException("Unable to open unsupported audio device: " + config.deviceSpecifier);
             }
@@ -268,6 +283,22 @@ public class AudioDevice {
 
         // If the extension is not available, always report true
         return true;
+    }
+
+
+    /**
+     * Switches to another audio device.
+     *
+     * @param deviceSpecifier must be one of the devices returned by {@link AudioDevice#availableDevices()} or null to switch to the default device.
+     *
+     * @return true if successful
+     */
+    public boolean switchToDevice(String deviceSpecifier) {
+        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(this.deviceHandle, deviceSpecifier, (IntBuffer) null);
+        if (success && this.deviceRerouter != null) {
+            this.deviceRerouter.setNewDesiredDevice(deviceSpecifier);
+        }
+        return success;
     }
 
 

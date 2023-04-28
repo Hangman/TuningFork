@@ -23,6 +23,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
+import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.DistanceAttenuationModel;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -37,7 +38,7 @@ public class DeviceTest {
         Gdx.files = new Lwjgl3Files();
 
         // FETCH AVAILABLE DEVICES
-        final List<String> deviceList = Audio.availableDevices();
+        final List<String> deviceList = AudioDevice.availableDevices();
         if (deviceList == null) {
             System.out.println("Error: deviceList is null");
             return;

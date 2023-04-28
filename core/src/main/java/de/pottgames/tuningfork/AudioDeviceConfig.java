@@ -18,7 +18,7 @@ import de.pottgames.tuningfork.router.KeepAliveDeviceRerouter;
 public class AudioDeviceConfig {
 
     /**
-     * Must be one of the device specifiers you can query with {@link Audio#availableDevices()}. Leave it null to use the default audio device.
+     * Must be one of the device specifiers you can query with {@link AudioDevice#availableDevices()}. Leave it null to use the default audio device.
      */
     public String deviceSpecifier;
 

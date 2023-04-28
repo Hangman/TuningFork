@@ -29,6 +29,12 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
 
 
     @Override
+    public void setNewDesiredDevice(String desiredDeviceSpecifier) {
+        // this rerouter doesn't care about desires
+    }
+
+
+    @Override
     public void start() {
         if (!this.setup) {
             throw new TuningForkRuntimeException("KeepAliveDeviceRerouter wasn't set up properly");

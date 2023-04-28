@@ -47,7 +47,7 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
     @Override
     public void create() {
         // FETCH AVAILABLE DEVICES
-        final List<String> deviceList = Audio.availableDevices();
+        final List<String> deviceList = AudioDevice.availableDevices();
         if (deviceList == null) {
             System.out.println("Error: deviceList is null");
             return;
