@@ -85,7 +85,7 @@ public class AudioDevice {
         if (deviceSpecifier != null) {
             final List<String> availableDevices = AudioDevice.availableDevices();
             if (!availableDevices.contains(deviceSpecifier)) {
-                throw new UnsupportedAudioDeviceException("Unable to open unsupported audio device: " + deviceSpecifier);
+                throw new UnsupportedAudioDeviceException("Unable to find audio device: " + deviceSpecifier);
             }
         }
         String deviceName = deviceSpecifier;
@@ -99,7 +99,7 @@ public class AudioDevice {
             throw new OpenDeviceException("Failed to open the " + deviceName + " OpenAL device.");
         }
 
-        // SET CONTEXT ATTRIBUTES
+        // CREATE A CONTEXT AND SET IT ACTIVE
         final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
         contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
         contextAttributes.put(config.getEffectSlots());
@@ -107,8 +107,6 @@ public class AudioDevice {
         contextAttributes.put(config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
         contextAttributes.put(0);
         contextAttributes.flip();
-
-        // CREATE A CONTEXT AND SET IT ACTIVE
         final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.deviceHandle);
         this.context = ALC10.alcCreateContext(this.deviceHandle, contextAttributes);
         if (this.context == 0L) {
@@ -129,9 +127,6 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.AL_SOFTX_HOLD_ON_DISCONNECT);
         this.checkRequiredExtension(ALExtension.ALC_SOFT_REOPEN_DEVICE);
         this.checkRequiredExtension(ALExtension.ALC_ENUMERATE_ALL_EXT);
-
-        // CONFIGURE CONTEXT
-        AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {
@@ -187,15 +182,10 @@ public class AudioDevice {
             logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.getEffectSlots() + ").");
         }
 
-        // FIND RESAMPLERS
+        // FINAL SETUP
         this.getAvailableResamplers();
-
-        // DEVICE CONNECTION REROUTER
-        this.deviceRerouter = config.getRerouter();
-        if (this.deviceRerouter != null) {
-            this.deviceRerouter.setup(this.deviceHandle, deviceSpecifier);
-            this.deviceRerouter.start();
-        }
+        this.setDeviceRerouter(config.getRerouter());
+        AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 
         // LOG ERRORS
         this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
@@ -300,6 +290,34 @@ public class AudioDevice {
             this.deviceRerouter.setNewDesiredDevice(deviceSpecifier);
         }
         return success;
+    }
+
+
+    /**
+     * Sets the device rerouter, calls {@link AudioDeviceRerouter#setup(long, String) setup} and {@link AudioDeviceRerouter#start() start} on it. If there was
+     * another rerouter active, it gets {@link AudioDeviceRerouter#dispose() disposed}.
+     *
+     * @param rerouter
+     */
+    public void setDeviceRerouter(AudioDeviceRerouter rerouter) {
+        if (this.deviceRerouter != null) {
+            this.deviceRerouter.dispose();
+        }
+        this.deviceRerouter = rerouter;
+        if (rerouter != null) {
+            rerouter.setup(this.deviceHandle, this.config.deviceSpecifier);
+            rerouter.start();
+        }
+    }
+
+
+    /**
+     * Returns the currently active {@link AudioDeviceRerouter}.
+     *
+     * @return the device rerouter
+     */
+    public AudioDeviceRerouter getDeviceRerouter() {
+        return this.deviceRerouter;
     }
 
 
