@@ -58,6 +58,7 @@ public class AudioDevice {
     private final Array<String>                   resamplers            = new Array<>();
     private final int                             effectSlots;
     private AudioDeviceRerouter                   deviceRerouter;
+    private ContextAttributes                     contextAttributes;
 
 
     /**
@@ -100,15 +101,14 @@ public class AudioDevice {
         }
 
         // CREATE A CONTEXT AND SET IT ACTIVE
-        final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
-        contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-        contextAttributes.put(config.getEffectSlots());
-        contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
-        contextAttributes.put(config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
-        contextAttributes.put(0);
-        contextAttributes.flip();
+        final int[] attributes = new int[4];
+        attributes[0] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
+        attributes[1] = config.getEffectSlots();
+        attributes[2] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
+        attributes[3] = config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+        this.contextAttributes = new ContextAttributes(attributes);
         final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.deviceHandle);
-        this.context = ALC10.alcCreateContext(this.deviceHandle, contextAttributes);
+        this.context = ALC10.alcCreateContext(this.deviceHandle, this.contextAttributes.getBuffer());
         if (this.context == 0L) {
             throw new IllegalStateException("Failed to create OpenAL context.");
         }
@@ -285,17 +285,17 @@ public class AudioDevice {
      * @return true if successful
      */
     public boolean switchToDevice(String deviceSpecifier) {
-        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(this.deviceHandle, deviceSpecifier, (IntBuffer) null);
+        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(this.deviceHandle, deviceSpecifier, this.contextAttributes.getBuffer());
         if (success && this.deviceRerouter != null) {
-            this.deviceRerouter.setNewDesiredDevice(deviceSpecifier);
+            this.deviceRerouter.updateDesiredDevice(deviceSpecifier);
         }
         return success;
     }
 
 
     /**
-     * Sets the device rerouter, calls {@link AudioDeviceRerouter#setup(long, String) setup} and {@link AudioDeviceRerouter#start() start} on it. If there was
-     * another rerouter active, it gets {@link AudioDeviceRerouter#dispose() disposed}.
+     * Sets the device rerouter, calls {@link AudioDeviceRerouter#setup(long, String, ContextAttributes) setup} and {@link AudioDeviceRerouter#start() start} on
+     * it. If there was another rerouter active, it gets {@link AudioDeviceRerouter#dispose() disposed}.
      *
      * @param rerouter
      */
@@ -305,7 +305,7 @@ public class AudioDevice {
         }
         this.deviceRerouter = rerouter;
         if (rerouter != null) {
-            rerouter.setup(this.deviceHandle, this.config.deviceSpecifier);
+            rerouter.setup(this.deviceHandle, this.config.deviceSpecifier, this.contextAttributes);
             rerouter.start();
         }
     }
@@ -385,22 +385,30 @@ public class AudioDevice {
 
             if (hrtfIndex >= 0) {
                 // SET NEW DEVICE ATTRIBUTES
-                final IntBuffer contextAttributes = BufferUtils.newIntBuffer(10);
-                contextAttributes.put(SOFTHRTF.ALC_HRTF_SOFT).put(ALC10.ALC_TRUE); // enable hrtf
-                contextAttributes.put(SOFTHRTF.ALC_HRTF_ID_SOFT).put(hrtfIndex); // set hrtf configuration
-                contextAttributes.put(EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-                contextAttributes.put(this.config.getEffectSlots());
-                contextAttributes.put(SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT);
-                contextAttributes.put(this.config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE);
-                contextAttributes.put(0);
-                contextAttributes.flip();
+                final ContextAttributes oldAttributes = this.contextAttributes;
+                final int[] attributes = new int[8];
+                attributes[0] = SOFTHRTF.ALC_HRTF_SOFT;
+                attributes[1] = ALC10.ALC_TRUE;
+                attributes[2] = SOFTHRTF.ALC_HRTF_ID_SOFT;
+                attributes[3] = hrtfIndex;
+                attributes[4] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
+                attributes[5] = this.config.getEffectSlots();
+                attributes[6] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
+                attributes[7] = this.config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+                this.contextAttributes = new ContextAttributes(attributes);
 
                 // RESET DEVICE
-                if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, contextAttributes)) {
+                if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, this.contextAttributes.getBuffer())) {
                     this.logger.error(this.getClass(),
                             "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
                     this.hrtfEnabled = false;
+                    this.contextAttributes = oldAttributes;
                     return false;
+                }
+
+                // NOTIFY REROUTER ABOUT CONTEXT ATTRIBUTES CHANGE
+                if (this.deviceRerouter != null) {
+                    this.deviceRerouter.updateContextAttributes(this.contextAttributes);
                 }
 
                 // CHECK CURRENT HRTF STATE

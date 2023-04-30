@@ -12,7 +12,6 @@
 
 package de.pottgames.tuningfork.router;
 
-import java.nio.IntBuffer;
 import java.util.List;
 
 import org.lwjgl.openal.ALC10;
@@ -22,6 +21,7 @@ import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.system.MemoryUtil;
 
 import de.pottgames.tuningfork.AudioDevice;
+import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.misc.ExperimentalFeature;
 
@@ -35,24 +35,26 @@ import de.pottgames.tuningfork.misc.ExperimentalFeature;
  */
 @ExperimentalFeature
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
-    private volatile boolean active            = false;
-    private Thread           thread;
-    private long             device;
-    private volatile String  desiredDeviceSpecifier;
-    private volatile boolean defaultDeviceMode = true;
-    private boolean          setup             = false;
+    private volatile boolean           active            = false;
+    private Thread                     thread;
+    private long                       device;
+    private volatile ContextAttributes attributes;
+    private volatile String            desiredDeviceSpecifier;
+    private volatile boolean           defaultDeviceMode = true;
+    private boolean                    setup             = false;
 
 
     @Override
-    public void setup(long device, String desiredDeviceSpecifier) {
+    public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
         this.device = device;
-        this.setNewDesiredDevice(desiredDeviceSpecifier);
+        this.attributes = attributes;
+        this.updateDesiredDevice(desiredDeviceSpecifier);
         this.setup = true;
     }
 
 
     @Override
-    public void setNewDesiredDevice(String desiredDeviceSpecifier) {
+    public void updateDesiredDevice(String desiredDeviceSpecifier) {
         if (desiredDeviceSpecifier != null) {
             this.desiredDeviceSpecifier = desiredDeviceSpecifier;
             this.defaultDeviceMode = false;
@@ -60,6 +62,12 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
             this.desiredDeviceSpecifier = this.fetchDefaultDeviceName();
             this.defaultDeviceMode = true;
         }
+    }
+
+
+    @Override
+    public void updateContextAttributes(ContextAttributes attributes) {
+        this.attributes = attributes;
     }
 
 
@@ -124,7 +132,7 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
 
     private void reopen(String deviceSpecifier) {
-        if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceSpecifier, (IntBuffer) null)) {
+        if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceSpecifier, this.attributes.getBuffer())) {
             System.err.println("Failed to reopen audio device");
         }
     }

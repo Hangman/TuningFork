@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
+import de.pottgames.tuningfork.ContextAttributes;
 
 /**
  * A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to keep
@@ -27,12 +28,13 @@ import de.pottgames.tuningfork.AudioDeviceConfig;
 public interface AudioDeviceRerouter extends Disposable {
 
     /**
-     * {@link #setup(long, String) setup} is called before {@link #start() run}.
+     * {@link #setup(long, String, ContextAttributes) setup} is called before {@link #start() run}.
      *
      * @param device the OpenAL device handle
      * @param desiredDeviceSpecifier the device specifier that was specified in {@link AudioDeviceConfig#setDeviceSpecifier(String)}
+     * @param attributes
      */
-    void setup(long device, String desiredDeviceSpecifier);
+    void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes);
 
 
     /**
@@ -40,11 +42,20 @@ public interface AudioDeviceRerouter extends Disposable {
      *
      * @param desiredDeviceSpecifier
      */
-    void setNewDesiredDevice(String desiredDeviceSpecifier);
+    void updateDesiredDevice(String desiredDeviceSpecifier);
 
 
     /**
-     * Gets called right after {@link #setup(long, String) setup} and should start a background thread which is then responsible for rerouting.
+     * This method gets called whenever the OpenAL context attributes change.
+     *
+     * @param attributes
+     */
+    void updateContextAttributes(ContextAttributes attributes);
+
+
+    /**
+     * Gets called right after {@link #setup(long, String, ContextAttributes) setup} and should start a background thread which is then responsible for
+     * rerouting.
      */
     void start();
 

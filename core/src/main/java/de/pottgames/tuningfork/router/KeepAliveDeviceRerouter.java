@@ -12,12 +12,11 @@
 
 package de.pottgames.tuningfork.router;
 
-import java.nio.IntBuffer;
-
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.SOFTReopenDevice;
 
+import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 
 /**
@@ -27,22 +26,30 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
  *
  */
 public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
-    private volatile boolean active = false;
-    private Thread           thread;
-    private long             device;
-    private boolean          setup  = false;
+    private volatile boolean           active = false;
+    private Thread                     thread;
+    private long                       device;
+    private volatile ContextAttributes attributes;
+    private boolean                    setup  = false;
 
 
     @Override
-    public void setup(long device, String desiredDeviceSpecifier) {
+    public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
         this.device = device;
+        this.attributes = attributes;
         this.setup = true;
     }
 
 
     @Override
-    public void setNewDesiredDevice(String desiredDeviceSpecifier) {
+    public void updateDesiredDevice(String desiredDeviceSpecifier) {
         // this rerouter doesn't care about desires
+    }
+
+
+    @Override
+    public void updateContextAttributes(ContextAttributes attributes) {
+        this.attributes = attributes;
     }
 
 
@@ -66,7 +73,7 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
         while (this.active) {
             final boolean isConnected = ALC10.alcGetInteger(this.device, EXTDisconnect.ALC_CONNECTED) == ALC10.ALC_TRUE;
             if (!isConnected) {
-                if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, (String) null, (IntBuffer) null)) {
+                if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, (String) null, this.attributes.getBuffer())) {
                     System.err.println("Failed to reopen audio device");
                 }
             }
