@@ -51,9 +51,12 @@ public class AudioDeviceConfig {
      * Must be one of the device specifiers you can query with {@link AudioDevice#availableDevices()}. Leave it null to use the default audio device.
      *
      * @param deviceSpecifier
+     *
+     * @return this
      */
-    public void setDeviceSpecifier(String deviceSpecifier) {
+    public AudioDeviceConfig setDeviceSpecifier(String deviceSpecifier) {
         this.deviceSpecifier = deviceSpecifier;
+        return this;
     }
 
 
@@ -66,9 +69,12 @@ public class AudioDeviceConfig {
      * Whether to use the OpenAL output limiter that prevents clipping on the output.
      *
      * @param enableOutputLimiter
+     *
+     * @return this
      */
-    public void setEnableOutputLimiter(boolean enableOutputLimiter) {
+    public AudioDeviceConfig setEnableOutputLimiter(boolean enableOutputLimiter) {
         this.enableOutputLimiter = enableOutputLimiter;
+        return this;
     }
 
 
@@ -83,9 +89,12 @@ public class AudioDeviceConfig {
      * Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable numbers).
      *
      * @param effectSlots
+     *
+     * @return this
      */
-    public void setEffectSlots(int effectSlots) {
+    public AudioDeviceConfig setEffectSlots(int effectSlots) {
         this.effectSlots = effectSlots;
+        return this;
     }
 
 
@@ -100,9 +109,12 @@ public class AudioDeviceConfig {
      * {@link KeepAliveDeviceRerouter}
      *
      * @param rerouter
+     *
+     * @return this
      */
-    public void setRerouter(AudioDeviceRerouter rerouter) {
+    public AudioDeviceConfig setRerouter(AudioDeviceRerouter rerouter) {
         this.rerouter = rerouter;
+        return this;
     }
 
 }

@@ -191,9 +191,12 @@ public class AudioConfig {
      * By default virtualization is enabled and it's the recommended setting.
      *
      * @param enabled
+     *
+     * @return this
      */
-    public void setVirtualizationEnabled(boolean enabled) {
+    public AudioConfig setVirtualizationEnabled(boolean enabled) {
         this.virtualizationEnabled = enabled;
+        return this;
     }
 
 
@@ -228,10 +231,13 @@ public class AudioConfig {
      * Sets the decoder provider that is used by {@link WavInputStream}.
      *
      * @param decoderProvider must not be null
+     *
+     * @return this
      */
-    public void setWavDecoderProvider(WavDecoderProvider decoderProvider) {
+    public AudioConfig setWavDecoderProvider(WavDecoderProvider decoderProvider) {
         Objects.requireNonNull(decoderProvider);
         this.wavDecoderProvider = decoderProvider;
+        return this;
     }
 
 }
