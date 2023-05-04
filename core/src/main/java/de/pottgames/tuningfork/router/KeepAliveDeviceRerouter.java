@@ -64,8 +64,8 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
             return;
         }
 
-        final TuningForkLogger logger = Audio.get().getLogger();
         if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, (String) null, this.attributes.getBuffer())) {
+            final TuningForkLogger logger = Audio.get().getLogger();
             if (logger != null) {
                 logger.error(this.getClass(), "Failed to reopen audio device");
             }
