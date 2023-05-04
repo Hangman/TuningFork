@@ -97,6 +97,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/LoaderInputStreamTest.class'
      exclude 'de/pottgames/tuningfork/test/JukeBoxTest.class'
      exclude 'de/pottgames/tuningfork/test/AuxSendsTest.class'
+     exclude 'de/pottgames/tuningfork/test/SmartDeviceRerouterTest.class'
 }
 
 publishing {

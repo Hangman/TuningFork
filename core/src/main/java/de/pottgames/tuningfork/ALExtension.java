@@ -55,6 +55,7 @@ enum ALExtension {
     AL_SOFT_SOURCE_LENGTH("AL_SOFT_source_length", false),
     AL_SOFT_SOURCE_RESAMPLER("AL_SOFT_source_resampler", false),
     AL_SOFT_SOURCE_SPATIALIZE("AL_SOFT_source_spatialize", false),
+    AL_SOFT_EVENTS("AL_SOFT_events", false),
     AL_SOFTX_MAP_BUFFER("AL_SOFTX_map_buffer", false),
     AL_SOFTX_EVENTS("AL_SOFTX_events", false),
     AL_SOFTX_FILTER_GAIN_EX("AL_SOFTX_filter_gain_ex", false),

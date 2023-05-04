@@ -12,6 +12,7 @@
 
 package de.pottgames.tuningfork;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import org.lwjgl.openal.ALUtil;
 import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.openal.SOFTEvents;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
 import org.lwjgl.openal.SOFTReopenDevice;
@@ -32,6 +34,7 @@ import org.lwjgl.openal.SOFTSourceResampler;
 import org.lwjgl.openal.SOFTXHoldOnDisconnect;
 import org.lwjgl.system.MemoryUtil;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -127,6 +130,7 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.AL_SOFTX_HOLD_ON_DISCONNECT);
         this.checkRequiredExtension(ALExtension.ALC_SOFT_REOPEN_DEVICE);
         this.checkRequiredExtension(ALExtension.ALC_ENUMERATE_ALL_EXT);
+        this.checkRequiredExtension(ALExtension.AL_SOFT_EVENTS);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {
@@ -186,6 +190,11 @@ public class AudioDevice {
         this.getAvailableResamplers();
         this.setDeviceRerouter(config.getRerouter());
         AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
+        SOFTEvents.alEventControlSOFT(new int[] { SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT }, true);
+        SOFTEvents.alEventCallbackSOFT((eventType, object, param, length, message, userParam) -> {
+            final AlEvent event = new AlEvent(eventType, object, param, length, message, userParam);
+            AudioDevice.this.onAlEvent(event);
+        }, (ByteBuffer) null);
 
         // LOG ERRORS
         this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
@@ -514,6 +523,25 @@ public class AudioDevice {
      */
     public String getDefaultResampler() {
         return this.getResamplerNameByIndex(this.getDefaultResamplerIndex());
+    }
+
+
+    /**
+     * This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has registered.
+     *
+     * @param event
+     */
+    protected void onAlEvent(AlEvent event) {
+        if (event.getEventType() == SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT) {
+            Gdx.app.postRunnable(this::onDisconnect);
+        }
+    }
+
+
+    protected void onDisconnect() {
+        if (this.deviceRerouter != null) {
+            this.deviceRerouter.onDisconnect();
+        }
     }
 
 

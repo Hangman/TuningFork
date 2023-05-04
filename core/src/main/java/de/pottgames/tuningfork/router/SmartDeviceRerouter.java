@@ -13,9 +13,9 @@
 package de.pottgames.tuningfork.router;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.system.MemoryUtil;
@@ -27,27 +27,58 @@ import de.pottgames.tuningfork.misc.ExperimentalFeature;
 
 /**
  * <b>Warning</b>: This is an experimental router that has not been tested on all platforms and OpenAL backends. Use at your own risk.<br>
- * A task that runs on a daemon thread which periodically checks if the audio device lost connection. If a connection loss is detected or AL was opened on the
- * default device and the OS reports a new one, the task reopens AL on the new default audio device.
+ * The SmartDeviceRerouter checks every {@link #checkInterval} milliseconds whether the connection to the audio device still exists and whether it is the
+ * optimal connection. If not, it tries to establish a connection with the following prioritization:<br>
+ * <ul>
+ * <li>desired device</li>
+ * <li>current default device</li>
+ * </ul>
+ * The router is able to restore a previously lost connection to the desired device when it becomes available again. When not connected to the desired device,
+ * the router will establish a connection to the default device and also keep track of it, so when the user selects a new default device in the OS, the router
+ * will do the same accordingly.
  *
  * @author Matthias
  *
  */
+@SuppressWarnings("javadoc")
 @ExperimentalFeature
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
-    private volatile boolean           active            = false;
-    private Thread                     thread;
+    /**
+     * Defines how often the background thread will check the connection and try to reconnect to audio devies.
+     */
+    private final long checkInterval;
+
+    private volatile boolean           active                 = false;
     private long                       device;
     private volatile ContextAttributes attributes;
-    private volatile String            desiredDeviceSpecifier;
-    private volatile boolean           defaultDeviceMode = true;
-    private boolean                    setup             = false;
+    private volatile String            desiredDeviceSpecifier = null;
+    private volatile String            currentDeviceSpecifier = "none";
+    private boolean                    setup                  = false;
+
+
+    /**
+     * Creates a new {@link SmartDeviceRerouter} with the default check interval.
+     */
+    public SmartDeviceRerouter() {
+        this(1500L);
+    }
+
+
+    /**
+     * Creates a new {@link SmartDeviceRerouter} with the given check interval for the background thread.
+     *
+     * @param checkInterval sleep time of the background thread in milliseconds
+     */
+    public SmartDeviceRerouter(long checkInterval) {
+        this.checkInterval = checkInterval;
+    }
 
 
     @Override
     public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
         this.device = device;
         this.attributes = attributes;
+        this.currentDeviceSpecifier = this.fetchDefaultDeviceSpecifier();
         this.updateDesiredDevice(desiredDeviceSpecifier);
         this.setup = true;
     }
@@ -55,13 +86,8 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
     @Override
     public void updateDesiredDevice(String desiredDeviceSpecifier) {
-        if (desiredDeviceSpecifier != null) {
-            this.desiredDeviceSpecifier = desiredDeviceSpecifier;
-            this.defaultDeviceMode = false;
-        } else {
-            this.desiredDeviceSpecifier = this.fetchDefaultDeviceName();
-            this.defaultDeviceMode = true;
-        }
+        this.desiredDeviceSpecifier = desiredDeviceSpecifier;
+        this.currentDeviceSpecifier = desiredDeviceSpecifier;
     }
 
 
@@ -81,32 +107,31 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         }
 
         this.active = true;
-        this.thread = new Thread(() -> {
+        final Thread thread = new Thread(() -> {
             SmartDeviceRerouter.this.loop();
         });
-        this.thread.setName("TuningFork-SmartDeviceRerouter-Thread");
-        this.thread.setDaemon(true);
-        this.thread.start();
+        thread.setName("TuningFork-SmartDeviceRerouter-Thread");
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+
+    @Override
+    public void onDisconnect() {
+        if (!this.active) {
+            return;
+        }
+
+        this.currentDeviceSpecifier = "none";
+        this.tryReopen();
     }
 
 
     private void loop() {
         while (this.active) {
-            final boolean isConnected = ALC10.alcGetInteger(this.device, EXTDisconnect.ALC_CONNECTED) == ALC10.ALC_TRUE;
-            final String defaultDeviceName = this.fetchDefaultDeviceName();
-            boolean newDefaultDevice = false;
-
-            if (this.defaultDeviceMode && !this.desiredDeviceSpecifier.equals(defaultDeviceName)) {
-                newDefaultDevice = true;
-                this.desiredDeviceSpecifier = defaultDeviceName;
-            }
-
-            if (!isConnected || newDefaultDevice) {
-                this.tryReopen();
-            }
-
+            this.tryReopen();
             try {
-                Thread.sleep(1500);
+                Thread.sleep(this.checkInterval);
             } catch (final InterruptedException e) {
                 this.dispose();
             }
@@ -114,26 +139,43 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     }
 
 
-    private void tryReopen() {
-        final List<String> availableDevices = AudioDevice.availableDevices();
-        if (availableDevices.contains(this.desiredDeviceSpecifier)) {
-            this.reopen(this.desiredDeviceSpecifier);
+    private synchronized void tryReopen() {
+        if (this.desiredDeviceSpecifier == null) {
+            this.tryReopenOnDefaultDevice();
         } else {
-            this.reopen(null);
-            this.desiredDeviceSpecifier = this.fetchDefaultDeviceName();
+            this.tryReopenOnDesiredDevice();
         }
     }
 
 
-    private String fetchDefaultDeviceName() {
-        // FIXME: Works on Windows 11 (with idk what audio backend OpenAL chose) but other backends/OSes aren't tested
-        return ALC10.alcGetString(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+    private void tryReopenOnDesiredDevice() {
+        if (!this.currentDeviceSpecifier.equals(this.desiredDeviceSpecifier)) {
+            final List<String> availableDevices = AudioDevice.availableDevices();
+            if (availableDevices != null && availableDevices.contains(this.desiredDeviceSpecifier)) {
+                this.reopen(this.desiredDeviceSpecifier);
+            } else {
+                this.tryReopenOnDefaultDevice();
+            }
+        }
+    }
+
+
+    private void tryReopenOnDefaultDevice() {
+        final String defaultDeviceSpecifier = this.fetchDefaultDeviceSpecifier();
+        if (!this.currentDeviceSpecifier.equals(defaultDeviceSpecifier)) {
+            this.reopen(defaultDeviceSpecifier);
+        }
+    }
+
+
+    private String fetchDefaultDeviceSpecifier() {
+        return Objects.requireNonNullElse(ALC10.alcGetString(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER), "none");
     }
 
 
     private void reopen(String deviceSpecifier) {
-        if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceSpecifier, this.attributes.getBuffer())) {
-            System.err.println("Failed to reopen audio device");
+        if (SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceSpecifier, this.attributes.getBuffer())) {
+            this.currentDeviceSpecifier = deviceSpecifier;
         }
     }
 

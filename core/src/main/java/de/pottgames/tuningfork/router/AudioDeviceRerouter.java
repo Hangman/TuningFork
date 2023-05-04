@@ -59,4 +59,10 @@ public interface AudioDeviceRerouter extends Disposable {
      */
     void start();
 
+
+    /**
+     * Gets called when a disconnect to the audio device is detected.
+     */
+    void onDisconnect();
+
 }
