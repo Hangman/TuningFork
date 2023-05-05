@@ -13,8 +13,8 @@
 package de.pottgames.tuningfork.router;
 
 import java.util.List;
-import java.util.Objects;
 
+import de.pottgames.tuningfork.misc.Objects;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTReopenDevice;
@@ -107,9 +107,7 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         }
 
         this.active = true;
-        final Thread thread = new Thread(() -> {
-            SmartDeviceRerouter.this.loop();
-        });
+        final Thread thread = new Thread(SmartDeviceRerouter.this::loop);
         thread.setName("TuningFork-SmartDeviceRerouter-Thread");
         thread.setDaemon(true);
         thread.start();
