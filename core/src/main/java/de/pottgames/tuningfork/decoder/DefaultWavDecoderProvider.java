@@ -1,6 +1,7 @@
 package de.pottgames.tuningfork.decoder;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.decoder.LawDecoder.Encoding;
 
 public class DefaultWavDecoderProvider implements WavDecoderProvider {
 
@@ -28,6 +29,12 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
             case 8:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
                     return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.INTEGER);
+                }
+                if (audioFormat == WavAudioFormat.WAVE_FORMAT_MULAW.getRegNumber()) {
+                    return new LawDecoder(channels, sampleRate, Encoding.U_LAW);
+                }
+                if (audioFormat == WavAudioFormat.WAVE_FORMAT_ALAW.getRegNumber()) {
+                    return new LawDecoder(channels, sampleRate, Encoding.A_LAW);
                 }
                 break;
             case 16:

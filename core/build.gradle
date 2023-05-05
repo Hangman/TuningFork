@@ -98,6 +98,8 @@ test {
      exclude 'de/pottgames/tuningfork/test/JukeBoxTest.class'
      exclude 'de/pottgames/tuningfork/test/AuxSendsTest.class'
      exclude 'de/pottgames/tuningfork/test/SmartDeviceRerouterTest.class'
+     exclude 'de/pottgames/tuningfork/test/ULawTest.class'
+     exclude 'de/pottgames/tuningfork/test/ALawTest.class'
 }
 
 publishing {
