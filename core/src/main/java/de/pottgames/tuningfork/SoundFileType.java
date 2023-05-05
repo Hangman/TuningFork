@@ -30,7 +30,7 @@ public enum SoundFileType {
         if ("mp3".equalsIgnoreCase(fileExtension)) {
             return MP3;
         }
-        if ("aiff".equalsIgnoreCase(fileExtension) || "aif".equalsIgnoreCase(fileExtension)) {
+        if ("aiff".equalsIgnoreCase(fileExtension) || "aif".equalsIgnoreCase(fileExtension) || "aifc".equalsIgnoreCase(fileExtension)) {
             return AIFF;
         }
 

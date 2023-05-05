@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
+import de.pottgames.tuningfork.decoder.LawDecoder.Encoding;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -35,6 +36,7 @@ public class AiffInputStream implements AudioStream {
     private int                    inputBitsPerSample;
     private float                  duration          = -1f;
     private boolean                closed            = false;
+    private String                 compressionId     = "NONE";
 
 
     /**
@@ -73,8 +75,8 @@ public class AiffInputStream implements AudioStream {
 
 
     private void setup() throws IOException {
-        this.readFormChunk();
-        this.readCommChunk();
+        final boolean aifc = this.readFormChunk();
+        this.readCommChunk(aifc);
 
         // SKIP TO SOUND DATA CHUNK
         final long dataChunkSize = this.skipToChunk('S', 'S', 'N', 'D');
@@ -96,30 +98,38 @@ public class AiffInputStream implements AudioStream {
         } else if (this.inputBitsPerSample <= 8) {
             inputBytesPerSample = 1;
         }
-        switch (inputBytesPerSample) {
-            case 1:
-                this.decoder = new Aiff8BitDecoder(this.inputBitsPerSample);
-                break;
-            case 2:
-                this.decoder = new Aiff16BitDecoder(this.inputBitsPerSample);
-                break;
-            case 3:
-                this.decoder = new Aiff24BitDecoder(this.inputBitsPerSample);
-                break;
-            case 4:
-                this.decoder = new Aiff32BitDecoder(this.inputBitsPerSample);
-                break;
+        if ("NONE".equalsIgnoreCase(this.compressionId)) {
+            switch (inputBytesPerSample) {
+                case 1:
+                    this.decoder = new Aiff8BitDecoder(this.inputBitsPerSample);
+                    break;
+                case 2:
+                    this.decoder = new Aiff16BitDecoder(this.inputBitsPerSample);
+                    break;
+                case 3:
+                    this.decoder = new Aiff24BitDecoder(this.inputBitsPerSample);
+                    break;
+                case 4:
+                    this.decoder = new Aiff32BitDecoder(this.inputBitsPerSample);
+                    break;
+            }
+        } else if ("alaw".equalsIgnoreCase(this.compressionId) && inputBytesPerSample == 1) {
+            this.decoder = new LawDecoder(this.channels, this.sampleRate, Encoding.A_LAW, true);
+        } else if ("ulaw".equalsIgnoreCase(this.compressionId) && inputBytesPerSample == 1) {
+            this.decoder = new LawDecoder(this.channels, this.sampleRate, Encoding.U_LAW, true);
         }
+
         if (this.decoder == null) {
-            this.throwRuntimeError("Unsupported bits per sample: " + this.inputBitsPerSample);
+            this.throwRuntimeError(
+                    "Unsupported aiff format: bits per sample (" + this.inputBitsPerSample + ")" + ", compression type (" + this.compressionId + ")");
         }
         this.decoder.setup(this.stream, dataChunkSize - 8 - offset);
     }
 
 
-    private void readCommChunk() throws IOException {
+    private void readCommChunk(boolean aifc) throws IOException {
         final int commChunkSize = this.skipToChunk('C', 'O', 'M', 'M');
-        if (commChunkSize != 18) {
+        if (!aifc && commChunkSize != 18 || aifc && commChunkSize < 22) {
             this.throwRuntimeError("Not a valid aiff file, COMM chunk not found");
         }
 
@@ -127,7 +137,19 @@ public class AiffInputStream implements AudioStream {
         this.totalSampleFrames = this.readUnsignedLong();
         this.inputBitsPerSample = this.readShort();
         this.sampleRate = (int) this.readExtendedPrecision();
-        this.duration = this.totalSampleFrames / this.sampleRate;
+        if (aifc) {
+            final char char1 = (char) this.stream.read();
+            final char char2 = (char) this.stream.read();
+            final char char3 = (char) this.stream.read();
+            final char char4 = (char) this.stream.read();
+            final StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(char1).append(char2).append(char3).append(char4);
+            this.compressionId = stringBuilder.toString();
+
+            this.readPString();
+        }
+
+        this.duration = (float) this.totalSampleFrames / (float) this.sampleRate;
 
         this.endChunk(commChunkSize);
     }
@@ -140,7 +162,7 @@ public class AiffInputStream implements AudioStream {
     }
 
 
-    private void readFormChunk() throws IOException {
+    private boolean readFormChunk() throws IOException {
         // FORM CHUNK ID
         final boolean form = this.stream.read() == 'F' && this.stream.read() == 'O' && this.stream.read() == 'R' && this.stream.read() == 'M';
         if (!form) {
@@ -154,10 +176,17 @@ public class AiffInputStream implements AudioStream {
         this.stream.read();
 
         // FORM TYPE
-        final boolean aiff = this.stream.read() == 'A' && this.stream.read() == 'I' && this.stream.read() == 'F' && this.stream.read() == 'F';
-        if (!aiff) {
-            this.throwRuntimeError("Not a valid aiff file, FORM type is not AIFF");
+        final int char1 = this.stream.read();
+        final int char2 = this.stream.read();
+        final int char3 = this.stream.read();
+        final int char4 = this.stream.read();
+        final boolean aiff = char1 == 'A' && char2 == 'I' && char3 == 'F' && char4 == 'F';
+        final boolean aifc = char1 == 'A' && char2 == 'I' && char3 == 'F' && char4 == 'C';
+        if (!aiff && !aifc) {
+            this.throwRuntimeError("Not a valid aiff file, FORM type is not AIFF or AIFC");
         }
+
+        return aifc;
     }
 
 
@@ -271,6 +300,25 @@ public class AiffInputStream implements AudioStream {
 
     private long readUnsignedLong() throws IOException {
         return (long) this.stream.read() << 24 | this.stream.read() << 16 | this.stream.read() << 8 | this.stream.read();
+    }
+
+
+    private String readPString() throws IOException {
+        final int stringLength = this.stream.read();
+
+        final StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < stringLength; i++) {
+            builder.append((char) this.stream.read());
+        }
+
+        // XXX pad byte should be included even if stringLength is 0 according to the specification,
+        // but the Audacity encoder doesn't do this?!
+        // may also be a bug in this code I haven't thought about yet
+        if (stringLength > 0 && Util.isEven(stringLength)) {
+            this.stream.read();
+        }
+
+        return builder.toString();
     }
 
 

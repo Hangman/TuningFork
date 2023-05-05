@@ -31,10 +31,10 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
                     return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.INTEGER);
                 }
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_MULAW.getRegNumber()) {
-                    return new LawDecoder(channels, sampleRate, Encoding.U_LAW);
+                    return new LawDecoder(channels, sampleRate, Encoding.U_LAW, false);
                 }
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_ALAW.getRegNumber()) {
-                    return new LawDecoder(channels, sampleRate, Encoding.A_LAW);
+                    return new LawDecoder(channels, sampleRate, Encoding.A_LAW, false);
                 }
                 break;
             case 16:

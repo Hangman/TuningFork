@@ -9,20 +9,22 @@ import javax.sound.sampled.AudioSystem;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 
-public class LawDecoder implements WavDecoder {
+public class LawDecoder implements WavDecoder, AiffDecoder {
     private final Encoding encoding;
     private final int      channels;
     private final int      sampleRate;
     private long           totalOutputSamplesPerChannel;
+    private final boolean  bigEndian;
 
     private AudioInputStream inputStream;
     private AudioInputStream outputStream;
 
 
-    public LawDecoder(int channels, int sampleRate, Encoding encoding) {
+    public LawDecoder(int channels, int sampleRate, Encoding encoding, boolean bigEndian) {
         this.channels = channels;
         this.sampleRate = sampleRate;
         this.encoding = encoding;
+        this.bigEndian = bigEndian;
     }
 
 
@@ -32,7 +34,7 @@ public class LawDecoder implements WavDecoder {
 
         // INPUT STREAM
         final AudioFormat.Encoding inputEncoding = this.encoding == Encoding.U_LAW ? AudioFormat.Encoding.ULAW : AudioFormat.Encoding.ALAW;
-        final AudioFormat inputFormat = new AudioFormat(inputEncoding, this.sampleRate, 8, this.channels, this.channels, this.sampleRate, false);
+        final AudioFormat inputFormat = new AudioFormat(inputEncoding, this.sampleRate, 8, this.channels, this.channels, this.sampleRate, this.bigEndian);
         this.inputStream = new AudioInputStream(stream, inputFormat, this.totalOutputSamplesPerChannel);
 
         // OUTPUT STREAM

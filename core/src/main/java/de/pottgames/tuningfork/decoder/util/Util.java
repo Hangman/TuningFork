@@ -23,4 +23,14 @@ public class Util {
         return number % 2 != 0;
     }
 
+
+    public static boolean isEven(int number) {
+        return !Util.isOdd(number);
+    }
+
+
+    public static boolean isEven(long number) {
+        return !Util.isOdd(number);
+    }
+
 }

@@ -11,8 +11,8 @@ import de.pottgames.tuningfork.SoundSource;
 import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.WaveLoader;
 
-public class ALawTest extends ApplicationAdapter {
-    private static final String FILE_PATH = "numbers-alaw.wav";
+public class WavULawTest extends ApplicationAdapter {
+    private static final String FILE_PATH = "numbers-ulaw.wav";
     private Audio               audio;
     private SoundBuffer         sound;
     private SoundSource         bufferedSource;
@@ -23,8 +23,8 @@ public class ALawTest extends ApplicationAdapter {
     @Override
     public void create() {
         this.audio = Audio.init();
-        this.sound = WaveLoader.load(Gdx.files.internal(ALawTest.FILE_PATH));
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(ALawTest.FILE_PATH));
+        this.sound = WaveLoader.load(Gdx.files.internal(WavULawTest.FILE_PATH));
+        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(WavULawTest.FILE_PATH));
         this.bufferedSource = this.audio.obtainSource(this.sound);
         System.out.println("Sound duration (streamed): " + this.streamedSource.getDuration() + "s");
         System.out.println("Sound duration (buffered): " + this.sound.getDuration() + "s");
@@ -58,10 +58,10 @@ public class ALawTest extends ApplicationAdapter {
 
     public static void main(String[] args) {
         final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("ALawTest");
+        config.setTitle("WavULawTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
-        new Lwjgl3Application(new ALawTest(), config);
+        new Lwjgl3Application(new WavULawTest(), config);
     }
 }

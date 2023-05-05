@@ -5,14 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import de.pottgames.tuningfork.AiffLoader;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundSource;
 import de.pottgames.tuningfork.StreamedSoundSource;
-import de.pottgames.tuningfork.WaveLoader;
 
-public class ULawTest extends ApplicationAdapter {
-    private static final String FILE_PATH = "numbers-ulaw.wav";
+public class AifcALawTest extends ApplicationAdapter {
+    private static final String FILE_PATH = "numbers-alaw.aifc";
     private Audio               audio;
     private SoundBuffer         sound;
     private SoundSource         bufferedSource;
@@ -23,8 +23,8 @@ public class ULawTest extends ApplicationAdapter {
     @Override
     public void create() {
         this.audio = Audio.init();
-        this.sound = WaveLoader.load(Gdx.files.internal(ULawTest.FILE_PATH));
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(ULawTest.FILE_PATH));
+        this.sound = AiffLoader.load(Gdx.files.internal(AifcALawTest.FILE_PATH));
+        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(AifcALawTest.FILE_PATH));
         this.bufferedSource = this.audio.obtainSource(this.sound);
         System.out.println("Sound duration (streamed): " + this.streamedSource.getDuration() + "s");
         System.out.println("Sound duration (buffered): " + this.sound.getDuration() + "s");
@@ -58,10 +58,10 @@ public class ULawTest extends ApplicationAdapter {
 
     public static void main(String[] args) {
         final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("ULawTest");
+        config.setTitle("AifcALawTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
-        new Lwjgl3Application(new ULawTest(), config);
+        new Lwjgl3Application(new AifcALawTest(), config);
     }
 }
