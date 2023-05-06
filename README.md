@@ -4,7 +4,8 @@
 [![Versioning](https://img.shields.io/badge/semver-2.0.0-blue)](https://semver.org/)
 
 # Introduction
-TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that provides advanced audio features. The goal of this library is to make most of the features of [OpenAL](https://github.com/kcat/openal-soft) accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. Note that TuningFork is not an extension to libGDX audio but a replacement.
+TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that provides advanced audio features. The goal of this library is to make most of the features of [OpenAL](https://github.com/kcat/openal-soft) accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. In addition, the library offers some convenience features that are needed for almost every game, such as the music player.<br>
+Note that TuningFork is not an extension to libGDX audio but a replacement.
 
 ### Main Features
 * Spatial 3D and 2D audio
@@ -15,7 +16,7 @@ TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that prov
 * HRTF support (aka binaural)
 * Streaming is handled on a background thread
 * No more fiddling with sound IDs - proper OOP design
-* Load **wav**, **aiff** (SNAPSHOT), **ogg**, **flac**, **mp3**
+* Load **wav**, **aiff** (SNAPSHOT), **ogg**, **flac**, **mp3** ([see the full list](https://github.com/Hangman/TuningFork/wiki/Supported-audio-formats-and-codecs))
 * Load asynchronously via `AssetManager`
 * Play raw PCM data
 * Supports surround sound formats
@@ -59,7 +60,8 @@ Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.
 | < 1.9.11            | not supported, might work though: 2.0.1  |
 
 ### Upgrading
-The latest patch notes can be found here: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
+This library follows [semantic versioning](https://semver.org/). That means upgrading is always "safe" unless it is a major version increase. Accordingly, breaking changes are only made in major versions.
+Nevertheless, I think it's a good habit to check out the latest patch notes before depending on a new version: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
 
 # Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
