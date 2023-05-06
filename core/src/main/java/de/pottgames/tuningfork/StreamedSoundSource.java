@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTBlockAlignment;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
@@ -124,18 +125,38 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
         }
 
         // CREATE BUFFERS
-        this.bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
+        final int blockSize = this.audioStream.getBlockSize();
+        this.bufferSize = this.determineBufferSize(channels, blockSize);
         this.tempBuffer = BufferUtils.createByteBuffer(this.bufferSize);
         this.tempBytes = new byte[this.bufferSize];
         this.secondsPerBuffer = (float) this.bufferSize / (bytesPerSample * channels * sampleRate);
         this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
         AL10.alGenBuffers(this.buffers);
+        if (blockSize > 0) {
+            for (int i = 0; i < StreamedSoundSource.BUFFER_COUNT; i++) {
+                final int bufferId = this.buffers.get(i);
+                AL11.alBufferi(bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, this.audioStream.getBlockAlign());
+            }
+        }
 
         // INITIAL BUFFER FILL
         this.audio.postTask(this, TaskAction.INITIAL_BUFFER_FILL);
 
         // REGISTER IN AUDIO
         this.audio.registerStreamedSoundSource(this);
+    }
+
+
+    private int determineBufferSize(int channels, int blockSize) {
+        int bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
+        if (blockSize > 0) {
+            bufferSize = blockSize;
+            while (bufferSize < StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL) {
+                bufferSize += blockSize;
+            }
+        }
+
+        return bufferSize;
     }
 
 
@@ -350,6 +371,9 @@ public class StreamedSoundSource extends SoundSource implements Disposable {
 
         this.tempBuffer.put(this.tempBytes, 0, length).flip();
         AL10.alBufferData(bufferId, this.pcmFormat.getAlId(), this.tempBuffer, this.audioStream.getSampleRate());
+        // TODO: REMOVE
+        this.errorLogger.checkLogError("problemo");
+        //
         return true;
     }
 

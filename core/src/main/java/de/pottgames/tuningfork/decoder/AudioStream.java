@@ -35,4 +35,10 @@ public interface AudioStream extends Closeable {
 
     boolean isClosed();
 
+
+    int getBlockAlign();
+
+
+    int getBlockSize();
+
 }

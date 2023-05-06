@@ -532,6 +532,18 @@ public class OggInputStream extends InputStream implements AudioStream {
 
 
     @Override
+    public int getBlockAlign() {
+        return -1;
+    }
+
+
+    @Override
+    public int getBlockSize() {
+        return -1;
+    }
+
+
+    @Override
     public void close() {
         StreamUtils.closeQuietly(this.input);
         this.closed = true;

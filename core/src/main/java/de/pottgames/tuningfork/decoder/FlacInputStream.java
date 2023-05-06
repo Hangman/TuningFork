@@ -19,9 +19,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.PcmFormat;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import io.nayuki.flac.decode.FlacDecoder;
 
 public class FlacInputStream implements AudioStream {
@@ -148,6 +148,18 @@ public class FlacInputStream implements AudioStream {
     @Override
     public PcmDataType getPcmDataType() {
         return PcmDataType.INTEGER;
+    }
+
+
+    @Override
+    public int getBlockAlign() {
+        return -1;
+    }
+
+
+    @Override
+    public int getBlockSize() {
+        return -1;
     }
 
 

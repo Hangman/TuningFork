@@ -103,6 +103,18 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
 
     @Override
+    public int blockAlign() {
+        return -1;
+    }
+
+
+    @Override
+    public int blockSize() {
+        return -1;
+    }
+
+
+    @Override
     public void close() throws IOException, NullPointerException {
         this.stream.close();
     }

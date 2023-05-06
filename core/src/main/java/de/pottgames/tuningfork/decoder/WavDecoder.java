@@ -22,4 +22,10 @@ public interface WavDecoder extends Closeable {
 
     int read(byte[] output) throws IOException;
 
+
+    int blockAlign();
+
+
+    int blockSize();
+
 }

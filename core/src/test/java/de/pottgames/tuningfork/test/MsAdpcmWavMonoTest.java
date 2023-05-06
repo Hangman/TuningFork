@@ -48,8 +48,6 @@ public class MsAdpcmWavMonoTest extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.sound.dispose();
-
-        // always dispose Audio last
         this.audio.dispose();
     }
 

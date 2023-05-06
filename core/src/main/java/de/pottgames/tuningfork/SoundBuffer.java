@@ -16,6 +16,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTBlockAlignment;
 
 import com.badlogic.gdx.utils.Disposable;
 
@@ -36,6 +38,11 @@ public class SoundBuffer implements Disposable {
     private final float            duration;
 
 
+    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
+        this(pcm, channels, sampleRate, bitsPerSample, pcmDataType, -1);
+    }
+
+
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
      * <br>
@@ -50,12 +57,12 @@ public class SoundBuffer implements Disposable {
      * @param bitsPerSample number of bits per sample
      * @param pcmDataType
      */
-    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
+    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
         this.logger = Audio.get().getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         // DETERMINE PCM FORMAT AND DURATION
-        final int samplesPerChannel = pcm.length / (bitsPerSample / 8 * channels);
+        final int samplesPerChannel = (int) (pcm.length / ((float) bitsPerSample / 8 * channels));
         this.duration = samplesPerChannel / (float) sampleRate;
         final PcmFormat pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
         if (pcmFormat == null) {
@@ -70,6 +77,9 @@ public class SoundBuffer implements Disposable {
 
         // GEN BUFFER AND UPLOAD PCM DATA
         this.bufferId = AL10.alGenBuffers();
+        if (blockAlign > 0) {
+            AL11.alBufferi(this.bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
+        }
         AL10.alBufferData(this.bufferId, pcmFormat.getAlId(), buffer.asShortBuffer(), sampleRate);
 
         // CHECK FOR ERRORS
