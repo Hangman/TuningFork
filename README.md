@@ -10,7 +10,7 @@
 </td></tr></table>
 
 ## Introduction
-TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that provides advanced audio features. The goal of this library is to make most of the features of [OpenAL](https://github.com/kcat/openal-soft) accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. In addition, the library offers some convenience features that are needed for almost every game, such as the music player.<br>
+TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that provides advanced audio features. The goal was to make most of the features of [OpenAL](https://github.com/kcat/openal-soft) accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. In addition, the library offers some convenience features that are needed for almost every game, such as the music player.<br>
 Note that TuningFork is not an extension to libGDX audio but a replacement.
 
 ### Main Features
@@ -71,3 +71,19 @@ Nevertheless, I think it's a good habit to check out the latest patch notes befo
 
 ## Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
+
+## Building from source
+To build TuningFork from source, you need a JDK >= 8 installed. Like [Adoptium JDK](https://adoptium.net/) for example.  
+TuningFork uses [Gradle](https://gradle.org/) as it's build tool (you don't need to have Gradle installed), for those who are not familiar with it:
+```console
+./gradlew build
+```
+to compile the library. After that, you can find the resulting jar under `core/build/libs/`.
+```console
+./gradlew publishToMavenLocal
+```
+to publish the core artifact to your local Maven repository.
+```console
+./gradlew test
+```
+to run all unit tests.
