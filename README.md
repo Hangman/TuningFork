@@ -1,9 +1,15 @@
-# ![logo](https://github.com/Hangman/TuningFork/blob/master/pageBin/logo.png) TuningFork
+<table align="center"><tr><td align="center" width="10000">
+<img src="pageBin/logo.png" align="center" width="150" alt="logo">
+
+# TuningFork
+
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Versioning](https://img.shields.io/badge/semver-2.0.0-blue)](https://semver.org/)
 
-# Introduction
+</td></tr></table>
+
+## Introduction
 TuningFork is a library for [libGDX](https://github.com/libgdx/libgdx) that provides advanced audio features. The goal of this library is to make most of the features of [OpenAL](https://github.com/kcat/openal-soft) accessible and provide a comfortable, easy to use, low overhead and object oriented high-level API. In addition, the library offers some convenience features that are needed for almost every game, such as the music player.<br>
 Note that TuningFork is not an extension to libGDX audio but a replacement.
 
@@ -29,7 +35,7 @@ Note that TuningFork is not an extension to libGDX audio but a replacement.
 ### Why
 The standard audio capabilities of libGDX are very limited compared to sound APIs like OpenAL - probably due to its cross-platform nature. Especially if you are developing a 3D application and want to create realistic spatial sound, use modern features like HRTF etc., you'll face some problems with libGDX.
 
-# Install
+## Install
 TuningFork is available via Jitpack.
 First make sure you have Jitpack declared as repository in your root build.gradle file:
 ```groovy
@@ -63,5 +69,5 @@ Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.
 This library follows [semantic versioning](https://semver.org/). That means upgrading is always "safe" unless it is a major version increase. Accordingly, breaking changes are only made in major versions.
 Nevertheless, I think it's a good habit to check out the latest patch notes before depending on a new version: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
 
-# Get Started
+## Get Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
