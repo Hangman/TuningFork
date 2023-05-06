@@ -18,12 +18,12 @@ import java.io.InputStream;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 
 public class Aiff8BitDecoder implements AiffDecoder {
-    private final int   bitsPerSample;
-    private InputStream stream;
-    private long        inputBytesRemaining;
-    private byte[]      buffer       = new byte[4096];
-    private int         bufferOffset = 0;
-    private int         bufferLength = 0;
+    private final int    bitsPerSample;
+    private InputStream  stream;
+    private long         inputBytesRemaining;
+    private final byte[] buffer       = new byte[4096];
+    private int          bufferOffset = 0;
+    private int          bufferLength = 0;
 
 
     public Aiff8BitDecoder(int bitsPerSample) {
