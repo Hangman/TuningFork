@@ -34,7 +34,7 @@ public class ImaAdpcmWavMonoTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
         this.sound = WaveLoader.load(Gdx.files.internal(ImaAdpcmWavMonoTest.SOUND_PATH));
-        SoundSource bufferedSource = this.audio.obtainSource(this.sound);
+        final SoundSource bufferedSource = this.audio.obtainSource(this.sound);
         this.streamedSource = new StreamedSoundSource(Gdx.files.internal(ImaAdpcmWavMonoTest.SOUND_PATH));
         bufferedSource.setLooping(true);
         this.streamedSource.setLooping(true);

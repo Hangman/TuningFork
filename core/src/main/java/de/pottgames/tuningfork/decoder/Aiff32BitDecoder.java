@@ -51,15 +51,15 @@ public class Aiff32BitDecoder implements AiffDecoder {
         while (writeOffset < output.length) {
             if (this.bufferOffset >= this.bufferLength) {
                 this.bufferLength = this.fillBuffer();
-                if (this.bufferLength <= 0) {
+                if (this.bufferLength < 2) {
                     return writeOffset == 0 ? -1 : writeOffset;
                 }
             }
 
-            while (this.bufferOffset < this.bufferLength && writeOffset < output.length - 1) {
+            while (this.bufferOffset + 1 < this.bufferLength && writeOffset < output.length - 1) {
                 final byte byte1 = this.buffer[this.bufferOffset++];
                 final byte byte2 = this.buffer[this.bufferOffset++];
-                this.bufferOffset++; // we skip byte3 and byte4 because OpenAL only supports 16-Bit integer sound (float formats = no surround sound)
+                this.bufferOffset++; // skip bytes to downsample to 16 bit
                 this.bufferOffset++;
                 output[writeOffset++] = byte2;
                 output[writeOffset++] = byte1;

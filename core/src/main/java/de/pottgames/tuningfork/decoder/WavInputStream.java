@@ -254,6 +254,23 @@ public class WavInputStream implements AudioStream {
     }
 
 
+    @Override
+    public int getBlockAlign() {
+        return this.decoder.blockAlign();
+    }
+
+
+    @Override
+    public int getBlockSize() {
+        return this.decoder.blockSize();
+    }
+
+
+    public long bytesRemaining() {
+        return this.decoder.bytesRemaining();
+    }
+
+
     private void throwRuntimeError(String message) {
         this.throwRuntimeError(message, null);
     }

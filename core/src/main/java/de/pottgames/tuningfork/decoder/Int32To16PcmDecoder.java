@@ -131,6 +131,12 @@ public class Int32To16PcmDecoder implements WavDecoder {
 
 
     @Override
+    public long bytesRemaining() {
+        return this.bytesRemaining / 2L;
+    }
+
+
+    @Override
     public void close() throws IOException {
         this.stream.close();
     }

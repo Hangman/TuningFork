@@ -49,14 +49,14 @@ public class Aiff16BitDecoder implements AiffDecoder {
         int writeOffset = 0;
 
         while (writeOffset < output.length) {
-            if (this.bufferOffset >= this.bufferLength) {
+            if (this.bufferOffset >= this.bufferLength - 1) {
                 this.bufferLength = this.fillBuffer();
-                if (this.bufferLength <= 0) {
+                if (this.bufferLength < 2) {
                     return writeOffset == 0 ? -1 : writeOffset;
                 }
             }
 
-            while (this.bufferOffset < this.bufferLength && writeOffset < output.length - 1) {
+            while (this.bufferOffset + 1 < this.bufferLength && writeOffset < output.length - 1) {
                 final byte byte1 = this.buffer[this.bufferOffset++];
                 final byte byte2 = this.buffer[this.bufferOffset++];
                 output[writeOffset++] = byte2;

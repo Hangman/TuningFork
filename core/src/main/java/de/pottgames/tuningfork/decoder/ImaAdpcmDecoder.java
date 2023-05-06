@@ -20,6 +20,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
     private int                outputSampleSize;
     private final int          sampleRate;
     private long               totalOutputSamplesPerChannel;
+    private long               outputBytesRemaining;
     private final Prediction[] prediction    = new Prediction[2];
 
 
@@ -37,16 +38,17 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
     @Override
     public void setup(InputStream stream, long streamLength) {
-        this.stream = new BufferedInputStream(stream, this.blockSize * 2);
         this.bytesRemaining = streamLength;
+        this.stream = new BufferedInputStream(stream, this.blockSize * 2);
 
         // CALC TOTAL SAMPLES
-        long numberOfBlocks = this.bytesRemaining / this.blockSize;
-        if (this.bytesRemaining % this.blockSize > 0) {
+        long numberOfBlocks = streamLength / this.blockSize;
+        if (streamLength % this.blockSize > 0) {
             numberOfBlocks++;
         }
         final long blockBytes = numberOfBlocks * 4L * this.channels;
-        this.totalOutputSamplesPerChannel = (this.bytesRemaining * 2L - blockBytes * 2L) / this.channels;
+        this.totalOutputSamplesPerChannel = (streamLength * 2L - blockBytes * 2L) / this.channels;
+        this.outputBytesRemaining = this.totalOutputSamplesPerChannel * this.channels * 2;
     }
 
 
@@ -63,6 +65,8 @@ public class ImaAdpcmDecoder implements WavDecoder {
             // COPY OUTPUT BYTE
             output[i] = this.outputSamples[this.outputSamplePosition++];
         }
+
+        this.outputBytesRemaining -= output.length;
 
         return output.length;
     }
@@ -227,6 +231,12 @@ public class ImaAdpcmDecoder implements WavDecoder {
     @Override
     public PcmDataType outputPcmDataType() {
         return PcmDataType.INTEGER;
+    }
+
+
+    @Override
+    public long bytesRemaining() {
+        return this.outputBytesRemaining;
     }
 
 

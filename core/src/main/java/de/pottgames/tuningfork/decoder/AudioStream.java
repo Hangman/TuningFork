@@ -85,6 +85,27 @@ public interface AudioStream extends Closeable {
 
 
     /**
+     * Returns the block size in bytes. This only applies for data that is organized in blocks like ADPCM, all other implementations should return -1.
+     *
+     * @return block size in bytes
+     */
+    default int getBlockSize() {
+        return -1;
+    }
+
+
+    /**
+     * Returns the block alignment in sample frames. This only applies for data that is organized in blocks like ADPCM, all other implementations should return
+     * -1.
+     *
+     * @return the block size in sample frames
+     */
+    default int getBlockAlign() {
+        return -1;
+    }
+
+
+    /**
      * Returns true if the AudioStream is closed.
      *
      * @return true if closed, false if open

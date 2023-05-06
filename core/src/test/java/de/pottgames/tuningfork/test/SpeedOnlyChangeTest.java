@@ -34,7 +34,7 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.sound = OggLoader.load(Gdx.files.internal("carnivalrides.ogg"));
+        this.sound = OggLoader.load(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
         final SoundSource source = this.audio.obtainSource(this.sound);
 
         // set source pitch to change the speed

@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTBlockAlignment;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
@@ -36,6 +37,7 @@ import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import de.pottgames.tuningfork.misc.Numbers;
 
 /**
  * A {@link SoundSource} that streams audio data instead of loading all data at once into memory.
@@ -44,7 +46,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class StreamedSoundSource extends SongSource implements Disposable {
-    public static final int        BUFFER_SIZE_PER_CHANNEL = 44100;
+    public static final int        BUFFER_SIZE_PER_CHANNEL = 65536;
     public static final int        BUFFER_COUNT            = 3;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
@@ -120,19 +122,48 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
 
         // CREATE BUFFERS
-        final int bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
+        final int blockSize = this.audioStream.getBlockSize();
+        final int bufferSize = this.determineBufferSize(channels, blockSize, (int) Math.ceil(this.audioStream.getBitsPerSample() / 8d));
         this.tempBuffer = BufferUtils.createByteBuffer(bufferSize);
         this.tempBytes = new byte[bufferSize];
         this.secondsPerBuffer = (float) bufferSize / (bytesPerSample * channels * sampleRate);
         this.bytesPerSecond = bytesPerSample * channels * sampleRate;
         this.buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
         AL10.alGenBuffers(this.buffers);
+        this.errorLogger.checkLogError("Buffers couldn't be created");
+        if (blockSize > 0) {
+            for (int i = 0; i < StreamedSoundSource.BUFFER_COUNT; i++) {
+                final int bufferId = this.buffers.get(i);
+                final int blockAlign = this.audioStream.getBlockAlign();
+                AL11.alBufferi(bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
+                this.errorLogger.checkLogError("Couldn't set blockAlign");
+                this.logger.trace(this.getClass(), "setting block align to " + blockAlign);
+            }
+        }
 
         // INITIAL BUFFER FILL
         this.fillAllBuffersInternal();
+        this.errorLogger.checkLogError("An error occured while pre-buffering");
 
         // REGISTER IN AUDIO
         this.audio.streamManager.registerSource(this);
+    }
+
+
+    private int determineBufferSize(int channels, int blockSize, int bytesPerSample) {
+        int bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
+
+        // keep block alignment
+        if (blockSize > 0) {
+            bufferSize = blockSize;
+            while (bufferSize < StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL) {
+                bufferSize += blockSize;
+            }
+            return bufferSize;
+        }
+
+        bufferSize = Numbers.nextPowerOfTwo(bufferSize);
+        return bufferSize;
     }
 
 

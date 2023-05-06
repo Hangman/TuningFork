@@ -16,6 +16,7 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.EXTDouble;
 import org.lwjgl.openal.EXTFloat32;
 import org.lwjgl.openal.EXTMCFormats;
+import org.lwjgl.openal.SOFTMSADPCM;
 
 public enum PcmFormat {
     SURROUND_7DOT1_16_BIT(EXTMCFormats.AL_FORMAT_71CHN16),
@@ -33,12 +34,12 @@ public enum PcmFormat {
     FLOAT_MONO_64_BIT(EXTDouble.AL_FORMAT_MONO_DOUBLE_EXT),
     FLOAT_MONO_32_BIT(EXTFloat32.AL_FORMAT_MONO_FLOAT32),
     MONO_16_BIT(AL10.AL_FORMAT_MONO16),
-    MONO_8_BIT(AL10.AL_FORMAT_MONO8);
+    MONO_8_BIT(AL10.AL_FORMAT_MONO8),
+    MS_ADPCM_MONO(SOFTMSADPCM.AL_FORMAT_MONO_MSADPCM_SOFT),
+    MS_ADPCM_STEREO(SOFTMSADPCM.AL_FORMAT_STEREO_MSADPCM_SOFT);
 
 
-    public static final String CHANNELS_STRING        = "1, 2, 4, 6, 7, 8";
-    public static final String BITS_PER_SAMPLE_STRING = "8, 16";
-    private final int          alId;
+    private final int alId;
 
 
     PcmFormat(int alId) {
@@ -132,6 +133,13 @@ public enum PcmFormat {
                     }
                     break;
             }
+        } else if (pcmDataType == PcmDataType.MS_ADPCM) {
+            switch (channels) {
+                case 1:
+                    return PcmFormat.MS_ADPCM_MONO;
+                case 2:
+                    return PcmFormat.MS_ADPCM_STEREO;
+            }
         }
 
         return null;
@@ -139,7 +147,7 @@ public enum PcmFormat {
 
 
     public enum PcmDataType {
-        INTEGER, FLOAT;
+        INTEGER, FLOAT, MS_ADPCM;
     }
 
 }

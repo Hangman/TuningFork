@@ -44,6 +44,8 @@ enum ALExtension {
     AL_EXT_VORBIS("AL_EXT_vorbis", false), // not available in AL SOFT
     AL_EXT_MP3("AL_EXT_mp3", false), // not available in AL SOFT
     AL_LOKI_QUADRIPHONIC("AL_LOKI_quadriphonic", false),
+    AL_SOFT_BUFFER_LENGTH_QUERY("AL_SOFT_buffer_length_query", false),
+    AL_SOFT_BUFFER_SAMPLES("AL_SOFT_buffer_samples", false),
     AL_SOFT_BLOCK_ALIGNMENT("AL_SOFT_block_alignment", false),
     AL_SOFT_DEFERRED_UPDATES("AL_SOFT_deferred_updates", false),
     AL_SOFT_DIRECT_CHANNELS("AL_SOFT_direct_channels", false),

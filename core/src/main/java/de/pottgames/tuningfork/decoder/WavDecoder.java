@@ -29,6 +29,19 @@ public interface WavDecoder extends Closeable {
     PcmDataType outputPcmDataType();
 
 
+    default int blockAlign() {
+        return -1;
+    }
+
+
+    default int blockSize() {
+        return -1;
+    }
+
+
+    long bytesRemaining();
+
+
     int read(byte[] output) throws IOException;
 
 }

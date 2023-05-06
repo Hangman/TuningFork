@@ -102,6 +102,8 @@ test {
      exclude 'de/pottgames/tuningfork/test/WavALawTest.class'
      exclude 'de/pottgames/tuningfork/test/AifcULawTest.class'
      exclude 'de/pottgames/tuningfork/test/AifcALawTest.class'
+     exclude 'de/pottgames/tuningfork/test/MsAdpcmWavMonoTest.class'
+     exclude 'de/pottgames/tuningfork/test/MsAdpcmWavStereoTest.class'
 }
 
 publishing {

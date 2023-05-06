@@ -97,6 +97,12 @@ public class PcmDecoder implements WavDecoder {
 
 
     @Override
+    public long bytesRemaining() {
+        return this.bytesRemaining;
+    }
+
+
+    @Override
     public void close() throws IOException, NullPointerException {
         this.stream.close();
     }

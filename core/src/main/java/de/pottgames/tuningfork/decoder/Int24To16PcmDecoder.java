@@ -130,6 +130,12 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
 
     @Override
+    public long bytesRemaining() {
+        return (long) (this.bytesRemaining / 3f * 2f);
+    }
+
+
+    @Override
     public void close() throws IOException, NullPointerException {
         this.stream.close();
     }

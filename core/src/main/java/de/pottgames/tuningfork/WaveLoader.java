@@ -71,9 +71,10 @@ public abstract class WaveLoader {
     public static SoundBuffer load(WavInputStream input) {
         SoundBuffer result = null;
         try {
-            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer = new byte[(int) input.bytesRemaining()];
             input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
+                    input.getBlockAlign());
         } finally {
             StreamUtils.closeQuietly(input);
         }

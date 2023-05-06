@@ -19,9 +19,12 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 
 public class LawDecoder implements WavDecoder, AiffDecoder {
+    private long           bytesRemaining;
     private final Encoding encoding;
     private final int      channels;
     private final int      sampleRate;
@@ -42,6 +45,7 @@ public class LawDecoder implements WavDecoder, AiffDecoder {
 
     @Override
     public void setup(InputStream stream, long streamLength) {
+        this.bytesRemaining = streamLength;
         this.totalOutputSamplesPerChannel = streamLength / this.channels;
 
         // INPUT STREAM
@@ -58,7 +62,13 @@ public class LawDecoder implements WavDecoder, AiffDecoder {
 
     @Override
     public int read(byte[] output) throws IOException {
-        return this.outputStream.read(output);
+        final int read = this.outputStream.read(output);
+        if (read <= 0) {
+            this.bytesRemaining = -1;
+        } else {
+            this.bytesRemaining = MathUtils.clamp(this.bytesRemaining - read, -1, Long.MAX_VALUE);
+        }
+        return read;
     }
 
 
@@ -95,6 +105,12 @@ public class LawDecoder implements WavDecoder, AiffDecoder {
     @Override
     public PcmDataType outputPcmDataType() {
         return PcmDataType.INTEGER;
+    }
+
+
+    @Override
+    public long bytesRemaining() {
+        return this.bytesRemaining * 2;
     }
 
 

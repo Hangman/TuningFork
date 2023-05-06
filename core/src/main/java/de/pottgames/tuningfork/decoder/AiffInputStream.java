@@ -89,7 +89,9 @@ public class AiffInputStream implements AudioStream {
 
         // SETUP DECODER
         int inputBytesPerSample = 0;
-        if (this.inputBitsPerSample > 24) {
+        if (this.inputBitsPerSample == 64) {
+            inputBytesPerSample = 8;
+        } else if (this.inputBitsPerSample > 24) {
             inputBytesPerSample = 4;
         } else if (this.inputBitsPerSample > 16) {
             inputBytesPerSample = 3;
@@ -117,6 +119,10 @@ public class AiffInputStream implements AudioStream {
             this.decoder = new LawDecoder(this.channels, this.sampleRate, Encoding.A_LAW, true);
         } else if ("ulaw".equalsIgnoreCase(this.compressionId) && inputBytesPerSample == 1) {
             this.decoder = new LawDecoder(this.channels, this.sampleRate, Encoding.U_LAW, true);
+        } else if ("FL32".equalsIgnoreCase(this.compressionId) && inputBytesPerSample == 4) {
+            this.decoder = new Aiff32BitFloatDecoder();
+        } else if ("FL64".equalsIgnoreCase(this.compressionId) && inputBytesPerSample == 8) {
+            this.decoder = new Aiff64BitFloatDecoder();
         }
 
         if (this.decoder == null) {
@@ -243,7 +249,7 @@ public class AiffInputStream implements AudioStream {
 
 
     public long totalSamplesPerChannel() {
-        return this.totalSampleFrames / this.channels;
+        return this.totalSampleFrames;
     }
 
 

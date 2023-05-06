@@ -25,6 +25,11 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
                         return new ImaAdpcmDecoder(blockAlign, channels, sampleRate);
                     }
                 }
+                if (audioFormat == WavAudioFormat.WAVE_FORMAT_ADPCM.getRegNumber()) {
+                    if (channels == 1 || channels == 2) {
+                        return new MsAdpcmDecoder(blockAlign, channels, sampleRate);
+                    }
+                }
                 break;
             case 8:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
