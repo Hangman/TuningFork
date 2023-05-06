@@ -69,10 +69,10 @@ Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.
 This library follows [semantic versioning](https://semver.org/). That means upgrading is always "safe" unless it is a major version increase. Accordingly, breaking changes are only made in major versions.
 Nevertheless, I think it's a good habit to check out the latest patch notes before depending on a new version: [Patch Notes](https://github.com/Hangman/TuningFork/wiki/Patch-Notes)
 
-## Get Started
+## Getting Started
 [Go to the wiki](https://github.com/Hangman/TuningFork/wiki)
 
-## Building from source
+## Building From Source
 To build TuningFork from source, you need a JDK >= 8 installed. Like [Adoptium JDK](https://adoptium.net/) for example.  
 TuningFork uses [Gradle](https://gradle.org/) as it's build tool (you don't need to have Gradle installed), for those who are not familiar with it:
 ```console
