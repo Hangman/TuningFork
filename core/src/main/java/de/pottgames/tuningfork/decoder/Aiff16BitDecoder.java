@@ -21,7 +21,7 @@ public class Aiff16BitDecoder implements AiffDecoder {
     private final int   bitsPerSample;
     private InputStream stream;
     private long        inputBytesRemaining;
-    private byte[]      buffer       = new byte[500];
+    private byte[]      buffer       = new byte[4096];
     private int         bufferOffset = 0;
     private int         bufferLength = 0;
 
