@@ -34,7 +34,7 @@ import de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter;
 public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, SoundBufferLoaderParameter> {
     @SuppressWarnings("rawtypes")
     private final Array<AssetDescriptor> dependencies = new Array<>();
-    private SoundBuffer                  asset;
+    private volatile SoundBuffer         asset;
 
 
     public SoundBufferLoader(FileHandleResolver resolver) {
