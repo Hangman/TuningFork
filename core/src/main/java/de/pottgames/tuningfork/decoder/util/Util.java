@@ -33,4 +33,38 @@ public class Util {
         return !Util.isOdd(number);
     }
 
+
+    /**
+     * Returns the next higher power of two. If number is negative, 1 is returned.
+     *
+     * @param number
+     *
+     * @return the next power of two
+     */
+    public static int nextPowerOfTwo(int number) {
+        if (number <= 0) {
+            return 1;
+        }
+        final int result = Integer.highestOneBit(number);
+        if (result == number) {
+            return result;
+        }
+        return result << 1;
+    }
+
+
+    /**
+     * Returns the next lower power of two. If the number is negative, 1 is returned.
+     *
+     * @param number
+     *
+     * @return the next lower power of two
+     */
+    public static int lastPowerOfTwo(int number) {
+        if (number <= 0) {
+            return 1;
+        }
+        return Integer.highestOneBit(number);
+    }
+
 }

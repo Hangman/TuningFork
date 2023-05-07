@@ -34,10 +34,10 @@ import de.pottgames.tuningfork.decoder.FlacInputStream;
 import de.pottgames.tuningfork.decoder.Mp3InputStream;
 import de.pottgames.tuningfork.decoder.OggInputStream;
 import de.pottgames.tuningfork.decoder.WavInputStream;
+import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
-import de.pottgames.tuningfork.misc.Numbers;
 
 /**
  * A {@link SoundSource} that streams audio data instead of loading all data at once into memory.
@@ -162,7 +162,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             return bufferSize;
         }
 
-        bufferSize = Numbers.nextPowerOfTwo(bufferSize);
+        bufferSize = Util.nextPowerOfTwo(bufferSize);
         return bufferSize;
     }
 
