@@ -80,7 +80,7 @@ public class Util {
             if (read <= 0) {
                 break;
             }
-            outputStream.write(buffer);
+            outputStream.write(buffer, 0, read);
         }
         return outputStream.toByteArray();
     }
