@@ -1,8 +1,7 @@
 package de.pottgames.tuningfork.test;
 
-import java.io.File;
-
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
@@ -20,7 +19,7 @@ public class StbVorbisTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         this.sound = OggLoader.loadNonPacked("src/test/resources/numbers2.ogg");
-        this.sound2 = OggLoader.load(new File("src/test/resources/numbers2.ogg"));
+        this.sound2 = OggLoader.load(Gdx.files.internal("numbers2.ogg"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
         System.out.println("Sound2 duration: " + this.sound.getDuration() + "s");
 

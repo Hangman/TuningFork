@@ -20,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryStack;
 
@@ -101,7 +102,9 @@ public abstract class OggLoader {
             throw new TuningForkRuntimeException(e);
         }
         StreamUtils.closeQuietly(stream);
-        final ByteBuffer originalData = ByteBuffer.wrap(streamData);
+        final ByteBuffer originalData = BufferUtils.createByteBuffer(streamData.length);
+        originalData.put(streamData);
+        originalData.flip();
 
         final SoundBuffer soundBuffer;
 
