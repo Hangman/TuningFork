@@ -44,7 +44,7 @@ public class LoadQuality5Ogg {
 
     @Benchmark
     public void loadFast() {
-        this.soundBuffer = OggLoader.loadFast("src/jmh/resources/bench_5.ogg");
+        this.soundBuffer = OggLoader.loadNonPacked("src/jmh/resources/bench_5.ogg");
     }
 
 

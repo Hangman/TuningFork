@@ -19,8 +19,8 @@ public class StbVorbisTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.sound = OggLoader.loadFast("src/test/resources/numbers2.ogg");
-        this.sound2 = OggLoader.loadFast(new File("src/test/resources/numbers2.ogg"));
+        this.sound = OggLoader.loadNonPacked("src/test/resources/numbers2.ogg");
+        this.sound2 = OggLoader.load(new File("src/test/resources/numbers2.ogg"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
         System.out.println("Sound2 duration: " + this.sound.getDuration() + "s");
 

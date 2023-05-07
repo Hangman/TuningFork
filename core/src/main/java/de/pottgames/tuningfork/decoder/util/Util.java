@@ -12,6 +12,10 @@
 
 package de.pottgames.tuningfork.decoder.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class Util {
 
     public static boolean isOdd(int number) {
@@ -65,6 +69,20 @@ public class Util {
             return 1;
         }
         return Integer.highestOneBit(number);
+    }
+
+
+    public static byte[] toByteArray(InputStream stream) throws IOException {
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[20000];
+        while (true) {
+            final int read = stream.read(buffer);
+            if (read <= 0) {
+                break;
+            }
+            outputStream.write(buffer);
+        }
+        return outputStream.toByteArray();
     }
 
 }
