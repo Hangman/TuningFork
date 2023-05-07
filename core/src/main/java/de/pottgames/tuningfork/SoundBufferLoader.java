@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.io.File;
+
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -61,7 +63,12 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
                 this.asset = FlacLoader.load(file);
                 break;
             case OGG:
-                this.asset = OggLoader.load(file);
+                final File realFile = file.file();
+                if (realFile != null && realFile.exists()) {
+                    this.asset = OggLoader.loadFast(realFile);
+                } else {
+                    this.asset = OggLoader.load(file);
+                }
                 break;
             case WAV:
                 this.asset = WaveLoader.load(file);

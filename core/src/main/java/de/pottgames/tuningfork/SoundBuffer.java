@@ -14,6 +14,7 @@ package de.pottgames.tuningfork;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
@@ -61,6 +62,31 @@ public class SoundBuffer implements Disposable {
 
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+     * The interleaved format also applies to surround sound.
+     *
+     * @param pcm
+     * @param channels number of channels
+     * @param sampleRate number of samples per second
+     * @param bitsPerSample number of bits per sample
+     * @param pcmDataType
+     * @param blockAlign the block alignment (currently only used for MS ADPCM data)
+     */
+    public SoundBuffer(ShortBuffer pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
+        this.audio = Audio.get();
+        this.logger = this.audio.getLogger();
+        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+        final int pcmSize = pcm.limit();
+
+        this.bufferId = this.generateBufferAndUpload(pcm, channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.duration = this.calculateDuration(pcmSize * 2, bitsPerSample, channels, sampleRate);
+    }
+
+
+    /**
+     * Creates a SoundBuffer with the given pcm data.<br>
      * Consider using {@link #SoundBuffer(byte[], int, int, int, PcmDataType)} instead if you're not providing MS_ADPCM data.<br>
      * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
      * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
@@ -79,35 +105,42 @@ public class SoundBuffer implements Disposable {
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
-        // DETERMINE PCM FORMAT
-        final PcmFormat pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
-        if (pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
-        }
-
         // PCM ARRAY TO TEMP BUFFER
         final ByteBuffer buffer = ByteBuffer.allocateDirect(pcm.length);
         buffer.order(ByteOrder.nativeOrder());
         buffer.put(pcm);
         buffer.flip();
 
-        // GEN BUFFER AND UPLOAD PCM DATA
-        this.bufferId = AL10.alGenBuffers();
-        if (blockAlign > 0) {
-            AL11.alBufferi(this.bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
-        }
-        AL10.alBufferData(this.bufferId, pcmFormat.getAlId(), buffer.asShortBuffer(), sampleRate);
+        this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.duration = this.calculateDuration(pcm.length, bitsPerSample, channels, sampleRate);
+    }
 
-        // CHECK FOR ERRORS
+
+    protected int generateBufferAndUpload(ShortBuffer pcm, int channels, int bitsPerSample, PcmDataType pcmDataType, int blockAlign, int sampleRate) {
+        final PcmFormat pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
+        if (pcmFormat == null) {
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
+        }
+
+        final int bufferId = AL10.alGenBuffers();
+        if (blockAlign > 0) {
+            AL11.alBufferi(bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
+        }
+        AL10.alBufferData(bufferId, pcmFormat.getAlId(), pcm, sampleRate);
+
         if (!this.errorLogger.checkLogError("Failed to create the SoundBuffer")) {
             this.logger.debug(this.getClass(), "SoundBuffer successfully created");
         }
 
-        // FETCH DURATION
+        return bufferId;
+    }
+
+
+    protected float calculateDuration(int bytes, int bitsPerSample, int channels, int sampleRate) {
         // FIXME: fetch duration from OpenAL using AL_SOFT_buffer_length_query extension when the bindings got added https://github.com/LWJGL/lwjgl3/issues/885
         // the current calculation is okay but not 100% precise with compressed audio data
-        final float samplesPerChannel = pcm.length / (bitsPerSample / 8f * channels);
-        this.duration = samplesPerChannel / sampleRate;
+        final float samplesPerChannel = bytes / (bitsPerSample / 8f * channels);
+        return samplesPerChannel / sampleRate;
     }
 
 

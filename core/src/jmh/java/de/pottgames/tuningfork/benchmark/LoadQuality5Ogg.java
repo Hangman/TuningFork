@@ -42,6 +42,12 @@ public class LoadQuality5Ogg {
     }
 
 
+    @Benchmark
+    public void loadFast() {
+        this.soundBuffer = OggLoader.loadFast("src/jmh/resources/bench_5.ogg");
+    }
+
+
     @Setup(Level.Iteration)
     public void setup() {
         Gdx.files = new Lwjgl3Files();

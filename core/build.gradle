@@ -106,6 +106,7 @@ test {
      exclude 'de/pottgames/tuningfork/test/MsAdpcmWavStereoTest.class'
      exclude 'de/pottgames/tuningfork/test/unit/DurationTest.class'
      exclude 'de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class'
+     exclude 'de/pottgames/tuningfork/test/StbVorbisTest.class'
 }
 
 publishing {
