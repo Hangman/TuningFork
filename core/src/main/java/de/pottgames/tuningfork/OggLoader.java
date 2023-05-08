@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.decoder.OggInputStream;
+import de.pottgames.tuningfork.decoder.util.Util;
 
 public abstract class OggLoader {
 
@@ -96,7 +97,7 @@ public abstract class OggLoader {
     public static SoundBuffer load(InputStream stream) {
         byte[] streamData = null;
         try {
-            streamData = stream.readAllBytes();
+            streamData = Util.toByteArray(stream);
         } catch (final IOException e) {
             throw new TuningForkRuntimeException(e);
         }
