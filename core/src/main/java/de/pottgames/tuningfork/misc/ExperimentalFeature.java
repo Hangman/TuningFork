@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  *
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR })
 public @interface ExperimentalFeature {
 
 }
