@@ -76,7 +76,7 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
         this.device = device;
         this.attributes = attributes;
-        this.currentDeviceSpecifier = this.fetchDefaultDeviceSpecifier();
+        this.currentDeviceSpecifier = this.fetchCurrentDeviceSpecifier();
         this.updateDesiredDevice(desiredDeviceSpecifier);
         this.setup = true;
     }
@@ -85,7 +85,7 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     @Override
     public void updateDesiredDevice(String desiredDeviceSpecifier) {
         this.desiredDeviceSpecifier = desiredDeviceSpecifier;
-        this.currentDeviceSpecifier = desiredDeviceSpecifier;
+        this.currentDeviceSpecifier = this.fetchCurrentDeviceSpecifier();
     }
 
 
@@ -169,9 +169,14 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     }
 
 
+    private String fetchCurrentDeviceSpecifier() {
+        return ALC10.alcGetString(this.device, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+    }
+
+
     private void reopen(String deviceSpecifier) {
         if (SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceSpecifier, this.attributes.getBuffer())) {
-            this.currentDeviceSpecifier = deviceSpecifier;
+            this.currentDeviceSpecifier = this.fetchCurrentDeviceSpecifier();
         }
     }
 
