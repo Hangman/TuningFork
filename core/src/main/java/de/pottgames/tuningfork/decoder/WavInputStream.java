@@ -45,10 +45,21 @@ public class WavInputStream implements AudioStream {
      * @param file
      */
     public WavInputStream(FileHandle file) {
+        this(file, true);
+    }
+
+
+    /**
+     * Initializes a {@link WavInputStream} from a {@link FileHandle}.
+     *
+     * @param file
+     * @param forStreaming true if this will be used for streaming
+     */
+    public WavInputStream(FileHandle file, boolean forStreaming) {
         this.stream = file.read();
         this.file = file;
         this.logger = Audio.get().getLogger();
-        this.setup();
+        this.setup(forStreaming);
         this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
     }
 
@@ -60,15 +71,27 @@ public class WavInputStream implements AudioStream {
      * @param stream
      */
     public WavInputStream(InputStream stream) {
+        this(stream, true);
+    }
+
+
+    /**
+     * Initializes a {@link WavInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
+     * {@link #WavInputStream(FileHandle)} instead to get the full functionality.
+     *
+     * @param stream
+     * @param forStreaming true if this will be used for streaming
+     */
+    public WavInputStream(InputStream stream, boolean forStreaming) {
         this.stream = stream;
         this.file = null;
         this.logger = Audio.get().getLogger();
-        this.setup();
+        this.setup(forStreaming);
         this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
     }
 
 
-    private void setup() {
+    private void setup(boolean forStreaming) {
         this.readRiffChunk();
         final WavFmtChunk fmtChunk = this.readFmtChunk();
 
@@ -79,7 +102,7 @@ public class WavInputStream implements AudioStream {
 
         // FIND DECODER
         final WavDecoderProvider provider = Audio.get().getWavDecoderProvider();
-        this.decoder = provider.getDecoder(fmtChunk);
+        this.decoder = provider.getDecoder(fmtChunk, forStreaming);
         if (this.decoder == null) {
             this.throwRuntimeError("Unsupported wav file format");
         }

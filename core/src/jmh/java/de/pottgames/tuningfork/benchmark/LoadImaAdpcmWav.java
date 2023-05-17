@@ -37,8 +37,14 @@ public class LoadImaAdpcmWav {
 
 
     @Benchmark
-    public void load() {
-        this.soundBuffer = WaveLoader.load(new File("src/jmh/resources/bench_ima_adpcm.wav"));
+    public void loadJava() {
+        this.soundBuffer = WaveLoader.load(new File("src/jmh/resources/bench_ima_adpcm.wav"), true);
+    }
+
+
+    @Benchmark
+    public void loadNative() {
+        this.soundBuffer = WaveLoader.load(new File("src/jmh/resources/bench_ima_adpcm.wav"), false);
     }
 
 

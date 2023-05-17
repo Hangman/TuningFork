@@ -39,11 +39,38 @@ public abstract class WaveLoader {
      * Loads a wav file into a {@link SoundBuffer}.
      *
      * @param file
+     * @param useJavaDecoder enforces the java decoder instead of the native one
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(File file, boolean useJavaDecoder) {
+        return WaveLoader.load(Gdx.files.absolute(file.getAbsolutePath()), useJavaDecoder);
+    }
+
+
+    /**
+     * Loads a wav file into a {@link SoundBuffer}.
+     *
+     * @param file
      *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle file) {
-        final WavInputStream input = new WavInputStream(file);
+        final WavInputStream input = new WavInputStream(file, false);
+        return WaveLoader.load(input);
+    }
+
+
+    /**
+     * Loads a wav file into a {@link SoundBuffer}.
+     *
+     * @param file
+     * @param useJavaDecoder enforces the java decoder instead of the native one
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(FileHandle file, boolean useJavaDecoder) {
+        final WavInputStream input = new WavInputStream(file, useJavaDecoder);
         return WaveLoader.load(input);
     }
 
@@ -56,7 +83,7 @@ public abstract class WaveLoader {
      * @return the SoundBuffer
      */
     public static SoundBuffer load(InputStream stream) {
-        final WavInputStream input = new WavInputStream(stream);
+        final WavInputStream input = new WavInputStream(stream, false);
         return WaveLoader.load(input);
     }
 

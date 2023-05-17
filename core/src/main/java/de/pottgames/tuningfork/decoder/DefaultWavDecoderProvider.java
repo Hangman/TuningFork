@@ -1,12 +1,13 @@
 package de.pottgames.tuningfork.decoder;
 
+import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.decoder.LawDecoder.Encoding;
 
 public class DefaultWavDecoderProvider implements WavDecoderProvider {
 
     @Override
-    public WavDecoder getDecoder(WavFmtChunk fmtChunk) {
+    public WavDecoder getDecoder(WavFmtChunk fmtChunk, boolean forStreaming) {
         final int inputBitsPerSample = fmtChunk.getwBitsPerSample();
         final int format = fmtChunk.getwFormatTag();
         final int audioFormat = format == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber() ? fmtChunk.getSubFormatDataCode() : format;
@@ -20,17 +21,7 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
 
         switch (inputBitsPerSample) {
             case 4:
-                if (audioFormat == WavAudioFormat.WAVE_FORMAT_DVI_ADPCM.getRegNumber()) {
-                    if (channels == 1 || channels == 2) {
-                        return new ImaAdpcmDecoder(blockAlign, channels, sampleRate);
-                    }
-                }
-                if (audioFormat == WavAudioFormat.WAVE_FORMAT_ADPCM.getRegNumber()) {
-                    if (channels == 1 || channels == 2) {
-                        return new MsAdpcmDecoder(blockAlign, channels, sampleRate);
-                    }
-                }
-                break;
+                return this.getAdpcmDecoder(audioFormat, channels, blockAlign, sampleRate, forStreaming);
             case 8:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
                     return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.INTEGER);
@@ -65,6 +56,25 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
                     return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.FLOAT);
                 }
                 break;
+        }
+
+        return null;
+    }
+
+
+    protected WavDecoder getAdpcmDecoder(final int audioFormat, final int channels, final int blockAlign, final int sampleRate, boolean forStreaming) {
+        if (channels < 1 || channels > 2) {
+            return null;
+        }
+
+        if (audioFormat == WavAudioFormat.WAVE_FORMAT_DVI_ADPCM.getRegNumber()) {
+            if (!forStreaming && Audio.get().isNativeDecodersAvailable()) {
+                return new ImaAdpcmRsDecoder(blockAlign, channels, sampleRate);
+            }
+            return new ImaAdpcmDecoder(blockAlign, channels, sampleRate);
+        }
+        if (audioFormat == WavAudioFormat.WAVE_FORMAT_ADPCM.getRegNumber()) {
+            return new MsAdpcmDecoder(blockAlign, channels, sampleRate);
         }
 
         return null;

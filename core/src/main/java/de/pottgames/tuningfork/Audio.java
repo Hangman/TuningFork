@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
@@ -34,6 +35,7 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
 public class Audio implements Disposable {
     private static Audio instance;
 
+    private final boolean            nativeDecoderAvailable;
     final StreamManager              streamManager;
     final Filter                     publicFilter;
     private final WavDecoderProvider wavDecoderProvider;
@@ -114,6 +116,16 @@ public class Audio implements Disposable {
 
     private Audio(AudioDevice device, AudioConfig config) {
         this.logger = config.getLogger();
+        final SharedLibraryLoader loader = new SharedLibraryLoader();
+        boolean nativesLoaded = true;
+        try {
+            loader.load("ima_adpcm_rs");
+        } catch (final Exception e) {
+            this.logger.warn(this.getClass(), e.getMessage());
+            this.logger.warn(this.getClass(), "Native IMA ADPCM decoder isn't available on this OS, using the slower Java version instead.");
+            nativesLoaded = false;
+        }
+        this.nativeDecoderAvailable = nativesLoaded;
         this.device = device;
         this.wavDecoderProvider = config.getResamplerProvider();
         Audio.instance = this;
@@ -815,6 +827,16 @@ public class Audio implements Disposable {
 
     public TuningForkLogger getLogger() {
         return this.logger;
+    }
+
+
+    /**
+     * Returns true if the native decoders are available. Java decoders will be used as a fallback.
+     *
+     * @return native decoders available
+     */
+    public boolean isNativeDecodersAvailable() {
+        return this.nativeDecoderAvailable;
     }
 
 

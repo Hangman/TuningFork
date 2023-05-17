@@ -85,4 +85,28 @@ public class Util {
         return outputStream.toByteArray();
     }
 
+
+    public static int readAll(InputStream stream, byte[] output, int limit) throws IOException {
+        if (limit <= 0) {
+            return 0;
+        }
+
+        int bytesToRead = limit;
+        int offset = 0;
+
+        while (bytesToRead > 0) {
+            final int bytesRead = stream.read(output, offset, bytesToRead);
+            if (bytesRead == -1) {
+                if (offset > 0) {
+                    return offset;
+                }
+                return 0;
+            }
+            bytesToRead -= bytesRead;
+            offset += bytesRead;
+        }
+
+        return offset;
+    }
+
 }
