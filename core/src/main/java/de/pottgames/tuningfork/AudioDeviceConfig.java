@@ -14,6 +14,7 @@ package de.pottgames.tuningfork;
 
 import de.pottgames.tuningfork.router.AudioDeviceRerouter;
 import de.pottgames.tuningfork.router.KeepAliveDeviceRerouter;
+import de.pottgames.tuningfork.router.SmartDeviceRerouter;
 
 public class AudioDeviceConfig {
 
@@ -36,10 +37,9 @@ public class AudioDeviceConfig {
 
     /**
      * A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to
-     * keep track of the default audio device of the OS and switch to it when a new default device is reported by the OS. Default:
-     * {@link KeepAliveDeviceRerouter}
+     * keep track of the default audio device of the OS and switch to it when a new default device is reported by the OS. Default: {@link SmartDeviceRerouter}
      */
-    protected AudioDeviceRerouter rerouter = new KeepAliveDeviceRerouter();
+    protected AudioDeviceRerouter rerouter = new SmartDeviceRerouter();
 
 
     public String getDeviceSpecifier() {

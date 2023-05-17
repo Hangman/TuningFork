@@ -14,7 +14,6 @@ package de.pottgames.tuningfork.router;
 
 import java.util.List;
 
-import de.pottgames.tuningfork.misc.Objects;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTReopenDevice;
@@ -23,7 +22,7 @@ import org.lwjgl.system.MemoryUtil;
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
-import de.pottgames.tuningfork.misc.ExperimentalFeature;
+import de.pottgames.tuningfork.misc.Objects;
 
 /**
  * <b>Warning</b>: This is an experimental router that has not been tested on all platforms and OpenAL backends. Use at your own risk.<br>
@@ -41,7 +40,6 @@ import de.pottgames.tuningfork.misc.ExperimentalFeature;
  *
  */
 @SuppressWarnings("javadoc")
-@ExperimentalFeature
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
     /**
      * Defines how often the background thread will check the connection and try to reconnect to audio devies.
