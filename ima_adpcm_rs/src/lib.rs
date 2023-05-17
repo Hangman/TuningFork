@@ -9,24 +9,23 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-
 use std::cmp::min;
 use std::slice;
 
-use jni::{
-    JNIEnv,
-    objects::JObject,
-    sys::{jbyteArray, jint},
-};
 use jni::objects::{AutoArray, ReleaseMode};
 use jni::sys::{jboolean, jbyte};
+use jni::{
+    objects::JObject,
+    sys::{jbyteArray, jint},
+    JNIEnv,
+};
 
 const STEP_TABLE: [u16; 89] = [
-    7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73,
-    80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449,
+    7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66,
+    73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449,
     494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272,
     2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493,
-    10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
+    10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767,
 ];
 
 const INDEX_TABLE: [i8; 16] = [-1, -1, -1, -1, 2, 4, 6, 8, -1, -1, -1, -1, 2, 4, 6, 8];
@@ -39,9 +38,12 @@ pub extern "C" fn Java_de_pottgames_tuningfork_bindings_ImaAdpcmRs_decode(
     block_size: jint,
     stereo: jboolean,
 ) -> jbyteArray {
-    let input_elements: AutoArray<jbyte> = env.get_byte_array_elements(input, ReleaseMode::NoCopyBack).unwrap();
+    let input_elements: AutoArray<jbyte> = env
+        .get_byte_array_elements(input, ReleaseMode::NoCopyBack)
+        .unwrap();
     let input_size = env.get_array_length(input).unwrap();
-    let input_data = unsafe { slice::from_raw_parts(input_elements.as_ptr() as *const u8, input_size as usize) };
+    let input_data =
+        unsafe { slice::from_raw_parts(input_elements.as_ptr() as *const u8, input_size as usize) };
 
     // decode
     let mut pcm_data: Vec<u8> = vec![];
@@ -54,7 +56,12 @@ pub extern "C" fn Java_de_pottgames_tuningfork_bindings_ImaAdpcmRs_decode(
         let block_data = &input_data[data_pos..data_pos + this_block_size];
         data_pos += block_data.len();
         if stereo != 0 {
-            let pcm_bytes = decode_block(block_data, stereo != 0, &mut pcm_data_left, &mut pcm_data_right);
+            let pcm_bytes = decode_block(
+                block_data,
+                stereo != 0,
+                &mut pcm_data_left,
+                &mut pcm_data_right,
+            );
             let interleave_data = InterleaveData {
                 input_left: &pcm_data_left,
                 input_right: &pcm_data_right,
@@ -85,10 +92,18 @@ fn interleave(data: InterleaveData) {
 }
 
 #[inline]
-fn decode_block(data: &[u8], stereo: bool, output_left: &mut Vec<u8>, output_right: &mut Vec<u8>) -> usize {
+fn decode_block(
+    data: &[u8],
+    stereo: bool,
+    output_left: &mut Vec<u8>,
+    output_right: &mut Vec<u8>,
+) -> usize {
     let mut left_prediction = Prediction::new();
     let mut right_prediction = Prediction::new();
-    let preamble_bytes = if stereo { 8 } else { 4 };
+    let preamble_bytes = match stereo {
+        true => 8,
+        false => 4,
+    };
 
     // read left channel preamble
     left_prediction.predictor = data[0] as u16 | ((data[1] as u16) << 8);
@@ -109,8 +124,14 @@ fn decode_block(data: &[u8], stereo: bool, output_left: &mut Vec<u8>, output_rig
         // decode
         let nibble1 = input_byte & 0b1111;
         let nibble2 = input_byte >> 4;
-        let sample1 = decode_nibble(nibble1, if left { &mut left_prediction } else { &mut right_prediction });
-        let sample2 = decode_nibble(nibble2, if left { &mut left_prediction } else { &mut right_prediction });
+        let sample1 = match left {
+            true => decode_nibble(nibble1, &mut left_prediction),
+            false => decode_nibble(nibble1, &mut right_prediction),
+        };
+        let sample2 = match left {
+            true => decode_nibble(nibble2, &mut left_prediction),
+            false => decode_nibble(nibble2, &mut right_prediction),
+        };
 
         // split samples into bytes
         let byte1 = (sample1 & 0xFF) as u8;
@@ -149,7 +170,9 @@ fn decode_nibble(nibble: u8, prediction: &mut Prediction) -> u16 {
     let sign = nibble & 0b1000;
     let delta = nibble & 0b111;
 
-    prediction.step_index = prediction.step_index.wrapping_add(INDEX_TABLE[nibble as usize] as isize);
+    prediction.step_index = prediction
+        .step_index
+        .wrapping_add(INDEX_TABLE[nibble as usize] as isize);
     prediction.step_index = num::clamp(prediction.step_index, 0, 88);
 
     let mut diff = prediction.step >> 3;
