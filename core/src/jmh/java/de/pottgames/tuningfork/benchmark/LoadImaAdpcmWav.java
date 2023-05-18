@@ -48,6 +48,12 @@ public class LoadImaAdpcmWav {
     }
 
 
+    @Benchmark
+    public void loadNativeFast() {
+        this.soundBuffer = WaveLoader.loadFastImaAdpcm(new File("src/jmh/resources/bench_ima_adpcm.wav").getAbsolutePath());
+    }
+
+
     @Setup(Level.Iteration)
     public void setup() {
         Gdx.files = new Lwjgl3Files();

@@ -19,6 +19,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.bindings.ImaAdpcmData;
+import de.pottgames.tuningfork.bindings.ImaAdpcmRs;
 import de.pottgames.tuningfork.decoder.WavInputStream;
 
 public abstract class WaveLoader {
@@ -107,6 +110,31 @@ public abstract class WaveLoader {
         }
 
         return result;
+    }
+
+
+    /**
+     * Disclaimer: This is a special use case load method. If you just want to load a wav, no matter what encoding, use one of the other load methods.<br>
+     * <br>
+     * Loads an IMA ADPCM encoded wav file into a {@link SoundBuffer}. The file must be present on the file system (not packed into a jar), be careful with this
+     * as packing everything is libGDXs default behavior. Loading is completely done in native code and therefore a bit faster. Leads to a crash when fed with a
+     * wav file that is not IMA ADPCM encoded.
+     *
+     * @param path must be a file that exists on the file system
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer loadFastImaAdpcm(String path) {
+        if (!Audio.get().isNativeDecodersAvailable()) {
+            return null;
+        }
+
+        final ImaAdpcmRs decoder = new ImaAdpcmRs();
+        final ImaAdpcmData data = decoder.decodeFile(path);
+        if (data == null) {
+            throw new TuningForkRuntimeException("Error decoding " + path);
+        }
+        return new SoundBuffer(data.pcmData, data.numChannels, data.sampleRate, 16, PcmDataType.INTEGER);
     }
 
 }
