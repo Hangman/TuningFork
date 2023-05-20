@@ -1,0 +1,190 @@
+# This is the shittiest GH action workflow you will ever see.
+
+name: Build natives
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'ima_adpcm_rs/src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - 'ima_adpcm_rs/src/**'
+      env:
+        GIT: false
+
+    - name: Setup Rust
+      if: steps.changes.outputs.src == 'true'
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+
+    - name: Build Rust library (Linux)
+      if: steps.changes.outputs.src == 'true'
+      run: |
+        cd ima_adpcm_rs
+        cargo build --release
+        cd ..
+
+    - name: Copy Linux binary
+      if: steps.changes.outputs.src == 'true'
+      run: mv -f ima_adpcm_rs/target/release/libima_adpcm_rs64.so core/src/main/resources/libima_adpcm_rs64.so
+
+    - name: Commit native library
+      if: steps.changes.outputs.src == 'true'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GIT_USER_NAME: github-actions[bot]
+        GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      run: |
+        git config --global user.name "${GIT_USER_NAME}"
+        git config --global user.email "${GIT_USER_EMAIL}"
+        git add core/src/main/resources/
+        git diff-index --quiet HEAD || git commit -m "Update Linux natives" || echo "No changes to commit"
+
+    - name: Push changes
+      if: steps.changes.outputs.src == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
+        branch: ${{ github.ref }}
+
+  build-windows:
+    needs: build-linux
+    runs-on: windows-latest
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+      
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - 'ima_adpcm_rs/src/**'
+      env:
+        GIT: false
+      
+    - name: Setup Rust
+      if: steps.changes.outputs.src == 'true'
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+      
+    - name: Build Rust library (Windows)
+      if: steps.changes.outputs.src == 'true'
+      run: |
+        cd ima_adpcm_rs
+        cargo build --release
+        cd ..
+      
+    - name: Copy Windows binary
+      if: steps.changes.outputs.src == 'true'
+      run: mv -Force ima_adpcm_rs/target/release/ima_adpcm_rs64.dll core/src/main/resources/ima_adpcm_rs64.dll
+      
+    - name: Commit native library
+      if: steps.changes.outputs.src == 'true'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "GIT_USER_NAME: $GIT_USER_NAME"
+        echo "GIT_USER_EMAIL: $GIT_USER_EMAIL"
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git pull origin
+        git add core/src/main/resources/
+        git diff-index --quiet HEAD || git commit -m "Update Windows natives" || echo "No changes to commit"
+      
+    - name: Push changes
+      if: steps.changes.outputs.src == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
+        branch: ${{ github.ref }}
+
+  build-macos:
+    needs: build-windows
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        architecture: [arm64]
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+      
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - 'ima_adpcm_rs/src/**'
+      env:
+        GIT: false
+      
+    - name: Setup Rust
+      if: steps.changes.outputs.src == 'true'
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+      
+    - name: Build Rust library (MacOS)
+      if: steps.changes.outputs.src == 'true'
+      run: |
+        cd ima_adpcm_rs
+        cargo build --release
+        cd ..
+      
+    - name: Copy MacOS binary
+      if: steps.changes.outputs.src == 'true'
+      run: mv -f ima_adpcm_rs/target/release/libima_adpcm_rs64.dylib core/src/main/resources/libima_adpcm_rsarm64.dylib
+      
+    - name: List files
+      if: steps.changes.outputs.src == 'true'
+      run: ls -R
+      
+    - name: Commit native library
+      if: steps.changes.outputs.src == 'true'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GIT_USER_NAME: github-actions[bot]
+        GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      run: |
+        git config --global user.name "${GIT_USER_NAME}"
+        git config --global user.email "${GIT_USER_EMAIL}"
+        git pull origin
+        git add core/src/main/resources/
+        git diff-index --quiet HEAD || git commit -m "Update MacOS natives" || echo "No changes to commit"
+      
+    - name: Push changes
+      if: steps.changes.outputs.src == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
+        branch: ${{ github.ref }}
