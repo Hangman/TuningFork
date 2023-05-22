@@ -116,16 +116,23 @@ public class Audio implements Disposable {
 
     private Audio(AudioDevice device, AudioConfig config) {
         this.logger = config.getLogger();
+
+        // LOAD NATIVE LIBRARIES
         final SharedLibraryLoader loader = new SharedLibraryLoader();
-        boolean nativesLoaded = true;
-        try {
-            loader.load("ima_adpcm_rs");
-        } catch (final Exception e) {
-            this.logger.warn(this.getClass(), e.getMessage());
-            this.logger.warn(this.getClass(), "Native IMA ADPCM decoder isn't available on this OS, using the slower Java version instead.");
-            nativesLoaded = false;
+        boolean nativesLoaded = false;
+        if (config.useNativeDecoders()) {
+            try {
+                loader.load("ima_adpcm_rs");
+                nativesLoaded = true;
+            } catch (final Exception e) {
+                this.logger.warn(this.getClass(), e.getMessage());
+                this.logger.warn(this.getClass(), "Native IMA ADPCM decoder isn't available on this OS, using the slower Java version instead.");
+                nativesLoaded = false;
+            }
         }
         this.nativeDecoderAvailable = nativesLoaded;
+
+        // INIT
         this.device = device;
         this.wavDecoderProvider = config.getResamplerProvider();
         Audio.instance = this;

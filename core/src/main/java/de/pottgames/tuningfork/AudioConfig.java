@@ -33,6 +33,7 @@ public class AudioConfig {
     protected Virtualization           virtualization;
     protected TuningForkLogger         logger;
     protected WavDecoderProvider       wavDecoderProvider;
+    protected boolean                  useNativeDecoders = true;
 
 
     /**
@@ -191,9 +192,35 @@ public class AudioConfig {
      * Check {@link Virtualization} for the different methods available.<br>
      *
      * @param virtualization
+     *
+     * @return this
      */
-    public void setVirtualization(Virtualization virtualization) {
+    public AudioConfig setVirtualization(Virtualization virtualization) {
         this.virtualization = virtualization;
+        return this;
+    }
+
+
+    /**
+     * When true, native decoders will be used if available.
+     *
+     * @return this
+     */
+    public boolean useNativeDecoders() {
+        return this.useNativeDecoders;
+    }
+
+
+    /**
+     * If this is set to false, TuningFork will not load the native decoders and instead use the slower Java ones.
+     *
+     * @param value
+     *
+     * @return this
+     */
+    public AudioConfig setUseNativeDecoders(boolean value) {
+        this.useNativeDecoders = value;
+        return this;
     }
 
 
