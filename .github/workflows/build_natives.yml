@@ -22,35 +22,22 @@ jobs:
       with:
         persist-credentials: false
 
-    - uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          src:
-            - 'ima_adpcm_rs/src/**'
-      env:
-        GIT: false
-
     - name: Setup Rust
-      if: steps.changes.outputs.src == 'true'
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         override: true
 
     - name: Build Rust library (Linux)
-      if: steps.changes.outputs.src == 'true'
       run: |
         cd ima_adpcm_rs
         cargo build --release
         cd ..
 
     - name: Copy Linux binary
-      if: steps.changes.outputs.src == 'true'
       run: mv -f ima_adpcm_rs/target/release/libima_adpcm_rs64.so core/src/main/resources/libima_adpcm_rs64.so
 
     - name: Commit native library
-      if: steps.changes.outputs.src == 'true'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GIT_USER_NAME: github-actions[bot]
@@ -62,7 +49,6 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "Update Linux natives" || echo "No changes to commit"
 
     - name: Push changes
-      if: steps.changes.outputs.src == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
@@ -78,35 +64,22 @@ jobs:
       with:
         persist-credentials: false
       
-    - uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          src:
-            - 'ima_adpcm_rs/src/**'
-      env:
-        GIT: false
-      
     - name: Setup Rust
-      if: steps.changes.outputs.src == 'true'
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         override: true
       
     - name: Build Rust library (Windows)
-      if: steps.changes.outputs.src == 'true'
       run: |
         cd ima_adpcm_rs
         cargo build --release
         cd ..
       
     - name: Copy Windows binary
-      if: steps.changes.outputs.src == 'true'
       run: mv -Force ima_adpcm_rs/target/release/ima_adpcm_rs64.dll core/src/main/resources/ima_adpcm_rs64.dll
       
     - name: Commit native library
-      if: steps.changes.outputs.src == 'true'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
@@ -119,7 +92,6 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "Update Windows natives" || echo "No changes to commit"
       
     - name: Push changes
-      if: steps.changes.outputs.src == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
@@ -138,39 +110,22 @@ jobs:
       with:
         persist-credentials: false
       
-    - uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          src:
-            - 'ima_adpcm_rs/src/**'
-      env:
-        GIT: false
-      
     - name: Setup Rust
-      if: steps.changes.outputs.src == 'true'
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         override: true
       
     - name: Build Rust library (MacOS)
-      if: steps.changes.outputs.src == 'true'
       run: |
         cd ima_adpcm_rs
         cargo build --release
         cd ..
       
     - name: Copy MacOS binary
-      if: steps.changes.outputs.src == 'true'
       run: mv -f ima_adpcm_rs/target/release/libima_adpcm_rs64.dylib core/src/main/resources/libima_adpcm_rsarm64.dylib
       
-    - name: List files
-      if: steps.changes.outputs.src == 'true'
-      run: ls -R
-      
     - name: Commit native library
-      if: steps.changes.outputs.src == 'true'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GIT_USER_NAME: github-actions[bot]
@@ -183,7 +138,6 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "Update MacOS natives" || echo "No changes to commit"
       
     - name: Push changes
-      if: steps.changes.outputs.src == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
