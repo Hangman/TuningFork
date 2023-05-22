@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - 'ima_adpcm_rs/src/**'
+      - 'ima_adpcm_rs/**'
 
 permissions:
   contents: read

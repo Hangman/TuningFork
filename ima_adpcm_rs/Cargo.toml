@@ -7,6 +7,9 @@ edition = "2021"
 num = "0.4"
 jni = "0.20.0"
 
+[profile.release]
+lto = true
+
 [lib]
 crate_type = ["cdylib"]
 name = "ima_adpcm_rs64"
