@@ -122,11 +122,11 @@ public class Audio implements Disposable {
         boolean nativesLoaded = false;
         if (config.useNativeDecoders()) {
             try {
-                loader.load("ima_adpcm_rs");
+                loader.load("decoders_rs");
                 nativesLoaded = true;
             } catch (final Exception e) {
                 this.logger.warn(this.getClass(), e.getMessage());
-                this.logger.warn(this.getClass(), "Native IMA ADPCM decoder isn't available on this OS, using the slower Java version instead.");
+                this.logger.warn(this.getClass(), "Native decoders aren't available on this platform");
                 nativesLoaded = false;
             }
         }
