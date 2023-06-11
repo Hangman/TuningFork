@@ -553,10 +553,8 @@ public class AudioDevice {
         if (this.context != 0L) {
             ALC10.alcDestroyContext(this.context);
         }
-        if (this.deviceHandle != 0L) {
-            if (!ALC10.alcCloseDevice(this.deviceHandle) && log) {
-                this.logger.error(this.getClass(), "The audio device did not close properly.");
-            }
+        if (this.deviceHandle != 0L && !ALC10.alcCloseDevice(this.deviceHandle) && log) {
+            this.logger.error(this.getClass(), "The audio device did not close properly.");
         }
     }
 

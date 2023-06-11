@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - 'ima_adpcm_rs/**'
+      - 'decoders_rs/**'
 
 permissions:
   contents: read
@@ -30,12 +30,12 @@ jobs:
 
     - name: Build Rust library (Linux)
       run: |
-        cd ima_adpcm_rs
+        cd decoders_rs
         cargo build --release
         cd ..
 
     - name: Copy Linux binary
-      run: mv -f ima_adpcm_rs/target/release/libima_adpcm_rs64.so core/src/main/resources/libima_adpcm_rs64.so
+      run: mv -f decoders_rs/target/release/libdecoders_rs64.so core/src/main/resources/libdecoders_rs64.so
 
     - name: Commit native library
       env:
@@ -72,12 +72,12 @@ jobs:
       
     - name: Build Rust library (Windows)
       run: |
-        cd ima_adpcm_rs
+        cd decoders_rs
         cargo build --release
         cd ..
       
     - name: Copy Windows binary
-      run: mv -Force ima_adpcm_rs/target/release/ima_adpcm_rs64.dll core/src/main/resources/ima_adpcm_rs64.dll
+      run: mv -Force decoders_rs/target/release/decoders_rs64.dll core/src/main/resources/decoders_rs64.dll
       
     - name: Commit native library
       env:
@@ -118,12 +118,12 @@ jobs:
       
     - name: Build Rust library (MacOS)
       run: |
-        cd ima_adpcm_rs
+        cd decoders_rs
         cargo build --release
         cd ..
       
     - name: Copy MacOS binary
-      run: mv -f ima_adpcm_rs/target/release/libima_adpcm_rs64.dylib core/src/main/resources/libima_adpcm_rsarm64.dylib
+      run: mv -f decoders_rs/target/release/libdecoders_rs64.dylib core/src/main/resources/libdecoders_rsarm64.dylib
       
     - name: Commit native library
       env:
