@@ -282,6 +282,7 @@ public class BufferedSoundSource extends SongSource {
             throw new TuningForkRuntimeException("Invalid call to BufferedSoundSource.free(), you are not the owner of this sound source.");
         }
         this.stop();
+        this.setBuffer(null);
         this.obtained = false;
     }
 

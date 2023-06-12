@@ -132,6 +132,7 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.ALC_ENUMERATE_ALL_EXT);
         this.checkRequiredExtension(ALExtension.AL_SOFT_EVENTS);
         this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS_REMIX);
+        this.checkRequiredExtension(ALExtension.AL_SOFT_LOOP_POINTS);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {

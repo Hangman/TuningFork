@@ -14,12 +14,16 @@ package de.pottgames.tuningfork;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.SOFTBlockAlignment;
+import org.lwjgl.openal.SOFTLoopPoints;
+import org.lwjgl.system.MemoryStack;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -39,6 +43,8 @@ public class SoundBuffer implements Disposable {
     private final ErrorLogger      errorLogger;
     private final int              bufferId;
     private final float            duration;
+    private final int              samplesPerChannel;
+    private final float[]          loopPointCache = new float[2];
 
 
     /**
@@ -81,6 +87,7 @@ public class SoundBuffer implements Disposable {
         final int pcmSize = pcm.limit();
 
         this.bufferId = this.generateBufferAndUpload(pcm, channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.samplesPerChannel = this.calculateSamplesPerChannel(pcmSize * 2, bitsPerSample, channels);
         this.duration = this.calculateDuration(pcmSize * 2, bitsPerSample, channels, sampleRate);
     }
 
@@ -112,6 +119,7 @@ public class SoundBuffer implements Disposable {
         buffer.flip();
 
         this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.samplesPerChannel = this.calculateSamplesPerChannel(pcm.length, bitsPerSample, channels);
         this.duration = this.calculateDuration(pcm.length, bitsPerSample, channels, sampleRate);
     }
 
@@ -136,11 +144,86 @@ public class SoundBuffer implements Disposable {
     }
 
 
+    protected int calculateSamplesPerChannel(int bytes, int bitsPerSample, int channels) {
+        // FIXME: fetch samples per channel from OpenAL using AL_SOFT_buffer_length_query extension when the bindings got added
+        // https://github.com/LWJGL/lwjgl3/issues/885
+        // the current calculation is okay but not 100% precise with compressed audio data
+        return (int) (bytes / (bitsPerSample / 8f * channels));
+    }
+
+
     protected float calculateDuration(int bytes, int bitsPerSample, int channels, int sampleRate) {
         // FIXME: fetch duration from OpenAL using AL_SOFT_buffer_length_query extension when the bindings got added https://github.com/LWJGL/lwjgl3/issues/885
         // the current calculation is okay but not 100% precise with compressed audio data
         final float samplesPerChannel = bytes / (bitsPerSample / 8f * channels);
         return samplesPerChannel / sampleRate;
+    }
+
+
+    /**
+     * Specifies the two offsets the playing source will use to loop, expressed in seconds. This method will fail when the buffer is attached to a source like:
+     * <br>
+     * <br>
+     * <code>
+     * SoundSource source = audio.obtain(soundBuffer);
+     * soundBuffer.setLoopPoints(1f, 2f); // this will fail
+     * </code> <br>
+     * <br>
+     * If the playback position is manually set to something > end, the source will not loop and instead stop playback when it reaches the end of the sound.<br>
+     * The method will throw an exception if start >= end or if either is a negative value. Values > sound duration are not considered invalid, but they'll be
+     * clamped internally.
+     *
+     * @param start start position of the loop in seconds
+     * @param end end position of the loop in seconds
+     */
+    public void setLoopPoints(float start, float end) {
+        if (start >= end) {
+            throw new TuningForkRuntimeException("Invalid loop points: start >= end");
+        }
+        if (start < 0 || end < 0) {
+            throw new TuningForkRuntimeException("Invalid loop points: start and end must not be < 0");
+        }
+
+        int startSample = (int) (start / this.duration * this.samplesPerChannel);
+        startSample = MathUtils.clamp(startSample, 0, this.samplesPerChannel - 1);
+        int endSample = (int) (end / this.duration * this.samplesPerChannel);
+        endSample = MathUtils.clamp(endSample, 1, this.samplesPerChannel);
+
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            final IntBuffer params = stack.mallocInt(2);
+            params.put(0, startSample);
+            params.put(1, endSample);
+            AL11.alBufferiv(this.bufferId, SOFTLoopPoints.AL_LOOP_POINTS_SOFT, params);
+        }
+
+        this.errorLogger.checkLogError("Error setting loop points on the buffer");
+    }
+
+
+    /**
+     * Returns the loop points set by {@link #setLoopPoints(float, float)}.<br>
+     * The returned array has a length of 2, with <br>
+     * index 0 => start<br>
+     * index 1 => end<br>
+     * The result might not exactly reflect the numbers from {@link #setLoopPoints(float, float)} because there's a conversion from seconds to samples involved.
+     *
+     * @return the loop points
+     */
+    public float[] getLoopPoints() {
+        int startSample = 0;
+        int endSample = 0;
+
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            final IntBuffer params = stack.mallocInt(2);
+            AL11.alGetBufferiv(this.bufferId, SOFTLoopPoints.AL_LOOP_POINTS_SOFT, params);
+            startSample = params.get(0);
+            endSample = params.get(1);
+        }
+
+        this.loopPointCache[0] = (float) startSample / this.samplesPerChannel * this.duration;
+        this.loopPointCache[1] = (float) endSample / this.samplesPerChannel * this.duration;
+
+        return this.loopPointCache;
     }
 
 
