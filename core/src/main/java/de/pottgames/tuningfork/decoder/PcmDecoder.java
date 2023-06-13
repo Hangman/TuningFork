@@ -39,6 +39,7 @@ public class PcmDecoder implements WavDecoder {
             return -1;
         }
         final int bytesRead = Util.readAll(this.stream, output, (int) Math.min(this.bytesRemaining, output.length));
+        this.bytesRemaining -= bytesRead;
         return bytesRead;
     }
 

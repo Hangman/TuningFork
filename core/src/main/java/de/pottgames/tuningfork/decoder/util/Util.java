@@ -97,10 +97,7 @@ public class Util {
         while (bytesToRead > 0) {
             final int bytesRead = stream.read(output, offset, bytesToRead);
             if (bytesRead == -1) {
-                if (offset > 0) {
-                    return offset;
-                }
-                return 0;
+                return offset;
             }
             bytesToRead -= bytesRead;
             offset += bytesRead;
