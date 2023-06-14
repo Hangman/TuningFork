@@ -161,8 +161,7 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Specifies the two offsets the playing source will use to loop, expressed in seconds. This method will fail when the buffer is attached to a source like:
-     * <br>
+     * Specifies the two offsets the source will use to loop, expressed in seconds. This method will fail when the buffer is attached to a source like: <br>
      * <br>
      * <code>
      * SoundSource source = audio.obtain(soundBuffer);

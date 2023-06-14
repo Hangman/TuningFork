@@ -41,8 +41,6 @@ public class LoopPointSoundBufferTest extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.sound.dispose();
-
-        // always dispose Audio last
         this.audio.dispose();
     }
 

@@ -108,6 +108,8 @@ test {
      exclude 'de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class'
      exclude 'de/pottgames/tuningfork/test/StbVorbisTest.class'
      exclude 'de/pottgames/tuningfork/test/DirectChannelRemixTest.class'
+     exclude 'de/pottgames/tuningfork/test/LoopPointSoundBufferTest.class'
+     exclude 'de/pottgames/tuningfork/test/LoopPointStreamingTest.class'
 }
 
 publishing {

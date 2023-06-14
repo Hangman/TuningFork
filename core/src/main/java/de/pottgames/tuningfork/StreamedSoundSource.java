@@ -22,6 +22,7 @@ import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.SOFTBlockAlignment;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.StreamUtils;
@@ -46,8 +47,8 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class StreamedSoundSource extends SongSource implements Disposable {
-    public static final int        BUFFER_SIZE_PER_CHANNEL = 65536;
-    public static final int        BUFFER_COUNT            = 3;
+    public static final int        BUFFER_SIZE_PER_CHANNEL  = 65536;
+    public static final int        BUFFER_COUNT             = 3;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
     private AudioStream            audioStream;
@@ -57,14 +58,18 @@ public class StreamedSoundSource extends SongSource implements Disposable {
     private final ByteBuffer       tempBuffer;
     private final byte[]           tempBytes;
     private final Audio            audio;
-    private final AtomicBoolean    playing                 = new AtomicBoolean(false);
-    private final AtomicBoolean    stopped                 = new AtomicBoolean(true);
-    private volatile boolean       looping                 = false;
-    private volatile boolean       readyToDispose          = false;
+    private final AtomicBoolean    playing                  = new AtomicBoolean(false);
+    private final AtomicBoolean    stopped                  = new AtomicBoolean(true);
+    private volatile boolean       looping                  = false;
+    private volatile float         loopStart                = 0f;
+    private volatile float         loopEnd                  = 0f;
+    private boolean                manuallySetBehindLoopEnd = false;
+    private volatile boolean       readyToDispose           = false;
     private final float            duration;
 
-    private final FloatArray bufferTime;
+    private final FloatArray bufferTimeQueue;
     private volatile float   processedTime;
+    private float            queuedSeconds;
     private final float      bytesPerSecond;
 
 
@@ -88,7 +93,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             throw new TuningForkRuntimeException("stream is null");
         }
 
-        this.bufferTime = new FloatArray(true, StreamedSoundSource.BUFFER_COUNT + 1);
+        this.bufferTimeQueue = new FloatArray(true, StreamedSoundSource.BUFFER_COUNT + 1);
 
         // FETCH AND SET DEPENDENCIES
         this.audio = Audio.get();
@@ -181,7 +186,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             while (processedBufferCount > 0) {
                 processedBufferCount--;
 
-                final float processedSeconds = this.bufferTime.removeIndex(0);
+                final float processedSeconds = this.bufferTimeQueue.removeIndex(0);
                 this.processedTime += processedSeconds;
                 this.checkPlaybackPosResetAsync();
 
@@ -200,13 +205,13 @@ public class StreamedSoundSource extends SongSource implements Disposable {
                 }
             }
 
-            if (end && AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_QUEUED) == 0) {
-                this.stopAsync();
-                // TODO: if (onCompletionListener != null) onCompletionListener.onCompletion(this);
-            }
+            final int queuedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_QUEUED);
 
-            // A buffer underflow will cause the source to stop, so we should resume playback in this case.
-            if (this.playing.get() && AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING) {
+            if (end && queuedBuffers == 0) {
+                this.stopInternal();
+                this.manuallySetBehindLoopEnd = false;
+            } else if (this.playing.get() && AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING && queuedBuffers > 0) {
+                // A buffer underflow will cause the source to stop, so we should resume playback in this case.
                 AL10.alSourcePlay(this.sourceId);
             }
         }
@@ -214,10 +219,14 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
 
     private void checkPlaybackPosResetAsync() {
-        if (this.bufferTime.size > 0) {
-            if (this.bufferTime.get(0) == Float.MAX_VALUE) {
-                this.bufferTime.removeIndex(0);
+        if (this.bufferTimeQueue.size > 0) {
+            final float value = this.bufferTimeQueue.get(0);
+            if (value == Float.MAX_VALUE) {
+                this.bufferTimeQueue.removeIndex(0);
                 this.processedTime = 0f;
+            } else if (value == Float.MIN_VALUE) {
+                this.bufferTimeQueue.removeIndex(0);
+                this.processedTime = this.loopStart;
             }
         }
     }
@@ -232,6 +241,40 @@ public class StreamedSoundSource extends SongSource implements Disposable {
     @Override
     public float getPlaybackPosition() {
         return this.processedTime + AL10.alGetSourcef(this.sourceId, AL11.AL_SEC_OFFSET);
+    }
+
+
+    /**
+     * Specifies the two offsets the source will use to loop, expressed in seconds.<br>
+     * If the playback position is manually set to something > end, the source will not loop and instead stop playback when it reaches the end of the sound.<br>
+     * The method will throw an exception if start > end or if either is a negative value. Values > sound duration are not considered invalid, but they'll be
+     * clamped internally.
+     *
+     * @param start start position of the loop in seconds
+     * @param end end position of the loop in seconds
+     */
+    public void setLoopPoints(float start, float end) {
+        if (start > end) {
+            throw new TuningForkRuntimeException("Invalid loop points: start >= end");
+        }
+        if (start < 0 || end < 0) {
+            throw new TuningForkRuntimeException("Invalid loop points: start and end must not be < 0");
+        }
+
+        this.loopStart = start;
+        this.loopEnd = end;
+    }
+
+
+    void skipStreamToPosition(final float seconds) {
+        synchronized (this) {
+            this.resetStream();
+            int bytesToSkip = (int) (seconds * this.bytesPerSecond);
+            final int overbytes = bytesToSkip % (this.audioStream.getBitsPerSample() / 8);
+            bytesToSkip -= overbytes;
+            final byte[] buffer = new byte[bytesToSkip];
+            this.audioStream.read(buffer);
+        }
     }
 
 
@@ -257,7 +300,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             // FULL RESET
             AL10.alSourceStop(this.sourceId);
             this.resetStream();
-            this.bufferTime.clear();
+            this.bufferTimeQueue.clear();
 
             // SKIP THE INPUT STREAM UNTIL THE NEW POSITION IS IN REACH
             float currentSeconds = 0f;
@@ -271,6 +314,8 @@ public class StreamedSoundSource extends SongSource implements Disposable {
                 currentSeconds += skippedBytes / this.bytesPerSecond;
             }
             this.processedTime = currentSeconds;
+            this.queuedSeconds = currentSeconds;
+            this.manuallySetBehindLoopEnd = this.queuedSeconds > this.loopEnd && this.loopEnd > 0f;
 
             if (unreachable) {
                 this.stopInternal();
@@ -368,7 +413,8 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         AL10.alSourcei(this.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
         this.resetStream();
         this.processedTime = 0f;
-        this.bufferTime.clear();
+        this.queuedSeconds = 0f;
+        this.bufferTimeQueue.clear();
         this.fillAllBuffersInternal();
         this.playing.set(false);
         this.stopped.set(true);
@@ -386,22 +432,44 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
 
     private boolean fillBufferInternal(int bufferId) {
-        this.tempBuffer.clear();
         int length = this.audioStream.read(this.tempBytes);
         if (length <= 0) {
-            this.bufferTime.add(Float.MAX_VALUE);
-            if (!this.looping) {
+            if (!this.looping || this.manuallySetBehindLoopEnd) {
+                this.bufferTimeQueue.add(Float.MAX_VALUE);
                 return false;
             }
-            this.resetStream();
+            this.skipStreamToPosition(this.loopStart);
+            this.queuedSeconds = this.loopStart;
+            this.bufferTimeQueue.add(Float.MIN_VALUE);
             length = this.audioStream.read(this.tempBytes);
             if (length <= 0) {
                 return false;
             }
         }
 
-        this.bufferTime.add(length / this.bytesPerSecond);
-        this.tempBuffer.put(this.tempBytes, 0, length).flip();
+        float secondsInUploadBuffer = length / this.bytesPerSecond;
+        int bytesToUpload = length;
+        boolean loopEndCut = false;
+        if (this.looping && this.loopEnd > 0f && this.loopEnd > this.loopStart) {
+            if (this.queuedSeconds + secondsInUploadBuffer >= this.loopEnd && !this.manuallySetBehindLoopEnd) {
+                secondsInUploadBuffer = this.loopEnd - this.queuedSeconds;
+                bytesToUpload = (int) (this.bytesPerSecond * secondsInUploadBuffer);
+                final int overbytes = bytesToUpload % (this.audioStream.getBitsPerSample() / 8);
+                bytesToUpload = MathUtils.clamp(bytesToUpload - overbytes, 0, length);
+                loopEndCut = true;
+                this.skipStreamToPosition(this.loopStart);
+                this.queuedSeconds = this.loopStart;
+            }
+        }
+
+        this.bufferTimeQueue.add(secondsInUploadBuffer);
+        this.queuedSeconds += secondsInUploadBuffer;
+        if (loopEndCut) {
+            this.bufferTimeQueue.add(Float.MIN_VALUE);
+            this.queuedSeconds = this.loopStart;
+        }
+        this.tempBuffer.clear();
+        this.tempBuffer.put(this.tempBytes, 0, bytesToUpload).flip();
         AL10.alBufferData(bufferId, this.pcmFormat.getAlId(), this.tempBuffer, this.audioStream.getSampleRate());
         return true;
     }
@@ -409,6 +477,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
     private int fillAllBuffersInternal() {
         AL10.alSourcei(this.sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
+        this.errorLogger.checkLogError("error removing buffers from the source");
         int filledBufferCount = 0;
         for (int i = 0; i < StreamedSoundSource.BUFFER_COUNT; i++) {
             final int bufferId = this.buffers.get(i);
@@ -417,6 +486,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             }
             filledBufferCount++;
             AL10.alSourceQueueBuffers(this.sourceId, bufferId);
+            this.errorLogger.checkLogError("error queueing buffers on the source");
         }
 
         return filledBufferCount;
