@@ -17,6 +17,7 @@ import org.lwjgl.openal.AL11;
 
 import com.badlogic.gdx.math.Vector3;
 
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
@@ -253,7 +254,8 @@ public class BufferedSoundSource extends SongSource {
     }
 
 
-    void reset(float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance, Virtualization virtualization, int resamplerIndex) {
+    void reset(float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance, Virtualization virtualization,
+            Spatialization spatialization, int resamplerIndex) {
         this.obtained = true;
         AL10.alSourceRewind(this.sourceId);
         this.setBuffer(null);
@@ -265,6 +267,7 @@ public class BufferedSoundSource extends SongSource {
         this.setPosition(0f, 0f, 0f);
         this.setSpeed(0f, 0f, 0f);
         this.setVirtualization(virtualization);
+        this.setSpatialization(spatialization);
         this.setAttenuationFactor(attenuationFactor);
         this.setAttenuationMaxDistance(attenuationMaxDistance);
         this.setAttenuationMinDistance(attenuationMinDistance);

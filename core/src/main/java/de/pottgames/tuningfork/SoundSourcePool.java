@@ -58,7 +58,7 @@ class SoundSourcePool {
 
         // RESET SOURCE
         result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance(),
-                this.audio.getDefaultVirtualization(), this.audio.getDefaultResamplerIndex());
+                this.audio.getDefaultVirtualization(), this.audio.getDefaultSpatialization(), this.audio.getDefaultResamplerIndex());
 
         return result;
     }
