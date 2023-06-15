@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavInputStream;
@@ -46,6 +47,7 @@ public class Audio implements Disposable {
     private float                    defaultMaxAttenuationDistance = Float.MAX_VALUE;
     private float                    defaultAttenuationFactor      = 1f;
     private Virtualization           defaultVirtualization         = Virtualization.ON;
+    private Spatialization           defaultSpatialization         = Spatialization.ON;
     private final TuningForkLogger   logger;
     private final AudioDevice        device;
     private int                      defaultResamplerIndex         = -1;
@@ -141,6 +143,7 @@ public class Audio implements Disposable {
         // SET DEFAULTS
         this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
         this.defaultVirtualization = config.getVirtualization();
+        this.defaultSpatialization = config.getSpatialization();
 
         // CREATE LISTENER
         this.listener = new SoundListener();
@@ -291,6 +294,25 @@ public class Audio implements Disposable {
             final SoundSource source = this.managedSources.get(i);
             if (source != null) {
                 source.setVirtualization(virtualization);
+            }
+        }
+    }
+
+
+    public Spatialization getDefaultSpatialization() {
+        return this.defaultSpatialization;
+    }
+
+
+    public void setDefaultSpatialization(Spatialization spatialization) {
+        this.defaultSpatialization = spatialization;
+        this.sourcePool.setSpatialization(spatialization);
+        this.streamManager.setDefaultSpatialization(spatialization);
+
+        for (int i = 0; i < this.managedSources.size; i++) {
+            final SoundSource source = this.managedSources.get(i);
+            if (source != null) {
+                source.setSpatialization(spatialization);
             }
         }
     }

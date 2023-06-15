@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.utils.Array;
 
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -81,6 +82,16 @@ public class StreamManager {
             for (int i = 0; i < this.soundsToUpdate.size; i++) {
                 final StreamedSoundSource sound = this.soundsToUpdate.get(i);
                 sound.setVirtualization(virtualization);
+            }
+        }
+    }
+
+
+    protected void setDefaultSpatialization(Spatialization spatialization) {
+        synchronized (this.lock) {
+            for (int i = 0; i < this.soundsToUpdate.size; i++) {
+                final StreamedSoundSource sound = this.soundsToUpdate.get(i);
+                sound.setSpatialization(spatialization);
             }
         }
     }

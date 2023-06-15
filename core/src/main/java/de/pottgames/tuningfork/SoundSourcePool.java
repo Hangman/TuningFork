@@ -14,6 +14,7 @@ package de.pottgames.tuningfork;
 
 import com.badlogic.gdx.utils.Array;
 
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 
 class SoundSourcePool {
@@ -110,6 +111,13 @@ class SoundSourcePool {
     void setVirtualization(Virtualization virtualization) {
         for (final BufferedSoundSource source : this.sources) {
             source.setVirtualization(virtualization);
+        }
+    }
+
+
+    void setSpatialization(Spatialization spatialization) {
+        for (final BufferedSoundSource source : this.sources) {
+            source.setSpatialization(spatialization);
         }
     }
 

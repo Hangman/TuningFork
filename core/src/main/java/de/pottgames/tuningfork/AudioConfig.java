@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.SOFTDirectChannelsRemix;
+import org.lwjgl.openal.SOFTSourceSpatialize;
 
 import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
@@ -31,6 +32,7 @@ public class AudioConfig {
     protected int                      simultaneousSources;
     protected int                      idleTasks;
     protected Virtualization           virtualization;
+    protected Spatialization           spatialization;
     protected TuningForkLogger         logger;
     protected WavDecoderProvider       wavDecoderProvider;
     protected boolean                  useNativeDecoders = true;
@@ -91,6 +93,7 @@ public class AudioConfig {
         this.setIdleTasks(idleTasks);
         this.setLogger(logger);
         this.setVirtualization(virtualization);
+        this.setSpatialization(Spatialization.ON);
         this.setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
@@ -179,6 +182,25 @@ public class AudioConfig {
     }
 
 
+    public Spatialization getSpatialization() {
+        return this.spatialization;
+    }
+
+
+    /**
+     * Sets the spatialization mode that is used on all sources. The default is: {@link Spatialization#ON}<br>
+     * See {@link Spatialization} for the different methods available.<br>
+     *
+     * @param spatialization
+     *
+     * @return this
+     */
+    public AudioConfig setSpatialization(Spatialization spatialization) {
+        this.spatialization = spatialization;
+        return this;
+    }
+
+
     public Virtualization getVirtualization() {
         return this.virtualization;
     }
@@ -262,6 +284,49 @@ public class AudioConfig {
         Objects.requireNonNull(decoderProvider);
         this.wavDecoderProvider = decoderProvider;
         return this;
+    }
+
+
+    public enum Spatialization {
+        /**
+         * Spatialization is always available/applied. This is the default.
+         */
+        ON(AL10.AL_TRUE),
+
+        /**
+         * Only mono sounds get spatialized. Stereo or multi-channel sounds ignore spatialization completely.
+         */
+        AUTO(SOFTSourceSpatialize.AL_AUTO_SOFT),
+
+        /**
+         * Spatialization is turned off.
+         */
+        OFF(AL10.AL_FALSE);
+
+
+        private static final Spatialization[] MAP = Spatialization.values();
+        private final int                     alId;
+
+
+        Spatialization(int alId) {
+            this.alId = alId;
+        }
+
+
+        int getAlId() {
+            return this.alId;
+        }
+
+
+        static Spatialization getByAlId(int id) {
+            for (final Spatialization spatialization : Spatialization.MAP) {
+                if (id == spatialization.alId) {
+                    return spatialization;
+                }
+            }
+            return null;
+        }
+
     }
 
 

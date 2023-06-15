@@ -17,10 +17,12 @@ import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.SOFTDirectChannels;
 import org.lwjgl.openal.SOFTSourceResampler;
+import org.lwjgl.openal.SOFTSourceSpatialize;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -59,6 +61,7 @@ public abstract class SoundSource {
         }
 
         this.setVirtualization(audio.getDefaultVirtualization());
+        this.setSpatialization(audio.getDefaultSpatialization());
         this.setResamplerByIndex(audio.getDefaultResamplerIndex());
     }
 
@@ -359,6 +362,29 @@ public abstract class SoundSource {
     public Virtualization getVirtualization() {
         final int alId = AL10.alGetSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT);
         return Virtualization.getByAlId(alId);
+    }
+
+
+    /**
+     * Sets the spatialization mode for this sound source.
+     *
+     * @param spatialization null is a legal NOP
+     */
+    public void setSpatialization(Spatialization spatialization) {
+        if (spatialization != null) {
+            AL10.alSourcei(this.sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT, spatialization.getAlId());
+        }
+    }
+
+
+    /**
+     * Retrieves the spatialization mode.
+     *
+     * @return the spatialization mode
+     */
+    public Spatialization getSpatialization() {
+        final int alId = AL10.alGetSourcei(this.sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT);
+        return Spatialization.getByAlId(alId);
     }
 
 
