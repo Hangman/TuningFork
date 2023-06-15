@@ -36,7 +36,7 @@ public class LoopPointStreamingTest extends ApplicationAdapter {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             this.source.setPlaybackPosition(1f);
         }
-        // System.out.println("playback position: " + this.source.getPlaybackPosition() + "s");
+        System.out.println("playback position: " + this.source.getPlaybackPosition() + "s");
     }
 
 

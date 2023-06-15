@@ -26,12 +26,14 @@ import org.lwjgl.openal.ALUtil;
 import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.openal.SOFTDeviceClock;
 import org.lwjgl.openal.SOFTEvents;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
 import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.openal.SOFTSourceResampler;
 import org.lwjgl.openal.SOFTXHoldOnDisconnect;
+import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
 import com.badlogic.gdx.Gdx;
@@ -56,7 +58,6 @@ public class AudioDevice {
     private final ErrorLogger                     errorLogger;
     private boolean                               hrtfEnabled           = false;
     private final AudioDeviceConfig               config;
-    private final int[]                           tempSingleIntResult   = new int[1];
     private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
     private final Array<String>                   resamplers            = new Array<>();
     private final int                             effectSlots;
@@ -133,6 +134,7 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.AL_SOFT_EVENTS);
         this.checkRequiredExtension(ALExtension.AL_SOFT_DIRECT_CHANNELS_REMIX);
         this.checkRequiredExtension(ALExtension.AL_SOFT_LOOP_POINTS);
+        this.checkRequiredExtension(ALExtension.ALC_SOFT_DEVICE_CLOCK);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {
@@ -279,8 +281,11 @@ public class AudioDevice {
      */
     public boolean isConnected() {
         if (this.isExtensionAvailable(ALExtension.ALC_EXT_DISCONNECT)) {
-            ALC10.alcGetIntegerv(this.deviceHandle, EXTDisconnect.ALC_CONNECTED, this.tempSingleIntResult);
-            return this.tempSingleIntResult[0] == ALC10.ALC_TRUE;
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                final IntBuffer resultBuffer = stack.mallocInt(1);
+                ALC10.alcGetIntegerv(this.deviceHandle, EXTDisconnect.ALC_CONNECTED, resultBuffer);
+                return resultBuffer.get(0) == ALC10.ALC_TRUE;
+            }
         }
 
         // If the extension is not available, always report true
@@ -525,6 +530,31 @@ public class AudioDevice {
      */
     public String getDefaultResampler() {
         return this.getResamplerNameByIndex(this.getDefaultResamplerIndex());
+    }
+
+
+    /**
+     * Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the system clock's tick rate (the infamous timer
+     * drift).
+     *
+     * @return the device time in nanoseconds
+     */
+    public long getClockTime() {
+        // no error check here because this should be as fast as possible
+        return SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_CLOCK_SOFT);
+    }
+
+
+    /**
+     * Returns the current audio device latency in nanoseconds. This is effectively the delay for the samples rendered at the the device's current clock time
+     * from reaching the physical output.
+     *
+     * @return latency in nanoseconds
+     */
+    public long getLatency() {
+        final long result = SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_LATENCY_SOFT);
+        this.errorLogger.checkLogAlcError(this.deviceHandle, "Error while fetching alc device latency");
+        return result;
     }
 
 
