@@ -30,6 +30,7 @@ import org.lwjgl.openal.SOFTDeviceClock;
 import org.lwjgl.openal.SOFTEvents;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
+import org.lwjgl.openal.SOFTOutputMode;
 import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.openal.SOFTSourceResampler;
 import org.lwjgl.openal.SOFTXHoldOnDisconnect;
@@ -105,11 +106,13 @@ public class AudioDevice {
         }
 
         // CREATE A CONTEXT AND SET IT ACTIVE
-        final int[] attributes = new int[4];
+        final int[] attributes = new int[6];
         attributes[0] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
         attributes[1] = config.getEffectSlots();
         attributes[2] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
         attributes[3] = config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+        attributes[4] = SOFTOutputMode.ALC_OUTPUT_MODE_SOFT;
+        attributes[5] = config.outputMode.getAlId();
         this.contextAttributes = new ContextAttributes(attributes);
         final ALCCapabilities deviceCapabilities = ALC.createCapabilities(this.deviceHandle);
         this.context = ALC10.alcCreateContext(this.deviceHandle, this.contextAttributes.getBuffer());
@@ -136,6 +139,7 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.AL_SOFT_LOOP_POINTS);
         this.checkRequiredExtension(ALExtension.ALC_SOFT_DEVICE_CLOCK);
         this.checkRequiredExtension(ALExtension.AL_SOFT_SOURCE_SPATIALIZE);
+        this.checkRequiredExtension(ALExtension.ALC_SOFT_OUTPUT_MODE);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {
@@ -339,6 +343,17 @@ public class AudioDevice {
 
 
     /**
+     * Returns the output mode of the device. It includes the channel configuration of the physical (if not virtual) sound hardware this device is connected to.
+     *
+     * @return the output mode
+     */
+    public OutputMode getOutputMode() {
+        final int alId = ALC10.alcGetInteger(this.deviceHandle, SOFTOutputMode.ALC_OUTPUT_MODE_SOFT);
+        return OutputMode.getByAlId(alId);
+    }
+
+
+    /**
      * Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is available, call {@link #getAvailableHrtfs()} to
      * query for profiles.
      *
@@ -403,7 +418,7 @@ public class AudioDevice {
             if (hrtfIndex >= 0) {
                 // SET NEW DEVICE ATTRIBUTES
                 final ContextAttributes oldAttributes = this.contextAttributes;
-                final int[] attributes = new int[8];
+                final int[] attributes = new int[10];
                 attributes[0] = SOFTHRTF.ALC_HRTF_SOFT;
                 attributes[1] = ALC10.ALC_TRUE;
                 attributes[2] = SOFTHRTF.ALC_HRTF_ID_SOFT;
@@ -412,6 +427,8 @@ public class AudioDevice {
                 attributes[5] = this.config.getEffectSlots();
                 attributes[6] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
                 attributes[7] = this.config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+                attributes[8] = SOFTOutputMode.ALC_OUTPUT_MODE_SOFT;
+                attributes[9] = this.config.getOutputMode().getAlId();
                 this.contextAttributes = new ContextAttributes(attributes);
 
                 // RESET DEVICE
@@ -451,16 +468,24 @@ public class AudioDevice {
     public void disableHrtf() {
         if (this.isHrtfSupported()) {
             // SET NEW DEVICE ATTRIBUTES
-            final IntBuffer attr = BufferUtils.newIntBuffer(10);
-            attr.put(SOFTHRTF.ALC_HRTF_SOFT).put(ALC10.ALC_FALSE); // disable hrtf
-            attr.put(0);
-            attr.flip();
+            final ContextAttributes oldAttributes = this.contextAttributes;
+            final int[] attributes = new int[8];
+            attributes[0] = SOFTHRTF.ALC_HRTF_SOFT;
+            attributes[1] = ALC10.ALC_FALSE;
+            attributes[2] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
+            attributes[3] = this.config.getEffectSlots();
+            attributes[4] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
+            attributes[5] = this.config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+            attributes[6] = SOFTOutputMode.ALC_OUTPUT_MODE_SOFT;
+            attributes[7] = this.config.getOutputMode().getAlId();
+            this.contextAttributes = new ContextAttributes(attributes);
 
             // RESET DEVICE
-            if (SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attr)) {
+            if (SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attributes)) {
                 this.hrtfEnabled = false;
                 this.logger.info(this.getClass(), "HRTF disabled.");
             } else {
+                this.contextAttributes = oldAttributes;
                 this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
             }
         } else {

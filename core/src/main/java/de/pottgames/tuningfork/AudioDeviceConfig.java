@@ -41,6 +41,12 @@ public class AudioDeviceConfig {
      */
     protected AudioDeviceRerouter rerouter = new SmartDeviceRerouter();
 
+    /**
+     * The desired output mode. It is just a hint for OpenAL and it might not give you the exact mode you wanted but its closest relative. Set
+     * {@link OutputMode#ANY} to let the system find the most fitting mode for you.
+     */
+    protected OutputMode outputMode = OutputMode.ANY;
+
 
     public String getDeviceSpecifier() {
         return this.deviceSpecifier;
@@ -114,6 +120,31 @@ public class AudioDeviceConfig {
      */
     public AudioDeviceConfig setRerouter(AudioDeviceRerouter rerouter) {
         this.rerouter = rerouter;
+        return this;
+    }
+
+
+    public OutputMode getOutputMode() {
+        return this.outputMode;
+    }
+
+
+    /**
+     * Request an output mode of your choice. It is just a hint for OpenAL and it might not give you the exact mode you wanted but its closest relative. Set
+     * {@link OutputMode#ANY} to let the system find the most fitting mode for you, this is the default and recommended unless you have a specific reason to use
+     * another output mode.<br>
+     * <br>
+     * You can check the current output mode after initialization with {@link AudioDevice#getOutputMode()}.
+     *
+     * @param mode the desired output mode
+     *
+     * @return this
+     */
+    public AudioDeviceConfig setOutputMode(OutputMode mode) {
+        if (mode == null) {
+            mode = OutputMode.ANY;
+        }
+        this.outputMode = mode;
         return this;
     }
 

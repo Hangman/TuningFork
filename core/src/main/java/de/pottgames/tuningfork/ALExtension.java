@@ -24,6 +24,7 @@ enum ALExtension {
     ALC_SOFT_HRTF("ALC_SOFT_HRTF", true),
     ALC_SOFT_LOOPBACK("ALC_SOFT_loopback", true),
     ALC_SOFT_OUTPUT_LIMITER("ALC_SOFT_output_limiter", true),
+    ALC_SOFT_OUTPUT_MODE("ALC_SOFT_output_mode", true),
     ALC_SOFT_PAUSE_DEVICE("ALC_SOFT_pause_device", true),
     ALC_SOFT_REOPEN_DEVICE("ALC_SOFT_reopen_device", true),
     AL_EXT_ALAW("AL_EXT_ALAW", false),
