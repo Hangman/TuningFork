@@ -204,7 +204,9 @@ public class SoundBuffer implements Disposable {
      * The returned array has a length of 2, with <br>
      * index 0 => start<br>
      * index 1 => end<br>
-     * The result might not exactly reflect the numbers from {@link #setLoopPoints(float, float)} because there's a conversion from seconds to samples involved.
+     * The result might not exactly reflect the numbers from {@link #setLoopPoints(float, float)} because there's a conversion from seconds to samples
+     * involved.<br>
+     * The returned float array is "owned" by the {@link SoundBuffer} class, so you shouldn't hold a reference to it but rather copy the values.
      *
      * @return the loop points
      */

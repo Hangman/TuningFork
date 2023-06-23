@@ -14,6 +14,7 @@ package de.pottgames.tuningfork;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,6 +65,7 @@ public class AudioDevice {
     private final int                             effectSlots;
     private AudioDeviceRerouter                   deviceRerouter;
     private ContextAttributes                     contextAttributes;
+    private final long[]                          clockLatencyCache     = new long[2];
 
 
     /**
@@ -581,6 +583,25 @@ public class AudioDevice {
         final long result = SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_LATENCY_SOFT);
         this.errorLogger.checkLogAlcError(this.deviceHandle, "Error while fetching alc device latency");
         return result;
+    }
+
+
+    /**
+     * This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling both functions separately.<br>
+     * See {@link #getClockTime()} and {@link #getLatency()} for a detailed explanation.<br>
+     * The returned long array is "owned" by the {@link AudioDevice} class, so you shouldn't hold a reference to it but rather copy the values.
+     *
+     * @return a long array that holds the time at index 0 and the latency at index 1. The length of 2 is guaranteed.
+     */
+    public long[] getClockTimeAndLatency() {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            final LongBuffer buffer = stack.mallocLong(2);
+            SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_CLOCK_LATENCY_SOFT, buffer);
+            this.clockLatencyCache[0] = buffer.get(0);
+            this.clockLatencyCache[1] = buffer.get(1);
+        }
+
+        return this.clockLatencyCache;
     }
 
 
