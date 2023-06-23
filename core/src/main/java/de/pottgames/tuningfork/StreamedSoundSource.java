@@ -248,17 +248,18 @@ public class StreamedSoundSource extends SongSource implements Disposable {
      * Specifies the two offsets the source will use to loop, expressed in seconds.<br>
      * If the playback position is manually set to something > end, the source will not loop and instead stop playback when it reaches the end of the sound.<br>
      * The method will throw an exception if start > end or if either is a negative value. Values > sound duration are not considered invalid, but they'll be
-     * clamped internally.
+     * clamped internally.<br>
+     * Setting start and end both to 0, deactivates the loop point mechanic.
      *
      * @param start start position of the loop in seconds
      * @param end end position of the loop in seconds
      */
     public void setLoopPoints(float start, float end) {
         if (start > end) {
-            throw new TuningForkRuntimeException("Invalid loop points: start >= end");
+            throw new TuningForkRuntimeException("Invalid loop points: start > end");
         }
         if (start < 0 || end < 0) {
-            throw new TuningForkRuntimeException("Invalid loop points: start and end must not be < 0");
+            throw new TuningForkRuntimeException("Invalid loop points: start and end must not be > 0");
         }
 
         this.loopStart = start;
