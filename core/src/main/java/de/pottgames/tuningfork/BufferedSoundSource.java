@@ -273,6 +273,7 @@ public class BufferedSoundSource extends SongSource {
         this.setAttenuationMinDistance(attenuationMinDistance);
         this.detachAllEffects();
         this.setResamplerByIndex(resamplerIndex);
+        this.setRadius(0f);
         this.obtained = false;
     }
 

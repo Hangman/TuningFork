@@ -15,6 +15,7 @@ package de.pottgames.tuningfork;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
+import org.lwjgl.openal.EXTSourceRadius;
 import org.lwjgl.openal.SOFTDirectChannels;
 import org.lwjgl.openal.SOFTSourceResampler;
 import org.lwjgl.openal.SOFTSourceSpatialize;
@@ -170,6 +171,29 @@ public abstract class SoundSource {
      */
     public Vector3 getPosition(Vector3 saveTo) {
         return saveTo.set(this.position);
+    }
+
+
+    /**
+     * Changes the source to a "large" source with a radius. The source has a raised cosine shape. A radius of 0 is the default (point-source).<br>
+     * The OpenAL documentation about this is very thin. I don't know nor have the resources to test how this really works with attenuation and directionality.
+     * If you happen to know, please PR a fix for this javadoc.
+     *
+     * @param radius
+     */
+    public void setRadius(float radius) {
+        radius = MathUtils.clamp(radius, 0f, Float.MAX_VALUE);
+        AL10.alSourcef(this.sourceId, EXTSourceRadius.AL_SOURCE_RADIUS, radius);
+    }
+
+
+    /**
+     * Returns the radius of the source.
+     *
+     * @return the radius
+     */
+    public float getRadius() {
+        return AL10.alGetSourcef(this.sourceId, EXTSourceRadius.AL_SOURCE_RADIUS);
     }
 
 

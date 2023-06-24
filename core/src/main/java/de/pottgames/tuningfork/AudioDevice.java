@@ -142,6 +142,7 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.ALC_SOFT_DEVICE_CLOCK);
         this.checkRequiredExtension(ALExtension.AL_SOFT_SOURCE_SPATIALIZE);
         this.checkRequiredExtension(ALExtension.ALC_SOFT_OUTPUT_MODE);
+        this.checkRequiredExtension(ALExtension.AL_EXT_SOURCE_RADIUS);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {
