@@ -20,15 +20,14 @@ Note that TuningFork is not an extension to libGDX audio but a replacement.
 * Real-time effects such as Reverb, Echo, Flanger, Distortion (and many more)
 * Filters
 * Music player with support for playlists and fading
+* Loop-points
 * HRTF support (aka binaural)
 * Streaming is handled on a background thread
-* No more fiddling with sound IDs - proper OOP design
-* Load **wav**, **aiff** (SNAPSHOT), **ogg**, **flac**, **mp3** ([see the full list](https://github.com/Hangman/TuningFork/wiki/Supported-audio-formats-and-codecs))
+* Load **wav**, **aiff**, **ogg**, **flac**, **mp3** ([see the full list](https://github.com/Hangman/TuningFork/wiki/Supported-audio-formats-and-codecs))
+* Supports surround sound formats
 * Load asynchronously via `AssetManager`
 * Play raw PCM data
-* Supports surround sound formats
 * Record audio
-* Output to any sound device<br>(you are no longer tied to the default sound device)
 
 ### Limitations
 * Lwjgl3 only, sorry mobile and web users
@@ -54,7 +53,7 @@ Then add TuningFork as dependency in your core project:
 project(":core") {
     dependencies {
     	// ...
-        implementation 'com.github.Hangman:TuningFork:3.3.0'
+        implementation 'com.github.Hangman:TuningFork:4.0.0'
     }
 }
 ```
@@ -62,6 +61,7 @@ project(":core") {
 Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.of(8)` (or higher) in your gradle scripts.
 | Version of libGDX   | Latest compatible version of TuningFork  |
 |      :----:         | :---                                     |
+| 1.12.0              | 4.0.0                                    |
 | 1.9.12 - 1.11.0     | 3.3.0                                    |
 | 1.9.11              | 2.0.1                                    |
 | < 1.9.11            | not supported, might work though: 2.0.1  |
@@ -79,12 +79,8 @@ TuningFork uses [Gradle](https://gradle.org/) as it's build tool (you don't need
 ```console
 ./gradlew build
 ```
-to compile the library. After that, you can find the resulting jar under `core/build/libs/`.
+Compiles the library. After that, you can find the resulting jar under `core/build/libs/`.
 ```console
 ./gradlew publishToMavenLocal
 ```
-to publish the core artifact to your local Maven repository.
-```console
-./gradlew test
-```
-to run all unit tests.
+Publishes the core artifact to your local Maven repository.
