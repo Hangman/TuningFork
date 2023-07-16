@@ -275,7 +275,7 @@ public class Audio implements Disposable {
      *
      * @return the default audio settings
      */
-    public AudioSettings getDefaultAudioSettings() {
+    AudioSettings getDefaultAudioSettings() {
         return this.defaultSettings;
     }
 

@@ -15,7 +15,7 @@ package de.pottgames.tuningfork;
 import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 
-public class AudioSettings {
+class AudioSettings {
     private float          minAttenuationDistance = 1f;
     private float          maxAttenuationDistance = Float.MAX_VALUE;
     private float          attenuationFactor      = 1f;
