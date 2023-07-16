@@ -104,9 +104,13 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
         // SET DEFAULTS
-        this.setAttenuationFactor(this.audio.getDefaultAttenuationFactor());
-        this.setAttenuationMinDistance(this.audio.getDefaultAttenuationMinDistance());
-        this.setAttenuationMaxDistance(this.audio.getDefaultAttenuationMaxDistance());
+        final AudioSettings defaultSettings = this.audio.getDefaultAudioSettings();
+        this.setAttenuationFactor(defaultSettings.getAttenuationFactor());
+        this.setAttenuationMinDistance(defaultSettings.getMinAttenuationDistance());
+        this.setAttenuationMaxDistance(defaultSettings.getMaxAttenuationDistance());
+        this.setVirtualization(defaultSettings.getVirtualization());
+        this.setSpatialization(defaultSettings.getSpatialization());
+        this.setResamplerByIndex(defaultSettings.getResamplerIndex());
 
         // CREATE INPUT STREAM
         this.audioStream = stream;

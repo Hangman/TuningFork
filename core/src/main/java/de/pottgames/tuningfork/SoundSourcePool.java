@@ -20,18 +20,16 @@ import de.pottgames.tuningfork.AudioConfig.Virtualization;
 class SoundSourcePool {
     private final Array<BufferedSoundSource> sources         = new Array<>();
     private int                              nextSourceIndex = 0;
-    private final Audio                      audio;
 
 
     SoundSourcePool(int simultaneousSources) {
-        this.audio = Audio.get();
         for (int i = 0; i < simultaneousSources; i++) {
             this.sources.add(new BufferedSoundSource());
         }
     }
 
 
-    BufferedSoundSource findFreeSource() {
+    BufferedSoundSource findFreeSource(AudioSettings defaultSettings) {
         BufferedSoundSource result = null;
         final int startSourceIndex = this.nextSourceIndex;
 
@@ -56,10 +54,7 @@ class SoundSourcePool {
             this.sources.add(result);
         }
 
-        // RESET SOURCE
-        result.reset(this.audio.getDefaultAttenuationFactor(), this.audio.getDefaultAttenuationMinDistance(), this.audio.getDefaultAttenuationMaxDistance(),
-                this.audio.getDefaultVirtualization(), this.audio.getDefaultSpatialization(), this.audio.getDefaultResamplerIndex());
-
+        result.reset(defaultSettings);
         return result;
     }
 

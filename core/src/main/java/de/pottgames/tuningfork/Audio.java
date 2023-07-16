@@ -42,15 +42,10 @@ public class Audio implements Disposable {
     private final WavDecoderProvider wavDecoderProvider;
     private final SoundListener      listener;
     private final SoundSourcePool    sourcePool;
-    private final Array<SoundSource> managedSources                = new Array<>();
-    private float                    defaultMinAttenuationDistance = 1f;
-    private float                    defaultMaxAttenuationDistance = Float.MAX_VALUE;
-    private float                    defaultAttenuationFactor      = 1f;
-    private Virtualization           defaultVirtualization         = Virtualization.ON;
-    private Spatialization           defaultSpatialization         = Spatialization.ON;
+    private final Array<SoundSource> managedSources  = new Array<>();
     private final TuningForkLogger   logger;
     private final AudioDevice        device;
-    private int                      defaultResamplerIndex         = -1;
+    private final AudioSettings      defaultSettings = new AudioSettings();
 
 
     /**
@@ -142,8 +137,8 @@ public class Audio implements Disposable {
 
         // SET DEFAULTS
         this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
-        this.defaultVirtualization = config.getVirtualization();
-        this.defaultSpatialization = config.getSpatialization();
+        this.defaultSettings.setVirtualization(config.getVirtualization());
+        this.defaultSettings.setSpatialization(config.getSpatialization());
 
         // CREATE LISTENER
         this.listener = new SoundListener();
@@ -204,7 +199,7 @@ public class Audio implements Disposable {
      * @param distance (default depends on the attenuation model)
      */
     public void setDefaultAttenuationMinDistance(float distance) {
-        this.defaultMinAttenuationDistance = distance;
+        this.defaultSettings.setMinAttenuationDistance(distance);
     }
 
 
@@ -216,7 +211,7 @@ public class Audio implements Disposable {
      * @param distance (default depends on the attenuation model)
      */
     public void setDefaultAttenuationMaxDistance(float distance) {
-        this.defaultMaxAttenuationDistance = distance;
+        this.defaultSettings.setMaxAttenuationDistance(distance);
     }
 
 
@@ -229,7 +224,7 @@ public class Audio implements Disposable {
      * @param rolloff (default depends on the attenuation model)
      */
     public void setDefaultAttenuationFactor(float rolloff) {
-        this.defaultAttenuationFactor = rolloff;
+        this.defaultSettings.setAttenuationFactor(rolloff);
     }
 
 
@@ -239,7 +234,7 @@ public class Audio implements Disposable {
      * @return the default attenuation min distance
      */
     public float getDefaultAttenuationMinDistance() {
-        return this.defaultMinAttenuationDistance;
+        return this.defaultSettings.getMinAttenuationDistance();
     }
 
 
@@ -249,7 +244,7 @@ public class Audio implements Disposable {
      * @return the default attenuation max distance
      */
     public float getDefaultAttenuationMaxDistance() {
-        return this.defaultMaxAttenuationDistance;
+        return this.defaultSettings.getMaxAttenuationDistance();
     }
 
 
@@ -259,7 +254,7 @@ public class Audio implements Disposable {
      * @return the default attenuation factor
      */
     public float getDefaultAttenuationFactor() {
-        return this.defaultAttenuationFactor;
+        return this.defaultSettings.getAttenuationFactor();
     }
 
 
@@ -271,7 +266,17 @@ public class Audio implements Disposable {
      * @return the virtualization method
      */
     public Virtualization getDefaultVirtualization() {
-        return this.defaultVirtualization;
+        return this.defaultSettings.getVirtualization();
+    }
+
+
+    /**
+     * Returns the default {@link AudioSettings}.
+     *
+     * @return the default audio settings
+     */
+    public AudioSettings getDefaultAudioSettings() {
+        return this.defaultSettings;
     }
 
 
@@ -286,7 +291,7 @@ public class Audio implements Disposable {
      * @param virtualization
      */
     public void setDefaultVirtualization(Virtualization virtualization) {
-        this.defaultVirtualization = virtualization;
+        this.defaultSettings.setVirtualization(virtualization);
         this.sourcePool.setVirtualization(virtualization);
         this.streamManager.setDefaultVirtualization(virtualization);
 
@@ -300,12 +305,12 @@ public class Audio implements Disposable {
 
 
     public Spatialization getDefaultSpatialization() {
-        return this.defaultSpatialization;
+        return this.defaultSettings.getSpatialization();
     }
 
 
     public void setDefaultSpatialization(Spatialization spatialization) {
-        this.defaultSpatialization = spatialization;
+        this.defaultSettings.setSpatialization(spatialization);
         this.sourcePool.setSpatialization(spatialization);
         this.streamManager.setDefaultSpatialization(spatialization);
 
@@ -362,7 +367,7 @@ public class Audio implements Disposable {
      */
     public BufferedSoundSource obtainSource(SoundBuffer buffer) {
         // FIND FREE SOUND SOURCE
-        final BufferedSoundSource source = this.sourcePool.findFreeSource();
+        final BufferedSoundSource source = this.sourcePool.findFreeSource(this.defaultSettings);
 
         // PREPARE SOURCE
         source.obtained = true;
@@ -375,7 +380,7 @@ public class Audio implements Disposable {
 
     private BufferedSoundSource obtainRelativeSource(SoundBuffer buffer, boolean looping) {
         // FIND FREE SOUND SOURCE
-        final BufferedSoundSource source = this.sourcePool.findFreeSource();
+        final BufferedSoundSource source = this.sourcePool.findFreeSource(this.defaultSettings);
 
         // PREPARE SOURCE
         source.obtained = true;
@@ -814,7 +819,7 @@ public class Audio implements Disposable {
 
 
     int getDefaultResamplerIndex() {
-        return this.defaultResamplerIndex;
+        return this.defaultSettings.getResamplerIndex();
     }
 
 
