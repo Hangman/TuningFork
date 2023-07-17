@@ -8,7 +8,7 @@ plugins {
     id 'eclipse'
     id 'maven-publish'
     id 'java'
-    id "me.champeau.jmh" version "0.6.6"
+    id "me.champeau.jmh" version "0.7.1"
 }
 
 // ECLIPSE SETTINGS
@@ -47,7 +47,6 @@ dependencies {
 }
 
 allprojects {
-	sourceCompatibility = JavaLanguageVersion.of(8)
 	compileJava {
 		options.incremental = true
 	}
@@ -60,6 +59,7 @@ allprojects {
 }
 
 java {
+    sourceCompatibility = JavaLanguageVersion.of(8)
     withSourcesJar()
 }
 
