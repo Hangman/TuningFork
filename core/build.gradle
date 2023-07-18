@@ -20,21 +20,21 @@ compileTestJava.options.encoding = "UTF-8"
 
 repositories {
     mavenLocal()
-	mavenCentral()
-	google()
-	maven { url "https://plugins.gradle.org/m2/" }
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	maven { url "https://jitpack.io" }
-	gradlePluginPortal()
+    mavenCentral()
+    google()
+    maven { url "https://plugins.gradle.org/m2/" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://jitpack.io" }
+    gradlePluginPortal()
 }
 
 dependencies {
-	// compileOnly here is kinda hacky but probably (afaik) the best solution we can get
-	compileOnly("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
+    // compileOnly here is kinda hacky but probably (afaik) the best solution we can get
+    compileOnly("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
 	
-	implementation("com.github.Hangman:FLAC-library-Java:90cee6f500")
+    implementation("com.github.Hangman:FLAC-library-Java:90cee6f500")
 	
-	testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
     testImplementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
     testImplementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
     testImplementation("com.badlogicgames.gdx:gdx:$gdxVersion")
@@ -47,11 +47,11 @@ dependencies {
 }
 
 allprojects {
-	compileJava {
-		options.incremental = true
-	}
+    compileJava {
+        options.incremental = true
+    }
 	
-	if(JavaVersion.current().isJava9Compatible()) {
+    if(JavaVersion.current().isJava9Compatible()) {
         tasks.withType(JavaCompile) {
             options.release.set(8)
         }
