@@ -1,6 +1,6 @@
 buildscript {
-	project.version = "4.0.1"
-	project.group = "de.pottgames"
+    project.version = "4.0.1"
+    project.group = "de.pottgames"
 }
 
 plugins {
