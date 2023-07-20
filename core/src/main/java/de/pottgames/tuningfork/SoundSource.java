@@ -61,9 +61,14 @@ public abstract class SoundSource {
             this.logger.trace(this.getClass(), "SoundSource successfully created");
         }
 
-        this.setVirtualization(audio.getDefaultVirtualization());
-        this.setSpatialization(audio.getDefaultSpatialization());
-        this.setResamplerByIndex(audio.getDefaultResamplerIndex());
+        // SET DEFAULTS
+        final AudioSettings defaultSettings = audio.getDefaultAudioSettings();
+        this.setAttenuationFactor(defaultSettings.getAttenuationFactor());
+        this.setAttenuationMinDistance(defaultSettings.getMinAttenuationDistance());
+        this.setAttenuationMaxDistance(defaultSettings.getMaxAttenuationDistance());
+        this.setVirtualization(defaultSettings.getVirtualization());
+        this.setSpatialization(defaultSettings.getSpatialization());
+        this.setResamplerByIndex(defaultSettings.getResamplerIndex());
     }
 
 

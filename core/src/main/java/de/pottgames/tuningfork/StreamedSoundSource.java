@@ -93,26 +93,14 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             throw new TuningForkRuntimeException("stream is null");
         }
 
-        this.bufferTimeQueue = new FloatArray(true, StreamedSoundSource.BUFFER_COUNT + 1);
-
         // FETCH AND SET DEPENDENCIES
+        this.bufferTimeQueue = new FloatArray(true, StreamedSoundSource.BUFFER_COUNT + 1);
         this.audio = Audio.get();
         if (this.audio == null) {
             throw new TuningForkRuntimeException("StreamedSoundSource cannot be created before Audio is initialized.");
         }
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
-
-        // SET DEFAULTS
-        final AudioSettings defaultSettings = this.audio.getDefaultAudioSettings();
-        this.setAttenuationFactor(defaultSettings.getAttenuationFactor());
-        this.setAttenuationMinDistance(defaultSettings.getMinAttenuationDistance());
-        this.setAttenuationMaxDistance(defaultSettings.getMaxAttenuationDistance());
-        this.setVirtualization(defaultSettings.getVirtualization());
-        this.setSpatialization(defaultSettings.getSpatialization());
-        this.setResamplerByIndex(defaultSettings.getResamplerIndex());
-
-        // CREATE INPUT STREAM
         this.audioStream = stream;
 
         // FETCH DATA & FORMAT FROM INPUT STREAM
