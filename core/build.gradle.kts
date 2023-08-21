@@ -122,6 +122,7 @@ tasks {
         exclude("de/pottgames/tuningfork/test/LoopPointSoundBufferTest.class")
         exclude("de/pottgames/tuningfork/test/LoopPointStreamingTest.class")
         exclude("de/pottgames/tuningfork/test/ClockTest.class")
+		exclude("de/pottgames/tuningfork/test/PlayReverseExample.class")
     }
 }
 
