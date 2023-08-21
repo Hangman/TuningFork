@@ -20,18 +20,29 @@ public class PlayReverseExample extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
+        // open an audio file as a stream - see also Mp3InputStream, OggInputStream, FlacInputStream, AiffInputStream etc.
+        // the stream is responsible for decoding the audio data
         final WavInputStream stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
+
+        // fetch all samples from the stream
+        // we get unencoded raw pcm samples
         final byte[] pcmData = new byte[(int) stream.bytesRemaining()];
         stream.read(pcmData);
+
+        // reverse sample-wise
+        final byte[] reversed = PlayReverseExample.reverseAudio(pcmData, stream.getBitsPerSample() / 8);
+
+        // create the sound with the reversed data
+        this.sound = new SoundBuffer(reversed, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
+
+        // close the stream
         try {
             stream.close();
         } catch (final IOException e) {
             // ignore, it is just an example
         }
 
-        final byte[] reversed = PlayReverseExample.reverseAudio(pcmData, stream.getBitsPerSample() / 8);
-
-        this.sound = new SoundBuffer(reversed, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
+        // and finally play the sound
         this.sound.play();
     }
 
