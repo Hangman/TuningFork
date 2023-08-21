@@ -1,5 +1,7 @@
 package de.pottgames.tuningfork.test;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -21,6 +23,12 @@ public class PlayReverseExample extends ApplicationAdapter {
         final WavInputStream stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
         final byte[] pcmData = new byte[(int) stream.bytesRemaining()];
         stream.read(pcmData);
+        try {
+            stream.close();
+        } catch (final IOException e) {
+            // ignore, it is just an example
+        }
+
         final byte[] reversed = PlayReverseExample.reverseAudio(pcmData, stream.getBitsPerSample() / 8);
 
         this.sound = new SoundBuffer(reversed, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
