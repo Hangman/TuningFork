@@ -86,6 +86,9 @@ public class PlayReverseExample extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.sound.dispose();
+        if (this.asyncLoadedSound != null) {
+            this.asyncLoadedSound.dispose();
+        }
         this.audio.dispose();
     }
 
