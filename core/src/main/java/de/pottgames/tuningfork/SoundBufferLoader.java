@@ -54,23 +54,24 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
+        final boolean reverse = parameter != null && parameter.reverse;
         final String fileExtension = file.extension();
         final SoundFileType type = SoundFileType.getByFileEnding(fileExtension);
         switch (type) {
             case FLAC:
-                this.asset = FlacLoader.load(file);
+                this.asset = reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);
                 break;
             case OGG:
-                this.asset = OggLoader.load(file);
+                this.asset = reverse ? OggLoader.loadReverse(file) : OggLoader.load(file);
                 break;
             case WAV:
-                this.asset = WaveLoader.load(file);
+                this.asset = reverse ? WaveLoader.loadReverse(file) : WaveLoader.load(file);
                 break;
             case MP3:
-                this.asset = Mp3Loader.load(file);
+                this.asset = reverse ? Mp3Loader.loadReverse(file) : Mp3Loader.load(file);
                 break;
             case AIFF:
-                this.asset = AiffLoader.load(file);
+                this.asset = reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
                 break;
             default:
                 throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac, mp3, aiff and wav files are supported.");
@@ -87,7 +88,10 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
 
 
     public static class SoundBufferLoaderParameter extends AssetLoaderParameters<SoundBuffer> {
-        // unused but necessary for the interface
+        /**
+         * Loads the file for reversed playback.
+         */
+        public boolean reverse = false;
     }
 
 }
