@@ -121,6 +121,7 @@ tasks {
         exclude("de/pottgames/tuningfork/test/LoopPointStreamingTest.class")
         exclude("de/pottgames/tuningfork/test/ClockTest.class")
         exclude("de/pottgames/tuningfork/test/PlayReverseExample.class")
+        exclude("de/pottgames/tuningfork/test/SoundBufferLoaderParameterTest.class")
         exclude("de/pottgames/tuningfork/test/unit/DurationTest.class")
         exclude("de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class")
         exclude("de/pottgames/tuningfork/test/unit/SoundLoaderUnitTest.class")
