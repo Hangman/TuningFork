@@ -5,7 +5,7 @@ val junitJupiterVersion: String by project
 val flacLibraryJavaVersion: String by project
 
 buildscript {
-    project.version = "4.0.0"
+    project.version = "4.1.0"
     project.group = "de.pottgames"
 }
 
@@ -122,7 +122,7 @@ tasks {
         exclude("de/pottgames/tuningfork/test/LoopPointSoundBufferTest.class")
         exclude("de/pottgames/tuningfork/test/LoopPointStreamingTest.class")
         exclude("de/pottgames/tuningfork/test/ClockTest.class")
-		exclude("de/pottgames/tuningfork/test/PlayReverseExample.class")
+        exclude("de/pottgames/tuningfork/test/PlayReverseExample.class")
     }
 }
 
