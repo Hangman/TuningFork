@@ -29,7 +29,7 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SoundLoaderTest {
+public class SoundLoaderUnitTest {
     private Audio audio;
 
 

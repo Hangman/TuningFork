@@ -115,14 +115,15 @@ tasks {
         exclude("de/pottgames/tuningfork/test/AifcALawTest.class")
         exclude("de/pottgames/tuningfork/test/MsAdpcmWavMonoTest.class")
         exclude("de/pottgames/tuningfork/test/MsAdpcmWavStereoTest.class")
-        exclude("de/pottgames/tuningfork/test/unit/DurationTest.class")
-        exclude("de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class")
         exclude("de/pottgames/tuningfork/test/StbVorbisTest.class")
         exclude("de/pottgames/tuningfork/test/DirectChannelRemixTest.class")
         exclude("de/pottgames/tuningfork/test/LoopPointSoundBufferTest.class")
         exclude("de/pottgames/tuningfork/test/LoopPointStreamingTest.class")
         exclude("de/pottgames/tuningfork/test/ClockTest.class")
         exclude("de/pottgames/tuningfork/test/PlayReverseExample.class")
+        exclude("de/pottgames/tuningfork/test/unit/DurationTest.class")
+        exclude("de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class")
+        exclude("de/pottgames/tuningfork/test/unit/SoundLoaderUnitTest.class")
     }
 }
 
