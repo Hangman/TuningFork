@@ -19,6 +19,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.decoder.FlacInputStream;
+import de.pottgames.tuningfork.misc.PcmUtil;
 
 public abstract class FlacLoader {
 
@@ -74,6 +75,34 @@ public abstract class FlacLoader {
             result = new SoundBuffer(buffer, flacStream.getChannels(), flacStream.getSampleRate(), flacStream.getBitsPerSample(), flacStream.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(flacStream);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads a flac file in reverse into a {@link SoundBuffer}.
+     *
+     * @param file
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer loadReverse(FileHandle file) {
+        final FlacInputStream stream = new FlacInputStream(file);
+        SoundBuffer result;
+
+        try {
+            if (stream.getBitsPerSample() % 8 != 0) {
+                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+            }
+
+            final byte[] buffer = new byte[(int) stream.totalSamples() * stream.getBytesPerSample() * stream.getChannels()];
+            stream.read(buffer);
+            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, stream.getBitsPerSample() / 8);
+            result = new SoundBuffer(reversedPcm, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
+        } finally {
+            StreamUtils.closeQuietly(stream);
         }
 
         return result;

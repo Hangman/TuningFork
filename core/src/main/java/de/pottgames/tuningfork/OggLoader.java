@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.StreamUtils;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.decoder.OggInputStream;
 import de.pottgames.tuningfork.decoder.util.Util;
+import de.pottgames.tuningfork.misc.PcmUtil;
 
 public abstract class OggLoader {
 
@@ -142,6 +143,36 @@ public abstract class OggLoader {
                 output.write(buffer, 0, length);
             }
             result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads an ogg file in reverse into a {@link SoundBuffer}.
+     *
+     * @param fileHandle
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer loadReverse(FileHandle fileHandle) {
+        final OggInputStream input = new OggInputStream(fileHandle.read());
+        SoundBuffer result = null;
+        try {
+            final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
+            final byte[] buffer = new byte[2048];
+            while (!input.atEnd()) {
+                final int length = input.read(buffer);
+                if (length == -1) {
+                    break;
+                }
+                output.write(buffer, 0, length);
+            }
+            final byte[] reversedPcm = PcmUtil.reverseAudio(output.toByteArray(), input.getBitsPerSample() / 8);
+            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

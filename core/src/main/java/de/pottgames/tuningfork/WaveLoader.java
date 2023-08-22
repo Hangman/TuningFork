@@ -23,6 +23,7 @@ import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.bindings.ImaAdpcmData;
 import de.pottgames.tuningfork.bindings.ImaAdpcmRs;
 import de.pottgames.tuningfork.decoder.WavInputStream;
+import de.pottgames.tuningfork.misc.PcmUtil;
 
 public abstract class WaveLoader {
 
@@ -135,6 +136,34 @@ public abstract class WaveLoader {
             throw new TuningForkRuntimeException("Error decoding " + path);
         }
         return new SoundBuffer(data.pcmData, data.numChannels, data.sampleRate, 16, PcmDataType.INTEGER);
+    }
+
+
+    /**
+     * Loads a wav file in reverse into a {@link SoundBuffer}.
+     *
+     * @param file
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer loadReverse(FileHandle file) {
+        final WavInputStream input = new WavInputStream(file, false);
+        SoundBuffer result = null;
+        try {
+            if (input.getBitsPerSample() % 8 != 0) {
+                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+            }
+
+            final byte[] buffer = new byte[(int) input.bytesRemaining()];
+            input.read(buffer);
+            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
+            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
+                    input.getBlockAlign());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
     }
 
 }

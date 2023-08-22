@@ -20,6 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import de.pottgames.tuningfork.decoder.AiffInputStream;
+import de.pottgames.tuningfork.misc.PcmUtil;
 
 public abstract class AiffLoader {
 
@@ -74,6 +75,33 @@ public abstract class AiffLoader {
             final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads an aiff file in reverse into a {@link SoundBuffer}.
+     *
+     * @param file
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer loadReverse(FileHandle file) {
+        final AiffInputStream input = new AiffInputStream(file);
+        SoundBuffer result = null;
+        try {
+            if (input.getBitsPerSample() % 8 != 0) {
+                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+            }
+
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            input.read(buffer);
+            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
+            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

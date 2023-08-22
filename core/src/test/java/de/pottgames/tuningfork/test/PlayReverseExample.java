@@ -1,6 +1,16 @@
-package de.pottgames.tuningfork.test;
+/**
+ * Copyright 2023 Matthias Finke
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
 
-import java.io.IOException;
+package de.pottgames.tuningfork.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -9,7 +19,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.decoder.WavInputStream;
+import de.pottgames.tuningfork.WaveLoader;
 
 public class PlayReverseExample extends ApplicationAdapter {
     private Audio       audio;
@@ -20,44 +30,13 @@ public class PlayReverseExample extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        // open an audio file as a stream - see also Mp3InputStream, OggInputStream, FlacInputStream, AiffInputStream etc.
-        // the stream is responsible for decoding the audio data
-        final WavInputStream stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
-
-        // fetch all samples from the stream
-        // we get unencoded raw pcm samples
-        final byte[] pcmData = new byte[(int) stream.bytesRemaining()];
-        stream.read(pcmData);
-
-        // reverse sample-wise
-        final byte[] reversed = PlayReverseExample.reverseAudio(pcmData, stream.getBitsPerSample() / 8);
-
-        // create the sound with the reversed data
-        this.sound = new SoundBuffer(reversed, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
-
-        // close the stream
-        try {
-            stream.close();
-        } catch (final IOException e) {
-            // ignore, it is just an example
-        }
-
-        // and finally play the sound
+        // use any of these
+        // this.sound = AiffLoader.loadReverse(Gdx.files.internal("numbers.aiff"));
+        // this.sound = FlacLoader.loadReverse(Gdx.files.internal("numbers_16bit_stereo.flac"));
+        // this.sound = Mp3Loader.loadReverse(Gdx.files.internal("numbers.mp3"));
+        // this.sound = OggLoader.loadReverse(Gdx.files.internal("numbers2.ogg"));
+        this.sound = WaveLoader.loadReverse(Gdx.files.internal("numbers.wav"));
         this.sound.play();
-    }
-
-
-    public static byte[] reverseAudio(byte[] pcmData, int sampleSizeInBytes) {
-        final int numSamples = pcmData.length / sampleSizeInBytes;
-        final byte[] reversedData = new byte[pcmData.length];
-
-        for (int i = 0; i < numSamples; i++) {
-            final int srcStart = i * sampleSizeInBytes;
-            final int destStart = (numSamples - i - 1) * sampleSizeInBytes;
-            System.arraycopy(pcmData, srcStart, reversedData, destStart, sampleSizeInBytes);
-        }
-
-        return reversedData;
     }
 
 
