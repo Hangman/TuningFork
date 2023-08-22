@@ -247,7 +247,12 @@ public class BufferedSoundSource extends SongSource {
     }
 
 
-    SoundBuffer getBuffer() {
+    /**
+     * Returns the SoundBuffer that this source is currently using.
+     *
+     * @return the buffer
+     */
+    public SoundBuffer getBuffer() {
         return this.buffer;
     }
 

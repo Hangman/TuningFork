@@ -56,6 +56,7 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
+        file = parameter != null && parameter.file != null ? parameter.file : file;
         final boolean reverse = parameter != null && parameter.reverse;
         final String fileExtension = file.extension();
         SoundFileType type = SoundFileType.getByFileEnding(fileExtension);
@@ -101,6 +102,14 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
          * Loads the file for reversed playback.
          */
         public boolean reverse = false;
+
+        /**
+         * A custom FileHandle object that can be set to specify an alternative file path for the asset.<br>
+         * If this is set, this path takes priority over the file name String given to the load function of the asset manager.<br>
+         * You can give the asset manager load method an arbitrary String that is just used to identify the asset, it must not point to the real file.<br>
+         * This is useful when multiple instances of the same asset need to be loaded with different configurations.
+         */
+        public FileHandle file;
     }
 
 }
