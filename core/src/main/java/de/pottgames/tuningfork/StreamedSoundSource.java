@@ -12,6 +12,7 @@
 
 package de.pottgames.tuningfork;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -517,19 +518,28 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
     private static AudioStream createAudioStream(FileHandle file) {
         final String fileExtension = file.extension();
-        final SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        if (soundFileType == null) {
+            try {
+                soundFileType = SoundFileType.parseFromFile(file);
+            } catch (final IOException e) {
+                // ignore
+            }
+        }
 
-        switch (soundFileType) {
-            case FLAC:
-                return new FlacInputStream(file);
-            case OGG:
-                return new OggInputStream(file, null);
-            case WAV:
-                return new WavInputStream(file);
-            case MP3:
-                return new Mp3InputStream(file);
-            case AIFF:
-                return new AiffInputStream(file);
+        if (soundFileType != null) {
+            switch (soundFileType) {
+                case FLAC:
+                    return new FlacInputStream(file);
+                case OGG:
+                    return new OggInputStream(file, null);
+                case WAV:
+                    return new WavInputStream(file);
+                case MP3:
+                    return new Mp3InputStream(file);
+                case AIFF:
+                    return new AiffInputStream(file);
+            }
         }
 
         return null;

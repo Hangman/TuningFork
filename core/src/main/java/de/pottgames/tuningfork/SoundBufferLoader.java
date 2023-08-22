@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -56,7 +58,14 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
         final boolean reverse = parameter != null && parameter.reverse;
         final String fileExtension = file.extension();
-        final SoundFileType type = SoundFileType.getByFileEnding(fileExtension);
+        SoundFileType type = SoundFileType.getByFileEnding(fileExtension);
+        if (type == null) {
+            try {
+                type = SoundFileType.parseFromFile(file);
+            } catch (final IOException e) {
+                // ignore
+            }
+        }
         switch (type) {
             case FLAC:
                 this.asset = reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);

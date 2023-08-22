@@ -86,6 +86,20 @@ public class Util {
     }
 
 
+    /**
+     * Reads bytes from the provided input stream into the given output buffer, up to the specified limit.
+     *
+     * This method attempts to read bytes from the input stream into the output buffer until either the specified limit is reached or the end of the input
+     * stream is encountered.
+     *
+     * @param stream The input stream to read from.
+     * @param output The byte array to store the read data into.
+     * @param limit The maximum number of bytes to read.
+     *
+     * @return The total number of bytes read from the input stream and stored in the output buffer.
+     *
+     * @throws IOException If an I/O error occurs while reading from the input stream.
+     */
     public static int readAll(InputStream stream, byte[] output, int limit) throws IOException {
         if (limit <= 0) {
             return 0;
