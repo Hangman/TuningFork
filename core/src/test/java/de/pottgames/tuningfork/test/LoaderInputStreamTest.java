@@ -22,8 +22,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import de.pottgames.tuningfork.AiffLoader;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.FlacLoader;
+import de.pottgames.tuningfork.Mp3Loader;
 import de.pottgames.tuningfork.OggLoader;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
@@ -33,6 +35,8 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
     private SoundBuffer wav;
     private SoundBuffer flac;
     private SoundBuffer ogg;
+    private SoundBuffer aiff;
+    private SoundBuffer mp3;
     private SoundBuffer playing;
     private long        startTime;
     private float       duration;
@@ -45,10 +49,14 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         InputStream wavStream = null;
         InputStream flacStream = null;
         InputStream oggStream = null;
+        InputStream aiffStream = null;
+        InputStream mp3Stream = null;
         try {
             wavStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers.wav")));
             flacStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers_16bit_mono.flac")));
             oggStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers2.ogg")));
+            aiffStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers.aiff")));
+            mp3Stream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers.mp3")));
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
@@ -57,6 +65,8 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         this.wav = WaveLoader.load(wavStream);
         this.flac = FlacLoader.load(flacStream);
         this.ogg = OggLoader.load(oggStream);
+        this.aiff = AiffLoader.load(aiffStream);
+        this.mp3 = Mp3Loader.load(mp3Stream);
     }
 
 
@@ -71,6 +81,12 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
                 toPlay = this.ogg;
                 System.out.println("ogg");
             } else if (this.playing == this.ogg) {
+                toPlay = this.aiff;
+                System.out.println("aiff");
+            } else if (this.playing == this.aiff) {
+                toPlay = this.mp3;
+                System.out.println("mp3");
+            } else if (this.playing == this.mp3) {
                 toPlay = this.wav;
                 System.out.println("wav");
             } else {
@@ -90,8 +106,9 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         this.wav.dispose();
         this.flac.dispose();
         this.ogg.dispose();
+        this.aiff.dispose();
+        this.mp3.dispose();
 
-        // always dispose Audio last
         this.audio.dispose();
     }
 

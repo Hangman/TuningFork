@@ -23,8 +23,8 @@ import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.StreamedSoundSource;
-import de.pottgames.tuningfork.WaveLoader;
 
 public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
     private Audio               audio;
@@ -50,7 +50,7 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
         this.streamedSource = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
         this.streamedSource.setLooping(true);
 
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
         this.soundSource = this.audio.obtainSource(this.sound);
         this.soundSource.setLooping(true);
     }

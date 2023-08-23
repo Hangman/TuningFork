@@ -32,7 +32,7 @@ import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.DistanceAttenuationModel;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
@@ -90,7 +90,7 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         }
 
         // LOAD SOUND
-        this.soundBuffer = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.soundBuffer = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // OBTAIN SOURCE & PLAY SOUND
         this.soundSource = this.audio.obtainSource(this.soundBuffer);

@@ -2,6 +2,7 @@ package de.pottgames.tuningfork;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -41,10 +42,22 @@ public abstract class Mp3Loader {
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle file) {
+        return Mp3Loader.load(file.read());
+    }
+
+
+    /**
+     * Loads a mp3 into a {@link SoundBuffer} and closes the InputStream afterwards.
+     *
+     * @param stream
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(InputStream stream) {
         SoundBuffer result = null;
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
-        final Bitstream bitstream = new Bitstream(file.read());
+        final Bitstream bitstream = new Bitstream(stream);
         final MP3Decoder decoder = new MP3Decoder();
         try {
             OutputBuffer outputBuffer = null;

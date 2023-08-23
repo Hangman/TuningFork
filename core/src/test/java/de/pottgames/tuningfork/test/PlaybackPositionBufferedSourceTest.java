@@ -21,7 +21,7 @@ import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
@@ -41,7 +41,7 @@ public class PlaybackPositionBufferedSourceTest extends ApplicationAdapter imple
         this.audio = Audio.init(config);
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // play the sound
         this.soundSource = this.audio.obtainSource(this.sound);

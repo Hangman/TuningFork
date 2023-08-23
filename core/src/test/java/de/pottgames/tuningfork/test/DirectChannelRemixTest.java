@@ -9,8 +9,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
-import de.pottgames.tuningfork.OggLoader;
 import de.pottgames.tuningfork.SoundBuffer;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.StreamedSoundSource;
 
 public class DirectChannelRemixTest extends ApplicationAdapter {
@@ -27,7 +27,7 @@ public class DirectChannelRemixTest extends ApplicationAdapter {
         final AudioConfig config = new AudioConfig();
         config.setVirtualization(Virtualization.ON);
         this.audio = Audio.init(config);
-        this.sound = OggLoader.load(Gdx.files.internal("quadrophonic.ogg"));
+        this.sound = SoundLoader.load(Gdx.files.internal("quadrophonic.ogg"));
         this.streamedSource = new StreamedSoundSource(Gdx.files.internal("quadrophonic.ogg"));
         System.out.println("Press space to switch through the different virtualization settings.");
     }

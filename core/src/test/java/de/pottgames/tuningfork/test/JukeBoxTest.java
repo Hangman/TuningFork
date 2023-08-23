@@ -21,8 +21,8 @@ import com.badlogic.gdx.math.Interpolation;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
-import de.pottgames.tuningfork.FlacLoader;
 import de.pottgames.tuningfork.SoundBuffer;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.jukebox.JukeBox;
 import de.pottgames.tuningfork.jukebox.JukeBoxObserver;
@@ -50,9 +50,9 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
 
         // LOAD SOUNDS
         this.rhythm1 = new StreamedSoundSource(Gdx.files.internal("rhythm.wav"));
-        this.rhythm2 = FlacLoader.load(Gdx.files.internal("rhythm2.flac"));
+        this.rhythm2 = SoundLoader.load(Gdx.files.internal("rhythm2.flac"));
         this.rhythm3 = new StreamedSoundSource(Gdx.files.internal("rhythm3.flac"));
-        this.rhythm4 = FlacLoader.load(Gdx.files.internal("rhythm4.flac"));
+        this.rhythm4 = SoundLoader.load(Gdx.files.internal("rhythm4.flac"));
         this.rhythm5 = new StreamedSoundSource(Gdx.files.internal("short.flac"));
 
         // OBTAIN BUFFERED SOUND SOURCES

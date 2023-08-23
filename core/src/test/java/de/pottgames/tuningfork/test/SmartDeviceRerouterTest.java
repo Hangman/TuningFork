@@ -28,8 +28,8 @@ import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.DistanceAttenuationModel;
 import de.pottgames.tuningfork.SoundBuffer;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.SoundSource;
-import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 import de.pottgames.tuningfork.router.SmartDeviceRerouter;
@@ -75,7 +75,7 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
         audioDeviceConfig.setRerouter(new SmartDeviceRerouter());
         this.audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
 
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         final SoundSource source = this.audio.obtainSource(this.sound);
         source.setLooping(true);

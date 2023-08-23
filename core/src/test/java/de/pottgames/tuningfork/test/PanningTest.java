@@ -19,7 +19,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 
 public class PanningTest extends ApplicationAdapter {
     private Audio       audio;
@@ -33,7 +33,7 @@ public class PanningTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.sound = WaveLoader.load(Gdx.files.internal("rhythm.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("rhythm.wav"));
         this.soundDuration = this.sound.getDuration() * 1000f;
     }
 

@@ -19,7 +19,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 
 public class EightBitTest extends ApplicationAdapter {
     private Audio       audio;
@@ -32,7 +32,7 @@ public class EightBitTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers_8bit_stereo.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_stereo.wav"));
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");
 
         // play the sound

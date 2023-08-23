@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 
 public class LoopPointSoundBufferTest extends ApplicationAdapter {
     private Audio               audio;
@@ -20,7 +20,7 @@ public class LoopPointSoundBufferTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
         this.sound.setLoopPoints(3f, 7f);
         final float[] loopPoints = this.sound.getLoopPoints();
         System.out.println("Sound duration: " + this.sound.getDuration() + "s");

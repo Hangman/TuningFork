@@ -21,7 +21,7 @@ import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
@@ -37,11 +37,11 @@ public class FilterTest extends ApplicationAdapter {
     public void create() {
         // before we can do anything, we need to initialize our Audio instance
         final AudioConfig config = new AudioConfig();
-        config.setLogger(new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR));
+        config.setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
         this.audio = Audio.init(config);
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // obtain sound source
         this.soundSource = this.audio.obtainSource(this.sound);

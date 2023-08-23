@@ -23,7 +23,7 @@ import de.pottgames.tuningfork.EaxReverb;
 import de.pottgames.tuningfork.Flanger;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundEffect;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 
 public class EffectTest extends ApplicationAdapter {
     private Audio               audio;
@@ -39,7 +39,7 @@ public class EffectTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // load a sound
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // obtain sound source
         this.soundSource = this.audio.obtainSource(this.sound);

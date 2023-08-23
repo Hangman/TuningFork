@@ -26,8 +26,8 @@ import de.pottgames.tuningfork.Echo;
 import de.pottgames.tuningfork.PitchShifter;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundEffect;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.SoundSource;
-import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
@@ -48,7 +48,7 @@ public class AuxSendsTest extends ApplicationAdapter {
 
         // INIT
         this.audio = Audio.init(config);
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
         System.out.println("available effect slots: " + this.audio.getDevice().getNumberOfEffectSlots());
 
         // PLAY

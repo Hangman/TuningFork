@@ -19,7 +19,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.WaveLoader;
+import de.pottgames.tuningfork.SoundLoader;
 
 public class ClockTest extends ApplicationAdapter {
     private Audio       audio;
@@ -29,7 +29,7 @@ public class ClockTest extends ApplicationAdapter {
     @Override
     public void create() {
         this.audio = Audio.init();
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
         this.sound.play();
     }
 

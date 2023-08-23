@@ -18,10 +18,10 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.OggLoader;
 import de.pottgames.tuningfork.PitchShifter;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundEffect;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.SoundSource;
 
 public class SpeedOnlyChangeTest extends ApplicationAdapter {
@@ -34,7 +34,7 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
     public void create() {
         this.audio = Audio.init();
 
-        this.sound = OggLoader.load(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
+        this.sound = SoundLoader.load(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
         final SoundSource source = this.audio.obtainSource(this.sound);
 
         // set source pitch to change the speed
