@@ -95,10 +95,14 @@ public abstract class SoundSource {
     /**
      * Sets the pitch of this sound source.
      *
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
+     * @param pitch The pitch value, which must be >= 0. Values less than 1 result in slower playback and a deeper tone, while values greater than 1 make it
+     *            faster and produce a higher tone.
      */
     public void setPitch(float pitch) {
-        AL10.alSourcef(this.sourceId, AL10.AL_PITCH, MathUtils.clamp(pitch, 0.5f, 2f));
+        if (pitch < 0f) {
+            pitch = 0f;
+        }
+        AL10.alSourcef(this.sourceId, AL10.AL_PITCH, pitch);
     }
 
 
