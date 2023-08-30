@@ -97,6 +97,32 @@ public class SoundEffect implements Disposable {
     }
 
 
+    /**
+     * Returns true if this sound effect is attached to one or more sources.
+     *
+     * @return true if attached, false otherwise
+     */
+    public boolean isAttached() {
+        return !this.attachedSources.isEmpty();
+    }
+
+
+    /**
+     * Saves all {@link SoundSource}s that this SoundEffect is currently attached to in the list specified in the parameter.
+     *
+     * @param saveToList provide an array to save the sources to
+     *
+     * @return true if the effect is attached to at least one source
+     */
+    public boolean getAttachedSources(Array<SoundSource> saveToList) {
+        if (this.attachedSources.isEmpty()) {
+            return false;
+        }
+        saveToList.addAll(this.attachedSources);
+        return true;
+    }
+
+
     int getAuxSlotId() {
         return this.auxSlotId;
     }
