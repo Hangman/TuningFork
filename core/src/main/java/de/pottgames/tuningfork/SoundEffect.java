@@ -21,13 +21,29 @@ import com.badlogic.gdx.utils.Disposable;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
+/**
+ * A sound effect that can be attached to a sound source via {@link SoundSource#attachEffect(SoundEffect)}. It uses native resources, call {@link #dispose()}
+ * when you don't need it anymore.
+ *
+ * @see <a href="https://github.com/Hangman/TuningFork/wiki/Sound-Effects">The wiki entry</a>
+ */
 public class SoundEffect implements Disposable {
     private final ErrorLogger        errorLogger;
     private final TuningForkLogger   logger;
     private final int                auxSlotId;
+    private final int                effectId;
     private final Array<SoundSource> attachedSources = new Array<>();
 
 
+    /**
+     * Creates a new SoundEffect from a template.
+     *
+     * @param data Available effects: {@link AutoWah}, {@link Chorus}, {@link Compressor}, {@link Distortion}, {@link EaxReverb}, {@link Echo},
+     *            {@link Equalizer}, {@link Flanger}, {@link FrequencyShifter}, {@link PitchShifter}, {@link Reverb}, {@link RingModulator},
+     *            {@link VocalMorpher}.
+     *
+     * @see <a href="https://github.com/Hangman/TuningFork/wiki/Sound-Effects">The wiki entry</a>
+     */
     public SoundEffect(SoundEffectData data) {
         this.logger = Audio.get().getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
@@ -37,18 +53,32 @@ public class SoundEffect implements Disposable {
         this.setEnvironmental(false);
 
         // CREATE EFFECT
-        final int effectId = EXTEfx.alGenEffects();
-        data.apply(effectId);
+        this.effectId = EXTEfx.alGenEffects();
+        data.apply(this.effectId);
 
         // SET EFFECT TO AUX SLOT
-        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
-
-        // DELETE EFFECT
-        EXTEfx.alDeleteEffects(effectId);
+        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, this.effectId);
 
         if (!this.errorLogger.checkLogError("Failed to create the SoundEffect")) {
             this.logger.debug(this.getClass(), "SoundEffect successfully created");
         }
+    }
+
+
+    /**
+     * Updates the sound effect data. This is also possible at runtime, when the sound effect is in active use.
+     *
+     * @param data Available effects: {@link AutoWah}, {@link Chorus}, {@link Compressor}, {@link Distortion}, {@link EaxReverb}, {@link Echo},
+     *            {@link Equalizer}, {@link Flanger}, {@link FrequencyShifter}, {@link PitchShifter}, {@link Reverb}, {@link RingModulator},
+     *            {@link VocalMorpher}.
+     */
+    public void updateEffect(SoundEffectData data) {
+        // AL wants us to do it this way: detach effect from aux slot, re-attach altered effect to aux slot
+        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, EXTEfx.AL_EFFECT_NULL);
+        data.apply(this.effectId);
+        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, this.effectId);
+
+        this.errorLogger.checkLogError("Failed to update SoundEffect");
     }
 
 
@@ -87,6 +117,7 @@ public class SoundEffect implements Disposable {
      */
     @Override
     public void dispose() {
+        EXTEfx.alDeleteEffects(this.effectId);
         for (final SoundSource source : this.attachedSources) {
             source.onEffectDisposal(this);
         }
