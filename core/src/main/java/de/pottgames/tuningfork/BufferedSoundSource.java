@@ -289,6 +289,7 @@ public class BufferedSoundSource extends SongSource {
         }
         this.stop();
         this.setBuffer(null);
+        this.detachAllEffects();
         this.obtained = false;
     }
 
