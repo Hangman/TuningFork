@@ -6,9 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.OpenDeviceException;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.UnsupportedAudioDeviceException;
 import de.pottgames.tuningfork.WaveLoader;
 
 public class JniTest extends ApplicationAdapter {
@@ -18,14 +16,21 @@ public class JniTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        try {
-            this.audio = Audio.initSafe();
-        } catch (OpenDeviceException | UnsupportedAudioDeviceException e) {
-            e.printStackTrace();
-        }
+        this.audio = Audio.init();
 
+        // load via java decoder
+        final long javaStartTime = System.nanoTime();
+        this.sound = WaveLoader.load(Gdx.files.internal("ima_adpcm_stereo.wav"), true);
+        final long javaEndTime = System.nanoTime();
+        this.sound.dispose();
+        System.out.println("java decoder load time: " + (javaEndTime - javaStartTime) / 1000 / 1000 + " ms");
+
+        // load via rust decoder
+        final long rustStartTime = System.nanoTime();
         this.sound = WaveLoader.load(Gdx.files.internal("ima_adpcm_stereo.wav"), false);
-        System.out.println("Sound duration: " + this.sound.getDuration() + "s");
+        final long rustEndTime = System.nanoTime();
+        System.out.println("rust decoder load time: " + (rustEndTime - rustStartTime) / 1000 / 1000 + " ms");
+
         this.sound.play();
     }
 
