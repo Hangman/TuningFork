@@ -66,6 +66,7 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         this.rhythm5.setRelative(true);
         this.rhythm2Source.setRelative(true);
         this.rhythm4Source.setRelative(true);
+        this.rhythm5.setRelative(true);
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
