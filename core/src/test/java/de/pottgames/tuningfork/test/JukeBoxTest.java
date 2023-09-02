@@ -59,6 +59,14 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         this.rhythm2Source = this.audio.obtainSource(this.rhythm2);
         this.rhythm4Source = this.audio.obtainSource(this.rhythm4);
 
+        // OPTIONAL: SET RELATIVE
+        // if you want to play music globally and not in 3D space, make sure to only provide relative sources
+        this.rhythm1.setRelative(true);
+        this.rhythm3.setRelative(true);
+        this.rhythm5.setRelative(true);
+        this.rhythm2Source.setRelative(true);
+        this.rhythm4Source.setRelative(true);
+
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
         final Song song1 = new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
@@ -115,6 +123,9 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             this.jukeBox.softStopAndResume(Interpolation.linear, 2f);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            this.audio.getListener().setPosition(100f, 0f, 0f);
         }
 
         this.jukeBox.update();
