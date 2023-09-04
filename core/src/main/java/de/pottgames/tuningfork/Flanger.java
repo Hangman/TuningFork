@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -106,6 +108,37 @@ public class Flanger extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DEPTH, this.depth);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_FEEDBACK, this.feedback);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DELAY, this.delay);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.delay, this.depth, this.feedback, this.phase, this.rate, this.waveform);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Flanger other = (Flanger) obj;
+        return Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(this.depth) == Float.floatToIntBits(other.depth)
+                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback) && this.phase == other.phase
+                && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate) && this.waveform == other.waveform;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Flanger [waveform=" + this.waveform + ", phase=" + this.phase + ", rate=" + this.rate + ", depth=" + this.depth + ", feedback=" + this.feedback
+                + ", delay=" + this.delay + "]";
     }
 
 }

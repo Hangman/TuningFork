@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -83,6 +85,39 @@ public class Distortion extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_LOWPASS_CUTOFF, this.lowpassCutoff);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQCENTER, this.eqCenter);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQBANDWIDTH, this.eqBandwidth);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.edge, this.eqBandwidth, this.eqCenter, this.gain, this.lowpassCutoff);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Distortion other = (Distortion) obj;
+        return Float.floatToIntBits(this.edge) == Float.floatToIntBits(other.edge)
+                && Float.floatToIntBits(this.eqBandwidth) == Float.floatToIntBits(other.eqBandwidth)
+                && Float.floatToIntBits(this.eqCenter) == Float.floatToIntBits(other.eqCenter)
+                && Float.floatToIntBits(this.gain) == Float.floatToIntBits(other.gain)
+                && Float.floatToIntBits(this.lowpassCutoff) == Float.floatToIntBits(other.lowpassCutoff);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Distortion [edge=" + this.edge + ", gain=" + this.gain + ", lowpassCutoff=" + this.lowpassCutoff + ", eqCenter=" + this.eqCenter
+                + ", eqBandwidth=" + this.eqBandwidth + "]";
     }
 
 }

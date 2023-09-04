@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -124,6 +126,39 @@ public class Echo extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DAMPING, this.damping);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_FEEDBACK, this.feedback);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_SPREAD, this.spread);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.damping, this.delay, this.feedback, this.lrDelay, this.spread);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Echo other = (Echo) obj;
+        return Float.floatToIntBits(this.damping) == Float.floatToIntBits(other.damping)
+                && Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay)
+                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback)
+                && Float.floatToIntBits(this.lrDelay) == Float.floatToIntBits(other.lrDelay)
+                && Float.floatToIntBits(this.spread) == Float.floatToIntBits(other.spread);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Echo [delay=" + this.delay + ", lrDelay=" + this.lrDelay + ", damping=" + this.damping + ", feedback=" + this.feedback + ", spread="
+                + this.spread + "]";
     }
 
 }

@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -123,6 +125,37 @@ public class Chorus extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DEPTH, this.depth);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_FEEDBACK, this.feedback);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DELAY, this.delay);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.delay, this.depth, this.feedback, this.phase, this.rate, this.waveForm);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Chorus other = (Chorus) obj;
+        return Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(this.depth) == Float.floatToIntBits(other.depth)
+                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback) && this.phase == other.phase
+                && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate) && this.waveForm == other.waveForm;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Chorus [waveForm=" + this.waveForm + ", phase=" + this.phase + ", rate=" + this.rate + ", depth=" + this.depth + ", feedback=" + this.feedback
+                + ", delay=" + this.delay + "]";
     }
 
 }

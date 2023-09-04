@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -78,6 +80,35 @@ public class RingModulator extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_FREQUENCY, this.frequency);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_HIGHPASS_CUTOFF, this.highpassCutoff);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_RING_MODULATOR_WAVEFORM, this.waveform);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.frequency, this.highpassCutoff, this.waveform);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final RingModulator other = (RingModulator) obj;
+        return Float.floatToIntBits(this.frequency) == Float.floatToIntBits(other.frequency)
+                && Float.floatToIntBits(this.highpassCutoff) == Float.floatToIntBits(other.highpassCutoff) && this.waveform == other.waveform;
+    }
+
+
+    @Override
+    public String toString() {
+        return "RingModulator [frequency=" + this.frequency + ", highpassCutoff=" + this.highpassCutoff + ", waveform=" + this.waveform + "]";
     }
 
 }

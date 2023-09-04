@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -97,6 +99,34 @@ public class PitchShifter extends SoundEffectData {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_PITCH_SHIFTER);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_COARSE_TUNE, this.coarseTune);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_FINE_TUNE, this.fineTune);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.coarseTune, this.fineTune);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final PitchShifter other = (PitchShifter) obj;
+        return this.coarseTune == other.coarseTune && this.fineTune == other.fineTune;
+    }
+
+
+    @Override
+    public String toString() {
+        return "PitchShifter [coarseTune=" + this.coarseTune + ", fineTune=" + this.fineTune + "]";
     }
 
 }

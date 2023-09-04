@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -107,6 +109,38 @@ public class AutoWah extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RELEASE_TIME, this.releaseTime);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RESONANCE, this.resonance);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_PEAK_GAIN, this.peakGain);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.attackTime, this.peakGain, this.releaseTime, this.resonance);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final AutoWah other = (AutoWah) obj;
+        return Float.floatToIntBits(this.attackTime) == Float.floatToIntBits(other.attackTime)
+                && Float.floatToIntBits(this.peakGain) == Float.floatToIntBits(other.peakGain)
+                && Float.floatToIntBits(this.releaseTime) == Float.floatToIntBits(other.releaseTime)
+                && Float.floatToIntBits(this.resonance) == Float.floatToIntBits(other.resonance);
+    }
+
+
+    @Override
+    public String toString() {
+        return "AutoWah [attackTime=" + this.attackTime + ", releaseTime=" + this.releaseTime + ", resonance=" + this.resonance + ", peakGain=" + this.peakGain
+                + "]";
     }
 
 }

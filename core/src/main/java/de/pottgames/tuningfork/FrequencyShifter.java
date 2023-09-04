@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -53,6 +55,35 @@ public class FrequencyShifter extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_FREQUENCY, this.frequency);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION, this.leftDirection);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION, this.rightDirection);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.frequency, this.leftDirection, this.rightDirection);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final FrequencyShifter other = (FrequencyShifter) obj;
+        return Float.floatToIntBits(this.frequency) == Float.floatToIntBits(other.frequency) && this.leftDirection == other.leftDirection
+                && this.rightDirection == other.rightDirection;
+    }
+
+
+    @Override
+    public String toString() {
+        return "FrequencyShifter [frequency=" + this.frequency + ", leftDirection=" + this.leftDirection + ", rightDirection=" + this.rightDirection + "]";
     }
 
 }

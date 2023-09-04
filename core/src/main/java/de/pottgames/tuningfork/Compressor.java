@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -34,6 +36,34 @@ public class Compressor extends SoundEffectData {
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_COMPRESSOR);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_COMPRESSOR_ONOFF, this.onOff);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.onOff);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Compressor other = (Compressor) obj;
+        return this.onOff == other.onOff;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Compressor [onOff=" + this.onOff + "]";
     }
 
 }

@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -74,6 +76,37 @@ public class VocalMorpher extends SoundEffectData {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB_COARSE_TUNING, this.phonemebCoarseTuning);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_WAVEFORM, this.waveform);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_VOCMORPHER_RATE, this.rate);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.phonemea, this.phonemeaCoarseTuning, this.phonemeb, this.phonemebCoarseTuning, this.rate, this.waveform);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final VocalMorpher other = (VocalMorpher) obj;
+        return this.phonemea == other.phonemea && this.phonemeaCoarseTuning == other.phonemeaCoarseTuning && this.phonemeb == other.phonemeb
+                && this.phonemebCoarseTuning == other.phonemebCoarseTuning && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate)
+                && this.waveform == other.waveform;
+    }
+
+
+    @Override
+    public String toString() {
+        return "VocalMorpher [phonemea=" + this.phonemea + ", phonemeb=" + this.phonemeb + ", phonemeaCoarseTuning=" + this.phonemeaCoarseTuning
+                + ", phonemebCoarseTuning=" + this.phonemebCoarseTuning + ", waveform=" + this.waveform + ", rate=" + this.rate + "]";
     }
 
 }

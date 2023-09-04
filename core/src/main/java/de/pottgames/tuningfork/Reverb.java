@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.EXTEfx;
 
@@ -155,6 +157,49 @@ public class Reverb extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_AIR_ABSORPTION_GAINHF, this.airAbsorptionGainHf);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_ROOM_ROLLOFF_FACTOR, this.roomRolloffFactor);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_REVERB_DECAY_HFLIMIT, this.decayHfLimit ? AL10.AL_TRUE : AL10.AL_FALSE);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.airAbsorptionGainHf, this.decayHfLimit, this.decayHfRatio, this.decayTime, this.density, this.diffusion, this.gain,
+                this.gainHf, this.lateReverbDelay, this.lateReverbGain, this.reflectionsDelay, this.reflectionsGain, this.roomRolloffFactor);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Reverb other = (Reverb) obj;
+        return Float.floatToIntBits(this.airAbsorptionGainHf) == Float.floatToIntBits(other.airAbsorptionGainHf) && this.decayHfLimit == other.decayHfLimit
+                && Float.floatToIntBits(this.decayHfRatio) == Float.floatToIntBits(other.decayHfRatio)
+                && Float.floatToIntBits(this.decayTime) == Float.floatToIntBits(other.decayTime)
+                && Float.floatToIntBits(this.density) == Float.floatToIntBits(other.density)
+                && Float.floatToIntBits(this.diffusion) == Float.floatToIntBits(other.diffusion)
+                && Float.floatToIntBits(this.gain) == Float.floatToIntBits(other.gain)
+                && Float.floatToIntBits(this.gainHf) == Float.floatToIntBits(other.gainHf)
+                && Float.floatToIntBits(this.lateReverbDelay) == Float.floatToIntBits(other.lateReverbDelay)
+                && Float.floatToIntBits(this.lateReverbGain) == Float.floatToIntBits(other.lateReverbGain)
+                && Float.floatToIntBits(this.reflectionsDelay) == Float.floatToIntBits(other.reflectionsDelay)
+                && Float.floatToIntBits(this.reflectionsGain) == Float.floatToIntBits(other.reflectionsGain)
+                && Float.floatToIntBits(this.roomRolloffFactor) == Float.floatToIntBits(other.roomRolloffFactor);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Reverb [density=" + this.density + ", diffusion=" + this.diffusion + ", gain=" + this.gain + ", gainHf=" + this.gainHf + ", decayTime="
+                + this.decayTime + ", decayHfRatio=" + this.decayHfRatio + ", reflectionsGain=" + this.reflectionsGain + ", reflectionsDelay="
+                + this.reflectionsDelay + ", lateReverbGain=" + this.lateReverbGain + ", lateReverbDelay=" + this.lateReverbDelay + ", airAbsorptionGainHf="
+                + this.airAbsorptionGainHf + ", roomRolloffFactor=" + this.roomRolloffFactor + ", decayHfLimit=" + this.decayHfLimit + "]";
     }
 
 }

@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork;
 
+import java.util.Objects;
+
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -96,6 +98,46 @@ public class Equalizer extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_WIDTH, this.mid2Width);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_GAIN, this.highGain);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_CUTOFF, this.highCutoff);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.highCutoff, this.highGain, this.lowCutoff, this.lowGain, this.mid1Center, this.mid1Gain, this.mid1Width, this.mid2Center,
+                this.mid2Gain, this.mid2Width);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Equalizer other = (Equalizer) obj;
+        return Float.floatToIntBits(this.highCutoff) == Float.floatToIntBits(other.highCutoff)
+                && Float.floatToIntBits(this.highGain) == Float.floatToIntBits(other.highGain)
+                && Float.floatToIntBits(this.lowCutoff) == Float.floatToIntBits(other.lowCutoff)
+                && Float.floatToIntBits(this.lowGain) == Float.floatToIntBits(other.lowGain)
+                && Float.floatToIntBits(this.mid1Center) == Float.floatToIntBits(other.mid1Center)
+                && Float.floatToIntBits(this.mid1Gain) == Float.floatToIntBits(other.mid1Gain)
+                && Float.floatToIntBits(this.mid1Width) == Float.floatToIntBits(other.mid1Width)
+                && Float.floatToIntBits(this.mid2Center) == Float.floatToIntBits(other.mid2Center)
+                && Float.floatToIntBits(this.mid2Gain) == Float.floatToIntBits(other.mid2Gain)
+                && Float.floatToIntBits(this.mid2Width) == Float.floatToIntBits(other.mid2Width);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Equalizer [lowGain=" + this.lowGain + ", lowCutoff=" + this.lowCutoff + ", mid1Gain=" + this.mid1Gain + ", mid1Center=" + this.mid1Center
+                + ", mid1Width=" + this.mid1Width + ", mid2Gain=" + this.mid2Gain + ", mid2Center=" + this.mid2Center + ", mid2Width=" + this.mid2Width
+                + ", highGain=" + this.highGain + ", highCutoff=" + this.highCutoff + "]";
     }
 
 }
