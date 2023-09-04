@@ -116,4 +116,11 @@ public class PlayList {
         return this.loop;
     }
 
+
+    @Override
+    public String toString() {
+        return "PlayList [songs=" + this.songs + ", songIndex=" + this.songIndex + ", playedThrough=" + this.playedThrough + ", loop=" + this.loop
+                + ", shuffleAfterPlaytrough=" + this.shuffleAfterPlaytrough + "]";
+    }
+
 }

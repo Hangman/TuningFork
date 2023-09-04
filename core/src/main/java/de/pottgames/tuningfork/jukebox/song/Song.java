@@ -103,4 +103,10 @@ public class Song {
         return this.metaData;
     }
 
+
+    @Override
+    public String toString() {
+        return "Song [source=" + this.source + ", settings=" + this.settings + ", metaData=" + this.metaData + "]";
+    }
+
 }

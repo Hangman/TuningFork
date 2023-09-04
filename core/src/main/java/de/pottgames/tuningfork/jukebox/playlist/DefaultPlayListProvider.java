@@ -75,4 +75,10 @@ public class DefaultPlayListProvider implements PlayListProvider {
         return this.lists.size > 0;
     }
 
+
+    @Override
+    public String toString() {
+        return "DefaultPlayListProvider [lists=" + this.lists + "]";
+    }
+
 }

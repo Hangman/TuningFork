@@ -88,4 +88,10 @@ public class ThemePlayListProvider implements PlayListProvider {
         return list != null;
     }
 
+
+    @Override
+    public String toString() {
+        return "ThemePlayListProvider [lists=" + this.lists + ", theme=" + this.theme + "]";
+    }
+
 }

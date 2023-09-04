@@ -128,4 +128,10 @@ public class SongMeta {
         return this.attributes.get(key);
     }
 
+
+    @Override
+    public String toString() {
+        return "SongMeta [artist=" + this.artist + ", title=" + this.title + ", album=" + this.album + ", attributes=" + this.attributes + "]";
+    }
+
 }

@@ -12,6 +12,8 @@
 
 package de.pottgames.tuningfork.jukebox.song;
 
+import java.util.Objects;
+
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -175,6 +177,38 @@ public class SongSettings {
             return 1f;
         }
 
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.fadeInCurve, this.fadeInDuration, this.fadeOutCurve, this.fadeOutDuration, this.volume);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final SongSettings other = (SongSettings) obj;
+        return Objects.equals(this.fadeInCurve, other.fadeInCurve) && Float.floatToIntBits(this.fadeInDuration) == Float.floatToIntBits(other.fadeInDuration)
+                && Objects.equals(this.fadeOutCurve, other.fadeOutCurve)
+                && Float.floatToIntBits(this.fadeOutDuration) == Float.floatToIntBits(other.fadeOutDuration)
+                && Float.floatToIntBits(this.volume) == Float.floatToIntBits(other.volume);
+    }
+
+
+    @Override
+    public String toString() {
+        return "SongSettings [fadeInDuration=" + this.fadeInDuration + ", fadeOutDuration=" + this.fadeOutDuration + ", fadeInCurve=" + this.fadeInCurve
+                + ", fadeOutCurve=" + this.fadeOutCurve + ", volume=" + this.volume + "]";
     }
 
 }
