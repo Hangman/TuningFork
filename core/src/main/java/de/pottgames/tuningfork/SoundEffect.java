@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.Disposable;
 
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
-import de.pottgames.tuningfork.misc.ExperimentalFeature;
 
 /**
  * A sound effect that can be attached to a sound source via {@link SoundSource#attachEffect(SoundEffect)}. It uses native resources, call {@link #dispose()}
@@ -115,8 +114,7 @@ public class SoundEffect implements Disposable {
      *
      * @return true if the effect is attached to at least one source
      */
-    @ExperimentalFeature(description = "This method could leak sources from the internal SoundSourcePool as reset isn't called on BufferedSoundSources on free but on obtain.")
-    protected boolean getAttachedSources(Array<SoundSource> saveToList) {
+    public boolean getAttachedSources(Array<SoundSource> saveToList) {
         if (this.attachedSources.isEmpty()) {
             return false;
         }
