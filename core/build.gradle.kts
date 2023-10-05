@@ -70,10 +70,11 @@ tasks {
 
 tasks {
     test {
-        useJUnit()
+        useJUnitPlatform()
         testLogging {
             events("passed", "skipped", "failed")
         }
+        failFast = true
 
         exclude("de/pottgames/tuningfork/test/InputAdapter.class")
         exclude("de/pottgames/tuningfork/test/Rng.class")
@@ -147,8 +148,9 @@ jmh {
     fork = 0 // How many times to forks a single benchmark. Use 0 to disable forking altogether
     failOnError = true // Should JMH fail immediately if any benchmark had experienced the unrecoverable error?
     forceGC = true // Should JMH force GC between iterations?
-    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt") // human-readable output file
-    resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt") // results file
+    humanOutputFile =
+        project.file("build/reports/jmh/human.txt") // human-readable output file
+    resultsFile = project.file("build/reports/jmh/results.txt") // results file
     operationsPerInvocation = 10 // Operations per invocation.
     timeOnIteration = "2s" // Time to spend at each measurement iteration.
     resultFormat = "TEXT" // Result format type (one of CSV, JSON, NONE, SCSV, TEXT)
