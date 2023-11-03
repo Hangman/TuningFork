@@ -138,13 +138,13 @@ public class DurationTest {
 
     @Test
     public void test15() {
-        this.testWav("ms_adpcm_mono.wav", 4.63f, DurationTest.HIGH_TOLERANCE);
+        this.testWav("ms_adpcm_mono.wav", 4.63f, DurationTest.TOLERANCE);
     }
 
 
     @Test
     public void test16() {
-        this.testWav("ms_adpcm_stereo.wav", 9.003f, DurationTest.HIGH_TOLERANCE);
+        this.testWav("ms_adpcm_stereo.wav", 9.003f, DurationTest.TOLERANCE);
     }
 
 

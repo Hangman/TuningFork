@@ -20,6 +20,7 @@ import java.nio.ShortBuffer;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.SOFTBlockAlignment;
+import org.lwjgl.openal.SOFTBufferLengthQuery;
 import org.lwjgl.openal.SOFTLoopPoints;
 import org.lwjgl.system.MemoryStack;
 
@@ -88,7 +89,7 @@ public class SoundBuffer implements Disposable {
 
         this.bufferId = this.generateBufferAndUpload(pcm, channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
         this.samplesPerChannel = this.calculateSamplesPerChannel(pcmSize * 2, bitsPerSample, channels);
-        this.duration = this.calculateDuration(pcmSize * 2, bitsPerSample, channels, sampleRate);
+        this.duration = this.fetchDuration();
     }
 
 
@@ -120,7 +121,7 @@ public class SoundBuffer implements Disposable {
 
         this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
         this.samplesPerChannel = this.calculateSamplesPerChannel(pcm.length, bitsPerSample, channels);
-        this.duration = this.calculateDuration(pcm.length, bitsPerSample, channels, sampleRate);
+        this.duration = this.fetchDuration();
     }
 
 
@@ -152,11 +153,8 @@ public class SoundBuffer implements Disposable {
     }
 
 
-    protected float calculateDuration(int bytes, int bitsPerSample, int channels, int sampleRate) {
-        // FIXME: fetch duration from OpenAL using AL_SOFT_buffer_length_query extension when the bindings got added https://github.com/LWJGL/lwjgl3/issues/885
-        // the current calculation is okay but not 100% precise with compressed audio data
-        final float samplesPerChannel = bytes / (bitsPerSample / 8f * channels);
-        return samplesPerChannel / sampleRate;
+    protected float fetchDuration() {
+        return AL10.alGetBufferf(this.bufferId, SOFTBufferLengthQuery.AL_SEC_LENGTH_SOFT);
     }
 
 
