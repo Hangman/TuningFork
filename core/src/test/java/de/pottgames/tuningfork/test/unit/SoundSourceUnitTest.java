@@ -84,16 +84,16 @@ public class SoundSourceUnitTest {
     public void testPitch() {
         Assertions.assertEquals(this.source.getPitch(), 1f);
         this.source.setPitch(0f);
-        Assertions.assertEquals(this.source.getPitch(), 0.5f);
+        Assertions.assertEquals(this.source.getPitch(), 0f);
 
         this.source.setPitch(2f);
         Assertions.assertEquals(this.source.getPitch(), 2f);
 
         this.source.setPitch(3f);
-        Assertions.assertEquals(this.source.getPitch(), 2f);
+        Assertions.assertEquals(this.source.getPitch(), 3f);
 
         this.source.setPitch(-1f);
-        Assertions.assertEquals(this.source.getPitch(), 0.5f);
+        Assertions.assertEquals(this.source.getPitch(), 0f);
 
         this.source.setPitch(0.5f);
         Assertions.assertEquals(this.source.getPitch(), 0.5f);
