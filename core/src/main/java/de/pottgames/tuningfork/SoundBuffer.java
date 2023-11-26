@@ -236,6 +236,21 @@ public class SoundBuffer implements Disposable {
 
 
     /**
+     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
+     * past will make the source play immediately.
+     *
+     * @param time the absolute time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
+     */
+    public void playAtTime(long time) {
+        if (time < 0) {
+            this.logger.error(this.getClass(), "Invalid time parameter on playAtTime(): " + time);
+            return;
+        }
+        this.audio.playAtTime(this, time);
+    }
+
+
+    /**
      * Plays a sound with an effect.
      *
      * @param effect

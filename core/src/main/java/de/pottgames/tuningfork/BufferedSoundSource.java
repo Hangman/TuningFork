@@ -14,6 +14,7 @@ package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTSourceStartDelay;
 
 import com.badlogic.gdx.math.Vector3;
 
@@ -61,6 +62,25 @@ public class BufferedSoundSource extends SongSource {
     public void play() {
         if (this.obtained) {
             super.play();
+        }
+    }
+
+
+    /**
+     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
+     * past will make the source play immediately. The source will be in playing-state while waiting for the start time to be reached. A call to {@link #play()}
+     * will not play the sound immediately anymore. In order to delete the play-at-time, call {@link #stop()}.
+     *
+     * @param time the time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
+     */
+    public void playAtTime(long time) {
+        if (time < 0) {
+            this.logger.error(this.getClass(), "Invalid time parameter: " + time);
+            return;
+        }
+
+        if (this.obtained) {
+            SOFTSourceStartDelay.alSourcePlayAtTimeSOFT(this.sourceId, time);
         }
     }
 

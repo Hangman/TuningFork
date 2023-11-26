@@ -144,6 +144,7 @@ public class AudioDevice {
         this.checkRequiredExtension(ALExtension.ALC_SOFT_OUTPUT_MODE);
         this.checkRequiredExtension(ALExtension.AL_EXT_SOURCE_RADIUS);
         this.checkRequiredExtension(ALExtension.AL_SOFT_BUFFER_LENGTH_QUERY);
+        this.checkRequiredExtension(ALExtension.AL_SOFT_SOURCE_START_DELAY);
 
         // LOG OUTPUT LIMITER STATE
         if (config.isEnableOutputLimiter()) {
