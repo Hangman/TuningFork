@@ -51,16 +51,15 @@ public class ProceduralSoundTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        final int queuedBuffers = this.pcmSource.queuedBuffers();
+        // this isn't necessary, just to demonstrate how to check for an underflow
+        if (!this.pcmSource.isPlaying()) {
+            System.out.println("pcm underflow, resuming playback");
+        }
 
         // we're playing a song on repeat, so we want to make sure there's always some samples in the queue (prevent underflow)
+        final int queuedBuffers = this.pcmSource.queuedBuffers();
         for (int i = 0; i < 3 - queuedBuffers; i++) {
             this.queueNextNote();
-
-            // this isn't necessary, just to demonstrate how to check for an underflow
-            if (!this.pcmSource.isPlaying()) {
-                System.out.println("pcm underflow, resuming playback");
-            }
 
             // this is best practice:
             // if an underflow happened for some reason, the source is in stopped-state and won't continue playing without this call
@@ -73,13 +72,13 @@ public class ProceduralSoundTest extends ApplicationAdapter {
         // fetch the next note from the song
         final SongNote songNote = this.song[this.noteIndex];
 
-        // fill the array with samples of the next note in the song
+        // sample count for this note
         final int sampleCount = (int) (ProceduralSoundTest.SAMPLES_PER_BEAT * songNote.durationFactor);
 
+        // fill the array with samples
         if (songNote.note == Note.SILENCE) {
             Arrays.fill(this.pcm, 0f);
         } else {
-            // fill the array with samples of the note
             switch (ProceduralSoundTest.WAVEFORM) {
                 case SINE:
                     this.createSineTonePcm(songNote.note, this.pcm, sampleCount);
@@ -89,7 +88,7 @@ public class ProceduralSoundTest extends ApplicationAdapter {
                     break;
             }
 
-            // to prevent popping sounds, apply some fading at the beginning and the end of the array
+            // to prevent audio cracks, apply some fading at the beginning and the end
             this.fadeInAndOut(this.pcm, sampleCount);
         }
 
