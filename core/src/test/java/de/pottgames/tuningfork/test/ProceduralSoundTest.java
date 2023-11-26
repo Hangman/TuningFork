@@ -24,65 +24,97 @@ import de.pottgames.tuningfork.PcmFormat;
 import de.pottgames.tuningfork.PcmSoundSource;
 
 public class ProceduralSoundTest extends ApplicationAdapter {
-    private static final int      SAMPLE_RATE = 44100;
-    private static final int      NPM         = 30;
-    private static final WaveForm WAVEFORM    = WaveForm.SINE;
+    private static final float[]  FADE_FACTORS     = new float[] { 1f, 0.975f, 0.95f, 0.925f, 0.9f, 0.875f, 0.85f, 0.825f, 0.8f, 0.775f, 0.75f, 0.725f, 0.7f,
+            0.675f, 0.65f, 0.625f, 0.6f, 0.575f, 0.55f, 0.525f, 0.5f, 0.475f, 0.45f, 0.425f, 0.4f, 0.375f, 0.35f, 0.325f, 0.3f, 0.275f, 0.25f, 0.225f, 0.2f,
+            0.175f, 0.15f, 0.125f, 0.1f, 0.075f, 0.05f, 0.025f, 0f };
+    private static final int      SAMPLE_RATE      = 44100;
+    private static final int      NPM              = 30;
+    private static final int      SAMPLES_PER_BEAT = ProceduralSoundTest.SAMPLE_RATE * 60 / ProceduralSoundTest.NPM;
+    private static final WaveForm WAVEFORM         = WaveForm.SINE;
     private Audio                 audio;
     private PcmSoundSource        pcmSource;
-    private final byte[]          pcm         = new byte[ProceduralSoundTest.SAMPLE_RATE];
+    private final float[]         pcm              = new float[ProceduralSoundTest.SAMPLE_RATE];
     private SongNote[]            song;
-    private int                   noteIndex   = 0;
-    private long                  nextNoteTime;
+    private int                   noteIndex        = 0;
 
 
     @Override
     public void create() {
         this.audio = Audio.init();
-        this.pcmSource = new PcmSoundSource(ProceduralSoundTest.SAMPLE_RATE, PcmFormat.MONO_8_BIT);
+        this.pcmSource = new PcmSoundSource(ProceduralSoundTest.SAMPLE_RATE, PcmFormat.FLOAT_MONO_32_BIT);
         this.pcmSource.setVolume(0.5f);
         this.song = SongGenerator.createImperialMarch();
+        this.queueNextNote();
+        this.pcmSource.play();
     }
 
 
     @Override
     public void render() {
-        final long millis = System.currentTimeMillis();
+        final int queuedBuffers = this.pcmSource.queuedBuffers();
 
-        if (millis >= this.nextNoteTime) {
-            final SongNote songNote = this.song[this.noteIndex];
+        // we're playing a song on repeat, so we want to make sure there's always some samples in the queue (prevent underflow)
+        for (int i = 0; i < 3 - queuedBuffers; i++) {
+            this.queueNextNote();
+
+            // this isn't necessary, just to demonstrate how to check for an underflow
+            if (!this.pcmSource.isPlaying()) {
+                System.out.println("pcm underflow, resuming playback");
+            }
+
+            // this is best practice:
+            // if an underflow happened for some reason, the source is in stopped-state and won't continue playing without this call
+            this.pcmSource.play();
+        }
+    }
+
+
+    private void queueNextNote() {
+        // fetch the next note from the song
+        final SongNote songNote = this.song[this.noteIndex];
+
+        // fill the array with samples of the next note in the song
+        final int sampleCount = (int) (ProceduralSoundTest.SAMPLES_PER_BEAT * songNote.durationFactor);
+
+        if (songNote.note == Note.SILENCE) {
+            Arrays.fill(this.pcm, 0f);
+        } else {
+            // fill the array with samples of the note
             switch (ProceduralSoundTest.WAVEFORM) {
                 case SINE:
-                    this.createSineTonePcm(songNote.note, this.pcm);
+                    this.createSineTonePcm(songNote.note, this.pcm, sampleCount);
                     break;
                 case SQUARE:
-                    this.createSquareTonePcm(songNote.note, this.pcm);
+                    this.createSquareTonePcm(songNote.note, this.pcm, sampleCount);
                     break;
             }
-            final int samplesPerBeat = ProceduralSoundTest.SAMPLE_RATE * 60 / ProceduralSoundTest.NPM;
-            this.pcmSource.queueSamples(this.pcm, 0, (int) (samplesPerBeat * songNote.durationFactor));
-            this.pcmSource.play();
 
-            this.nextNoteTime = millis + (long) (60f / ProceduralSoundTest.NPM * 1000f * songNote.durationFactor);
-            this.noteIndex++;
-            if (this.noteIndex >= this.song.length) {
-                this.noteIndex = 0;
-            }
+            // to prevent popping sounds, apply some fading at the beginning and the end of the array
+            this.fadeInAndOut(this.pcm, sampleCount);
         }
 
+        // finally queue the samples on the source
+        this.pcmSource.queueSamples(this.pcm, 0, sampleCount);
+
+        // and prepare for the next call to this method
+        this.noteIndex++;
+        if (this.noteIndex >= this.song.length) {
+            this.noteIndex = 0;
+        }
     }
 
 
-    private void createSineTonePcm(Note note, byte[] target) {
+    private void createSineTonePcm(Note note, float[] target, int limit) {
         if (note == Note.SILENCE) {
-            Arrays.fill(target, (byte) 128);
+            Arrays.fill(target, 0f);
             return;
         }
 
         final float samplesPerCycle = ProceduralSoundTest.SAMPLE_RATE / note.getFrequency();
         float cycleCounter = 0f;
-        for (int i = 0; i < target.length; i++) {
+        for (int i = 0; i < limit; i++) {
             final float cycleProgress = cycleCounter / samplesPerCycle;
-            target[i] = (byte) MathUtils.clamp(128 + 128 * MathUtils.sin(2f * MathUtils.PI * cycleProgress), 0, 255);
+            target[i] = MathUtils.sin(MathUtils.PI2 * cycleProgress);
             cycleCounter++;
             if (cycleCounter >= samplesPerCycle) {
                 cycleCounter = 0f;
@@ -91,21 +123,36 @@ public class ProceduralSoundTest extends ApplicationAdapter {
     }
 
 
-    private void createSquareTonePcm(Note note, byte[] target) {
+    private void createSquareTonePcm(Note note, float[] target, int limit) {
         if (note == Note.SILENCE) {
-            Arrays.fill(target, (byte) 128);
+            Arrays.fill(target, 0f);
             return;
         }
 
         final float samplesPerCycle = ProceduralSoundTest.SAMPLE_RATE / note.getFrequency();
         float cycleCounter = 0f;
-        for (int i = 0; i < target.length; i++) {
+        for (int i = 0; i < limit; i++) {
             final float cycleProgress = cycleCounter / samplesPerCycle;
-            target[i] = (byte) (cycleProgress < 0.5f ? 0 : 255);
+            target[i] = cycleProgress < 0.5f ? -1f : 1f;
             cycleCounter++;
             if (cycleCounter >= samplesPerCycle) {
                 cycleCounter = 0f;
             }
+        }
+    }
+
+
+    private void fadeInAndOut(float[] target, int limit) {
+        // flatten the samples at the beginning to prevent popping sounds
+        for (int i = 0; i < ProceduralSoundTest.FADE_FACTORS.length; i++) {
+            target[i] *= ProceduralSoundTest.FADE_FACTORS[ProceduralSoundTest.FADE_FACTORS.length - 1 - i];
+        }
+
+        // flatten the samples at the end to prevent popping sounds
+        int fadeIndex = ProceduralSoundTest.FADE_FACTORS.length - 1;
+        for (int i = limit - 1; i > limit - ProceduralSoundTest.FADE_FACTORS.length; i--) {
+            target[i] *= ProceduralSoundTest.FADE_FACTORS[fadeIndex];
+            fadeIndex--;
         }
     }
 
