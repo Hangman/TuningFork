@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.SOFTSourceStartDelay;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -406,19 +405,15 @@ public class Audio implements Disposable {
 
 
     /**
-     * Plays the sound at the specified time. Negative values for time will fail silently. Positive values that point to the past will make the source play
-     * immediately. The source will be in playing-state while waiting for the start time to be reached.
+     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
+     * past will make the source play immediately. The source will be in playing-state while waiting for the start time to be reached.
      *
      * @param buffer
      * @param time the time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
      */
     protected void playAtTime(SoundBuffer buffer, long time) {
-        if (time < 0) {
-            return;
-        }
-
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
-        SOFTSourceStartDelay.alSourcePlayAtTimeSOFT(source.sourceId, time);
+        source.playAtTime(time);
         source.obtained = false;
     }
 
