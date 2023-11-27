@@ -85,10 +85,9 @@ public class SoundBuffer implements Disposable {
         this.audio = Audio.get();
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
-        final int pcmSize = pcm.limit();
 
         this.bufferId = this.generateBufferAndUpload(pcm, channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
-        this.samplesPerChannel = this.calculateSamplesPerChannel(pcmSize * 2, bitsPerSample, channels);
+        this.samplesPerChannel = this.fetchSamplesPerChannel();
         this.duration = this.fetchDuration();
     }
 
@@ -120,7 +119,8 @@ public class SoundBuffer implements Disposable {
         buffer.flip();
 
         this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
-        this.samplesPerChannel = this.calculateSamplesPerChannel(pcm.length, bitsPerSample, channels);
+        this.samplesPerChannel = this.fetchSamplesPerChannel();
+
         this.duration = this.fetchDuration();
     }
 
@@ -145,11 +145,8 @@ public class SoundBuffer implements Disposable {
     }
 
 
-    protected int calculateSamplesPerChannel(int bytes, int bitsPerSample, int channels) {
-        // FIXME: fetch samples per channel from OpenAL using AL_SOFT_buffer_length_query extension when the bindings got added
-        // https://github.com/LWJGL/lwjgl3/issues/885
-        // the current calculation is okay but not 100% precise with compressed audio data
-        return (int) (bytes / (bitsPerSample / 8f * channels));
+    protected int fetchSamplesPerChannel() {
+        return AL10.alGetBufferi(this.bufferId, SOFTBufferLengthQuery.AL_SAMPLE_LENGTH_SOFT);
     }
 
 
