@@ -159,13 +159,13 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
 
     @Override
     public void onPlayListStart(PlayList playList) {
-        System.out.println("PlayList started");
+        System.out.println("PlayList started: " + playList);
     }
 
 
     @Override
     public void onPlayListEnd(PlayList playList) {
-        System.out.println("PlayList ended");
+        System.out.println("PlayList ended: " + playList);
     }
 
 

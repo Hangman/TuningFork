@@ -14,7 +14,9 @@ package de.pottgames.tuningfork.jukebox;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
+import de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType;
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
 import de.pottgames.tuningfork.jukebox.playlist.PlayListProvider;
 import de.pottgames.tuningfork.jukebox.playlist.ThemePlayListProvider;
@@ -43,13 +45,13 @@ public class JukeBox {
     protected Interpolation softStopFadeCurve;
     protected float         softStopFadeStartVolume;
 
-    protected Song     eventSongStart;
-    protected Song     eventSongEnd;
-    protected PlayList eventPlayListStart;
-    protected PlayList eventPlayListEnd;
-    protected boolean  eventJukeBoxEnd;
-    protected boolean  eventJukeBoxStart;
-    protected boolean  eventJukeBoxPause;
+    protected Pool<JukeBoxEvent>  eventPool    = new Pool<JukeBoxEvent>(7 * 6) {
+                                                   @Override
+                                                   protected JukeBoxEvent newObject() {
+                                                       return new JukeBoxEvent();
+                                                   }
+                                               };
+    protected Array<JukeBoxEvent> eventHistory = new Array<>();
 
 
     /**
@@ -87,7 +89,9 @@ public class JukeBox {
             }
         } else {
             this.resetSoftStop(true);
-            this.eventSongEnd = this.currentSong;
+            if (this.currentSong != null) {
+                this.pushEvent(JukeBoxEventType.SONG_END, this.currentSong);
+            }
             this.nextSong();
         }
 
@@ -154,7 +158,7 @@ public class JukeBox {
      */
     public void play() {
         this.stopped = false;
-        this.eventJukeBoxStart = true;
+        this.pushEvent(JukeBoxEventType.JUKEBOX_START);
         if (this.currentSong != null) {
             this.currentSong.getSource().play();
         }
@@ -166,7 +170,7 @@ public class JukeBox {
      */
     public void pause() {
         this.stopped = true;
-        this.eventJukeBoxPause = true;
+        this.pushEvent(JukeBoxEventType.JUKEBOX_PAUSE);
         if (this.currentSong != null) {
             this.currentSong.getSource().pause();
         }
@@ -178,11 +182,11 @@ public class JukeBox {
      */
     public void stop() {
         if (!this.stopped) {
-            this.eventJukeBoxEnd = true;
+            this.pushEvent(JukeBoxEventType.JUKEBOX_END);
         }
         if (this.currentSong != null) {
             this.currentSong.getSource().stop();
-            this.eventSongEnd = this.currentSong;
+            this.pushEvent(JukeBoxEventType.SONG_END, this.currentSong);
         }
         if (this.currentPlayList != null) {
             this.currentPlayList.reset();
@@ -281,13 +285,10 @@ public class JukeBox {
         this.currentPlayList = null;
         this.currentSong = null;
         this.observer.clear();
-        this.eventJukeBoxEnd = false;
-        this.eventJukeBoxPause = false;
-        this.eventJukeBoxStart = false;
-        this.eventPlayListEnd = null;
-        this.eventPlayListStart = null;
-        this.eventSongEnd = null;
-        this.eventSongStart = null;
+        for (final JukeBoxEvent event : this.eventHistory) {
+            this.eventPool.free(event);
+        }
+        this.eventHistory.clear();
     }
 
 
@@ -318,7 +319,7 @@ public class JukeBox {
                 this.currentPlayList = this.playListProvider.next();
             }
             if (this.currentPlayList != null) {
-                this.eventPlayListStart = this.currentPlayList;
+                this.pushEvent(JukeBoxEventType.PLAYLIST_START, this.currentPlayList);
             }
         }
 
@@ -334,13 +335,13 @@ public class JukeBox {
                         this.currentPlayList = this.playListProvider.next();
                     }
                     if (this.currentPlayList == null) {
-                        this.eventPlayListEnd = lastPlayList;
-                        this.eventJukeBoxEnd = true;
+                        this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
+                        this.pushEvent(JukeBoxEventType.JUKEBOX_END);
                         this.stopped = true;
                         return;
                     }
-                    this.eventPlayListEnd = lastPlayList;
-                    this.eventPlayListStart = this.currentPlayList;
+                    this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
+                    this.pushEvent(JukeBoxEventType.PLAYLIST_START, this.currentPlayList);
                 }
             }
         }
@@ -355,10 +356,10 @@ public class JukeBox {
             final SongSource source = this.currentSong.getSource();
             this.fadeIn(source, this.currentSong.getSettings(), 0f);
             this.currentSong.getSource().play();
-            this.eventSongStart = this.currentSong;
+            this.pushEvent(JukeBoxEventType.SONG_START, this.currentSong);
         } else {
             this.stopped = true;
-            this.eventJukeBoxEnd = true;
+            this.pushEvent(JukeBoxEventType.JUKEBOX_END);
         }
     }
 
@@ -383,35 +384,62 @@ public class JukeBox {
     }
 
 
+    protected void pushEvent(JukeBoxEventType type) {
+        final JukeBoxEvent event = this.eventPool.obtain();
+        event.setType(type);
+        this.eventHistory.add(event);
+    }
+
+
+    protected void pushEvent(JukeBoxEventType type, Song song) {
+        if (song == null) {
+            throw new RuntimeException("song is null");
+        }
+        final JukeBoxEvent event = this.eventPool.obtain();
+        event.setType(type);
+        event.setSong(song);
+        this.eventHistory.add(event);
+    }
+
+
+    protected void pushEvent(JukeBoxEventType type, PlayList playList) {
+        final JukeBoxEvent event = this.eventPool.obtain();
+        event.setType(type);
+        event.setPlayList(playList);
+        this.eventHistory.add(event);
+    }
+
+
     protected void handleEvents() {
-        if (this.eventJukeBoxStart) {
-            this.notifyJukeBoxStart();
-            this.eventJukeBoxStart = false;
+        for (final JukeBoxEvent event : this.eventHistory) {
+            switch (event.getType()) {
+                case JUKEBOX_END:
+                    this.notifyJukeBoxEnd();
+                    break;
+                case JUKEBOX_PAUSE:
+                    this.notifyJukeBoxPause();
+                    break;
+                case JUKEBOX_START:
+                    this.notifyJukeBoxStart();
+                    break;
+                case PLAYLIST_END:
+                    this.notifyPlayListEnd(event.getPlayList());
+                    break;
+                case PLAYLIST_START:
+                    this.notifyPlayListStart(event.getPlayList());
+                    break;
+                case SONG_END:
+                    this.notifySongEnd(event.getSong());
+                    break;
+                case SONG_START:
+                    this.notifySongStart(event.getSong());
+                    break;
+                case NONE:
+                    break;
+            }
+            this.eventPool.free(event);
         }
-        if (this.eventPlayListEnd != null) {
-            this.notifyPlayListEnd(this.eventPlayListEnd);
-            this.eventPlayListEnd = null;
-        }
-        if (this.eventPlayListStart != null) {
-            this.notifyPlayListStart(this.eventPlayListStart);
-            this.eventPlayListStart = null;
-        }
-        if (this.eventSongEnd != null) {
-            this.notifySongEnd(this.eventSongEnd);
-            this.eventSongEnd = null;
-        }
-        if (this.eventSongStart != null) {
-            this.notifySongStart(this.eventSongStart);
-            this.eventSongStart = null;
-        }
-        if (this.eventJukeBoxEnd) {
-            this.notifyJukeBoxEnd();
-            this.eventJukeBoxEnd = false;
-        }
-        if (this.eventJukeBoxPause) {
-            this.notifyJukeBoxPause();
-            this.eventJukeBoxPause = false;
-        }
+        this.eventHistory.clear();
     }
 
 
