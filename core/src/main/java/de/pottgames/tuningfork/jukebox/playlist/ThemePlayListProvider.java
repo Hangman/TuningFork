@@ -14,6 +14,9 @@ package de.pottgames.tuningfork.jukebox.playlist;
 
 import com.badlogic.gdx.utils.IntMap;
 
+import de.pottgames.tuningfork.Audio;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 /**
  * This provider offers {@link PlayList}s based on the currently set theme. {@link PlayList}s are not consumed/removed when fetched.<br>
  * Theme - PlayList is a 1:1 relation, you can only connect one PlayList to one theme.
@@ -22,8 +25,14 @@ import com.badlogic.gdx.utils.IntMap;
  *
  */
 public class ThemePlayListProvider implements PlayListProvider {
-    private IntMap<PlayList> lists = new IntMap<>();
-    protected int            theme;
+    private final TuningForkLogger logger;
+    private IntMap<PlayList>       lists = new IntMap<>();
+    protected int                  theme;
+
+
+    public ThemePlayListProvider() {
+        this.logger = Audio.get().getLogger();
+    }
 
 
     /**
@@ -34,6 +43,9 @@ public class ThemePlayListProvider implements PlayListProvider {
      * @return the ThemePlayListProvider for chaining
      */
     public ThemePlayListProvider setTheme(int theme) {
+        if (this.lists.get(theme) == null) {
+            this.logger.warn(this.getClass(), "There is no corresponding playlist for the selected theme: " + theme);
+        }
         this.theme = theme;
         return this;
     }
