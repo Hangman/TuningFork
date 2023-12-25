@@ -14,7 +14,9 @@ package de.pottgames.tuningfork.jukebox.playlist;
 
 import com.badlogic.gdx.utils.Array;
 
+import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.jukebox.song.Song;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
  * A {@link PlayList} is a collection of songs that can be fetched in order.
@@ -23,11 +25,17 @@ import de.pottgames.tuningfork.jukebox.song.Song;
  *
  */
 public class PlayList {
-    protected final Array<Song> songs                  = new Array<>();
-    protected int               songIndex;
-    protected boolean           playedThrough          = false;
-    protected boolean           loop                   = false;
-    protected boolean           shuffleAfterPlaytrough = false;
+    protected final TuningForkLogger logger;
+    protected final Array<Song>      songs                  = new Array<>();
+    protected int                    songIndex              = 0;
+    protected boolean                playedThrough          = false;
+    protected boolean                loop                   = false;
+    protected boolean                shuffleAfterPlaytrough = false;
+
+
+    public PlayList() {
+        this.logger = Audio.get().getLogger();
+    }
 
 
     /**
@@ -46,6 +54,11 @@ public class PlayList {
      * @return the next {@link Song} in the list
      */
     public Song nextSong() {
+        if (this.songs.isEmpty()) {
+            this.logger.warn(this.getClass(), "Requested nextSong on empty PlayList: " + this);
+            return null;
+        }
+
         final Song song = this.songs.get(this.songIndex);
         this.songIndex++;
         if (this.songIndex >= this.songs.size) {
