@@ -324,25 +324,20 @@ public class JukeBox {
         }
 
         // SET TO NEXT PLAYLIST OR LOOP CURRENT PLAYLIST
-        if (this.currentPlayList != null) {
-            if (this.currentPlayList.isPlayedThrough()) {
-                if (!this.playListProvider.hasNext() && this.currentPlayList.isLoop()) {
-                    this.currentPlayList.reset();
-                } else {
-                    final PlayList lastPlayList = this.currentPlayList;
-                    this.currentPlayList = null;
-                    if (this.playListProvider.hasNext()) {
-                        this.currentPlayList = this.playListProvider.next();
-                    }
-                    if (this.currentPlayList == null) {
-                        this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
-                        this.pushEvent(JukeBoxEventType.JUKEBOX_END);
-                        this.stopped = true;
-                        return;
-                    }
+        if (this.currentPlayList != null && this.currentPlayList.isPlayedThrough()) {
+            if (!this.playListProvider.hasNext() && this.currentPlayList.isLoop()) {
+                this.currentPlayList.reset();
+            } else {
+                final PlayList lastPlayList = this.currentPlayList;
+                this.currentPlayList = this.playListProvider.hasNext() ? this.playListProvider.next() : null;
+                if (this.currentPlayList == null) {
                     this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
-                    this.pushEvent(JukeBoxEventType.PLAYLIST_START, this.currentPlayList);
+                    this.pushEvent(JukeBoxEventType.JUKEBOX_END);
+                    this.stopped = true;
+                    return;
                 }
+                this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
+                this.pushEvent(JukeBoxEventType.PLAYLIST_START, this.currentPlayList);
             }
         }
 
