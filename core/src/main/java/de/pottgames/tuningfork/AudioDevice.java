@@ -495,7 +495,6 @@ public class AudioDevice {
                 this.contextAttributes = oldAttributes;
                 this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
                 return;
-
             }
             this.hrtfEnabled = false;
             this.logger.info(this.getClass(), "HRTF disabled.");
