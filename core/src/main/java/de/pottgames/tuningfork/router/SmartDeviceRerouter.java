@@ -25,9 +25,8 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.misc.Objects;
 
 /**
- * <b>Warning</b>: This is an experimental router that has not been tested on all platforms and OpenAL backends. Use at your own risk.<br>
- * The SmartDeviceRerouter checks every {@link #checkInterval} milliseconds whether the connection to the audio device still exists and whether it is the
- * optimal connection. If not, it tries to establish a connection with the following prioritization:<br>
+ * The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still exists and whether it is the optimal
+ * connection. If not, it tries to establish a connection with the following prioritization:<br>
  * <ul>
  * <li>desired device</li>
  * <li>current default device</li>
@@ -39,7 +38,6 @@ import de.pottgames.tuningfork.misc.Objects;
  * @author Matthias
  *
  */
-@SuppressWarnings("javadoc")
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
     /**
      * Defines how often the background thread will check the connection and try to reconnect to audio devies.
