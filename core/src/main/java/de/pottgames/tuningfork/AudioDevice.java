@@ -470,6 +470,11 @@ public class AudioDevice {
      * Disables hrtf on this device.
      */
     public void disableHrtf() {
+        if (!this.isHrtfSupported()) {
+            this.logger.warn(this.getClass(), "HRTF is not supported by this device and was never enabled.");
+            return;
+        }
+
         if (this.isHrtfSupported()) {
             // SET NEW DEVICE ATTRIBUTES
             final ContextAttributes oldAttributes = this.contextAttributes;
@@ -485,15 +490,16 @@ public class AudioDevice {
             this.contextAttributes = new ContextAttributes(attributes);
 
             // RESET DEVICE
-            if (SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, attributes)) {
-                this.hrtfEnabled = false;
-                this.logger.info(this.getClass(), "HRTF disabled.");
-            } else {
+            if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, this.contextAttributes.getBuffer())) {
                 this.contextAttributes = oldAttributes;
                 this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
+                return;
             }
-        } else {
-            this.logger.warn(this.getClass(), "HRTF is not supported by this device and was therefore never enabled.");
+            this.hrtfEnabled = false;
+            this.logger.info(this.getClass(), "HRTF disabled.");
+            if (this.deviceRerouter != null) {
+                this.deviceRerouter.updateContextAttributes(this.contextAttributes);
+            }
         }
     }
 
