@@ -84,7 +84,7 @@ public class QoaLoader {
 
 
     /**
-     * Loads a wav file in reverse into a {@link SoundBuffer}.
+     * Loads a qoa file in reverse into a {@link SoundBuffer}.
      *
      * @param file
      *
