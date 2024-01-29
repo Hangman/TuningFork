@@ -83,8 +83,11 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
             case AIFF:
                 this.asset = reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
                 break;
+            case QOA:
+                this.asset = reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
+                break;
             default:
-                throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac, mp3, aiff and wav files are supported.");
+                throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac, mp3, aiff, wav and qoa files are supported.");
         }
     }
 

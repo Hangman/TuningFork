@@ -22,7 +22,7 @@ import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.misc.ExperimentalFeature;
 
 public enum SoundFileType {
-    OGG, WAV, FLAC, MP3, AIFF;
+    OGG, WAV, FLAC, MP3, AIFF, QOA;
 
 
     /**
@@ -48,6 +48,9 @@ public enum SoundFileType {
         }
         if ("aiff".equalsIgnoreCase(fileExtension) || "aif".equalsIgnoreCase(fileExtension) || "aifc".equalsIgnoreCase(fileExtension)) {
             return AIFF;
+        }
+        if ("qoa".equalsIgnoreCase(fileExtension)) {
+            return QOA;
         }
 
         return null;
@@ -88,6 +91,9 @@ public enum SoundFileType {
         }
         if (SoundFileType.isMp3File(file)) {
             return MP3;
+        }
+        if (SoundFileType.isQoaHeader(streamData)) {
+            return QOA;
         }
 
         return null;
@@ -154,6 +160,21 @@ public enum SoundFileType {
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * Checks if the provided byte array represents a QOA header.
+     *
+     * @param header The byte array containing the header data to be checked.
+     *
+     * @return true if the header represents a QOA file, false otherwise.
+     */
+    public static boolean isQoaHeader(byte[] header) {
+        if (header.length < 4) {
+            return false;
+        }
+        return header[0] == 'q' && header[1] == 'o' && header[2] == 'a' && header[3] == 'f';
     }
 
 

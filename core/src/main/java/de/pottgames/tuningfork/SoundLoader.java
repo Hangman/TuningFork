@@ -96,6 +96,8 @@ public abstract class SoundLoader {
                     return reverse ? Mp3Loader.loadReverse(file) : Mp3Loader.load(file);
                 case AIFF:
                     return reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
+                case QOA:
+                    return reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
             }
         }
 

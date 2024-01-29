@@ -120,4 +120,32 @@ public class Util {
         return offset;
     }
 
+
+    /**
+     * Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long value using big-endian byte order.
+     *
+     * @param source The source byte array.
+     * @param offset The starting offset in the source array.
+     *
+     * @return The long value converted from the specified bytes in big-endian order.
+     */
+    public static long longOfBigEndianBytes(byte[] source, int offset) {
+        return (source[offset] & 0xFFL) << 56 | (source[offset + 1] & 0xFFL) << 48 | (source[offset + 2] & 0xFFL) << 40 | (source[offset + 3] & 0xFFL) << 32
+                | (source[offset + 4] & 0xFFL) << 24 | (source[offset + 5] & 0xFFL) << 16 | (source[offset + 6] & 0xFFL) << 8 | source[offset + 7] & 0xFFL;
+    }
+
+
+    /**
+     * Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into a long value representing an unsigned integer
+     * using big-endian byte order.
+     *
+     * @param source The source byte array.
+     * @param offset The starting offset in the source array.
+     *
+     * @return The long value representing the unsigned integer from the specified bytes in big-endian order.
+     */
+    public static long uIntOfBigEndianBytes(byte[] source, int offset) {
+        return (source[offset] & 0xFFL) << 24 | (source[offset + 1] & 0xFFL) << 16 | (source[offset + 2] & 0xFFL) << 8 | source[offset + 3] & 0xFFL;
+    }
+
 }

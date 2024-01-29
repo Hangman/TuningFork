@@ -35,6 +35,7 @@ import de.pottgames.tuningfork.decoder.AudioStream;
 import de.pottgames.tuningfork.decoder.FlacInputStream;
 import de.pottgames.tuningfork.decoder.Mp3InputStream;
 import de.pottgames.tuningfork.decoder.OggInputStream;
+import de.pottgames.tuningfork.decoder.QoaInputStream;
 import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
@@ -539,6 +540,8 @@ public class StreamedSoundSource extends SongSource implements Disposable {
                     return new Mp3InputStream(file);
                 case AIFF:
                     return new AiffInputStream(file);
+                case QOA:
+                    return new QoaInputStream(file);
             }
         }
 
