@@ -15,8 +15,6 @@ package de.pottgames.tuningfork.decoder;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkException;
 import de.pottgames.tuningfork.decoder.util.Util;
@@ -82,15 +80,11 @@ public class QoaDecoder {
         this.bufferCursor = 0;
         Util.readAll(this.stream, this.currentFrameHeader.data, 8);
         final int channels = this.currentFrameHeader.channels();
-        final int sampleRate = this.currentFrameHeader.sampleRate();
         final int samples = this.currentFrameHeader.samplesPerChannel();
         final int frameSize = this.currentFrameHeader.frameSize();
 
-        if (!firstFrame) {
-            if (sampleRate != this.sampleRate || channels != this.channels) {
-                throw new TuningForkException("Variable samplerate/channels not supported");
-            }
-        }
+        // Here it would be nice to check whether this frame still has the same sample rate and number of channels,
+        // but we are optimizing for performance, not data validity.
 
         final int sliceDataSize = frameSize - 8 - 4 * 4 * channels;
         final int numSlices = sliceDataSize / 8;
@@ -118,19 +112,35 @@ public class QoaDecoder {
         }
 
         for (int sampleIndex = 0; sampleIndex < samples; sampleIndex += 20) {
+            final int sliceStartBase = sampleIndex * channels;
             for (int channel = 0; channel < channels; channel++) {
                 long slice = Util.longOfBigEndianBytes(this.rawFrameData, cursor);
                 cursor += 8;
 
                 final int scaleFactor = (int) (slice >> 60 & 0xF);
-                final int sliceStart = sampleIndex * channels + channel;
-                final int sliceEnd = MathUtils.clamp(sampleIndex + 20, 0, samples) * channels + channel;
+                final int sliceStart = sliceStartBase + channel;
+                final int sliceEnd = Util.limit(sampleIndex + 20, samples) * channels + channel;
 
                 for (int si = sliceStart; si < sliceEnd; si += channels) {
                     final int predicted = this.lmsStates[channel].predict();
                     final int quantizedResidual = (int) (slice >> 57 & 0x7);
                     final int residual = QoaDecoder.DEQUANT_LUT[scaleFactor][quantizedResidual];
-                    final short decodedSample = (short) MathUtils.clamp(predicted + residual, -32768, 32767);
+                    final int unclamped_sample = predicted + residual;
+
+                    // A faster clamp:
+                    // The first if statement here checks for both branches (v < -32768 and v > 32767) simultaneously and is very rarely taken. This helps the
+                    // CPU's branch predictor to correctly predict and skip the branch in the vast majority of cases.
+                    int clampedSample = unclamped_sample;
+                    if (unclamped_sample + 32768 > 65535) {
+                        if (unclamped_sample < -32768) {
+                            clampedSample = -32768;
+                        }
+                        if (unclamped_sample > 32767) {
+                            clampedSample = 32767;
+                        }
+                    }
+
+                    final short decodedSample = (short) clampedSample;
                     this.lmsStates[channel].update(decodedSample, residual);
                     this.buffer[si] = decodedSample;
                     slice <<= 3;

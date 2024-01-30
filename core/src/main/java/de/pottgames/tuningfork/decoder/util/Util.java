@@ -148,4 +148,20 @@ public class Util {
         return (source[offset] & 0xFFL) << 24 | (source[offset + 1] & 0xFFL) << 16 | (source[offset + 2] & 0xFFL) << 8 | source[offset + 3] & 0xFFL;
     }
 
+
+    /**
+     * Clamps a value to the given limit.
+     *
+     * @param value
+     * @param limit
+     *
+     * @return the result
+     */
+    public static int limit(int value, int limit) {
+        if (value > limit) {
+            return limit;
+        }
+        return value;
+    }
+
 }
