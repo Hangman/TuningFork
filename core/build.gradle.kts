@@ -2,6 +2,7 @@ val gdxVersion: String by project
 val jmhInstanceVersion: String by project
 val jmhPluginVersion: String by project
 val junitJupiterVersion: String by project
+val junitJupiterPlatformLauncherVersion: String by project
 val flacLibraryJavaVersion: String by project
 
 buildscript {
@@ -37,7 +38,7 @@ dependencies {
     testImplementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
     testImplementation("com.badlogicgames.gdx:gdx-platform:${gdxVersion}:natives-desktop")
     testImplementation("com.badlogicgames.gdx:gdx:${gdxVersion}")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:${junitJupiterPlatformLauncherVersion}")
 
     jmh("org.openjdk.jmh:jmh-core:${jmhInstanceVersion}")
     jmh("org.openjdk.jmh:jmh-generator-annprocess:${jmhInstanceVersion}")
