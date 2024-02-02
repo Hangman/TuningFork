@@ -37,7 +37,7 @@ dependencies {
     testImplementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
     testImplementation("com.badlogicgames.gdx:gdx-platform:${gdxVersion}:natives-desktop")
     testImplementation("com.badlogicgames.gdx:gdx:${gdxVersion}")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.2")
 
     jmh("org.openjdk.jmh:jmh-core:${jmhInstanceVersion}")
     jmh("org.openjdk.jmh:jmh-generator-annprocess:${jmhInstanceVersion}")
