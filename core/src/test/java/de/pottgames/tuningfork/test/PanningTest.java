@@ -32,7 +32,6 @@ public class PanningTest extends ApplicationAdapter {
     @Override
     public void create() {
         this.audio = Audio.init();
-
         this.sound = SoundLoader.load(Gdx.files.internal("rhythm.wav"));
         this.soundDuration = this.sound.getDuration() * 1000f;
     }
@@ -43,6 +42,7 @@ public class PanningTest extends ApplicationAdapter {
         if (System.currentTimeMillis() > this.soundPlayStartTime + (long) this.soundDuration) {
             this.left = !this.left;
             this.playSound(this.left ? -1f : 1f);
+            System.out.println(this.left ? "left" : "right");
         }
     }
 
@@ -56,8 +56,6 @@ public class PanningTest extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.sound.dispose();
-
-        // always dispose Audio last
         this.audio.dispose();
     }
 
