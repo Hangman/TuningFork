@@ -26,16 +26,14 @@ import java.io.IOException;
 
 /**
  * This class can be used to load {@link SoundBuffer}s asynchronously. Don't forget to tell your
- * {@link com.badlogic.gdx.assets.AssetManager AssetManager} about
- * this loader.
+ * {@link com.badlogic.gdx.assets.AssetManager AssetManager} about this loader.
  *
  * @author Matthias
- *
  */
 public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, SoundBufferLoaderParameter> {
     @SuppressWarnings("rawtypes")
-    private final Array<AssetDescriptor> dependencies = new Array<>();
-    private volatile SoundBuffer         asset;
+    private final    Array<AssetDescriptor> dependencies = new Array<>();
+    private volatile SoundBuffer            asset;
 
 
     public SoundBufferLoader(FileHandleResolver resolver) {
@@ -70,6 +68,10 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
                 // ignore
             }
         }
+        if (type == null) {
+            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension +
+                                                 "'. Only ogg, flac, mp3, aiff, wav and qoa files are supported.");
+        }
         switch (type) {
             case FLAC:
                 this.asset = reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);
@@ -89,9 +91,6 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
             case QOA:
                 this.asset = reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
                 break;
-            default:
-                throw new TuningForkRuntimeException("Unsupported file '" + fileExtension +
-                                                     "'. Only ogg, flac, mp3, aiff, wav and qoa files are supported.");
         }
     }
 
@@ -112,12 +111,11 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
         public boolean reverse = false;
 
         /**
-         * A custom FileHandle object that can be set to specify an alternative file path for the asset.<br>
-         * If this is set, this path takes priority over the file name String given to the load function of the asset
-         * manager.<br>
+         * A custom FileHandle object that can be set to specify an alternative file path for the asset.<br> If this is
+         * set, this path takes priority over the file name String given to the load function of the asset manager.<br>
          * You can give the asset manager load method an arbitrary String that is just used to identify the asset, it
-         * must not point to the real file.<br>
-         * This is useful when multiple instances of the same asset need to be loaded with different configurations.
+         * must not point to the real file.<br> This is useful when multiple instances of the same asset need to be
+         * loaded with different configurations.
          */
         public FileHandle file;
 

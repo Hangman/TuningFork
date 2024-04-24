@@ -327,7 +327,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             // RESTORE SOURCE STATE
             if (filledBufferCount > 0 && playing) {
                 AL10.alSourcePlay(this.sourceId);
-            } else if (filledBufferCount > 0 && !playing && !stopped) {
+            } else if (filledBufferCount > 0 && !stopped) {
                 AL10.alSourcePlay(this.sourceId);
                 AL10.alSourcePause(this.sourceId);
             } else if (playing) {

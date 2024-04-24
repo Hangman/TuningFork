@@ -13,7 +13,7 @@
 
 package de.pottgames.tuningfork;
 
-enum ALExtension {
+public enum ALExtension {
     ALC_ENUMERATE_ALL_EXT("ALC_ENUMERATE_ALL_EXT", true),
     ALC_ENUMERATION_EXT("ALC_ENUMERATION_EXT", true),
     ALC_EXT_CAPTURE("ALC_EXT_CAPTURE", true),

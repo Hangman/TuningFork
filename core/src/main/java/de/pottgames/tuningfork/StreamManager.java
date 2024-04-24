@@ -178,7 +178,7 @@ public class StreamManager {
     }
 
 
-    enum TaskAction {
+    public enum TaskAction {
         PLAY, STOP, PAUSE, UPDATE, SET_PLAYBACK_POSITION, STOP_ALL, PAUSE_ALL, RESUME_ALL, DISPOSE_CALLBACK;
     }
 
