@@ -1,0 +1,11 @@
+de.pottgames.tuningfork
+de.pottgames.tuningfork.bindings
+de.pottgames.tuningfork.capture
+de.pottgames.tuningfork.decoder
+de.pottgames.tuningfork.decoder.util
+de.pottgames.tuningfork.jukebox
+de.pottgames.tuningfork.jukebox.playlist
+de.pottgames.tuningfork.jukebox.song
+de.pottgames.tuningfork.logger
+de.pottgames.tuningfork.misc
+de.pottgames.tuningfork.router
