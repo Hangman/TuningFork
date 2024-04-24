@@ -1,23 +1,20 @@
 /**
  * Copyright 2023 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
@@ -25,24 +22,27 @@ import de.pottgames.tuningfork.decoder.LawDecoder.Encoding;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class AiffInputStream implements AudioStream {
     private final InputStream      stream;
-    private AiffDecoder            decoder;
+    private       AiffDecoder      decoder;
     private final TuningForkLogger logger;
     private final FileHandle       file;
-    private int                    channels          = 0;
-    private int                    sampleRate        = 0;
-    private long                   totalSampleFrames = 0;
-    private int                    inputBitsPerSample;
-    private float                  duration          = -1f;
-    private boolean                closed            = false;
-    private String                 compressionId     = "NONE";
+    private       int              channels          = 0;
+    private       int              sampleRate        = 0;
+    private       long             totalSampleFrames = 0;
+    private       int              inputBitsPerSample;
+    private       float            duration          = -1f;
+    private       boolean          closed            = false;
+    private       String           compressionId     = "NONE";
 
 
     /**
      * Initializes a {@link AiffInputStream} from a {@link FileHandle}.
      *
-     * @param file
+     * @param file the file
      */
     public AiffInputStream(FileHandle file) {
         this.stream = file.read();
@@ -57,10 +57,10 @@ public class AiffInputStream implements AudioStream {
 
 
     /**
-     * Initializes a {@link AiffInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
-     * {@link #AiffInputStream(FileHandle)} instead to get the full functionality.
+     * Initializes a {@link AiffInputStream} from an {@link InputStream}. This stream does not support the reset
+     * function. Use {@link #AiffInputStream(FileHandle)} instead to get the full functionality.
      *
-     * @param stream
+     * @param stream the input stream
      */
     public AiffInputStream(InputStream stream) {
         this.stream = stream;
@@ -83,7 +83,8 @@ public class AiffInputStream implements AudioStream {
         final long offset = this.readUnsignedLong();
         final long blockSize = this.readUnsignedLong();
         if (blockSize > 0) {
-            this.logger.warn(this.getClass(), "This aiff file uses block-aligned sound data, which TuningFork does not fully support.");
+            this.logger.warn(this.getClass(),
+                             "This aiff file uses block-aligned sound data, which TuningFork does not fully support.");
         }
         this.skip(offset);
 
@@ -97,7 +98,7 @@ public class AiffInputStream implements AudioStream {
             inputBytesPerSample = 3;
         } else if (this.inputBitsPerSample > 8) {
             inputBytesPerSample = 2;
-        } else if (this.inputBitsPerSample <= 8) {
+        } else {
             inputBytesPerSample = 1;
         }
         if ("NONE".equalsIgnoreCase(this.compressionId)) {
@@ -126,8 +127,8 @@ public class AiffInputStream implements AudioStream {
         }
 
         if (this.decoder == null) {
-            this.throwRuntimeError(
-                    "Unsupported aiff format: bits per sample (" + this.inputBitsPerSample + ")" + ", compression type (" + this.compressionId + ")");
+            this.throwRuntimeError("Unsupported aiff format: bits per sample (" + this.inputBitsPerSample + ")" +
+                                   ", compression type (" + this.compressionId + ")");
         }
         this.decoder.setup(this.stream, dataChunkSize - 8 - offset);
     }
@@ -170,7 +171,8 @@ public class AiffInputStream implements AudioStream {
 
     private boolean readFormChunk() throws IOException {
         // FORM CHUNK ID
-        final boolean form = this.stream.read() == 'F' && this.stream.read() == 'O' && this.stream.read() == 'R' && this.stream.read() == 'M';
+        final boolean form = this.stream.read() == 'F' && this.stream.read() == 'O' && this.stream.read() == 'R' &&
+                             this.stream.read() == 'M';
         if (!form) {
             this.throwRuntimeError("Not a valid aiff file, FORM container chunk missing");
         }
@@ -199,8 +201,8 @@ public class AiffInputStream implements AudioStream {
     private int skipToChunk(char byte1, char byte2, char byte3, char byte4) throws IOException {
         int chunkSize = -1;
         while (chunkSize < 0) {
-            final char read1 = (char) this.stream.read();
-            if (read1 != byte1) {
+            final int read1 = this.stream.read();
+            if ((char) read1 != byte1) {
                 continue;
             }
             if (read1 < 0) {
@@ -305,7 +307,8 @@ public class AiffInputStream implements AudioStream {
 
 
     private long readUnsignedLong() throws IOException {
-        return (long) this.stream.read() << 24 | this.stream.read() << 16 | this.stream.read() << 8 | this.stream.read();
+        return (long) this.stream.read() << 24 | this.stream.read() << 16 | this.stream.read() << 8 |
+               this.stream.read();
     }
 
 
@@ -341,8 +344,8 @@ public class AiffInputStream implements AudioStream {
         final int byte10 = this.stream.read();
         final boolean sign = byte1 >>> 7 != 0;
         final int exponent = (byte1 & 0b01111111) << 8 | byte2;
-        final long fraction = (long) byte3 << 56L | (long) byte4 << 48 | (long) byte5 << 40 | (long) byte6 << 32 | (long) byte7 << 24 | (long) byte8 << 16
-                | (long) byte9 << 8 | byte10;
+        final long fraction = (long) byte3 << 56L | (long) byte4 << 48 | (long) byte5 << 40 | (long) byte6 << 32 |
+                              (long) byte7 << 24 | (long) byte8 << 16 | (long) byte9 << 8 | byte10;
 
         // conversion to java float
         final int floatExponent = exponent - 16383 + 127;

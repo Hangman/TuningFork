@@ -1,25 +1,29 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
 
-import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
+import java.util.Objects;
+
 /**
- * The chorus effect essentially replays the input audio accompanied by another slightly delayed version of the signal, creating a ‘doubling’ effect. This was
- * originally intended to emulate the effect of several musicians playing the same notes simultaneously, to create a thicker, more satisfying sound. To add some
- * variation to the effect, the delay time of the delayed versions of the input signal is modulated by an adjustable oscillating waveform. This causes subtle
+ * The chorus effect essentially replays the input audio accompanied by another slightly delayed version of the
+ * signal, creating a ‘doubling’ effect. This was
+ * originally intended to emulate the effect of several musicians playing the same notes simultaneously, to create a
+ * thicker, more satisfying sound. To add some
+ * variation to the effect, the delay time of the delayed versions of the input signal is modulated by an adjustable
+ * oscillating waveform. This causes subtle
  * shifts in the pitch of the delayed signals, emphasizing the thickening effect.
  *
  * @author Matthias
@@ -34,7 +38,8 @@ public class Chorus extends SoundEffectData {
 
     /**
      * Range: -180 - 180, Default: 90<br>
-     * This property controls the phase difference between the left and right LFO’s. At zero degrees the two LFOs are synchronized. Use this parameter to create
+     * This property controls the phase difference between the left and right LFO’s. At zero degrees the two LFOs are
+     * synchronized. Use this parameter to create
      * the illusion of an expanded stereo field of the output signal.
      */
     public int phase = 90;
@@ -53,16 +58,20 @@ public class Chorus extends SoundEffectData {
 
     /**
      * Range: -1.0 - 1.0, Default: 0.25<br>
-     * This property controls the amount of processed signal that is fed back to the input of the chorus effect. Negative values will reverse the phase of the
-     * feedback signal. At full magnitude the identical sample will repeat endlessly. At lower magnitudes the sample will repeat and fade out over time. Use
+     * This property controls the amount of processed signal that is fed back to the input of the chorus effect.
+     * Negative values will reverse the phase of the
+     * feedback signal. At full magnitude the identical sample will repeat endlessly. At lower magnitudes the sample
+     * will repeat and fade out over time. Use
      * this parameter to create a “cascading” chorus effect.
      */
     public float feedback = 0.25f;
 
     /**
      * Range: 0.0 - 0.016, Default: 0.016<br>
-     * This property controls the average amount of time the sample is delayed before it is played back, and with feedback, the amount of time between
-     * iterations of the sample. Larger values lower the pitch. Smaller values make the chorus sound like a flanger, but with different frequency
+     * This property controls the average amount of time the sample is delayed before it is played back, and with
+     * feedback, the amount of time between
+     * iterations of the sample. Larger values lower the pitch. Smaller values make the chorus sound like a flanger,
+     * but with different frequency
      * characteristics.
      */
     public float delay = 0.016f;
@@ -146,16 +155,18 @@ public class Chorus extends SoundEffectData {
             return false;
         }
         final Chorus other = (Chorus) obj;
-        return Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(this.depth) == Float.floatToIntBits(other.depth)
-                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback) && this.phase == other.phase
-                && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate) && this.waveForm == other.waveForm;
+        return Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay) &&
+               Float.floatToIntBits(this.depth) == Float.floatToIntBits(other.depth) &&
+               Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback) &&
+               this.phase == other.phase && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate) &&
+               this.waveForm == other.waveForm;
     }
 
 
     @Override
     public String toString() {
-        return "Chorus [waveForm=" + this.waveForm + ", phase=" + this.phase + ", rate=" + this.rate + ", depth=" + this.depth + ", feedback=" + this.feedback
-                + ", delay=" + this.delay + "]";
+        return "Chorus [waveForm=" + this.waveForm + ", phase=" + this.phase + ", rate=" + this.rate + ", depth=" +
+               this.depth + ", feedback=" + this.feedback + ", delay=" + this.delay + "]";
     }
 
 }

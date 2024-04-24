@@ -68,9 +68,11 @@ tasks {
             attributes["Implementation-Version"] = project.version
         }
     }
-}
 
-tasks {
+    javadoc {
+        options.encoding = "UTF-8"
+    }
+
     test {
         useJUnitPlatform()
         testLogging {

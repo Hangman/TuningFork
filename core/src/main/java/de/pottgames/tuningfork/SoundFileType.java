@@ -71,8 +71,6 @@ public enum SoundFileType {
         final InputStream stream = file.read();
         try {
             Util.readAll(stream, streamData, streamData.length);
-        } catch (final IOException e) {
-            throw e;
         } finally {
             StreamUtils.closeQuietly(stream);
         }

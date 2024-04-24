@@ -1,23 +1,20 @@
 /**
  * Copyright 2024 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkException;
@@ -25,25 +22,27 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * An {@link AudioStream} implementation to read qoa files.
  *
  * @author Matthias
- *
  */
 public class QoaInputStream implements AudioStream {
     private final InputStream      stream;
-    private QoaDecoder             decoder;
+    private       QoaDecoder       decoder;
     private final TuningForkLogger logger;
     private final FileHandle       file;
     private final float            duration;
-    private boolean                closed = false;
+    private       boolean          closed = false;
 
 
     /**
      * Initializes a {@link QoaInputStream} from a {@link FileHandle}.
      *
-     * @param file
+     * @param file the file handle
      */
     public QoaInputStream(FileHandle file) {
         this(file, true);
@@ -53,7 +52,7 @@ public class QoaInputStream implements AudioStream {
     /**
      * Initializes a {@link QoaInputStream} from a {@link FileHandle}.
      *
-     * @param file
+     * @param file         the file handle
      * @param forStreaming true if this will be used for streaming
      */
     public QoaInputStream(FileHandle file, boolean forStreaming) {
@@ -66,10 +65,10 @@ public class QoaInputStream implements AudioStream {
 
 
     /**
-     * Initializes a {@link QoaInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
-     * {@link #QoaInputStream(FileHandle)} instead to get the full functionality.
+     * Initializes a {@link QoaInputStream} from an {@link InputStream}. This stream does not support the reset
+     * function. Use {@link #QoaInputStream(FileHandle)} instead to get the full functionality.
      *
-     * @param stream
+     * @param stream the input stream
      */
     public QoaInputStream(InputStream stream) {
         this(stream, true);
@@ -77,10 +76,10 @@ public class QoaInputStream implements AudioStream {
 
 
     /**
-     * Initializes a {@link QoaInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
-     * {@link #QoaInputStream(FileHandle)} instead to get the full functionality.
+     * Initializes a {@link QoaInputStream} from an {@link InputStream}. This stream does not support the reset
+     * function. Use {@link #QoaInputStream(FileHandle)} instead to get the full functionality.
      *
-     * @param stream
+     * @param stream       the input stream
      * @param forStreaming true if this will be used for streaming
      */
     public QoaInputStream(InputStream stream, boolean forStreaming) {
@@ -205,4 +204,5 @@ public class QoaInputStream implements AudioStream {
             this.closed = true;
         }
     }
+
 }

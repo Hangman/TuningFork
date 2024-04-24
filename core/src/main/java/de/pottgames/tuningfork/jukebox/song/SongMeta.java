@@ -1,13 +1,14 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.jukebox.song;
@@ -15,24 +16,23 @@ package de.pottgames.tuningfork.jukebox.song;
 import com.badlogic.gdx.utils.ObjectMap;
 
 /**
- * A class that holds basic meta data to a {@link Song} like title and artist. If you need custom attributes of arbitrary types, use
- * {@link #addAttribute(Object, Object)} and {@link #getAttribute(Object)}. It is a regular map of key-value pairs.
+ * A class that holds basic meta data to a {@link Song} like title and artist. If you need custom attributes of
+ * arbitrary types, use {@link #addAttribute(Object, Object)} and {@link #getAttribute(Object)}. It is a regular map of
+ * key-value pairs.
  *
  * @author Matthias
- *
  */
 public class SongMeta {
-    protected String                  artist;
-    protected String                  title;
-    protected String                  album;
-    private ObjectMap<Object, Object> attributes;
+    protected String                    artist;
+    protected String                    title;
+    protected String                    album;
+    private   ObjectMap<Object, Object> attributes;
 
 
     /**
      * Sets the artist.
      *
-     * @param artist
-     *
+     * @param artist the artist
      * @return the SongMeta for chaining
      */
     public SongMeta setArtist(String artist) {
@@ -44,8 +44,7 @@ public class SongMeta {
     /**
      * Sets the title.
      *
-     * @param title
-     *
+     * @param title the title
      * @return the SongMeta for chaining
      */
     public SongMeta setTitle(String title) {
@@ -57,8 +56,7 @@ public class SongMeta {
     /**
      * Sets the album.
      *
-     * @param album
-     *
+     * @param album the album title
      * @return the SongMeta for chaining
      */
     public SongMeta setAlbum(String album) {
@@ -100,9 +98,8 @@ public class SongMeta {
     /**
      * Adds a custom attribute. Attributes are simple key-value pairs.
      *
-     * @param key
-     * @param value
-     *
+     * @param key   the key
+     * @param value the value
      * @return the SongMeta for chaining
      */
     public SongMeta addAttribute(Object key, Object value) {
@@ -117,8 +114,7 @@ public class SongMeta {
     /**
      * Returns the value that is connected to the given key.
      *
-     * @param key
-     *
+     * @param key the key
      * @return value
      */
     public Object getAttribute(Object key) {
@@ -131,7 +127,8 @@ public class SongMeta {
 
     @Override
     public String toString() {
-        return "SongMeta [artist=" + this.artist + ", title=" + this.title + ", album=" + this.album + ", attributes=" + this.attributes + "]";
+        return "SongMeta [artist=" + this.artist + ", title=" + this.title + ", album=" + this.album + ", attributes=" +
+               this.attributes + "]";
     }
 
 }

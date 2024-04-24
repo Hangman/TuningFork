@@ -10,7 +10,9 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
     public WavDecoder getDecoder(WavFmtChunk fmtChunk, boolean forStreaming) {
         final int inputBitsPerSample = fmtChunk.getwBitsPerSample();
         final int format = fmtChunk.getwFormatTag();
-        final int audioFormat = format == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber() ? fmtChunk.getSubFormatDataCode() : format;
+        final int audioFormat =
+                format == WavAudioFormat.WAVE_FORMAT_EXTENSIBLE.getRegNumber() ? fmtChunk.getSubFormatDataCode() :
+                        format;
         final int channels = fmtChunk.getnChannels();
         final int blockAlign = fmtChunk.getnBlockAlign();
         final int sampleRate = (int) fmtChunk.getnSamplesPerSec();
@@ -62,7 +64,9 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
     }
 
 
-    protected WavDecoder getAdpcmDecoder(final int audioFormat, final int channels, final int blockAlign, final int sampleRate, boolean forStreaming) {
+    protected WavDecoder getAdpcmDecoder(
+            final int audioFormat, final int channels, final int blockAlign, final int sampleRate,
+            boolean forStreaming) {
         if (channels < 1 || channels > 2) {
             return null;
         }

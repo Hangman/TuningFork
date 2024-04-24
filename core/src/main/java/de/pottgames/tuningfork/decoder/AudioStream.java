@@ -1,21 +1,22 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.Closeable;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamedSoundSource;
+
+import java.io.Closeable;
 
 /**
  * An audio stream interface that can be implemented to feed a {@link StreamedSoundSource}.
@@ -34,7 +35,8 @@ public interface AudioStream extends Closeable {
 
 
     /**
-     * Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new AudioStream. The AudioStream returned by
+     * Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new
+     * AudioStream. The AudioStream returned by
      * this function will be used, regardless of whether it is a new instance or the old one.
      *
      * @return an AudioStream
@@ -67,7 +69,8 @@ public interface AudioStream extends Closeable {
 
 
     /**
-     * Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that were actually read.
+     * Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that
+     * were actually read.
      *
      * @param bytes the byte array to store the bytes in
      *
@@ -85,7 +88,8 @@ public interface AudioStream extends Closeable {
 
 
     /**
-     * Returns the block size in bytes. This only applies for data that is organized in blocks like ADPCM, all other implementations should return -1.
+     * Returns the block size in bytes. This only applies for data that is organized in blocks like ADPCM, all other
+     * implementations should return -1.
      *
      * @return block size in bytes
      */
@@ -95,7 +99,8 @@ public interface AudioStream extends Closeable {
 
 
     /**
-     * Returns the block alignment in sample frames. This only applies for data that is organized in blocks like ADPCM, all other implementations should return
+     * Returns the block alignment in sample frames. This only applies for data that is organized in blocks like
+     * ADPCM, all other implementations should return
      * -1.
      *
      * @return the block size in sample frames

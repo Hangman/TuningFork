@@ -1,19 +1,19 @@
 package de.pottgames.tuningfork.decoder;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-
 public class Int24To16PcmDecoder implements WavDecoder {
-    private static final int END_OF_STREAM            = Integer.MAX_VALUE;
-    protected InputStream    stream;
-    protected long           bytesRemaining;
-    private final int        channels;
-    private final int        sampleRate;
-    private int              outputSample;
-    private long             totalOutputSamplesPerChannel;
-    private int              outputSampleFetchedBytes = 2;
+    private static final int         END_OF_STREAM            = Integer.MAX_VALUE;
+    protected            InputStream stream;
+    protected            long        bytesRemaining;
+    private final        int         channels;
+    private final        int         sampleRate;
+    private              int         outputSample;
+    private              long        totalOutputSamplesPerChannel;
+    private              int         outputSampleFetchedBytes = 2;
 
 
     public Int24To16PcmDecoder(int channels, int sampleRate) {

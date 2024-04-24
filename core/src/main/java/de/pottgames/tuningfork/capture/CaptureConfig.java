@@ -1,13 +1,14 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.capture;
@@ -20,7 +21,6 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * A class that helps configuring a {@link CaptureDevice}.
  *
  * @author Matthias
- *
  */
 public class CaptureConfig {
     private PcmFormat        pcmFormat;
@@ -45,13 +45,14 @@ public class CaptureConfig {
     /**
      * Creates a new {@link CaptureConfig} with all values specified.
      *
-     * @param deviceSpecifier
-     * @param pcmFormat
-     * @param frequency
-     * @param bufferSize
-     * @param logger
+     * @param deviceSpecifier the device name
+     * @param pcmFormat       the pcm format
+     * @param frequency       the frequency
+     * @param bufferSize      the buffer size
+     * @param logger          the TuningForkLogger
      */
-    public CaptureConfig(String deviceSpecifier, PcmFormat pcmFormat, int frequency, int bufferSize, TuningForkLogger logger) {
+    public CaptureConfig(
+            String deviceSpecifier, PcmFormat pcmFormat, int frequency, int bufferSize, TuningForkLogger logger) {
         this.deviceSpecifier = deviceSpecifier;
         this.pcmFormat = pcmFormat;
         this.frequency = frequency;
@@ -113,8 +114,7 @@ public class CaptureConfig {
     /**
      * Sets the requested pcm format for the {@link CaptureDevice}.
      *
-     * @param pcmFormat
-     *
+     * @param pcmFormat the pcm format
      * @return this
      */
     public CaptureConfig setPcmFormat(PcmFormat pcmFormat) {
@@ -124,11 +124,10 @@ public class CaptureConfig {
 
 
     /**
-     * Sets the requested frequency for the {@link CaptureDevice}. Use common values like 44100, 48000, etc. - other values might not be supported by the
-     * driver.
+     * Sets the requested frequency for the {@link CaptureDevice}. Use common values like 44100, 48000, etc. - other
+     * values might not be supported by the driver.
      *
-     * @param frequency
-     *
+     * @param frequency the frequency
      * @return this
      */
     public CaptureConfig setFrequency(int frequency) {
@@ -138,13 +137,12 @@ public class CaptureConfig {
 
 
     /**
-     * OpenAL uses a ring buffer internally to record audio data. If the buffer is full, it starts to overwrite the existing data. The buffer size defines how
-     * much audio data can be recorded before it gets overwritten.<br>
-     * <b>Note:</b> The implementation may use a larger buffer than requested if it needs to, but the implementation will set up a buffer of at least the
-     * requested size.
+     * OpenAL uses a ring buffer internally to record audio data. If the buffer is full, it starts to overwrite the
+     * existing data. The buffer size defines how much audio data can be recorded before it gets overwritten.<br>
+     * <b>Note:</b> The implementation may use a larger buffer than requested if it needs to, but the implementation
+     * will set up a buffer of at least the requested size.
      *
      * @param bufferSize in samples
-     *
      * @return this
      */
     public CaptureConfig setBufferSize(int bufferSize) {
@@ -156,8 +154,7 @@ public class CaptureConfig {
     /**
      * Sets the requested device name specifier. May be null if you want to request the default input device.
      *
-     * @param deviceSpecifier
-     *
+     * @param deviceSpecifier the device name
      * @return this
      */
     public CaptureConfig setDeviceSpecifier(String deviceSpecifier) {
@@ -169,8 +166,7 @@ public class CaptureConfig {
     /**
      * Sets the logger to use for the {@link CaptureDevice}. May be null to disable logging.
      *
-     * @param logger
-     *
+     * @param logger the TuningForkLogger
      * @return this
      */
     public CaptureConfig setLogger(TuningForkLogger logger) {

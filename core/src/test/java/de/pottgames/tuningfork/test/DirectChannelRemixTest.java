@@ -5,21 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
-import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.AudioConfig;
+import de.pottgames.tuningfork.*;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
-import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.SoundLoader;
-import de.pottgames.tuningfork.StreamedSoundSource;
 
 public class DirectChannelRemixTest extends ApplicationAdapter {
-    private static final Virtualization[] virtualizations     = { Virtualization.OFF_DROP_CHANNELS, Virtualization.OFF_REMIX_CHANNELS, Virtualization.ON };
-    private int                           virtualizationIndex = -1;
-    private Audio                         audio;
-    private SoundBuffer                   sound;
-    private StreamedSoundSource           streamedSource;
-    private boolean                       streamed            = false;
+    private static final Virtualization[]    virtualizations     =
+            {Virtualization.OFF_DROP_CHANNELS, Virtualization.OFF_REMIX_CHANNELS, Virtualization.ON};
+    private              int                 virtualizationIndex = -1;
+    private              Audio               audio;
+    private              SoundBuffer         sound;
+    private              StreamedSoundSource streamedSource;
+    private              boolean             streamed            = false;
 
 
     @Override

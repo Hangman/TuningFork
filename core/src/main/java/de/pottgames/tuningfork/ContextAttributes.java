@@ -1,8 +1,8 @@
 package de.pottgames.tuningfork;
 
-import java.nio.IntBuffer;
-
 import com.badlogic.gdx.utils.BufferUtils;
+
+import java.nio.IntBuffer;
 
 public class ContextAttributes {
     protected final IntBuffer buffer;

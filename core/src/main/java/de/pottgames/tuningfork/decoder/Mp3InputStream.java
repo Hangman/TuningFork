@@ -1,21 +1,16 @@
 package de.pottgames.tuningfork.decoder;
 
 import com.badlogic.gdx.files.FileHandle;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.BitstreamException;
-import javazoom.jl.decoder.Header;
-import javazoom.jl.decoder.MP3Decoder;
-import javazoom.jl.decoder.OutputBuffer;
+import javazoom.jl.decoder.*;
 
 /**
- * An {@link AudioStream} that decodes mp3. TuningFork doesn't officially support the mp3 file format, use at your own risk. This implementation is as open as
- * it can be, you should be able to extend it easily and make changes and improvements to your needs.
+ * An {@link AudioStream} that decodes mp3. TuningFork doesn't officially support the mp3 file format, use at your own
+ * risk. This implementation is as open as it can be, you should be able to extend it easily and make changes and
+ * improvements to your needs.
  *
  * @author Matthias
- *
  */
 public class Mp3InputStream implements AudioStream {
     protected Bitstream    bitstream;

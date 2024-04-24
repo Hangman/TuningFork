@@ -180,9 +180,9 @@ public class ImaAdpcmDecoder implements WavDecoder {
             diff += prediction.step >>> 2;
         }
         if (sign != 0) {
-            prediction.predictor -= diff;
+            prediction.predictor -= (short) diff;
         } else {
-            prediction.predictor += diff;
+            prediction.predictor += (short) diff;
         }
         prediction.predictor = MathUtils.clamp(prediction.predictor, Short.MIN_VALUE, Short.MAX_VALUE);
 

@@ -1,13 +1,14 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.jukebox;
@@ -15,7 +16,6 @@ package de.pottgames.tuningfork.jukebox;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-
 import de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType;
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
 import de.pottgames.tuningfork.jukebox.playlist.PlayListProvider;
@@ -26,38 +26,38 @@ import de.pottgames.tuningfork.jukebox.song.SongSettings.FadeType;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 
 /**
- * A music player class playing {@link Song}s from a {@link PlayList}. It's called JukeBox to avoid confusion with how libgdx uses the word 'Music'.
+ * A music player class playing {@link Song}s from a {@link PlayList}. It's called JukeBox to avoid confusion with how
+ * libgdx uses the word 'Music'.
  *
  * @author Matthias
- *
  */
 public class JukeBox {
     protected final Array<JukeBoxObserver> observer = new Array<>();
-    protected PlayList                     currentPlayList;
+    protected       PlayList               currentPlayList;
     protected final PlayListProvider       playListProvider;
-    protected Song                         currentSong;
-    protected boolean                      stopped  = true;
+    protected       Song                   currentSong;
+    protected       boolean                stopped  = true;
 
     protected boolean       softStop       = false;
-    private boolean         softStopResume = false;
+    private   boolean       softStopResume = false;
     protected long          softStopStartTime;
     protected float         softStopFadeDuration;
     protected Interpolation softStopFadeCurve;
     protected float         softStopFadeStartVolume;
 
     protected Pool<JukeBoxEvent>  eventPool    = new Pool<JukeBoxEvent>(7 * 6) {
-                                                   @Override
-                                                   protected JukeBoxEvent newObject() {
-                                                       return new JukeBoxEvent();
-                                                   }
-                                               };
+        @Override
+        protected JukeBoxEvent newObject() {
+            return new JukeBoxEvent();
+        }
+    };
     protected Array<JukeBoxEvent> eventHistory = new Array<>();
 
 
     /**
      * Creates a new JukeBox.
      *
-     * @param playListProvider
+     * @param playListProvider the playlist provider
      */
     public JukeBox(PlayListProvider playListProvider) {
         this.playListProvider = playListProvider;
@@ -135,8 +135,7 @@ public class JukeBox {
         final float fadeDuration = settings.getFadeInDuration();
         if (playbackPos < fadeDuration) {
             final float alpha = playbackPos / fadeDuration;
-            final float volume = settings.fadeVolume(FadeType.IN, alpha);
-            return volume;
+            return settings.fadeVolume(FadeType.IN, alpha);
         }
         return -1f;
     }
@@ -146,8 +145,7 @@ public class JukeBox {
         final float fadeDuration = settings.getFadeOutDuration();
         if (playbackPos > songDuration - fadeDuration) {
             final float alpha = (songDuration - playbackPos) / fadeDuration;
-            final float volume = settings.fadeVolume(FadeType.OUT, alpha);
-            return volume;
+            return settings.fadeVolume(FadeType.OUT, alpha);
         }
         return -1f;
     }
@@ -209,15 +207,12 @@ public class JukeBox {
     /**
      * Fades out the currently playing song and stops the {@link JukeBox} afterwards.<br>
      * <br>
-     * There's a couple of reasons why the {@link JukeBox} might stop early:<br>
-     * - the rest of the song is shorter than the desired fadeOutDuration<br>
-     * - the song duration is not available<br>
-     * - fadeOutCurve is null<br>
-     * - fadeOutDuration is smaller or equal 0<br>
+     * There's a couple of reasons why the {@link JukeBox} might stop early:<br> - the rest of the song is shorter than
+     * the desired fadeOutDuration<br> - the song duration is not available<br> - fadeOutCurve is null<br> -
+     * fadeOutDuration is smaller or equal 0<br>
      *
-     * @param fadeOutCurve
+     * @param fadeOutCurve    the interpolation used to fade-out
      * @param fadeOutDuration fade out duration in seconds
-     *
      * @return false if a soft stop couldn't be performed and it is stopped right away
      */
     public boolean softStop(Interpolation fadeOutCurve, float fadeOutDuration) {
@@ -251,17 +246,16 @@ public class JukeBox {
 
 
     /**
-     * Soft stops (see {@link #softStop(Interpolation, float)}), ends the current {@link PlayList} and resumes playback afterwards if possible.<br>
+     * Soft stops (see {@link #softStop(Interpolation, float)}), ends the current {@link PlayList} and resumes playback
+     * afterward if possible.<br>
      * <br>
-     * Since it may not be clear at first glance what the use cases are, here is an example:<br>
-     * The World-PlayList is running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList should begin
-     * playing.<br>
-     * This is achievable in 2 steps:<br>
-     * 1. change the theme in ThemePlayListProvider {@link ThemePlayListProvider#setTheme(int)}<br>
-     * 2. call softStopAndResume on the JukeBox
+     * Since it may not be clear at first glance what the use cases are, here is an example:<br> The World-PlayList is
+     * running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList
+     * should begin playing.<br> This is achievable in 2 steps:<br> 1. change the theme in ThemePlayListProvider
+     * {@link ThemePlayListProvider#setTheme(int)}<br> 2. call softStopAndResume on the JukeBox
      *
-     * @param fadeOutCurve
-     * @param fadeOutDuration
+     * @param fadeOutCurve    the interpolation used to fade-out
+     * @param fadeOutDuration the fade-out duration in seconds
      */
     public void softStopAndResume(Interpolation fadeOutCurve, float fadeOutDuration) {
         final boolean softStopResult = this.softStop(fadeOutCurve, fadeOutDuration);
@@ -362,7 +356,7 @@ public class JukeBox {
     /**
      * Adds an observer. See {@link JukeBoxObserver} for details.
      *
-     * @param observer
+     * @param observer the jukebox observer
      */
     public void addObserver(JukeBoxObserver observer) {
         this.observer.add(observer);
@@ -372,7 +366,7 @@ public class JukeBox {
     /**
      * Removes an observer.
      *
-     * @param observer
+     * @param observer the jukebox observer
      */
     public void removeObserver(JukeBoxObserver observer) {
         this.observer.removeValue(observer, true);

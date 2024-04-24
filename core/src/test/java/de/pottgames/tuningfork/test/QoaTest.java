@@ -6,22 +6,17 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
-import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.SoundBufferLoader;
-import de.pottgames.tuningfork.SoundLoader;
-import de.pottgames.tuningfork.StreamedSoundSource;
+import de.pottgames.tuningfork.*;
 
 public class QoaTest extends ApplicationAdapter {
-    private static final String SOUND_FILE_PATH1 = "42_accordion_melodious_phrase_stereo.qoa";
-    private static final String SOUND_FILE_PATH2 = "04_electronic_gong_400hz_mono.qoa";
-    private static final String SOUND_FILE_PATH3 = "ambience_forest_birds_mono_02.qoa";
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private SoundBuffer         asyncSound       = null;
-    private StreamedSoundSource streamedSound;
-    private AssetManager        assetManager;
+    private static final String              SOUND_FILE_PATH1 = "42_accordion_melodious_phrase_stereo.qoa";
+    private static final String              SOUND_FILE_PATH2 = "04_electronic_gong_400hz_mono.qoa";
+    private static final String              SOUND_FILE_PATH3 = "ambience_forest_birds_mono_02.qoa";
+    private              Audio               audio;
+    private              SoundBuffer         sound;
+    private              SoundBuffer         asyncSound       = null;
+    private              StreamedSoundSource streamedSound;
+    private              AssetManager        assetManager;
 
 
     @Override
@@ -71,4 +66,5 @@ public class QoaTest extends ApplicationAdapter {
         config.disableAudio(true);
         new Lwjgl3Application(new QoaTest(), config);
     }
+
 }

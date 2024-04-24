@@ -1,19 +1,19 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.jukebox.playlist;
 
 import com.badlogic.gdx.utils.Array;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.jukebox.song.Song;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -22,15 +22,14 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * A {@link PlayList} is a collection of songs that can be fetched in order.
  *
  * @author Matthias
- *
  */
 public class PlayList {
     protected final TuningForkLogger logger;
     protected final Array<Song>      songs                  = new Array<>();
-    protected int                    songIndex              = 0;
-    protected boolean                playedThrough          = false;
-    protected boolean                loop                   = false;
-    protected boolean                shuffleAfterPlaytrough = false;
+    protected       int              songIndex              = 0;
+    protected       boolean          playedThrough          = false;
+    protected       boolean          loop                   = false;
+    protected       boolean          shuffleAfterPlaytrough = false;
 
 
     public PlayList() {
@@ -41,7 +40,7 @@ public class PlayList {
     /**
      * Adds a song to the end of the list.
      *
-     * @param song
+     * @param song the song
      */
     public void addSong(Song song) {
         this.songs.add(song);
@@ -73,8 +72,8 @@ public class PlayList {
 
 
     /**
-     * Resets the index to 0, so the next call to {@link #nextSong()} will return the first song in the list. {@link #isPlayedThrough()} will return false
-     * afterwards.
+     * Resets the index to 0, so the next call to {@link #nextSong()} will return the first song in the list.
+     * {@link #isPlayedThrough()} will return false afterwards.
      */
     public void reset() {
         this.songIndex = 0;
@@ -101,9 +100,10 @@ public class PlayList {
 
 
     /**
-     * If set to true, the internal list of {@link Song}s is shuffled after a complete playthrough of this {@link PlayList}.
+     * If set to true, the internal list of {@link Song}s is shuffled after a complete play through of this
+     * {@link PlayList}.
      *
-     * @param value
+     * @param value if set to true, the playlist will be shuffled after a complete play through
      */
     public void setShuffleAfterPlaytrough(boolean value) {
         this.shuffleAfterPlaytrough = value;
@@ -113,7 +113,7 @@ public class PlayList {
     /**
      * If set to true, this {@link PlayList} indicates that it should be played on repeat.
      *
-     * @param loop
+     * @param loop true for looped playback
      */
     public void setLooping(boolean loop) {
         this.loop = loop;
@@ -132,8 +132,9 @@ public class PlayList {
 
     @Override
     public String toString() {
-        return "PlayList [songs=" + this.songs + ", songIndex=" + this.songIndex + ", playedThrough=" + this.playedThrough + ", loop=" + this.loop
-                + ", shuffleAfterPlaytrough=" + this.shuffleAfterPlaytrough + "]";
+        return "PlayList [songs=" + this.songs + ", songIndex=" + this.songIndex + ", playedThrough=" +
+               this.playedThrough + ", loop=" + this.loop + ", shuffleAfterPlaytrough=" + this.shuffleAfterPlaytrough +
+               "]";
     }
 
 }

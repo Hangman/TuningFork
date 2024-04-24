@@ -1,38 +1,41 @@
 /**
  * Copyright 2023 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.router;
-
-import java.util.List;
-
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.EnumerateAllExt;
-import org.lwjgl.openal.SOFTReopenDevice;
-import org.lwjgl.system.MemoryUtil;
 
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.misc.Objects;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.openal.SOFTReopenDevice;
+import org.lwjgl.system.MemoryUtil;
+
+import java.util.List;
 
 /**
- * The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still exists and whether it is the optimal
+ * The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still
+ * exists and whether it is the optimal
  * connection. If not, it tries to establish a connection with the following prioritization:<br>
  * <ul>
  * <li>desired device</li>
  * <li>current default device</li>
  * </ul>
- * The router is able to restore a previously lost connection to the desired device when it becomes available again. When not connected to the desired device,
- * the router will establish a connection to the default device and also keep track of it, so when the user selects a new default device in the OS, the router
+ * The router is able to restore a previously lost connection to the desired device when it becomes available again.
+ * When not connected to the desired device,
+ * the router will establish a connection to the default device and also keep track of it, so when the user selects a
+ * new default device in the OS, the router
  * will do the same accordingly.
  *
  * @author Matthias
@@ -45,11 +48,11 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     private final long checkInterval;
 
     private volatile boolean           active                 = false;
-    private long                       device;
+    private          long              device;
     private volatile ContextAttributes attributes;
     private volatile String            desiredDeviceSpecifier = null;
     private volatile String            currentDeviceSpecifier = "none";
-    private boolean                    setup                  = false;
+    private          boolean           setup                  = false;
 
 
     /**
@@ -163,7 +166,8 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
 
     private String fetchDefaultDeviceSpecifier() {
-        return Objects.requireNonNullElse(ALC10.alcGetString(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER), "none");
+        return Objects.requireNonNullElse(
+                ALC10.alcGetString(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER), "none");
     }
 
 

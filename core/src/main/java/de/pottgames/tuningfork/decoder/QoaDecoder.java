@@ -199,10 +199,10 @@ public class QoaDecoder {
 
         private void update(short sample, int residual) {
             final int delta = residual >> 4;
-            this.weights[0] += this.history[0] < 0 ? -delta : delta;
-            this.weights[1] += this.history[1] < 0 ? -delta : delta;
-            this.weights[2] += this.history[2] < 0 ? -delta : delta;
-            this.weights[3] += this.history[3] < 0 ? -delta : delta;
+            this.weights[0] += (short) (this.history[0] < 0 ? -delta : delta);
+            this.weights[1] += (short) (this.history[1] < 0 ? -delta : delta);
+            this.weights[2] += (short) (this.history[2] < 0 ? -delta : delta);
+            this.weights[3] += (short) (this.history[3] < 0 ? -delta : delta);
 
             this.history[0] = this.history[1];
             this.history[1] = this.history[2];

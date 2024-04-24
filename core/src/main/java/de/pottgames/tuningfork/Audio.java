@@ -1,44 +1,42 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
-
-import org.lwjgl.openal.AL10;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
-
 import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.AL10;
 
 /**
- * The main management and entry point of TuningFork. This class initializes the sound device and gives access to SoundSource's for advanced manual playback
- * control.
+ * The main management and entry point of TuningFork. This class initializes the sound device and gives access to
+ * SoundSource's for advanced manual playback control.
  *
  * @author Matthias
- *
  */
 public class Audio implements Disposable {
     private static Audio instance;
 
     private final boolean            nativeDecoderAvailable;
-    final StreamManager              streamManager;
-    final Filter                     publicFilter;
+    final         StreamManager      streamManager;
+    final         Filter             publicFilter;
     private final WavDecoderProvider wavDecoderProvider;
     private final SoundListener      listener;
     private final SoundSourcePool    sourcePool;
@@ -49,8 +47,8 @@ public class Audio implements Disposable {
 
 
     /**
-     * Initializes an Audio instance with the default {@link AudioConfig}. Errors are logged but exceptions are silently ignored. Call
-     * {@link Audio#initSafe(AudioConfig)} instead, if you want to handle exceptions.
+     * Initializes an Audio instance with the default {@link AudioConfig}. Errors are logged but exceptions are silently
+     * ignored. Call {@link Audio#initSafe(AudioConfig)} instead, if you want to handle exceptions.
      *
      * @return the initialized Audio instance or null on failure
      */
@@ -60,13 +58,13 @@ public class Audio implements Disposable {
 
 
     /**
-     * Initializes an Audio instance with the default {@link AudioConfig}. If you don't want to take care of exceptions, call {@link Audio#init(AudioConfig)}
-     * instead.
+     * Initializes an Audio instance with the default {@link AudioConfig}. If you don't want to take care of exceptions,
+     * call {@link Audio#init(AudioConfig)} instead.
      *
      * @return the initialized Audio instance
-     *
-     * @throws OpenDeviceException
-     * @throws UnsupportedAudioDeviceException
+     * @throws OpenDeviceException             is thrown when a device couldn't be opened
+     * @throws UnsupportedAudioDeviceException is thrown when the desired device couldn't be found or isn't a valid
+     *                                         device
      */
     public static Audio initSafe() throws OpenDeviceException, UnsupportedAudioDeviceException {
         return Audio.initSafe(new AudioConfig());
@@ -74,11 +72,10 @@ public class Audio implements Disposable {
 
 
     /**
-     * Initializes an Audio instance with the given {@link AudioConfig}. Errors are logged but exceptions are silently ignored. Call
-     * {@link Audio#initSafe(AudioConfig)} instead, if you want to handle exceptions.
+     * Initializes an Audio instance with the given {@link AudioConfig}. Errors are logged but exceptions are silently
+     * ignored. Call {@link Audio#initSafe(AudioConfig)} instead, if you want to handle exceptions.
      *
-     * @param config
-     *
+     * @param config the audio config
      * @return the initialized Audio instance or null on failure
      */
     public static Audio init(AudioConfig config) {
@@ -95,15 +92,14 @@ public class Audio implements Disposable {
 
 
     /**
-     * Initializes an Audio instance with the given {@link AudioConfig}. If you don't want to take care of exceptions, call {@link Audio#init(AudioConfig)}
-     * instead.
+     * Initializes an Audio instance with the given {@link AudioConfig}. If you don't want to take care of exceptions,
+     * call {@link Audio#init(AudioConfig)} instead.
      *
-     * @param config
-     *
+     * @param config the audio config
      * @return the initialized Audio instance
-     *
-     * @throws OpenDeviceException
-     * @throws UnsupportedAudioDeviceException
+     * @throws OpenDeviceException             is thrown when a device couldn't be opened
+     * @throws UnsupportedAudioDeviceException is thrown when the desired device couldn't be found or isn't a valid
+     *                                         device
      */
     public static Audio initSafe(AudioConfig config) throws OpenDeviceException, UnsupportedAudioDeviceException {
         final AudioDevice device = new AudioDevice(config.getDeviceConfig(), config.getLogger());
@@ -170,16 +166,18 @@ public class Audio implements Disposable {
 
 
     /**
-     * As the listener moves away from a sound source, the volume of the sound source decreases for the listener. The Attenuation Model is responsible for this
-     * calculation.<br>
+     * As the listener moves away from a sound source, the volume of the sound source decreases for the listener. The
+     * Attenuation Model is responsible for this calculation.<br>
      * <br>
-     * <b>Note:</b> Setting a DistanceAttenuationModel overwrites the default min and max attenuation distance as well as the attenuation factor that is used
-     * for new sound sources. It won't affect existing ones.<br>
+     * <b>Note:</b> Setting a DistanceAttenuationModel overwrites the default min and max attenuation distance as
+     * well as the attenuation factor that is used for new sound sources. It won't affect existing ones.<br>
      * <br>
      * There are several {@link de.pottgames.tuningfork.DistanceAttenuationModel models} to choose from, including a
      * {@link de.pottgames.tuningfork.DistanceAttenuationModel#LINEAR_DISTANCE_CLAMPED linear model} and a
-     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#INVERSE_DISTANCE_CLAMPED semi-realistic model} based on the real world. By default the
-     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#INVERSE_DISTANCE_CLAMPED INVERSE_DISTANCE_CLAMPED} model is used.
+     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#INVERSE_DISTANCE_CLAMPED semi-realistic model} based on
+     * the real world. By default the
+     * {@link de.pottgames.tuningfork.DistanceAttenuationModel#INVERSE_DISTANCE_CLAMPED INVERSE_DISTANCE_CLAMPED} model
+     * is used.
      *
      * @param model the model
      */
@@ -192,9 +190,11 @@ public class Audio implements Disposable {
 
 
     /**
-     * Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
-     * attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
-     * existing or already obtained sources. If you want to set this per source, you can do so: {@link SoundSource#setAttenuationMinDistance(float)}.
+     * Sets the distance the listener must be from the sound source at which the attenuation should begin. The
+     * attenuation itself is controlled by the attenuation model and the attenuation factor of the source. This value is
+     * used for all sources that are created/obtained afterwards, it doesn't affect existing or already obtained
+     * sources. If you want to set this per source, you can do so:
+     * {@link SoundSource#setAttenuationMinDistance(float)}.
      *
      * @param distance (default depends on the attenuation model)
      */
@@ -204,9 +204,11 @@ public class Audio implements Disposable {
 
 
     /**
-     * Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
-     * attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
-     * existing or already obtained sources. If you want to set this per source, you can do so: {@link SoundSource#setAttenuationMaxDistance(float)}.
+     * Sets the distance the listener must be from the sound source at which the attenuation should stop. The
+     * attenuation itself is controlled by the attenuation model and the attenuation factor of the source. This value is
+     * used for all sources that are created/obtained afterwards, it doesn't affect existing or already obtained
+     * sources. If you want to set this per source, you can do so:
+     * {@link SoundSource#setAttenuationMaxDistance(float)}.
      *
      * @param distance (default depends on the attenuation model)
      */
@@ -216,9 +218,10 @@ public class Audio implements Disposable {
 
 
     /**
-     * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
-     * volume loss by half. With a factor of 2, the source loses volume twice as fast. This factor is used for all sources that are created/obtained afterwards,
-     * it doesn't affect existing or already obtained sources. If you want to set this per source, you can do so:
+     * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
+     * the source. A factor of 0.5 reduces the volume loss by half. With a factor of 2, the source loses volume twice as
+     * fast. This factor is used for all sources that are created/obtained afterwards, it doesn't affect existing or
+     * already obtained sources. If you want to set this per source, you can do so:
      * {@link SoundSource#setAttenuationFactor(float)}.
      *
      * @param rolloff (default depends on the attenuation model)
@@ -229,7 +232,8 @@ public class Audio implements Disposable {
 
 
     /**
-     * Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default attenuation model.
+     * Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default
+     * attenuation model.
      *
      * @return the default attenuation min distance
      */
@@ -239,7 +243,8 @@ public class Audio implements Disposable {
 
 
     /**
-     * Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default attenuation model.
+     * Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default
+     * attenuation model.
      *
      * @return the default attenuation max distance
      */
@@ -249,7 +254,8 @@ public class Audio implements Disposable {
 
 
     /**
-     * Returns the default attenuation factor that is used to calculate the attenuation by the current default attenuation model.
+     * Returns the default attenuation factor that is used to calculate the attenuation by the current default
+     * attenuation model.
      *
      * @return the default attenuation factor
      */
@@ -259,9 +265,8 @@ public class Audio implements Disposable {
 
 
     /**
-     *
-     * Returns whether virtualization is enabled or disabled by default for all sound sources. See {@link AudioConfig#setVirtualization(Virtualization)} for
-     * more info.
+     * Returns whether virtualization is enabled or disabled by default for all sound sources. See
+     * {@link AudioConfig#setVirtualization(Virtualization)} for more info.
      *
      * @return the virtualization method
      */
@@ -281,14 +286,14 @@ public class Audio implements Disposable {
 
 
     /**
-     * Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
-     * Sources that are created afterwards are also initialized with the new default virtualization method.<br>
-     * Unless you have a specific reason to change this at runtime, it's recommended to set the default via {@link AudioConfig} on
-     * {@link Audio#init(AudioConfig)}.<br>
+     * Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused,
+     * obtained, etc.).<br> Sources that are created afterward are also initialized with the new default virtualization
+     * method.<br> Unless you have a specific reason to change this at runtime, it's recommended to set the default via
+     * {@link AudioConfig} on {@link Audio#init(AudioConfig)}.<br>
      * <br>
      * See {@link Virtualization} for the different options available.
      *
-     * @param virtualization
+     * @param virtualization the virtualization
      */
     public void setDefaultVirtualization(Virtualization virtualization) {
         this.defaultSettings.setVirtualization(virtualization);
@@ -344,9 +349,10 @@ public class Audio implements Disposable {
 
 
     /**
-     * Changing the doppler factor exaggerates or deemphasizes the doppler effect. Physically accurate doppler calculation might not give the desired result, so
-     * changing this to your needs is fine. The default doppler factor is 1. Values < 0 are ignored, 0 turns the doppler effect off, values greater than 1 will
-     * increase the strength of the doppler effect.
+     * Changing the doppler factor exaggerates or de-emphasizes the doppler effect. Physically accurate doppler
+     * calculation might not give the desired result, so changing this to your needs is fine. The default doppler factor
+     * is 1. Values &lt; 0 are ignored, 0 turns the doppler effect off, values &gt; 1 will increase the strength of the
+     * doppler effect.
      *
      * @param dopplerFactor (default 1)
      */
@@ -358,11 +364,10 @@ public class Audio implements Disposable {
 
 
     /**
-     * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to return it to the pool of available
-     * sources.
+     * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to
+     * return it to the pool of available sources.
      *
-     * @param buffer
-     *
+     * @param buffer the sound buffer
      * @return the {@link BufferedSoundSource}
      */
     public BufferedSoundSource obtainSource(SoundBuffer buffer) {
@@ -394,8 +399,7 @@ public class Audio implements Disposable {
     /**
      * Plays the sound.
      *
-     * @param buffer
-     *
+     * @param buffer the sound buffer
      */
     protected void play(SoundBuffer buffer) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -405,11 +409,12 @@ public class Audio implements Disposable {
 
 
     /**
-     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
-     * past will make the source play immediately. The source will be in playing-state while waiting for the start time to be reached.
+     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing
+     * else. Positive values that point to the past will make the source play immediately. The source will be in
+     * playing-state while waiting for the start time to be reached.
      *
-     * @param buffer
-     * @param time the time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
+     * @param buffer the sound buffer
+     * @param time   the time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
      */
     protected void playAtTime(SoundBuffer buffer, long time) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -421,9 +426,8 @@ public class Audio implements Disposable {
     /**
      * Plays a sound with an effect.
      *
-     * @param buffer
-     * @param effect
-     *
+     * @param buffer the sound buffer
+     * @param effect the sound effect
      */
     protected void play(SoundBuffer buffer, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -436,9 +440,8 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume.
      *
-     * @param buffer
+     * @param buffer the sound buffer
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     *
      */
     protected void play(SoundBuffer buffer, float volume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -451,10 +454,9 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume and effect.
      *
-     * @param buffer
+     * @param buffer the sound buffer
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param effect
-     *
+     * @param effect the sound effect
      */
     protected void play(SoundBuffer buffer, float volume, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -468,10 +470,10 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume and pitch.
      *
-     * @param buffer
+     * @param buffer the sound buffer
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     *
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
      */
     protected void play(SoundBuffer buffer, float volume, float pitch) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -485,11 +487,12 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume, pitch and filter.
      *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param filter
-     *
+     * @param buffer         the sound buffer
+     * @param volume         in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch          in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1
+     *                       making it faster (default 1)
+     * @param lowFreqVolume  the volume of low frequencies
+     * @param highFreqVolume the volume of high frequencies
      */
     protected void play(SoundBuffer buffer, float volume, float pitch, float lowFreqVolume, float highFreqVolume) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -504,11 +507,11 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume, pitch and effect.
      *
-     * @param buffer
+     * @param buffer the sound buffer
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param effect
-     *
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
+     * @param effect the sound effect
      */
     protected void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -523,11 +526,11 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume, pitch and pan.
      *
-     * @param buffer
+     * @param buffer the sound buffer
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
-     *
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
+     * @param pan    in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      */
     protected void play(SoundBuffer buffer, float volume, float pitch, float pan) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -543,12 +546,12 @@ public class Audio implements Disposable {
     /**
      * Plays the sound with the given volume, pitch, pan and effect.
      *
-     * @param buffer
+     * @param buffer the sound buffer
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
-     * @param effect
-     *
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
+     * @param pan    in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
+     * @param effect the sound effect
      */
     protected void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainRelativeSource(buffer, false);
@@ -565,9 +568,8 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound at the given position.
      *
-     * @param buffer
-     * @param position
-     *
+     * @param buffer   the sound buffer
+     * @param position the position in 3D space
      */
     protected void play3D(SoundBuffer buffer, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -580,10 +582,10 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound with the given filter at the given position.
      *
-     * @param buffer
-     * @param position
-     * @param filter
-     *
+     * @param buffer         the sound buffer
+     * @param position       the position in 3D space
+     * @param lowFreqVolume  the volume of low frequencies
+     * @param highFreqVolume the volume of high frequencies
      */
     protected void play3D(SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -597,10 +599,9 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound at the given position with an effect.
      *
-     * @param buffer
-     * @param position
-     * @param effect
-     *
+     * @param buffer   the sound buffer
+     * @param position the position in 3D space
+     * @param effect   the sound effect
      */
     protected void play3D(SoundBuffer buffer, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -614,13 +615,14 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound at the given position with the given effect and filter.
      *
-     * @param buffer
-     * @param position
-     * @param filter
-     * @param effect
-     *
+     * @param buffer         the sound buffer
+     * @param position       the position in 3D space
+     * @param lowFreqVolume  the volume of low frequencies
+     * @param highFreqVolume the volume of high frequencies
+     * @param effect         the sound effect
      */
-    protected void play3D(SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
+    protected void play3D(
+            SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setPosition(position);
         source.attachEffect(effect);
@@ -633,10 +635,9 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound with the given volume at the given position.
      *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param position
-     *
+     * @param buffer   the sound buffer
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param position the position in 3D space
      */
     protected void play3D(SoundBuffer buffer, float volume, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -650,13 +651,14 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound with the given volume and filter at the given position.
      *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param position
-     * @param filter
-     *
+     * @param buffer         the sound buffer
+     * @param volume         in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param position       the position in 3D space
+     * @param lowFreqVolume  the volume of low frequencies
+     * @param highFreqVolume the volume of high frequencies
      */
-    protected void play3D(SoundBuffer buffer, float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
+    protected void play3D(
+            SoundBuffer buffer, float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
         final BufferedSoundSource source = this.obtainSource(buffer);
         source.setVolume(volume);
         source.setPosition(position);
@@ -669,11 +671,10 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound with the given volume and effect at the given position.
      *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param position
-     * @param effect
-     *
+     * @param buffer   the sound buffer
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param position the position in 3D space
+     * @param effect   the sound effect
      */
     protected void play3D(SoundBuffer buffer, float volume, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -688,11 +689,11 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound with the given volume and pitch at the given position.
      *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param position
-     *
+     * @param buffer   the sound buffer
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch    in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *                 faster (default 1)
+     * @param position the position in 3D space
      */
     protected void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -707,12 +708,12 @@ public class Audio implements Disposable {
     /**
      * Plays a spatial sound with the given volume, pitch and effect at the given position.
      *
-     * @param buffer
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param position
-     * @param effect
-     *
+     * @param buffer   the sound buffer
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch    in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *                 faster (default 1)
+     * @param position the position in 3D space
+     * @param effect   the sound effect
      */
     protected void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position, SoundEffect effect) {
         final BufferedSoundSource source = this.obtainSource(buffer);
@@ -726,13 +727,12 @@ public class Audio implements Disposable {
 
 
     /**
-     * Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
-     * Sources that are created afterwards are also initialized with the new default resampler.<br>
+     * Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained,
+     * etc.).<br> Sources that are created afterward are also initialized with the new default resampler.<br>
      * <br>
      * Check {@link AudioDevice#getAvailableResamplers()} for a list of available resamplers.
      *
-     * @param resampler
-     *
+     * @param resampler the resampler
      * @return true if successful, false if the desired resampler isn't available
      */
     public boolean setDefaultResampler(String resampler) {

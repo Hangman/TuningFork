@@ -1,37 +1,35 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.capture;
+
+import com.badlogic.gdx.utils.Disposable;
+import de.pottgames.tuningfork.PcmFormat;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.MockLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALC11;
+import org.lwjgl.openal.ALUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.List;
 
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALC11;
-import org.lwjgl.openal.ALUtil;
-
-import com.badlogic.gdx.utils.Disposable;
-
-import de.pottgames.tuningfork.PcmFormat;
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.MockLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-
 /**
  * This class helps to record audio from input devices like microphones.
  *
  * @author Matthias
- *
  */
 public class CaptureDevice implements Disposable {
     private final TuningForkLogger logger;
@@ -80,9 +78,10 @@ public class CaptureDevice implements Disposable {
 
 
     /**
-     * Retrieves pcm data from the input device and saves it to a ByteBuffer. Use this for 8-Bit data only unless you know what you're doing.
+     * Retrieves pcm data from the input device and saves it to a ByteBuffer. Use this for 8-Bit data only unless you
+     * know what you're doing.
      *
-     * @param buffer
+     * @param buffer  the buffer
      * @param samples number of samples to fetch
      */
     public void fetch8BitSamples(ByteBuffer buffer, int samples) {
@@ -91,9 +90,10 @@ public class CaptureDevice implements Disposable {
 
 
     /**
-     * Retrieves pcm data from the input device and saves it to a short array. Use this for 16-Bit data only unless you know what you're doing.
+     * Retrieves pcm data from the input device and saves it to a short array. Use this for 16-Bit data only unless you
+     * know what you're doing.
      *
-     * @param buffer
+     * @param buffer  the buffer
      * @param samples number of samples to fetch
      */
     public void fetch16BitSamples(short[] buffer, int samples) {
@@ -102,9 +102,10 @@ public class CaptureDevice implements Disposable {
 
 
     /**
-     * Retrieves pcm data from the input device and saves it to a ShortBuffer. Use this for 16-Bit data only unless you know what you're doing.
+     * Retrieves pcm data from the input device and saves it to a ShortBuffer. Use this for 16-Bit data only unless you
+     * know what you're doing.
      *
-     * @param buffer
+     * @param buffer  the buffer
      * @param samples number of samples to fetch
      */
     public void fetch16BitSamples(ShortBuffer buffer, int samples) {
@@ -204,17 +205,17 @@ public class CaptureDevice implements Disposable {
     /**
      * Opens an input device with the given {@link CaptureConfig}.
      *
-     * @param config
-     *
+     * @param config the capture config
      * @return the device
      */
     public static CaptureDevice open(CaptureConfig config) {
         CaptureDevice captureDevice = null;
 
-        final long deviceHandle = ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(), config.getPcmFormat().getAlId(),
-                config.getBufferSize());
+        final long deviceHandle = ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(),
+                                                             config.getPcmFormat().getAlId(), config.getBufferSize());
         if (deviceHandle != 0L) {
-            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(), config.getBufferSize(), config.getLogger());
+            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(),
+                                              config.getBufferSize(), config.getLogger());
         }
 
         return captureDevice;

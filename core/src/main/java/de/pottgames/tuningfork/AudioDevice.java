@@ -1,16 +1,28 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.ObjectMap;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+import de.pottgames.tuningfork.router.AudioDeviceRerouter;
+import org.lwjgl.openal.*;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -18,59 +30,31 @@ import java.nio.LongBuffer;
 import java.util.List;
 import java.util.Objects;
 
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALCCapabilities;
-import org.lwjgl.openal.ALUtil;
-import org.lwjgl.openal.EXTDisconnect;
-import org.lwjgl.openal.EXTEfx;
-import org.lwjgl.openal.EnumerateAllExt;
-import org.lwjgl.openal.SOFTDeviceClock;
-import org.lwjgl.openal.SOFTEvents;
-import org.lwjgl.openal.SOFTHRTF;
-import org.lwjgl.openal.SOFTOutputLimiter;
-import org.lwjgl.openal.SOFTOutputMode;
-import org.lwjgl.openal.SOFTReopenDevice;
-import org.lwjgl.openal.SOFTSourceResampler;
-import org.lwjgl.openal.SOFTXHoldOnDisconnect;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.ObjectMap;
-
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-import de.pottgames.tuningfork.router.AudioDeviceRerouter;
-
 /**
- * A class that gives access to some audio hardware device specific settings. Allows to query and change hardware specific settings.
+ * A class that gives access to some audio hardware device specific settings. Allows to query and change hardware
+ * specific settings.
  *
  * @author Matthias
- *
  */
 public class AudioDevice {
     private final long                            deviceHandle;
     private final long                            context;
     private final TuningForkLogger                logger;
     private final ErrorLogger                     errorLogger;
-    private boolean                               hrtfEnabled           = false;
+    private       boolean                         hrtfEnabled           = false;
     private final AudioDeviceConfig               config;
     private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
     private final Array<String>                   resamplers            = new Array<>();
     private final int                             effectSlots;
-    private AudioDeviceRerouter                   deviceRerouter;
-    private ContextAttributes                     contextAttributes;
+    private       AudioDeviceRerouter             deviceRerouter;
+    private       ContextAttributes               contextAttributes;
     private final long[]                          clockLatencyCache     = new long[2];
 
 
     /**
-     * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#setDeviceSpecifier(String)} to request a
-     * specific sound device for audio playback or switch to a device at runtime with {@link AudioDevice#switchToDevice(String)}.
+     * Returns a list of identifiers of available sound devices. You can use an identifier in
+     * {@link AudioDeviceConfig#setDeviceSpecifier(String)} to request a specific sound device for audio playback or
+     * switch to a device at runtime with {@link AudioDevice#switchToDevice(String)}.
      *
      * @return the list
      */
@@ -79,7 +63,8 @@ public class AudioDevice {
     }
 
 
-    protected AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
+    protected AudioDevice(AudioDeviceConfig config, TuningForkLogger logger)
+            throws OpenDeviceException, UnsupportedAudioDeviceException {
         this.config = config;
         this.logger = logger;
         this.errorLogger = new ErrorLogger(this.getClass(), logger);
@@ -151,9 +136,11 @@ public class AudioDevice {
             final int[] outputLimiterEnabled = new int[1];
             outputLimiterEnabled[0] = ALC10.ALC_FALSE;
             if (this.isExtensionAvailable(ALExtension.ALC_SOFT_OUTPUT_LIMITER)) {
-                ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, outputLimiterEnabled);
+                ALC10.alcGetIntegerv(this.deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT,
+                                     outputLimiterEnabled);
             }
-            logger.debug(this.getClass(), "Output limiter: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "enabled" : "disabled"));
+            logger.debug(this.getClass(),
+                         "Output limiter: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "enabled" : "disabled"));
         }
 
         // CHECK AND LOG HRTF SETTINGS
@@ -186,7 +173,8 @@ public class AudioDevice {
                     break;
                 default:
                     this.hrtfEnabled = false;
-                    logger.debug(this.getClass(), "HRTF status is unknown: " + hrtfSoftStatus + " - TuningFork will report it as disabled.");
+                    logger.debug(this.getClass(), "HRTF status is unknown: " + hrtfSoftStatus +
+                                                  " - TuningFork will report it as disabled.");
                     break;
             }
         }
@@ -197,48 +185,57 @@ public class AudioDevice {
         this.effectSlots = auxSends.get(0);
         logger.debug(this.getClass(), "Available auxiliary sends: " + this.effectSlots);
         if (this.effectSlots != config.getEffectSlots()) {
-            logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.getEffectSlots() + ").");
+            logger.error(this.getClass(),
+                         "The audio device rejected the requested number of effect slots (" + config.getEffectSlots() +
+                         ").");
         }
 
         // FINAL SETUP
         this.getAvailableResamplers();
         this.setDeviceRerouter(config.getRerouter());
         AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
-        SOFTEvents.alEventControlSOFT(new int[] { SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT }, true);
+        SOFTEvents.alEventControlSOFT(new int[]{SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT}, true);
         SOFTEvents.alEventCallbackSOFT((eventType, object, param, length, message, userParam) -> {
             final AlEvent event = new AlEvent(eventType, object, param, length, message, userParam);
             AudioDevice.this.onAlEvent(event);
         }, (ByteBuffer) null);
 
         // LOG ERRORS
-        this.errorLogger.checkLogAlcError(this.deviceHandle, "There was at least one ALC error upon audio device initialization");
+        this.errorLogger.checkLogAlcError(this.deviceHandle,
+                                          "There was at least one ALC error upon audio device initialization");
         this.errorLogger.checkLogError("There was at least one AL error upon audio device initialization");
     }
 
 
-    private void checkAL11Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities) throws OpenDeviceException {
+    private void checkAL11Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities)
+            throws OpenDeviceException {
         if (!deviceCapabilities.OpenALC11) {
             try {
                 this.dispose(false);
             } catch (final Exception e) {
                 logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
+                             "The device was opened successfully, but didn't support a required feature. The attempt " +
+                             "to close the device failed.");
             }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.1 API which is a requirement of TuningFork.");
+            throw new OpenDeviceException("The audio device " + deviceName +
+                                          " doesn't support the OpenAL 1.1 API which is a requirement of TuningFork.");
         }
         logger.trace(this.getClass(), "OpenAL 1.1 supported.");
     }
 
 
-    private void checkAL10Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities) throws OpenDeviceException {
+    private void checkAL10Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities)
+            throws OpenDeviceException {
         if (!deviceCapabilities.OpenALC10) {
             try {
                 this.dispose(false);
             } catch (final Exception e) {
                 logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt to close the device failed.");
+                             "The device was opened successfully, but didn't support a required feature. The attempt " +
+                             "to close the device failed.");
             }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.0 API which is a requirement of TuningFork.");
+            throw new OpenDeviceException("The audio device " + deviceName +
+                                          " doesn't support the OpenAL 1.0 API which is a requirement of TuningFork.");
         }
         logger.trace(this.getClass(), "OpenAL 1.0 supported.");
     }
@@ -250,10 +247,12 @@ public class AudioDevice {
             try {
                 this.dispose(false);
             } catch (final Exception e) {
-                this.logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support " + extension.getAlSpecifier() + ". The attempt to close the device failed.");
+                this.logger.error(this.getClass(), "The device was opened successfully, but didn't support " +
+                                                   extension.getAlSpecifier() +
+                                                   ". The attempt to close the device failed.");
             }
-            throw new OpenDeviceException("The audio device doesn't support " + extension.getAlSpecifier() + " which is a requirement of TuningFork.");
+            throw new OpenDeviceException("The audio device doesn't support " + extension.getAlSpecifier() +
+                                          " which is a requirement of TuningFork.");
         }
 
         this.logger.trace(this.getClass(), "Extension available: " + extension.getAlSpecifier());
@@ -263,7 +262,8 @@ public class AudioDevice {
     private void checkAvailableExtensions() {
         for (final ALExtension extension : ALExtension.values()) {
             if (extension.isAlc()) {
-                this.extensionAvailableMap.put(extension, ALC10.alcIsExtensionPresent(this.deviceHandle, extension.getAlSpecifier()));
+                this.extensionAvailableMap.put(extension, ALC10.alcIsExtensionPresent(this.deviceHandle,
+                                                                                      extension.getAlSpecifier()));
             } else {
                 this.extensionAvailableMap.put(extension, AL10.alIsExtensionPresent(extension.getAlSpecifier()));
             }
@@ -281,9 +281,9 @@ public class AudioDevice {
 
 
     /**
-     * Returns whether the audio output device is still connected. While most people are using either PCI audio cards or a chip welded to their motherboard,
-     * there are many devices that are more dynamic in nature, such as USB and Firewire based-units. Such units may lose external power or may have their cables
-     * unplugged at runtime.<br>
+     * Returns whether the audio output device is still connected. While most people are using either PCI audio cards or
+     * a chip welded to their motherboard, there are many devices that are more dynamic in nature, such as USB and
+     * Firewire based-units. Such units may lose external power or may have their cables unplugged at runtime.<br>
      * <br>
      * <b>Note:</b> Not all operating systems and/or drivers will report a disconnected device.
      *
@@ -306,12 +306,13 @@ public class AudioDevice {
     /**
      * Switches to another audio device.
      *
-     * @param deviceSpecifier must be one of the devices returned by {@link AudioDevice#availableDevices()} or null to switch to the default device.
-     *
+     * @param deviceSpecifier must be one of the devices returned by {@link AudioDevice#availableDevices()} or null to
+     *                        switch to the default device.
      * @return true if successful
      */
     public boolean switchToDevice(String deviceSpecifier) {
-        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(this.deviceHandle, deviceSpecifier, this.contextAttributes.getBuffer());
+        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(this.deviceHandle, deviceSpecifier,
+                                                                     this.contextAttributes.getBuffer());
         if (success && this.deviceRerouter != null) {
             this.deviceRerouter.updateDesiredDevice(deviceSpecifier);
         }
@@ -320,10 +321,11 @@ public class AudioDevice {
 
 
     /**
-     * Sets the device rerouter, calls {@link AudioDeviceRerouter#setup(long, String, ContextAttributes) setup} and {@link AudioDeviceRerouter#start() start} on
-     * it. If there was another rerouter active, it gets {@link AudioDeviceRerouter#dispose() disposed}.
+     * Sets the device rerouter, calls {@link AudioDeviceRerouter#setup(long, String, ContextAttributes) setup} and
+     * {@link AudioDeviceRerouter#start() start} on it. If there was another rerouter active, it gets
+     * {@link AudioDeviceRerouter#dispose() disposed}.
      *
-     * @param rerouter
+     * @param rerouter the rerouter
      */
     public void setDeviceRerouter(AudioDeviceRerouter rerouter) {
         if (this.deviceRerouter != null) {
@@ -348,7 +350,8 @@ public class AudioDevice {
 
 
     /**
-     * Returns the output mode of the device. It includes the channel configuration of the physical (if not virtual) sound hardware this device is connected to.
+     * Returns the output mode of the device. It includes the channel configuration of the physical (if not virtual)
+     * sound hardware this device is connected to.
      *
      * @return the output mode
      */
@@ -359,8 +362,8 @@ public class AudioDevice {
 
 
     /**
-     * Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is available, call {@link #getAvailableHrtfs()} to
-     * query for profiles.
+     * Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is
+     * available, call {@link #getAvailableHrtfs()} to query for profiles.
      *
      * @return true if supported
      */
@@ -390,7 +393,8 @@ public class AudioDevice {
         if (this.isHrtfSupported()) {
             final int num_hrtf = ALC10.alcGetInteger(this.deviceHandle, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
             for (int i = 0; i < num_hrtf; i++) {
-                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
+                final String name = Objects.requireNonNull(
+                        SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
                 hrtfs.add(name);
             }
         }
@@ -402,8 +406,8 @@ public class AudioDevice {
     /**
      * Enables hrtf on this device.
      *
-     * @param specifier the hrtf configuration specifier. Must be one of the strings included in the list from {@link #getAvailableHrtfs()}
-     *
+     * @param specifier the hrtf configuration specifier. Must be one of the strings included in the list from
+     *                  {@link #getAvailableHrtfs()}
      * @return true on success, false on failure
      */
     public boolean enableHrtf(String specifier) {
@@ -413,7 +417,8 @@ public class AudioDevice {
             // FIND HRTF INDEX BY SPECIFIER
             int hrtfIndex = -1;
             for (int i = 0; i < num_hrtf; i++) {
-                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
+                final String name = Objects.requireNonNull(
+                        SOFTHRTF.alcGetStringiSOFT(this.deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
                 if (name.equals(specifier)) {
                     hrtfIndex = i;
                     break;
@@ -438,8 +443,9 @@ public class AudioDevice {
 
                 // RESET DEVICE
                 if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, this.contextAttributes.getBuffer())) {
-                    this.logger.error(this.getClass(),
-                            "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
+                    this.logger.error(this.getClass(), "Failed to reset device: " +
+                                                       ALC10.alcGetString(this.deviceHandle,
+                                                                          ALC10.alcGetError(this.deviceHandle)));
                     this.hrtfEnabled = false;
                     this.contextAttributes = oldAttributes;
                     return false;
@@ -493,7 +499,9 @@ public class AudioDevice {
             // RESET DEVICE
             if (!SOFTHRTF.alcResetDeviceSOFT(this.deviceHandle, this.contextAttributes.getBuffer())) {
                 this.contextAttributes = oldAttributes;
-                this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle, ALC10.alcGetError(this.deviceHandle)));
+                this.logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(this.deviceHandle,
+                                                                                                   ALC10.alcGetError(
+                                                                                                           this.deviceHandle)));
                 return;
             }
             this.hrtfEnabled = false;
@@ -506,9 +514,9 @@ public class AudioDevice {
 
 
     /**
-     * Returns a list of available resamplers for this device. The list is ordered by performance impact. That is, indices closer to 0 are of lower impact, and
-     * the higher index values have higher impact.<br>
-     * Mostly, a higher performance impact also means a better result in terms of quality, though this isn't true in all cases.<br>
+     * Returns a list of available resamplers for this device. The list is ordered by performance impact. That is,
+     * indices closer to 0 are of lower impact, and the higher index values have higher impact.<br> Mostly, a higher
+     * performance impact also means a better result in terms of quality, though this isn't true in all cases.<br>
      * <br>
      * If you need more information on what resampler is best for you, here's a video recommendation:
      * <a href="https://www.youtube.com/watch?v=62U6UnaUGDE">https://www.youtube.com/watch?v=62U6UnaUGDE</a>
@@ -520,7 +528,8 @@ public class AudioDevice {
 
         final int numberOfResamplers = AL10.alGetInteger(SOFTSourceResampler.AL_NUM_RESAMPLERS_SOFT);
         for (int index = 0; index < numberOfResamplers; index++) {
-            final String resamplerName = SOFTSourceResampler.alGetStringiSOFT(SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT, index);
+            final String resamplerName =
+                    SOFTSourceResampler.alGetStringiSOFT(SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT, index);
             this.resamplers.add(resamplerName);
         }
 
@@ -529,7 +538,8 @@ public class AudioDevice {
 
 
     /**
-     * Returns the number of available effect slots. If you want to change the number, see {@link AudioDeviceConfig#setEffectSlots(int)}.
+     * Returns the number of available effect slots. If you want to change the number, see
+     * {@link AudioDeviceConfig#setEffectSlots(int)}.
      *
      * @return the number of effect slots available for each source
      */
@@ -541,8 +551,7 @@ public class AudioDevice {
     /**
      * Returns the index of the first occurrence of the value in the array, or -1 if no such value exists.
      *
-     * @param name
-     *
+     * @param name the name of the resampler
      * @return the index of the first occurrence of the value in the array or -1 if no such value exists
      */
     protected int getResamplerIndexByName(String name) {
@@ -571,8 +580,8 @@ public class AudioDevice {
 
 
     /**
-     * Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the system clock's tick rate (the infamous timer
-     * drift).
+     * Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the
+     * system clock's tick rate (the infamous timer drift).
      *
      * @return the device time in nanoseconds
      */
@@ -583,29 +592,32 @@ public class AudioDevice {
 
 
     /**
-     * Returns the current audio device latency in nanoseconds. This is effectively the delay for the samples rendered at the the device's current clock time
-     * from reaching the physical output.
+     * Returns the current audio device latency in nanoseconds. This is effectively the delay for the samples rendered
+     * at the the device's current clock time from reaching the physical output.
      *
      * @return latency in nanoseconds
      */
     public long getLatency() {
-        final long result = SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_LATENCY_SOFT);
+        final long result =
+                SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_LATENCY_SOFT);
         this.errorLogger.checkLogAlcError(this.deviceHandle, "Error while fetching alc device latency");
         return result;
     }
 
 
     /**
-     * This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling both functions separately.<br>
-     * See {@link #getClockTime()} and {@link #getLatency()} for a detailed explanation.<br>
-     * The returned long array is "owned" by the {@link AudioDevice} class, so you shouldn't hold a reference to it but rather copy the values.
+     * This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling
+     * both functions separately.<br> See {@link #getClockTime()} and {@link #getLatency()} for a detailed
+     * explanation.<br> The returned long array is "owned" by the {@link AudioDevice} class, so you shouldn't hold a
+     * reference to it but rather copy the values.
      *
      * @return a long array that holds the time at index 0 and the latency at index 1. The length of 2 is guaranteed.
      */
     public long[] getClockTimeAndLatency() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final LongBuffer buffer = stack.mallocLong(2);
-            SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_CLOCK_LATENCY_SOFT, buffer);
+            SOFTDeviceClock.alcGetInteger64vSOFT(this.deviceHandle, SOFTDeviceClock.ALC_DEVICE_CLOCK_LATENCY_SOFT,
+                                                 buffer);
             this.clockLatencyCache[0] = buffer.get(0);
             this.clockLatencyCache[1] = buffer.get(1);
         }
@@ -615,9 +627,10 @@ public class AudioDevice {
 
 
     /**
-     * This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has registered.
+     * This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has
+     * registered.
      *
-     * @param event
+     * @param event the OpenAL event
      */
     protected void onAlEvent(AlEvent event) {
         if (event.getEventType() == SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT) {

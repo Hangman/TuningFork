@@ -1,23 +1,25 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
 
-import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
+import java.util.Objects;
+
 /**
- * The OpenAL Effects Extension EQ is very flexible, providing tonal control over four different adjustable frequency ranges. The lowest frequency range is
+ * The OpenAL Effects Extension EQ is very flexible, providing tonal control over four different adjustable frequency
+ * ranges. The lowest frequency range is
  * called “low.” The middle ranges are called “mid1” and “mid2.” The high range is called “high.”
  *
  * @author Matthias
@@ -103,8 +105,8 @@ public class Equalizer extends SoundEffectData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.highCutoff, this.highGain, this.lowCutoff, this.lowGain, this.mid1Center, this.mid1Gain, this.mid1Width, this.mid2Center,
-                this.mid2Gain, this.mid2Width);
+        return Objects.hash(this.highCutoff, this.highGain, this.lowCutoff, this.lowGain, this.mid1Center,
+                            this.mid1Gain, this.mid1Width, this.mid2Center, this.mid2Gain, this.mid2Width);
     }
 
 
@@ -120,24 +122,25 @@ public class Equalizer extends SoundEffectData {
             return false;
         }
         final Equalizer other = (Equalizer) obj;
-        return Float.floatToIntBits(this.highCutoff) == Float.floatToIntBits(other.highCutoff)
-                && Float.floatToIntBits(this.highGain) == Float.floatToIntBits(other.highGain)
-                && Float.floatToIntBits(this.lowCutoff) == Float.floatToIntBits(other.lowCutoff)
-                && Float.floatToIntBits(this.lowGain) == Float.floatToIntBits(other.lowGain)
-                && Float.floatToIntBits(this.mid1Center) == Float.floatToIntBits(other.mid1Center)
-                && Float.floatToIntBits(this.mid1Gain) == Float.floatToIntBits(other.mid1Gain)
-                && Float.floatToIntBits(this.mid1Width) == Float.floatToIntBits(other.mid1Width)
-                && Float.floatToIntBits(this.mid2Center) == Float.floatToIntBits(other.mid2Center)
-                && Float.floatToIntBits(this.mid2Gain) == Float.floatToIntBits(other.mid2Gain)
-                && Float.floatToIntBits(this.mid2Width) == Float.floatToIntBits(other.mid2Width);
+        return Float.floatToIntBits(this.highCutoff) == Float.floatToIntBits(other.highCutoff) &&
+               Float.floatToIntBits(this.highGain) == Float.floatToIntBits(other.highGain) &&
+               Float.floatToIntBits(this.lowCutoff) == Float.floatToIntBits(other.lowCutoff) &&
+               Float.floatToIntBits(this.lowGain) == Float.floatToIntBits(other.lowGain) &&
+               Float.floatToIntBits(this.mid1Center) == Float.floatToIntBits(other.mid1Center) &&
+               Float.floatToIntBits(this.mid1Gain) == Float.floatToIntBits(other.mid1Gain) &&
+               Float.floatToIntBits(this.mid1Width) == Float.floatToIntBits(other.mid1Width) &&
+               Float.floatToIntBits(this.mid2Center) == Float.floatToIntBits(other.mid2Center) &&
+               Float.floatToIntBits(this.mid2Gain) == Float.floatToIntBits(other.mid2Gain) &&
+               Float.floatToIntBits(this.mid2Width) == Float.floatToIntBits(other.mid2Width);
     }
 
 
     @Override
     public String toString() {
-        return "Equalizer [lowGain=" + this.lowGain + ", lowCutoff=" + this.lowCutoff + ", mid1Gain=" + this.mid1Gain + ", mid1Center=" + this.mid1Center
-                + ", mid1Width=" + this.mid1Width + ", mid2Gain=" + this.mid2Gain + ", mid2Center=" + this.mid2Center + ", mid2Width=" + this.mid2Width
-                + ", highGain=" + this.highGain + ", highCutoff=" + this.highCutoff + "]";
+        return "Equalizer [lowGain=" + this.lowGain + ", lowCutoff=" + this.lowCutoff + ", mid1Gain=" + this.mid1Gain +
+               ", mid1Center=" + this.mid1Center + ", mid1Width=" + this.mid1Width + ", mid2Gain=" + this.mid2Gain +
+               ", mid2Center=" + this.mid2Center + ", mid2Width=" + this.mid2Width + ", highGain=" + this.highGain +
+               ", highCutoff=" + this.highCutoff + "]";
     }
 
 }

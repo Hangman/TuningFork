@@ -1,28 +1,27 @@
 /**
  * Copyright 2023 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.router;
 
-import org.lwjgl.openal.SOFTReopenDevice;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.SOFTReopenDevice;
 
 /**
  * A simple rerouter that connects to the default device when the connection to the current device is lost.
  *
  * @author Matthias
- *
  */
 public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
     private long              device;
@@ -33,7 +32,6 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
 
     @Override
     public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
-        this.device = device;
         this.device = device;
         this.attributes = attributes;
         this.setup = true;

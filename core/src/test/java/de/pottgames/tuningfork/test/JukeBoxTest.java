@@ -1,13 +1,14 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.test;
@@ -18,12 +19,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.Interpolation;
-
-import de.pottgames.tuningfork.Audio;
-import de.pottgames.tuningfork.BufferedSoundSource;
-import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.SoundLoader;
-import de.pottgames.tuningfork.StreamedSoundSource;
+import de.pottgames.tuningfork.*;
 import de.pottgames.tuningfork.jukebox.JukeBox;
 import de.pottgames.tuningfork.jukebox.JukeBoxObserver;
 import de.pottgames.tuningfork.jukebox.playlist.DefaultPlayListProvider;
@@ -70,7 +66,8 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
-        final Song song1 = new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
+        final Song song1 =
+                new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
         final Song song2 = new Song(this.rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
         final Song song3 = new Song(this.rhythm3, settings, new SongMeta().setTitle("rhythm3"));
         final Song song4 = new Song(this.rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));

@@ -1,42 +1,36 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
- * License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
+
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.*;
+import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
-import org.lwjgl.openal.SOFTBlockAlignment;
-import org.lwjgl.openal.SOFTBufferLengthQuery;
-import org.lwjgl.openal.SOFTLoopPoints;
-import org.lwjgl.system.MemoryStack;
-
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Disposable;
-
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-
 /**
  * Stores sound data in an OpenAL buffer that can be used by sound sources. Needs to be disposed when no longer needed.
  *
  * @author Matthias
- *
  */
 public class SoundBuffer implements Disposable {
     private final Audio            audio;
@@ -51,16 +45,16 @@ public class SoundBuffer implements Disposable {
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
      * <br>
-     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
-     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
-     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
-     * The interleaved format also applies to surround sound.
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero
+     * .<br> 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of
+     * zero.<br> Stereo data is expressed in an interleaved format, left channel sample followed by the right channel
+     * sample.<br> The interleaved format also applies to surround sound.
      *
-     * @param pcm
-     * @param channels number of channels
-     * @param sampleRate number of samples per second
+     * @param pcm           the pcm data
+     * @param channels      number of channels
+     * @param sampleRate    number of samples per second
      * @param bitsPerSample number of bits per sample
-     * @param pcmDataType
+     * @param pcmDataType   the pcm data type
      */
     public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
         this(pcm, channels, sampleRate, bitsPerSample, pcmDataType, -1);
@@ -68,20 +62,21 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Creates a SoundBuffer with the given pcm data.<br>
-     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
-     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
-     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
-     * The interleaved format also applies to surround sound.
+     * Creates a SoundBuffer with the given pcm data.<br> 8-bit data is expressed as an unsigned value over the range 0
+     * to 255, 128 being an audio output level of zero .<br> 16-bit data is expressed as a signed value over the range
+     * -32768 to 32767, 0 being an audio output level of zero.<br> Stereo data is expressed in an interleaved format,
+     * left channel sample followed by the right channel sample.<br> The interleaved format also applies to surround
+     * sound.
      *
-     * @param pcm
-     * @param channels number of channels
-     * @param sampleRate number of samples per second
+     * @param pcm           the pcm data buffer
+     * @param channels      number of channels
+     * @param sampleRate    number of samples per second
      * @param bitsPerSample number of bits per sample
-     * @param pcmDataType
-     * @param blockAlign the block alignment (currently only used for MS ADPCM data)
+     * @param pcmDataType   the pcm data type
+     * @param blockAlign    the block alignment (currently only used for MS ADPCM data)
      */
-    public SoundBuffer(ShortBuffer pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
+    public SoundBuffer(
+            ShortBuffer pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
         this.audio = Audio.get();
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
@@ -93,21 +88,22 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Creates a SoundBuffer with the given pcm data.<br>
-     * Consider using {@link #SoundBuffer(byte[], int, int, int, PcmDataType)} instead if you're not providing MS_ADPCM data.<br>
-     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero.<br>
-     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
-     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
-     * The interleaved format also applies to surround sound.
+     * Creates a SoundBuffer with the given pcm data.<br> Consider using
+     * {@link #SoundBuffer(byte[], int, int, int, PcmDataType)} instead if you're not providing MS_ADPCM data.<br> 8-bit
+     * data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of
+     * zero.<br> Stereo data is expressed in an interleaved format, left channel sample followed by the right channel
+     * sample.<br> The interleaved format also applies to surround sound.
      *
-     * @param pcm
-     * @param channels number of channels
-     * @param sampleRate number of samples per second
+     * @param pcm           the pcm data
+     * @param channels      number of channels
+     * @param sampleRate    number of samples per second
      * @param bitsPerSample number of bits per sample
-     * @param pcmDataType
-     * @param blockAlign the block alignment (currently only used for MS ADPCM data)
+     * @param pcmDataType   the pcm data type
+     * @param blockAlign    the block alignment (currently only used for MS ADPCM data)
      */
-    public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
+    public SoundBuffer(
+            byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
         this.audio = Audio.get();
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
@@ -118,17 +114,21 @@ public class SoundBuffer implements Disposable {
         buffer.put(pcm);
         buffer.flip();
 
-        this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.bufferId =
+                this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign,
+                                             sampleRate);
         this.samplesPerChannel = this.fetchSamplesPerChannel();
 
         this.duration = this.fetchDuration();
     }
 
 
-    protected int generateBufferAndUpload(ShortBuffer pcm, int channels, int bitsPerSample, PcmDataType pcmDataType, int blockAlign, int sampleRate) {
+    protected int generateBufferAndUpload(
+            ShortBuffer pcm, int channels, int bitsPerSample, PcmDataType pcmDataType, int blockAlign, int sampleRate) {
         final PcmFormat pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
         if (pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
+            throw new TuningForkRuntimeException(
+                    "Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
         }
 
         final int bufferId = AL10.alGenBuffers();
@@ -156,25 +156,26 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Specifies the two offsets the source will use to loop, expressed in seconds. This method will fail when the buffer is attached to a source like: <br>
+     * Specifies the two offsets the source will use to loop, expressed in seconds. This method will fail when the
+     * buffer is attached to a source like: <br>
      * <br>
      * <code>
-     * SoundSource source = audio.obtain(soundBuffer);
-     * soundBuffer.setLoopPoints(1f, 2f); // this will fail
+     * SoundSource source = audio.obtain(soundBuffer); soundBuffer.setLoopPoints(1f, 2f); // this will fail
      * </code> <br>
      * <br>
-     * If the playback position is manually set to something > end, the source will not loop and instead stop playback when it reaches the end of the sound.<br>
-     * The method will throw an exception if start >= end or if either is a negative value. Values > sound duration are not considered invalid, but they'll be
-     * clamped internally.
+     * If the playback position is manually set to something &gt; end, the source will not loop and instead stop
+     * playback when it reaches the end of the sound.<br> The method will throw an exception if start &gt;= end or if
+     * either is a negative value. Values &gt; sound duration are not considered invalid, but they'll be clamped
+     * internally.
      *
      * @param start start position of the loop in seconds
-     * @param end end position of the loop in seconds
+     * @param end   end position of the loop in seconds
      */
     public void setLoopPoints(float start, float end) {
         if (start >= end) {
             throw new TuningForkRuntimeException("Invalid loop points: start >= end");
         }
-        if (start < 0 || end < 0) {
+        if (start < 0) {
             throw new TuningForkRuntimeException("Invalid loop points: start and end must not be < 0");
         }
 
@@ -195,13 +196,11 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Returns the loop points set by {@link #setLoopPoints(float, float)}.<br>
-     * The returned array has a length of 2, with <br>
-     * index 0 => start<br>
-     * index 1 => end<br>
-     * The result might not exactly reflect the numbers from {@link #setLoopPoints(float, float)} because there's a conversion from seconds to samples
-     * involved.<br>
-     * The returned float array is "owned" by the {@link SoundBuffer} class, so you shouldn't hold a reference to it but rather copy the values.
+     * Returns the loop points set by {@link #setLoopPoints(float, float)}.<br> The returned array has a length of 2,
+     * with <br> index 0 =&gt; start<br> index 1 =&gt; end<br> The result might not exactly reflect the numbers from
+     * {@link #setLoopPoints(float, float)} because there's a conversion from seconds to samples involved.<br> The
+     * returned float array is "owned" by the {@link SoundBuffer} class, so you shouldn't hold a reference to it but
+     * rather copy the values.
      *
      * @return the loop points
      */
@@ -225,7 +224,6 @@ public class SoundBuffer implements Disposable {
 
     /**
      * Plays the sound.
-     *
      */
     public void play() {
         this.audio.play(this);
@@ -233,8 +231,8 @@ public class SoundBuffer implements Disposable {
 
 
     /**
-     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
-     * past will make the source play immediately.
+     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing
+     * else. Positive values that point to the past will make the source play immediately.
      *
      * @param time the absolute time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
      */
@@ -250,7 +248,7 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a sound with an effect.
      *
-     * @param effect
+     * @param effect the sound effect
      */
     public void play(SoundEffect effect) {
         this.audio.play(this, effect);
@@ -271,7 +269,7 @@ public class SoundBuffer implements Disposable {
      * Plays the sound with the given volume and effect.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param effect
+     * @param effect the sound effect
      */
     public void play(float volume, SoundEffect effect) {
         this.audio.play(this, volume, effect);
@@ -282,7 +280,8 @@ public class SoundBuffer implements Disposable {
      * Plays the sound with the given volume and pitch.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
      */
     public void play(float volume, float pitch) {
         this.audio.play(this, volume, pitch);
@@ -292,9 +291,10 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays the sound with the given volume, pitch and filter.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param volume         in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch          in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1
+     *                       making it faster (default 1)
+     * @param lowFreqVolume  range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void play(float volume, float pitch, float lowFreqVolume, float highFreqVolume) {
@@ -306,8 +306,9 @@ public class SoundBuffer implements Disposable {
      * Plays the sound with the given volume, pitch and effect.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param effect
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
+     * @param effect the sound effect
      */
     public void play(float volume, float pitch, SoundEffect effect) {
         this.audio.play(this, volume, pitch, effect);
@@ -318,8 +319,9 @@ public class SoundBuffer implements Disposable {
      * Plays the sound with the given volume, pitch and pan.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
+     * @param pan    in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      */
     public void play(float volume, float pitch, float pan) {
         this.audio.play(this, volume, pitch, pan);
@@ -330,9 +332,10 @@ public class SoundBuffer implements Disposable {
      * Plays the sound with the given volume, pitch, pan and effect.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
-     * @param effect
+     * @param pitch  in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *               faster (default 1)
+     * @param pan    in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
+     * @param effect the sound effect
      */
     public void play(float volume, float pitch, float pan, SoundEffect effect) {
         this.audio.play(this, volume, pitch, pan, effect);
@@ -342,7 +345,7 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound at the given position.
      *
-     * @param position
+     * @param position the position in 3D space
      */
     public void play3D(Vector3 position) {
         this.audio.play3D(this, position);
@@ -352,8 +355,8 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound with the given filter at the given position.
      *
-     * @param position
-     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param position       the position in 3D space
+     * @param lowFreqVolume  range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void play3D(Vector3 position, float lowFreqVolume, float highFreqVolume) {
@@ -364,8 +367,8 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound at the given position with an effect.
      *
-     * @param position
-     * @param effect
+     * @param position the position in 3D space
+     * @param effect   the sound effect
      */
     public void play3D(Vector3 position, SoundEffect effect) {
         this.audio.play3D(this, position, effect);
@@ -375,10 +378,10 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound at the given position with the given effect and filter.
      *
-     * @param position
-     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param position       the position in 3D space
+     * @param lowFreqVolume  range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
-     * @param effect
+     * @param effect         the sound effect
      */
     public void play3D(Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
         this.audio.play3D(this, position, lowFreqVolume, highFreqVolume, effect);
@@ -388,8 +391,8 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound with the given volume at the given position.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param position
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param position the position in 3D space
      */
     public void play3D(float volume, Vector3 position) {
         this.audio.play3D(this, volume, position);
@@ -399,9 +402,9 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound with the given volume and filter at the given position.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param position
-     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param volume         in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param position       the position in 3D space
+     * @param lowFreqVolume  range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void play3D(float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
@@ -412,9 +415,9 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound with the given volume and effect at the given position.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param position
-     * @param effect
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param position the position in 3D space
+     * @param effect   the sound effect
      */
     public void play3D(float volume, Vector3 position, SoundEffect effect) {
         this.audio.play3D(this, volume, position, effect);
@@ -424,9 +427,10 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound with the given volume and pitch at the given position.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param position
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch    in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *                 faster (default 1)
+     * @param position the position in 3D space
      */
     public void play3D(float volume, float pitch, Vector3 position) {
         this.audio.play3D(this, volume, pitch, position);
@@ -436,10 +440,11 @@ public class SoundBuffer implements Disposable {
     /**
      * Plays a spatial sound with the given volume, pitch and effect at the given position.
      *
-     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
-     * @param pitch in the range of 0.5 - 2.0 with values < 1 making the sound slower and values > 1 making it faster (default 1)
-     * @param position
-     * @param effect
+     * @param volume   in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
+     * @param pitch    in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
+     *                 faster (default 1)
+     * @param position the position in 3D space
+     * @param effect   the effect
      */
     public void play3D(float volume, float pitch, Vector3 position, SoundEffect effect) {
         this.audio.play3D(this, volume, pitch, position, effect);

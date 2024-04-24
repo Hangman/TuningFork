@@ -1,7 +1,7 @@
 package de.pottgames.tuningfork.decoder;
 
 public class WavFmtChunk {
-    public final int    length;
+    public final  int   length;
     private final int[] data;
     private final int   wFormatTag;
     private final int   nChannels;
@@ -9,10 +9,10 @@ public class WavFmtChunk {
     private final long  nAvgBytesPerSec;
     private final int   nBlockAlign;
     private final int   wBitsPerSample;
-    private int         cbSize              = -1;
-    private int         wValidBitsPerSample = -1;
-    private int         dwChannelMask       = -1;
-    private int         subFormatDataCode;
+    private       int   cbSize              = -1;
+    private       int   wValidBitsPerSample = -1;
+    private       int   dwChannelMask       = -1;
+    private       int   subFormatDataCode;
 
 
     public WavFmtChunk(int[] data) {
@@ -35,7 +35,8 @@ public class WavFmtChunk {
                     if (data.length > 24) {
                         this.subFormatDataCode = data[24] | data[25] << 8;
 
-                        // The remaining 14 bytes contain a fixed string, \x00\x00\x00\x00\x10\x00\x80\x00\x00\xAA\x00\x38\x9B\x71. Encoders don't seem to
+                        // The remaining 14 bytes contain a fixed string,
+                        // \x00\x00\x00\x00\x10\x00\x80\x00\x00\xAA\x00\x38\x9B\x71. Encoders don't seem to
                         // follow this specification, hence we don't validate it.
                     }
                 }
@@ -146,10 +147,10 @@ public class WavFmtChunk {
 
 
     /**
-     * Returns a byte (int 0 - 255) of the original chunk data as read from the stream. {@link WavFmtChunk#length} is set to the original data length.
+     * Returns a byte (int 0 - 255) of the original chunk data as read from the stream. {@link WavFmtChunk#length} is
+     * set to the original data length.
      *
-     * @param index
-     *
+     * @param index the index
      * @return an int containing the byte of the original data
      */
     public int getRaw(int index) {
