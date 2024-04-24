@@ -16,7 +16,8 @@ jobs:
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-source-folder: core/build/docs/javadoc
           javadoc-branch: javadoc
           java-version: 21
-          target-folder: javadoc 
+          target-folder: javadoc
           project: gradle
