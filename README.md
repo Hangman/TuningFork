@@ -6,6 +6,7 @@
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 [![Workflow](https://github.com/Hangman/TuningFork/actions/workflows/gradle.yml/badge.svg)](https://github.com/Hangman/TuningFork/actions/workflows/gradle.yml/badge.svg)
 [![WorkflowNative](https://github.com/Hangman/TuningFork/actions/workflows/build_natives.yml/badge.svg)](https://github.com/Hangman/TuningFork/actions/workflows/build_natives.yml/badge.svg)
+[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://Hangman.github.io/TuningFork/javadoc/)
 [![Versioning](https://img.shields.io/badge/semver-2.0.0-blue)](https://semver.org/)
 
 </td></tr></table>
