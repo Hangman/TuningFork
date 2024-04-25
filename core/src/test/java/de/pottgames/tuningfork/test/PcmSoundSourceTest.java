@@ -41,7 +41,6 @@ public class PcmSoundSourceTest extends ApplicationAdapter {
         this.audio = Audio.init(config);
         this.stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
         this.pcmSource = new PcmSoundSource(this.stream.getSampleRate(), PcmFormat.MONO_16_BIT);
-        this.pcmSource.setLooping(false);
     }
 
 
