@@ -36,11 +36,13 @@ public class PcmSoundSourceTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        final AudioConfig config = new AudioConfig();
-        config.setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
+        final AudioConfig config = new AudioConfig().setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
         this.audio = Audio.init(config);
         this.stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
-        this.pcmSource = new PcmSoundSource(this.stream.getSampleRate(), PcmFormat.MONO_16_BIT);
+        PcmFormat format = PcmFormat.determineFormat(this.stream.getChannels(), this.stream.getBitsPerSample(),
+                                                     this.stream.getPcmDataType());
+        assert format != null;
+        this.pcmSource = new PcmSoundSource(this.stream.getSampleRate(), format);
     }
 
 
