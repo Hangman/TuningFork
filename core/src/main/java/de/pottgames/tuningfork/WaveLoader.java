@@ -76,7 +76,7 @@ public abstract class WaveLoader {
 
 
     /**
-     * Loads a {@link SoundBuffer} from an {@link InputStream} and closes it afterwards.
+     * Loads a {@link SoundBuffer} from an {@link InputStream} and closes it afterward.
      *
      * @param stream the input stream
      * @return the SoundBuffer

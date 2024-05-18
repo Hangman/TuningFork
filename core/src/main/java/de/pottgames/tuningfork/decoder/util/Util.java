@@ -71,6 +71,12 @@ public class Util {
     }
 
 
+    /**
+     * Fully reads an InputStream and returns its data as an array of bytes.
+     *
+     * @param stream the InputStream
+     * @return a byte array that contains the data of the stream
+     */
     public static byte[] toByteArray(InputStream stream) throws IOException {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final byte[] buffer = new byte[20000];
@@ -123,13 +129,29 @@ public class Util {
      *
      * @param source The source byte array.
      * @param offset The starting offset in the source array.
-     * @return The long value converted from the specified bytes in big-endian order.
+     * @return The long value converted from the specified bytes in big-endian byte order.
      */
     public static long longOfBigEndianBytes(byte[] source, int offset) {
         return (source[offset] & 0xFFL) << 56 | (source[offset + 1] & 0xFFL) << 48 |
                (source[offset + 2] & 0xFFL) << 40 | (source[offset + 3] & 0xFFL) << 32 |
                (source[offset + 4] & 0xFFL) << 24 | (source[offset + 5] & 0xFFL) << 16 |
                (source[offset + 6] & 0xFFL) << 8 | source[offset + 7] & 0xFFL;
+    }
+
+
+    /**
+     * Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
+     * value using little-endian byte order.
+     *
+     * @param source The source byte array.
+     * @param offset The starting offset in the source array.
+     * @return The long value converted from the specified bytes in little-endian byte order.
+     */
+    public static long longOfLittleEndianBytes(byte[] source, int offset) {
+        return (source[offset + 7] & 0xFFL) << 56 | (source[offset + 6] & 0xFFL) << 48 |
+               (source[offset + 5] & 0xFFL) << 40 | (source[offset + 4] & 0xFFL) << 32 |
+               (source[offset + 3] & 0xFFL) << 24 | (source[offset + 2] & 0xFFL) << 16 |
+               (source[offset + 1] & 0xFFL) << 8 | source[offset] & 0xFFL;
     }
 
 
@@ -148,6 +170,34 @@ public class Util {
 
 
     /**
+     * Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
+     * value representing a signed integer using big-endian byte order.
+     *
+     * @param source The source byte array.
+     * @param offset The starting offset in the source array.
+     * @return The int value representing the signed integer from the specified bytes in big-endian byte order.
+     */
+    public static int intOfBigEndianBytes(byte[] source, int offset) {
+        return (source[offset] & 0xFF) << 24 | (source[offset + 1] & 0xFF) << 16 | (source[offset + 2] & 0xFF) << 8 |
+               source[offset + 3] & 0xFF;
+    }
+
+
+    /**
+     * Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
+     * value representing a signed integer using little-endian byte order.
+     *
+     * @param source The source byte array.
+     * @param offset The starting offset in the source array.
+     * @return The int value representing the signed integer from the specified bytes in little-endian byte order.
+     */
+    public static int intOfLittleEndianBytes(byte[] source, int offset) {
+        return (source[offset + 3] & 0xFF) << 24 | (source[offset + 2] & 0xFF) << 16 |
+               (source[offset + 1] & 0xFF) << 8 | source[offset] & 0xFF;
+    }
+
+
+    /**
      * Clamps a value to the given limit.
      *
      * @param value the value
@@ -155,10 +205,7 @@ public class Util {
      * @return the result
      */
     public static int limit(int value, int limit) {
-        if (value > limit) {
-            return limit;
-        }
-        return value;
+        return Math.min(value, limit);
     }
 
 }
