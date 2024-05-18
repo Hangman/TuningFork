@@ -63,11 +63,11 @@ public class WaveFormTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // Some files to test this with
-        final WavInputStream input = new WavInputStream(Gdx.files.internal("numbers.wav"));
-        // final AudioStream input = new WavInputStream(Gdx.files.internal("numbers_8bit_mono.wav"));
-        // final AudioStream input = new WavInputStream(Gdx.files.internal("quadrophonic.wav"));
-        // final AudioStream input = new WavInputStream(Gdx.files.internal("32bit_float_numbers.wav"));
-        // final AudioStream input = new WavInputStream(Gdx.files.internal("64bit_float_numbers.wav"));
+        // final WavInputStream input = new WavInputStream(Gdx.files.internal("numbers.wav"));
+        // final WavInputStream input = new WavInputStream(Gdx.files.internal("numbers_8bit_mono.wav"));
+        final WavInputStream input = new WavInputStream(Gdx.files.internal("quadrophonic.wav"));
+        // final WavInputStream input = new WavInputStream(Gdx.files.internal("32bit_float_numbers.wav"));
+        // final WavInputStream input = new WavInputStream(Gdx.files.internal("64bit_float_numbers.wav"));
 
         // Extract meta data from the stream
         final int channels = input.getChannels();
