@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9};
+var methods = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -145,6 +145,16 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/misc/PcmUtil.html#averageSample-byte:A-de.pottgames.tuningfork.PcmFormat-int-int-int-">averageSample</a></span>(byte[]&nbsp;input,
+             <a href="../../../../de/pottgames/tuningfork/PcmFormat.html" title="enum in de.pottgames.tuningfork">PcmFormat</a>&nbsp;format,
+             int&nbsp;startSample,
+             int&nbsp;endSample,
+             int&nbsp;channel)</code>
+<div class="block">Calculates the average amplitude of a slice of samples.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/misc/PcmUtil.html#reverseAudio-byte:A-int-">reverseAudio</a></span>(byte[]&nbsp;pcmData,
             int&nbsp;sampleSizeInBytes)</code>
@@ -193,7 +203,7 @@ extends java.lang.Object</pre>
 <a name="reverseAudio-byte:A-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>reverseAudio</h4>
 <pre>public static&nbsp;byte[]&nbsp;reverseAudio(byte[]&nbsp;pcmData,
@@ -205,6 +215,31 @@ extends java.lang.Object</pre>
 <dd><code>sampleSizeInBytes</code> - the bytes per sample</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the reversed audio data</dd>
+</dl>
+</li>
+</ul>
+<a name="averageSample-byte:A-de.pottgames.tuningfork.PcmFormat-int-int-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>averageSample</h4>
+<pre>public static&nbsp;float&nbsp;averageSample(byte[]&nbsp;input,
+                                  <a href="../../../../de/pottgames/tuningfork/PcmFormat.html" title="enum in de.pottgames.tuningfork">PcmFormat</a>&nbsp;format,
+                                  int&nbsp;startSample,
+                                  int&nbsp;endSample,
+                                  int&nbsp;channel)</pre>
+<div class="block">Calculates the average amplitude of a slice of samples. The result is always in the range 0 - 1. With 0 equals
+ silence and 1 equals full amplitude.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>input</code> - the input byte array containing the samples</dd>
+<dd><code>format</code> - the data format of the input byte array</dd>
+<dd><code>startSample</code> - the start index of the desired slice</dd>
+<dd><code>endSample</code> - the end index of the desired slice</dd>
+<dd><code>channel</code> - the channel number samples will be read from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the average amplitude of all samples in the slice in the range 0 - 1</dd>
 </dl>
 </li>
 </ul>

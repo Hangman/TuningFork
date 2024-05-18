@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":9,"i3":9,"i4":9,"i5":9};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -234,20 +234,24 @@ extends java.lang.Enum&lt;<a href="../../../de/pottgames/tuningfork/PcmFormat.ht
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#getAlId--">getAlId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#isSupportedBitRate-int-">isSupportedBitRate</a></span>(int&nbsp;bits)</code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#getChannels--">getChannels</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#isSupportedChannelCount-int-">isSupportedChannelCount</a></span>(int&nbsp;channels)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#isSupportedBitRate-int-">isSupportedBitRate</a></span>(int&nbsp;bits)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#isSupportedChannelCount-int-">isSupportedChannelCount</a></span>(int&nbsp;channels)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../de/pottgames/tuningfork/PcmFormat.html" title="enum in de.pottgames.tuningfork">PcmFormat</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#valueOf-java.lang.String-">valueOf</a></span>(java.lang.String&nbsp;name)</code>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../de/pottgames/tuningfork/PcmFormat.html" title="enum in de.pottgames.tuningfork">PcmFormat</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PcmFormat.html#values--">values</a></span>()</code>
 <div class="block">Returns an array containing the constants of this enum type, in
@@ -502,6 +506,15 @@ not permitted.)</div>
 <li class="blockList">
 <h4>getAlId</h4>
 <pre>public&nbsp;int&nbsp;getAlId()</pre>
+</li>
+</ul>
+<a name="getChannels--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChannels</h4>
+<pre>public&nbsp;int&nbsp;getChannels()</pre>
 </li>
 </ul>
 <a name="isSupportedChannelCount-int-">

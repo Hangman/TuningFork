@@ -291,6 +291,10 @@
 <dd>
 <div class="block">Returns a list of available input devices.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/misc/PcmUtil.html#averageSample-byte:A-de.pottgames.tuningfork.PcmFormat-int-int-int-">averageSample(byte[], PcmFormat, int, int, int)</a></span> - Static method in class de.pottgames.tuningfork.misc.<a href="de/pottgames/tuningfork/misc/PcmUtil.html" title="class in de.pottgames.tuningfork.misc">PcmUtil</a></dt>
+<dd>
+<div class="block">Calculates the average amplitude of a slice of samples.</div>
+</dd>
 </dl>
 <a name="I:B">
 <!--   -->
@@ -1231,6 +1235,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/WavInputStream.html#getChannels--">getChannels()</a></span> - Method in class de.pottgames.tuningfork.decoder.<a href="de/pottgames/tuningfork/decoder/WavInputStream.html" title="class in de.pottgames.tuningfork.decoder">WavInputStream</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/PcmFormat.html#getChannels--">getChannels()</a></span> - Method in enum de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/PcmFormat.html" title="enum in de.pottgames.tuningfork">PcmFormat</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AudioDevice.html#getClockTime--">getClockTime()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AudioDevice.html" title="class in de.pottgames.tuningfork">AudioDevice</a></dt>
 <dd>
 <div class="block">Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the
@@ -1787,6 +1793,16 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/Int32To16PcmDecoder.html#Int32To16PcmDecoder-int-int-">Int32To16PcmDecoder(int, int)</a></span> - Constructor for class de.pottgames.tuningfork.decoder.<a href="de/pottgames/tuningfork/decoder/Int32To16PcmDecoder.html" title="class in de.pottgames.tuningfork.decoder">Int32To16PcmDecoder</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/util/Util.html#intOfBigEndianBytes-byte:A-int-">intOfBigEndianBytes(byte[], int)</a></span> - Static method in class de.pottgames.tuningfork.decoder.util.<a href="de/pottgames/tuningfork/decoder/util/Util.html" title="class in de.pottgames.tuningfork.decoder.util">Util</a></dt>
+<dd>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
+ value representing a signed integer using big-endian byte order.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/util/Util.html#intOfLittleEndianBytes-byte:A-int-">intOfLittleEndianBytes(byte[], int)</a></span> - Static method in class de.pottgames.tuningfork.decoder.util.<a href="de/pottgames/tuningfork/decoder/util/Util.html" title="class in de.pottgames.tuningfork.decoder.util">Util</a></dt>
+<dd>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
+ value representing a signed integer using little-endian byte order.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundFileType.html#isAifcHeader-byte:A-">isAifcHeader(byte[])</a></span> - Static method in enum de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundFileType.html" title="enum in de.pottgames.tuningfork">SoundFileType</a></dt>
 <dd>
 <div class="block">Checks if the provided byte array represents an AIFC header.</div>
@@ -2112,7 +2128,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#load-java.io.InputStream-">load(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
 <dd>
-<div class="block">Loads a <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a> from an <code>InputStream</code> and closes it afterwards.</div>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a> from an <code>InputStream</code> and closes it afterward.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#load-de.pottgames.tuningfork.decoder.WavInputStream-">load(WavInputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
 <dd>
@@ -2166,6 +2182,11 @@
 <dd>
 <div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
  value using big-endian byte order.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/util/Util.html#longOfLittleEndianBytes-byte:A-int-">longOfLittleEndianBytes(byte[], int)</a></span> - Static method in class de.pottgames.tuningfork.decoder.util.<a href="de/pottgames/tuningfork/decoder/util/Util.html" title="class in de.pottgames.tuningfork.decoder.util">Util</a></dt>
+<dd>
+<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
+ value using little-endian byte order.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/jukebox/playlist/PlayList.html#loop">loop</a></span> - Variable in class de.pottgames.tuningfork.jukebox.playlist.<a href="de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a></dt>
 <dd>&nbsp;</dd>
@@ -3922,7 +3943,9 @@
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html#title">title</a></span> - Variable in class de.pottgames.tuningfork.jukebox.song.<a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html" title="class in de.pottgames.tuningfork.jukebox.song">SongMeta</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/util/Util.html#toByteArray-java.io.InputStream-">toByteArray(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.decoder.util.<a href="de/pottgames/tuningfork/decoder/util/Util.html" title="class in de.pottgames.tuningfork.decoder.util">Util</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Fully reads an InputStream and returns its data as an array of bytes.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AutoWah.html#toString--">toString()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AutoWah.html" title="class in de.pottgames.tuningfork">AutoWah</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Chorus.html#toString--">toString()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Chorus.html" title="class in de.pottgames.tuningfork">Chorus</a></dt>
