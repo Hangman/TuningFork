@@ -1,14 +1,13 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.jukebox.song;
@@ -18,8 +17,8 @@ import de.pottgames.tuningfork.jukebox.JukeBox;
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
 
 /**
- * An immutable data class containing a {@link SongSource} and a {@link SongSettings} object meant to be added to a
- * {@link PlayList} that can be played via {@link JukeBox}.
+ * An immutable data class containing a {@link SongSource} and a {@link SongSettings} object meant to be added to a {@link PlayList} that can be played via
+ * {@link JukeBox}.
  *
  * @author Matthias
  */
@@ -42,7 +41,7 @@ public class Song {
     /**
      * Creates a new Song with the given settings.
      *
-     * @param source   the song source
+     * @param source the song source
      * @param settings if null, default settings will be used, see {@link SongSettings#DEFAULT} for details
      */
     public Song(SongSource source, SongSettings settings) {
@@ -53,7 +52,7 @@ public class Song {
     /**
      * Creates a new Song with the given settings and meta-data.
      *
-     * @param source   the song source
+     * @param source the song source
      * @param settings if null, default settings will be used, see {@link SongSettings#DEFAULT} for details
      * @param metaData may be null
      */

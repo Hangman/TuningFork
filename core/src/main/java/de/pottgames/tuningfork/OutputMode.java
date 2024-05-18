@@ -55,7 +55,7 @@ public enum OutputMode {
 
 
     private static final OutputMode[] MAP = OutputMode.values();
-    private final        int          alId;
+    private final int                 alId;
 
 
     OutputMode(int alId) {

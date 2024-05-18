@@ -1,7 +1,12 @@
 package de.pottgames.tuningfork;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.misc.PcmUtil;
 import javazoom.jl.decoder.Bitstream;
@@ -9,13 +14,9 @@ import javazoom.jl.decoder.Header;
 import javazoom.jl.decoder.MP3Decoder;
 import javazoom.jl.decoder.OutputBuffer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-
 /**
- * This class provides static functions to load mp3 audio data.<br> The mp3 file format is not officially supported by
- * TuningFork. Use at your own risk.
+ * This class provides static functions to load mp3 audio data.<br>
+ * The mp3 file format is not officially supported by TuningFork. Use at your own risk.
  *
  * @author Matthias
  */
@@ -24,6 +25,7 @@ public abstract class Mp3Loader {
      * Loads a mp3 into a {@link SoundBuffer}.
      *
      * @param file the file
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(File file) {
@@ -32,10 +34,10 @@ public abstract class Mp3Loader {
 
 
     /**
-     * Loads sound data from a {@link FileHandle} into a {@link SoundBuffer} using the mp3 decoder and closes the stream
-     * afterward.
+     * Loads sound data from a {@link FileHandle} into a {@link SoundBuffer} using the mp3 decoder and closes the stream afterward.
      *
      * @param file the file handle
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle file) {
@@ -47,6 +49,7 @@ public abstract class Mp3Loader {
      * Loads a mp3 into a {@link SoundBuffer} and closes the InputStream afterward.
      *
      * @param stream the input stream
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(InputStream stream) {
@@ -91,6 +94,7 @@ public abstract class Mp3Loader {
      * Loads an mp3 file in reverse into a {@link SoundBuffer}.
      *
      * @param file the file handle
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer loadReverse(FileHandle file) {

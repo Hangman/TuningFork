@@ -1,23 +1,23 @@
 package de.pottgames.tuningfork.decoder;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.bindings.ImaAdpcmRs;
 import de.pottgames.tuningfork.decoder.util.Util;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 public class ImaAdpcmRsDecoder implements WavDecoder {
-    private       InputStream stream;
-    private final int         blockSize;
-    private final int         channels;
-    private final int         sampleRate;
-    private       long        totalOutputSamplesPerChannel;
-    private       long        bytesRemaining = -1L;
-    private       long        streamLength;
-    private       byte[]      audioData;
-    private       int         readIndex;
+    private InputStream stream;
+    private final int   blockSize;
+    private final int   channels;
+    private final int   sampleRate;
+    private long        totalOutputSamplesPerChannel;
+    private long        bytesRemaining = -1L;
+    private long        streamLength;
+    private byte[]      audioData;
+    private int         readIndex;
 
 
     public ImaAdpcmRsDecoder(int blockSize, int channels, int sampleRate) {

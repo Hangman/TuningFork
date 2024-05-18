@@ -1,29 +1,25 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.EXTEfx;
-
 import java.util.Objects;
 
+import org.lwjgl.openal.EXTEfx;
+
 /**
- * The Auto-wah effect emulates the sound of a wah-wah pedal used with an electric guitar, or a mute on a brass
- * instrument. Such effects allow a musician to
- * control the tone of their instrument by varying the point at which high frequencies are cut off. This OpenAL
- * Effects Extension effect is called Auto-wah
- * because there is no user input for modulating the cut-off point. Instead the effect is achieved by analysing the
- * input signal, and applying a band-pass
+ * The Auto-wah effect emulates the sound of a wah-wah pedal used with an electric guitar, or a mute on a brass instrument. Such effects allow a musician to
+ * control the tone of their instrument by varying the point at which high frequencies are cut off. This OpenAL Effects Extension effect is called Auto-wah
+ * because there is no user input for modulating the cut-off point. Instead the effect is achieved by analysing the input signal, and applying a band-pass
  * filter according the intensity of the incoming audio.
  *
  * @author Matthias
@@ -32,24 +28,20 @@ import java.util.Objects;
 public class AutoWah extends SoundEffectData {
     /**
      * Range: 0.0001 - 1.0, Default: 0.06<br>
-     * This property controls the time the filtering effect takes to sweep from minimum to maximum center frequency
-     * when it is triggered by input signal.
+     * This property controls the time the filtering effect takes to sweep from minimum to maximum center frequency when it is triggered by input signal.
      */
     public float attackTime = 0.06f;
 
     /**
      * Range: 0.0001 - 1.0, Default: 0.06<br>
-     * This property controls the time the filtering effect takes to sweep from maximum back to base center
-     * frequency, when the input signal ends.
+     * This property controls the time the filtering effect takes to sweep from maximum back to base center frequency, when the input signal ends.
      */
     public float releaseTime = 0.06f;
 
     /**
      * Range: 2.0 - 1000.0, Default: 1000.0<br>
-     * This property controls the resonant peak, sometimes known as emphasis or Q, of the auto-wah band-pass filter.
-     * Resonance occurs when the effect boosts the
-     * frequency content of the sound 115/144 around the point at which the filter is working. A high value promotes
-     * a highly resonant, sharp sounding effect.
+     * This property controls the resonant peak, sometimes known as emphasis or Q, of the auto-wah band-pass filter. Resonance occurs when the effect boosts the
+     * frequency content of the sound 115/144 around the point at which the filter is working. A high value promotes a highly resonant, sharp sounding effect.
      */
     public float resonance = 1000f;
 
@@ -138,17 +130,17 @@ public class AutoWah extends SoundEffectData {
             return false;
         }
         final AutoWah other = (AutoWah) obj;
-        return Float.floatToIntBits(this.attackTime) == Float.floatToIntBits(other.attackTime) &&
-               Float.floatToIntBits(this.peakGain) == Float.floatToIntBits(other.peakGain) &&
-               Float.floatToIntBits(this.releaseTime) == Float.floatToIntBits(other.releaseTime) &&
-               Float.floatToIntBits(this.resonance) == Float.floatToIntBits(other.resonance);
+        return Float.floatToIntBits(this.attackTime) == Float.floatToIntBits(other.attackTime)
+                && Float.floatToIntBits(this.peakGain) == Float.floatToIntBits(other.peakGain)
+                && Float.floatToIntBits(this.releaseTime) == Float.floatToIntBits(other.releaseTime)
+                && Float.floatToIntBits(this.resonance) == Float.floatToIntBits(other.resonance);
     }
 
 
     @Override
     public String toString() {
-        return "AutoWah [attackTime=" + this.attackTime + ", releaseTime=" + this.releaseTime + ", resonance=" +
-               this.resonance + ", peakGain=" + this.peakGain + "]";
+        return "AutoWah [attackTime=" + this.attackTime + ", releaseTime=" + this.releaseTime + ", resonance=" + this.resonance + ", peakGain=" + this.peakGain
+                + "]";
     }
 
 }

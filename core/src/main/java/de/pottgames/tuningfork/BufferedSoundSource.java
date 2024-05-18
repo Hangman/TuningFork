@@ -1,25 +1,26 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
 
-import com.badlogic.gdx.math.Vector3;
-import de.pottgames.tuningfork.jukebox.song.SongSource;
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.SOFTSourceStartDelay;
+
+import com.badlogic.gdx.math.Vector3;
+
+import de.pottgames.tuningfork.jukebox.song.SongSource;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
  * A sound source that is backed by a single buffer.
@@ -28,10 +29,10 @@ import org.lwjgl.openal.SOFTSourceStartDelay;
  *
  */
 public class BufferedSoundSource extends SongSource {
-    private       SoundBuffer      buffer;
+    private SoundBuffer            buffer;
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
-    boolean obtained = false;
+    boolean                        obtained = false;
 
 
     BufferedSoundSource() {
@@ -66,10 +67,8 @@ public class BufferedSoundSource extends SongSource {
 
 
     /**
-     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do
-     * nothing else. Positive values that point to the
-     * past will make the source play immediately. The source will be in playing-state while waiting for the start
-     * time to be reached. A call to {@link #play()}
+     * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
+     * past will make the source play immediately. The source will be in playing-state while waiting for the start time to be reached. A call to {@link #play()}
      * will not play the sound immediately anymore. In order to delete the play-at-time, call {@link #stop()}.
      *
      * @param time the time in nanoseconds, use {@link AudioDevice#getClockTime()} to get the current time
@@ -306,8 +305,7 @@ public class BufferedSoundSource extends SongSource {
      */
     public void free() {
         if (!this.obtained) {
-            throw new TuningForkRuntimeException(
-                    "Invalid call to BufferedSoundSource.free(), you are not the owner of this sound source.");
+            throw new TuningForkRuntimeException("Invalid call to BufferedSoundSource.free(), you are not the owner of this sound source.");
         }
         this.stop();
         this.setBuffer(null);

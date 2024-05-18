@@ -1,27 +1,16 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
-
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.StreamUtils;
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-import de.pottgames.tuningfork.decoder.OggInputStream;
-import de.pottgames.tuningfork.decoder.util.Util;
-import de.pottgames.tuningfork.misc.PcmUtil;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.stb.STBVorbis;
-import org.lwjgl.system.MemoryStack;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,12 +20,25 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.stb.STBVorbis;
+import org.lwjgl.system.MemoryStack;
+
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.StreamUtils;
+
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.decoder.OggInputStream;
+import de.pottgames.tuningfork.decoder.util.Util;
+import de.pottgames.tuningfork.misc.PcmUtil;
+
 public abstract class OggLoader {
 
     /**
      * Loads an ogg into a {@link SoundBuffer}.
      *
      * @param file the file
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(File file) {
@@ -48,6 +50,7 @@ public abstract class OggLoader {
      * Loads an ogg into a {@link SoundBuffer}.
      *
      * @param fileHandle the file handle
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(FileHandle fileHandle) {
@@ -60,10 +63,11 @@ public abstract class OggLoader {
 
 
     /**
-     * Loads an ogg into a {@link SoundBuffer}. <b>Referenced file must not be packed into a jar. Be careful with this
-     * as packaging files into the jar is libGDXs default behavior on distribution.</b>
+     * Loads an ogg into a {@link SoundBuffer}. <b>Referenced file must not be packed into a jar. Be careful with this as packaging files into the jar is
+     * libGDXs default behavior on distribution.</b>
      *
      * @param path the path to the file
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer loadNonPacked(String path) {
@@ -87,6 +91,7 @@ public abstract class OggLoader {
      * Loads an ogg into a {@link SoundBuffer} and closes the InputStream afterward.
      *
      * @param stream the input stream
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(InputStream stream) {
@@ -121,6 +126,7 @@ public abstract class OggLoader {
      * Loads a {@link SoundBuffer} from a {@link OggInputStream}.
      *
      * @param input the OggInputStream
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer load(OggInputStream input) {
@@ -135,8 +141,7 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(),
-                                     input.getBitsPerSample(), input.getPcmDataType());
+            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }
@@ -149,6 +154,7 @@ public abstract class OggLoader {
      * Loads an ogg file in reverse into a {@link SoundBuffer}.
      *
      * @param fileHandle the file handle
+     *
      * @return the SoundBuffer
      */
     public static SoundBuffer loadReverse(FileHandle fileHandle) {
@@ -165,8 +171,7 @@ public abstract class OggLoader {
                 output.write(buffer, 0, length);
             }
             final byte[] reversedPcm = PcmUtil.reverseAudio(output.toByteArray(), input.getBitsPerSample() / 8);
-            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(),
-                                     input.getPcmDataType());
+            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

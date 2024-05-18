@@ -1,23 +1,24 @@
 package de.pottgames.tuningfork;
 
-import com.badlogic.gdx.utils.Array;
-import de.pottgames.tuningfork.AudioConfig.Spatialization;
-import de.pottgames.tuningfork.AudioConfig.Virtualization;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.badlogic.gdx.utils.Array;
+
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
+import de.pottgames.tuningfork.AudioConfig.Virtualization;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+
 public class StreamManager {
-    private final    ConcurrentLinkedQueue<AsyncTask> idleTasks      = new ConcurrentLinkedQueue<>();
-    private final    ExecutorService                  taskService;
-    private final    Array<StreamedSoundSource>       soundsToUpdate = new Array<>();
-    private final    Object                           lock           = new Object();
-    private final    Thread                           updateThread;
-    private volatile boolean                          running        = true;
-    private final    TuningForkLogger                 logger;
+    private final ConcurrentLinkedQueue<AsyncTask> idleTasks      = new ConcurrentLinkedQueue<>();
+    private final ExecutorService                  taskService;
+    private final Array<StreamedSoundSource>       soundsToUpdate = new Array<>();
+    private final Object                           lock           = new Object();
+    private final Thread                           updateThread;
+    private volatile boolean                       running        = true;
+    private final TuningForkLogger                 logger;
 
 
     protected StreamManager(AudioConfig config, TuningForkLogger logger) {

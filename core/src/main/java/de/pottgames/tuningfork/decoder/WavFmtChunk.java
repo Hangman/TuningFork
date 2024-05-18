@@ -1,7 +1,7 @@
 package de.pottgames.tuningfork.decoder;
 
 public class WavFmtChunk {
-    public final  int   length;
+    public final int    length;
     private final int[] data;
     private final int   wFormatTag;
     private final int   nChannels;
@@ -9,10 +9,10 @@ public class WavFmtChunk {
     private final long  nAvgBytesPerSec;
     private final int   nBlockAlign;
     private final int   wBitsPerSample;
-    private       int   cbSize              = -1;
-    private       int   wValidBitsPerSample = -1;
-    private       int   dwChannelMask       = -1;
-    private       int   subFormatDataCode;
+    private int         cbSize              = -1;
+    private int         wValidBitsPerSample = -1;
+    private int         dwChannelMask       = -1;
+    private int         subFormatDataCode;
 
 
     public WavFmtChunk(int[] data) {
@@ -147,10 +147,10 @@ public class WavFmtChunk {
 
 
     /**
-     * Returns a byte (int 0 - 255) of the original chunk data as read from the stream. {@link WavFmtChunk#length} is
-     * set to the original data length.
+     * Returns a byte (int 0 - 255) of the original chunk data as read from the stream. {@link WavFmtChunk#length} is set to the original data length.
      *
      * @param index the index
+     *
      * @return an int containing the byte of the original data
      */
     public int getRaw(int index) {

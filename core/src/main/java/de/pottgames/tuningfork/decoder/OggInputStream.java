@@ -3,25 +3,29 @@
  *
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
- * following conditions are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  *
- * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
- * disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
- * following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of
- * the Slick 2D nor the names of its contributors may be used to endorse or promote products derived from this software
+ * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form
+ * must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
+ * distribution. Neither the name of the Slick 2D nor the names of its contributors may be used to endorse or promote products derived from this software
  * without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 package de.pottgames.tuningfork.decoder;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import org.lwjgl.BufferUtils;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.files.FileHandle;
@@ -30,18 +34,16 @@ import com.jcraft.jogg.Packet;
 import com.jcraft.jogg.Page;
 import com.jcraft.jogg.StreamState;
 import com.jcraft.jogg.SyncState;
-import com.jcraft.jorbis.*;
+import com.jcraft.jorbis.Block;
+import com.jcraft.jorbis.Comment;
+import com.jcraft.jorbis.DspState;
+import com.jcraft.jorbis.Info;
+import com.jcraft.jorbis.VorbisFile;
+
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
-import org.lwjgl.BufferUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 /**
  * An input stream to read Ogg Vorbis.
@@ -59,7 +61,7 @@ public class OggInputStream implements AudioStream {
     /**
      * The conversion buffer size
      */
-    private       int         convsize = OggInputStream.BUFFER_SIZE * 4;
+    private int               convsize = OggInputStream.BUFFER_SIZE * 4;
     /**
      * The buffer used to read OGG file
      */
@@ -76,12 +78,12 @@ public class OggInputStream implements AudioStream {
     /**
      * True if we're at the end of the available data
      */
-    private       boolean     endOfStream;
+    private boolean endOfStream;
 
     /**
      * The Vorbis SyncState used to decode the OGG
      */
-    private final SyncState   syncState   = new SyncState();   // sync and verify incoming physical bitstream
+    private final SyncState   syncState   = new SyncState();  // sync and verify incoming physical bitstream
     /**
      * The Vorbis Stream State used to decode the OGG
      */
@@ -90,11 +92,11 @@ public class OggInputStream implements AudioStream {
     /**
      * The current OGG page
      */
-    private final Page        page        = new Page();        // one Ogg bitstream page. Vorbis packets are inside
+    private final Page   page   = new Page();   // one Ogg bitstream page. Vorbis packets are inside
     /**
      * The current packet page
      */
-    private final Packet      packet      = new Packet();      // one raw packet of data for decode
+    private final Packet packet = new Packet(); // one raw packet of data for decode
 
     /**
      * The comment read from the OGG file
@@ -133,7 +135,7 @@ public class OggInputStream implements AudioStream {
     /**
      * The index into the byte array we currently read from
      */
-    private       int        readIndex;
+    private int              readIndex;
     /**
      * The byte array store used to hold the data read from the ogg
      */
@@ -142,14 +144,14 @@ public class OggInputStream implements AudioStream {
      * The total number of bytes
      */
     private final int        total;
-    private       boolean    closed = false;
+    private boolean          closed = false;
 
 
     /**
-     * Initializes a {@link OggInputStream} from a {@link FileHandle} and an optional {@link OggInputStream} for buffer
-     * reusage, the old stream shouldn't be used afterward.
+     * Initializes a {@link OggInputStream} from a {@link FileHandle} and an optional {@link OggInputStream} for buffer reusage, the old stream shouldn't be
+     * used afterward.
      *
-     * @param file           the file handle
+     * @param file the file handle
      * @param previousStream may be null
      */
     public OggInputStream(FileHandle file, OggInputStream previousStream) {
@@ -176,8 +178,7 @@ public class OggInputStream implements AudioStream {
                 final StringBuilder builder = new StringBuilder();
                 builder.append("Can't measure the duration of: ");
                 builder.append(file.path());
-                builder.append(" - solution: use Gdx.files.absolute() and exclude it from being packed in the jar on " +
-                               "distribution");
+                builder.append(" - solution: use Gdx.files.absolute() and exclude it from being packed in the jar on " + "distribution");
                 this.logger.warn(this.getClass(), builder.toString());
             }
             this.duration = duration;
@@ -198,9 +199,8 @@ public class OggInputStream implements AudioStream {
 
 
     /**
-     * Initializes a {@link OggInputStream} from an {@link InputStream}. This stream does not support the reset and
-     * getDuration function. Use {@link #OggInputStream(FileHandle, OggInputStream)} instead to get the full
-     * functionality.
+     * Initializes a {@link OggInputStream} from an {@link InputStream}. This stream does not support the reset and getDuration function. Use
+     * {@link #OggInputStream(FileHandle, OggInputStream)} instead to get the full functionality.
      *
      * @param stream the input stream
      */
@@ -521,8 +521,7 @@ public class OggInputStream implements AudioStream {
                                     final int bytesToWrite = 2 * this.oggInfo.channels * bout;
                                     if (bytesToWrite > this.pcmBuffer.remaining()) {
                                         throw new TuningForkRuntimeException(
-                                                "Ogg block too big to be buffered: " + bytesToWrite + " :: " +
-                                                this.pcmBuffer.remaining());
+                                                "Ogg block too big to be buffered: " + bytesToWrite + " :: " + this.pcmBuffer.remaining());
                                     }
                                     this.pcmBuffer.put(this.convbuffer, 0, bytesToWrite);
 

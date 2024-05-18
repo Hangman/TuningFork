@@ -1,17 +1,22 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
+
+import java.util.Objects;
+
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.SOFTDirectChannelsRemix;
+import org.lwjgl.openal.SOFTSourceSpatialize;
 
 import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
@@ -20,11 +25,6 @@ import de.pottgames.tuningfork.logger.GdxLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 import de.pottgames.tuningfork.misc.ExperimentalFeature;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.SOFTDirectChannelsRemix;
-import org.lwjgl.openal.SOFTSourceSpatialize;
-
-import java.util.Objects;
 
 public class AudioConfig {
     protected AudioDeviceConfig        deviceConfig;
@@ -59,18 +59,16 @@ public class AudioConfig {
     /**
      * Creates an AudioConfig with the given settings.
      *
-     * @param deviceConfig             the device config
+     * @param deviceConfig the device config
      * @param distanceAttenuationModel the distance attenuation model
-     * @param simultaneousSources      defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
-     * @param idleTasks                the initial task pool capacity, 10 is the default, only go higher if you plan to
-     *                                 make heavy use of {@link StreamedSoundSource}s simultaneously
-     * @param logger                   the logger to be used by TuningFork. You can implement the
-     *                                 {@link TuningForkLogger} interface to write your own or choose one of the
-     *                                 available logger implementations that are shipped with TuningFork.
+     * @param simultaneousSources defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
+     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s
+     *            simultaneously
+     * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
+     *            available logger implementations that are shipped with TuningFork.
      */
-    public AudioConfig(
-            AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources,
-            int idleTasks, TuningForkLogger logger) {
+    public AudioConfig(AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources, int idleTasks,
+            TuningForkLogger logger) {
         this(deviceConfig, distanceAttenuationModel, simultaneousSources, idleTasks, Virtualization.ON, logger);
     }
 
@@ -78,19 +76,17 @@ public class AudioConfig {
     /**
      * Creates an AudioConfig with the given settings.
      *
-     * @param deviceConfig             the device config
+     * @param deviceConfig the device config
      * @param distanceAttenuationModel the distance attenuation model
-     * @param simultaneousSources      defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
-     * @param idleTasks                the initial task pool capacity, 10 is the default, only go higher if you plan to
-     *                                 make heavy use of {@link StreamedSoundSource}s simultaneously
-     * @param virtualization           see {@link #setVirtualization(Virtualization)} for info
-     * @param logger                   the logger to be used by TuningFork. You can implement the
-     *                                 {@link TuningForkLogger} interface to write your own or choose one of the
-     *                                 available logger implementations that are shipped with TuningFork.
+     * @param simultaneousSources defines how many {@link BufferedSoundSource}s are allowed to play simultaneously
+     * @param idleTasks the initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s
+     *            simultaneously
+     * @param virtualization see {@link #setVirtualization(Virtualization)} for info
+     * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
+     *            available logger implementations that are shipped with TuningFork.
      */
-    public AudioConfig(
-            AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources,
-            int idleTasks, Virtualization virtualization, TuningForkLogger logger) {
+    public AudioConfig(AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources, int idleTasks,
+            Virtualization virtualization, TuningForkLogger logger) {
         this.setDeviceConfig(deviceConfig);
         this.setDistanceAttenuationModel(distanceAttenuationModel);
         this.setSimultaneousSources(simultaneousSources);
@@ -111,6 +107,7 @@ public class AudioConfig {
      * Sets the audio device config.
      *
      * @param deviceConfig the device config
+     *
      * @return this
      */
     public AudioConfig setDeviceConfig(AudioDeviceConfig deviceConfig) {
@@ -131,6 +128,7 @@ public class AudioConfig {
      * Sets the distance attenuation model.
      *
      * @param distanceAttenuationModel the distance attenuation model
+     *
      * @return this
      */
     public AudioConfig setDistanceAttenuationModel(DistanceAttenuationModel distanceAttenuationModel) {
@@ -151,6 +149,7 @@ public class AudioConfig {
      * Defines how many {@link BufferedSoundSource}s are allowed to play simultaneously.
      *
      * @param simultaneousSources the number of simultaneous sources
+     *
      * @return this
      */
     public AudioConfig setSimultaneousSources(int simultaneousSources) {
@@ -168,10 +167,10 @@ public class AudioConfig {
 
 
     /**
-     * The initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of
-     * {@link StreamedSoundSource}s simultaneously.
+     * The initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s simultaneously.
      *
      * @param idleTasks the number of initial tasks
+     *
      * @return this
      */
     public AudioConfig setIdleTasks(int idleTasks) {
@@ -189,10 +188,11 @@ public class AudioConfig {
 
 
     /**
-     * Sets the spatialization mode that is used on all sources. The default is: {@link Spatialization#ON}<br> See
-     * {@link Spatialization} for the different methods available.<br>
+     * Sets the spatialization mode that is used on all sources. The default is: {@link Spatialization#ON}<br>
+     * See {@link Spatialization} for the different methods available.<br>
      *
      * @param spatialization the spatialization
+     *
      * @return this
      */
     public AudioConfig setSpatialization(Spatialization spatialization) {
@@ -207,14 +207,14 @@ public class AudioConfig {
 
 
     /**
-     * Sets the default virtualization enabled state all sound sources are initialized with. You can change it on a
-     * per-source basis later.<br> OpenAL requires buffer channels to be down-mixed to the output channel configuration,
-     * possibly using HRTF or other virtualization techniques to give a sense of speakers that may not be physically
-     * present. This leads to sometimes unexpected and unwanted audio output, so you can disable it.<br>
+     * Sets the default virtualization enabled state all sound sources are initialized with. You can change it on a per-source basis later.<br>
+     * OpenAL requires buffer channels to be down-mixed to the output channel configuration, possibly using HRTF or other virtualization techniques to give a
+     * sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output, so you can disable it.<br>
      * <br>
      * Check {@link Virtualization} for the different methods available.<br>
      *
      * @param virtualization the virtualization
+     *
      * @return this
      */
     public AudioConfig setVirtualization(Virtualization virtualization) {
@@ -237,6 +237,7 @@ public class AudioConfig {
      * If this is set to false, TuningFork will not load the native decoders and instead use the slower Java ones.
      *
      * @param value true if you want to load the native decoders
+     *
      * @return this
      */
     public AudioConfig setUseNativeDecoders(boolean value) {
@@ -251,10 +252,11 @@ public class AudioConfig {
 
 
     /**
-     * Sets the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your
-     * own or choose one of the available logger implementations that are shipped with TuningFork.
+     * Sets the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the available
+     * logger implementations that are shipped with TuningFork.
      *
      * @param logger may be null to turn off logging
+     *
      * @return this
      */
     public AudioConfig setLogger(TuningForkLogger logger) {
@@ -275,6 +277,7 @@ public class AudioConfig {
      * Sets the decoder provider that is used by {@link WavInputStream}.
      *
      * @param decoderProvider must not be null
+     *
      * @return this
      */
     public AudioConfig setWavDecoderProvider(WavDecoderProvider decoderProvider) {
@@ -302,7 +305,7 @@ public class AudioConfig {
 
 
         private static final Spatialization[] MAP = Spatialization.values();
-        private final        int              alId;
+        private final int                     alId;
 
 
         Spatialization(int alId) {
@@ -334,35 +337,33 @@ public class AudioConfig {
      */
     public enum Virtualization {
         /**
-         * Virtualization is on. Input channels will not be mapped to the corresponding output channels, instead OpenAL
-         * decides where to play each channel based on the spatialization algorithm. Applies only when playing non-mono
-         * audio.
+         * Virtualization is on. Input channels will not be mapped to the corresponding output channels, instead OpenAL decides where to play each channel based
+         * on the spatialization algorithm. Applies only when playing non-mono audio.
          */
         ON(AL10.AL_FALSE),
 
         /**
-         * Virtualizations is off. Input channels are routed to output channels as-is, input channels that don't match
-         * an output channel will be dropped.<br> An example: You try to play a 4-channel sound file on a stereo system.
-         * With this setting, only channel 1 and 2 are played, channel 3 and 4 will be ignored. Applies only when
-         * playing non-mono audio.
+         * Virtualizations is off. Input channels are routed to output channels as-is, input channels that don't match an output channel will be dropped.<br>
+         * An example: You try to play a 4-channel sound file on a stereo system. With this setting, only channel 1 and 2 are played, channel 3 and 4 will be
+         * ignored. Applies only when playing non-mono audio.
          */
         OFF_DROP_CHANNELS(SOFTDirectChannelsRemix.AL_DROP_UNMATCHED_SOFT),
 
         /**
-         * Virtualization is off. Input channels are routed to output channels as-is, input channels that do not match
-         * an output channel are mixed into the closest available output channel.<br> An example: You try to play a
-         * 4-channel sound file on a stereo system. With this setting, channel 1 and 3 are mapped to the left speaker,
-         * channel 2 and 4 to the right speaker. Applies only when playing non-mono audio.<br>
+         * Virtualization is off. Input channels are routed to output channels as-is, input channels that do not match an output channel are mixed into the
+         * closest available output channel.<br>
+         * An example: You try to play a 4-channel sound file on a stereo system. With this setting, channel 1 and 3 are mapped to the left speaker, channel 2
+         * and 4 to the right speaker. Applies only when playing non-mono audio.<br>
          * <br>
-         * <b>Warning: </b>The non-matching channels are mixed-in at a super low volume, I don't know why OpenAL does
-         * it this way but there's probably a reason. However, it is not what I'd expect it to be, hence the
-         * experimental feature flag until I have sorted this out.
+         * <b>Warning: </b>The non-matching channels are mixed-in at a super low volume, I don't know why OpenAL does it this way but there's probably a reason.
+         * However, it is not what I'd expect it to be, hence the experimental feature flag until I have sorted this out.
          */
-        @ExperimentalFeature OFF_REMIX_CHANNELS(SOFTDirectChannelsRemix.AL_REMIX_UNMATCHED_SOFT);
+        @ExperimentalFeature
+        OFF_REMIX_CHANNELS(SOFTDirectChannelsRemix.AL_REMIX_UNMATCHED_SOFT);
 
 
         private static final Virtualization[] MAP = Virtualization.values();
-        private final        int              alId;
+        private final int                     alId;
 
 
         Virtualization(int alId) {

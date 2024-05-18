@@ -1,39 +1,46 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTBlockAlignment;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.StreamUtils;
+
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamManager.TaskAction;
-import de.pottgames.tuningfork.decoder.*;
+import de.pottgames.tuningfork.decoder.AiffInputStream;
+import de.pottgames.tuningfork.decoder.AudioStream;
+import de.pottgames.tuningfork.decoder.FlacInputStream;
+import de.pottgames.tuningfork.decoder.Mp3InputStream;
+import de.pottgames.tuningfork.decoder.OggInputStream;
+import de.pottgames.tuningfork.decoder.QoaInputStream;
+import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
-import org.lwjgl.openal.SOFTBlockAlignment;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A {@link SoundSource} that streams audio data instead of loading all data at once into memory.
@@ -41,30 +48,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Matthias
  */
 public class StreamedSoundSource extends SongSource implements Disposable {
-    public static final int              BUFFER_SIZE_PER_CHANNEL  = 65536;
-    public static final int              BUFFER_COUNT             = 3;
-    private final       TuningForkLogger logger;
-    private final       ErrorLogger      errorLogger;
-    private             AudioStream      audioStream;
-    private final       float            secondsPerBuffer;
-    private final       IntBuffer        buffers;
-    private final       PcmFormat        pcmFormat;
-    private final       ByteBuffer       tempBuffer;
-    private final       byte[]           tempBytes;
-    private final       Audio            audio;
-    private final       AtomicBoolean    playing                  = new AtomicBoolean(false);
-    private final       AtomicBoolean    stopped                  = new AtomicBoolean(true);
-    private volatile    boolean          looping                  = false;
-    private volatile    float            loopStart                = 0f;
-    private volatile    float            loopEnd                  = 0f;
-    private             boolean          manuallySetBehindLoopEnd = false;
-    private volatile    boolean          readyToDispose           = false;
-    private final       float            duration;
+    public static final int        BUFFER_SIZE_PER_CHANNEL  = 65536;
+    public static final int        BUFFER_COUNT             = 3;
+    private final TuningForkLogger logger;
+    private final ErrorLogger      errorLogger;
+    private AudioStream            audioStream;
+    private final float            secondsPerBuffer;
+    private final IntBuffer        buffers;
+    private final PcmFormat        pcmFormat;
+    private final ByteBuffer       tempBuffer;
+    private final byte[]           tempBytes;
+    private final Audio            audio;
+    private final AtomicBoolean    playing                  = new AtomicBoolean(false);
+    private final AtomicBoolean    stopped                  = new AtomicBoolean(true);
+    private volatile boolean       looping                  = false;
+    private volatile float         loopStart                = 0f;
+    private volatile float         loopEnd                  = 0f;
+    private boolean                manuallySetBehindLoopEnd = false;
+    private volatile boolean       readyToDispose           = false;
+    private final float            duration;
 
-    private final    FloatArray bufferTimeQueue;
-    private volatile float      processedTime;
-    private          float      queuedSeconds;
-    private final    float      bytesPerSecond;
+    private final FloatArray bufferTimeQueue;
+    private volatile float   processedTime;
+    private float            queuedSeconds;
+    private final float      bytesPerSecond;
 
 
     /**
@@ -109,14 +116,12 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         final PcmDataType pcmDataType = this.audioStream.getPcmDataType();
         this.pcmFormat = PcmFormat.determineFormat(channels, sampleDepth, pcmDataType);
         if (this.pcmFormat == null) {
-            throw new TuningForkRuntimeException(
-                    "Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
         }
 
         // CREATE BUFFERS
         final int blockSize = this.audioStream.getBlockSize();
-        final int bufferSize = this.determineBufferSize(channels, blockSize,
-                                                        (int) Math.ceil(this.audioStream.getBitsPerSample() / 8d));
+        final int bufferSize = this.determineBufferSize(channels, blockSize, (int) Math.ceil(this.audioStream.getBitsPerSample() / 8d));
         this.tempBuffer = BufferUtils.createByteBuffer(bufferSize);
         this.tempBytes = new byte[bufferSize];
         this.secondsPerBuffer = (float) bufferSize / (bytesPerSample * channels * sampleRate);
@@ -198,8 +203,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             if (end && queuedBuffers == 0) {
                 this.stopInternal();
                 this.manuallySetBehindLoopEnd = false;
-            } else if (this.playing.get() &&
-                       AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING && queuedBuffers > 0) {
+            } else if (this.playing.get() && AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING && queuedBuffers > 0) {
                 // A buffer underflow will cause the source to stop, so we should resume playback in this case.
                 AL10.alSourcePlay(this.sourceId);
             }
@@ -223,8 +227,7 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
     /**
      * Returns the current playback position in seconds.<br>
-     * <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source
-     * .</b>
+     * <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source .</b>
      *
      * @return the playback position
      */
@@ -235,14 +238,15 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
 
     /**
-     * Specifies the two offsets the source will use to loop, expressed in seconds.<br> If the playback position is
-     * manually set to something &gt; end, the source will not loop and instead stop playback when it reaches the end of
-     * the sound.<br> The method will throw an exception if start &gt; end or if either is a negative value. Values &gt;
-     * sound duration are not considered invalid, but they'll be clamped internally.<br> Setting start and end both to
-     * 0, deactivates the loop point mechanic.
+     * Specifies the two offsets the source will use to loop, expressed in seconds.<br>
+     * If the playback position is manually set to something &gt; end, the source will not loop and instead stop playback when it reaches the end of the
+     * sound.<br>
+     * The method will throw an exception if start &gt; end or if either is a negative value. Values &gt; sound duration are not considered invalid, but they'll
+     * be clamped internally.<br>
+     * Setting start and end both to 0, deactivates the loop point mechanic.
      *
      * @param start start position of the loop in seconds
-     * @param end   end position of the loop in seconds
+     * @param end end position of the loop in seconds
      */
     public void setLoopPoints(float start, float end) {
         if (start > end) {
@@ -499,7 +503,8 @@ public class StreamedSoundSource extends SongSource implements Disposable {
     /**
      * Returns the duration of the attached sound in seconds.
      *
-     * @return the duration of the attached sound<br> Returns -1f if the duration couldn't be measured.
+     * @return the duration of the attached sound<br>
+     *         Returns -1f if the duration couldn't be measured.
      */
     @Override
     public float getDuration() {

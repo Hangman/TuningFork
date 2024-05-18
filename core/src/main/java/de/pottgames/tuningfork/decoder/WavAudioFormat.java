@@ -111,8 +111,8 @@ public enum WavAudioFormat {
 
 
     private static final IntMap<WavAudioFormat> MAP = new IntMap<>();
-    private final        int                    regNumber;
-    private final        String                 wFormatTagId;
+    private final int                           regNumber;
+    private final String                        wFormatTagId;
 
     static {
         for (final WavAudioFormat format : WavAudioFormat.values()) {

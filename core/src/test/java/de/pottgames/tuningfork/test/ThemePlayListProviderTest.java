@@ -6,7 +6,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.Interpolation;
-import de.pottgames.tuningfork.*;
+
+import de.pottgames.tuningfork.Audio;
+import de.pottgames.tuningfork.BufferedSoundSource;
+import de.pottgames.tuningfork.SoundBuffer;
+import de.pottgames.tuningfork.SoundLoader;
+import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.jukebox.JukeBox;
 import de.pottgames.tuningfork.jukebox.JukeBoxObserver;
 import de.pottgames.tuningfork.jukebox.playlist.PlayList;
@@ -54,8 +59,7 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
-        final Song song1 =
-                new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
+        final Song song1 = new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
         final Song song2 = new Song(this.rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
         final Song song3 = new Song(this.rhythm3, settings, new SongMeta().setTitle("rhythm3"));
         final Song song4 = new Song(this.rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));

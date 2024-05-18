@@ -1,43 +1,50 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
 
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.EXTEfx;
+import org.lwjgl.openal.EXTSourceRadius;
+import org.lwjgl.openal.SOFTDirectChannels;
+import org.lwjgl.openal.SOFTSourceResampler;
+import org.lwjgl.openal.SOFTSourceSpatialize;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+
 import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
-import org.lwjgl.openal.*;
 
 /**
- * A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world .
- * It enables you to play, pause, stop, position sounds and let's you set different effects on it.
+ * A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world . It enables you to play, pause, stop,
+ * position sounds and let's you set different effects on it.
  *
  * @author Matthias
  */
 public abstract class SoundSource {
-    private final    TuningForkLogger logger;
-    private final    ErrorLogger      errorLogger;
-    protected final  int              sourceId;
-    private final    SoundEffect[]    effects;
-    private          int              nextSoundEffectSendId = 0;
-    private          float            attenuationFactor     = 1f;
-    private final    Vector3          position              = new Vector3(0f, 0f, 0f);
-    private          boolean          directional           = false;
-    private volatile int              resamplerIndex        = -1;
-    private          boolean          directFilter          = false;
+    private final TuningForkLogger logger;
+    private final ErrorLogger      errorLogger;
+    protected final int            sourceId;
+    private final SoundEffect[]    effects;
+    private int                    nextSoundEffectSendId = 0;
+    private float                  attenuationFactor     = 1f;
+    private final Vector3          position              = new Vector3(0f, 0f, 0f);
+    private boolean                directional           = false;
+    private volatile int           resamplerIndex        = -1;
+    private boolean                directFilter          = false;
 
 
     protected SoundSource() {
@@ -65,8 +72,7 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the base volume of this sound source. The final output volume might differ depending on the source's
-     * position, listener position etc.
+     * Sets the base volume of this sound source. The final output volume might differ depending on the source's position, listener position etc.
      *
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
@@ -88,8 +94,8 @@ public abstract class SoundSource {
     /**
      * Sets the pitch of this sound source.
      *
-     * @param pitch The pitch value, which must be &gt;= 0. Values less than 1 result in slower playback and a deeper
-     *              tone, while values &gt; 1 make it faster and produce a higher tone.
+     * @param pitch The pitch value, which must be &gt;= 0. Values less than 1 result in slower playback and a deeper tone, while values &gt; 1 make it faster
+     *            and produce a higher tone.
      */
     public void setPitch(float pitch) {
         if (pitch < 0f) {
@@ -102,8 +108,7 @@ public abstract class SoundSource {
     /**
      * Returns the pitch of this sound source.
      *
-     * @return pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-     * faster
+     * @return pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster
      */
     public float getPitch() {
         return AL10.alGetSourcef(this.sourceId, AL10.AL_PITCH);
@@ -121,10 +126,9 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets whether the position attribute of this sound source should be handled as relative or absolute values to the
-     * listener's position.<br> If set to false, the position is the absolute position in the 3D world.<br> If set to
-     * true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical
-     * to the listener's position.
+     * Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+     * If set to false, the position is the absolute position in the 3D world.<br>
+     * If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.
      *
      * @param relative true = relative, false = absolute
      */
@@ -170,6 +174,7 @@ public abstract class SoundSource {
      * Retrieves the position of this sound source.
      *
      * @param saveTo the vector the result should be saved to
+     *
      * @return returns the saveTo parameter vector that contains the result
      */
     public Vector3 getPosition(Vector3 saveTo) {
@@ -178,10 +183,9 @@ public abstract class SoundSource {
 
 
     /**
-     * Changes the source to a "large" source with a radius. The source has a raised cosine shape. A radius of 0 is the
-     * default (point-source).<br> The OpenAL documentation about this is very thin. I don't know nor have the resources
-     * to test how this really works with attenuation and directionality. If you happen to know, please PR a fix for
-     * this javadoc.
+     * Changes the source to a "large" source with a radius. The source has a raised cosine shape. A radius of 0 is the default (point-source).<br>
+     * The OpenAL documentation about this is very thin. I don't know nor have the resources to test how this really works with attenuation and directionality.
+     * If you happen to know, please PR a fix for this javadoc.
      *
      * @param radius the radius
      */
@@ -202,9 +206,9 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position,
-     * you need to call setSpeed manually.<br> The speed is only used for calculating a Doppler effect. Note that you
-     * need to call set speed on the sound listener as well in order to get a proper Doppler effect.
+     * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+     * The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+     * Doppler effect.
      *
      * @param speed the speed
      */
@@ -214,9 +218,9 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position,
-     * you need to call setSpeed manually.<br> The speed is only used for calculating a Doppler effect. Note that you
-     * need to call set speed on the sound listener as well in order to get a proper Doppler effect.
+     * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+     * The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+     * Doppler effect.
      *
      * @param x the speed on the x-axis
      * @param y the speed on the y-axis
@@ -228,14 +232,13 @@ public abstract class SoundSource {
 
 
     /**
-     * Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener
-     * hears the sound at full volume. Outside the outer cone angle the sound is even on the level specified by
-     * outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
+     * Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound at full volume. Outside
+     * the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
      * {@link #makeOmniDirectional()} to make the source non-directional again.
      *
-     * @param direction       the direction the source is facing
-     * @param coneInnerAngle  the inner cone angle
-     * @param coneOuterAngle  the outer cone angle
+     * @param direction the direction the source is facing
+     * @param coneInnerAngle the inner cone angle
+     * @param coneOuterAngle the outer cone angle
      * @param outOfConeVolume the volume of the sound source when outside of the cone
      */
     public void makeDirectional(Vector3 direction, float coneInnerAngle, float coneOuterAngle, float outOfConeVolume) {
@@ -249,8 +252,8 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the direction of this sound source. You need to call {@link #makeDirectional(Vector3, float, float, float)}
-     * first, otherwise the direction will be ignored.
+     * Sets the direction of this sound source. You need to call {@link #makeDirectional(Vector3, float, float, float)} first, otherwise the direction will be
+     * ignored.
      *
      * @param direction the direction
      */
@@ -262,8 +265,7 @@ public abstract class SoundSource {
 
 
     /**
-     * Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the
-     * source directional earlier.
+     * Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the source directional earlier.
      */
     public void makeOmniDirectional() {
         this.directional = false;
@@ -299,9 +301,8 @@ public abstract class SoundSource {
 
 
     /**
-     * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
-     * the source. A factor of 0.5 reduces the volume loss by half. With a factor of 2, the source loses volume twice as
-     * fast.
+     * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
+     * volume loss by half. With a factor of 2, the source loses volume twice as fast.
      *
      * @param rolloff (default depends on the attenuation model)
      */
@@ -312,8 +313,8 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the distance the listener must be from the sound source at which the attenuation should begin. The
-     * attenuation itself is controlled by the attenuation model and the attenuation factor of the source.
+     * Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
+     * attenuation model and the attenuation factor of the source.
      *
      * @param minDistance (default depends on the attenuation model)
      */
@@ -323,8 +324,8 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the distance the listener must be from the sound source at which the attenuation should stop. The
-     * attenuation itself is controlled by the attenuation model and the attenuation factor of the source.
+     * Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
+     * attenuation model and the attenuation factor of the source.
      *
      * @param maxDistance (default depends on the attenuation model)
      */
@@ -344,8 +345,7 @@ public abstract class SoundSource {
 
 
     /**
-     * Returns the minimum distance for the attenuation to start. See {@link #setAttenuationMinDistance(float)} for more
-     * information.
+     * Returns the minimum distance for the attenuation to start. See {@link #setAttenuationMinDistance(float)} for more information.
      *
      * @return the attenuation min distance (default depends on the attenuation model)
      */
@@ -355,8 +355,7 @@ public abstract class SoundSource {
 
 
     /**
-     * Returns the distance at which the attenuation will stop. See {@link #setAttenuationMaxDistance(float)} for more
-     * information.
+     * Returns the distance at which the attenuation will stop. See {@link #setAttenuationMaxDistance(float)} for more information.
      *
      * @return the attenuation max distance (default depends on the attenuation model)
      */
@@ -366,10 +365,9 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets the virtualization enabled state for this sound source.<br> OpenAL requires input channels to be down-mixed
-     * to the output channel configuration, possibly using HRTF or other virtualization techniques to give a sense of
-     * speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output, so you
-     * can disable it.<br>
+     * Sets the virtualization enabled state for this sound source.<br>
+     * OpenAL requires input channels to be down-mixed to the output channel configuration, possibly using HRTF or other virtualization techniques to give a
+     * sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output, so you can disable it.<br>
      * <br>
      * Check {@link Virtualization} for the different methods available.<br>
      * <br>
@@ -423,8 +421,7 @@ public abstract class SoundSource {
 
 
     /**
-     * Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound
-     * again when it's finished playing.
+     * Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound again when it's finished playing.
      *
      * @param looping true for looped playback
      */
@@ -472,7 +469,7 @@ public abstract class SoundSource {
     /**
      * Enables the given filter as direct filter (dry signal) on this sound source.
      *
-     * @param lowFreqVolume  range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void setFilter(float lowFreqVolume, float highFreqVolume) {
@@ -498,14 +495,14 @@ public abstract class SoundSource {
 
 
     /**
-     * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the
-     * oldest attached effect will be kicked out. Attaching an effect that is already attached to this source is a legal
-     * NOP.<br>
+     * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+     * Attaching an effect that is already attached to this source is a legal NOP.<br>
      * <br>
-     * {@link AudioDeviceConfig#setEffectSlots(int)} to change the number of available effect slots.<br> Call
-     * {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
+     * {@link AudioDeviceConfig#setEffectSlots(int)} to change the number of available effect slots.<br>
+     * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
      * @param effect the sound effect
+     *
      * @return the effect that was kicked out or null otherwise
      */
     public SoundEffect attachEffect(SoundEffect effect) {
@@ -514,23 +511,22 @@ public abstract class SoundSource {
 
 
     /**
-     * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the
-     * oldest attached effect will be kicked out. Attaching an effect that is already attached to this source is a legal
-     * NOP. Optionally you can set a filter that is only used for this effect, or null if you don't want to apply a
-     * filter. <br>
+     * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+     * Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used for this effect, or null if
+     * you don't want to apply a filter. <br>
      * <br>
-     * {@link AudioDeviceConfig#setEffectSlots(int)} to change the number of available effect slots.<br> Call
-     * {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
+     * {@link AudioDeviceConfig#setEffectSlots(int)} to change the number of available effect slots.<br>
+     * Call {@link AudioDevice#getNumberOfEffectSlots()} to retrieve the number of available effect slots.
      *
-     * @param effect         the sound effect
-     * @param lowFreqVolume  range: 0 - 1, 0 means completely silent, 1 means full loudness
+     * @param effect the sound effect
+     * @param lowFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
+     *
      * @return the effect that was kicked out or null otherwise
      */
     public SoundEffect attachEffect(SoundEffect effect, float lowFreqVolume, float highFreqVolume) {
         if (this.effects.length == 0) {
-            this.logger.error(this.getClass(),
-                              "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
+            this.logger.error(this.getClass(), "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
             return null;
         }
 
@@ -558,8 +554,7 @@ public abstract class SoundSource {
             filter.setHighFrequencyVolume(highFreqVolume);
         }
         final int filterHandle = filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL;
-        AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(),
-                        this.nextSoundEffectSendId, filterHandle);
+        AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, filterHandle);
         this.effects[this.nextSoundEffectSendId] = effect;
         effect.addSource(this);
 
@@ -577,13 +572,13 @@ public abstract class SoundSource {
      * Detaches the given SoundEffect from this sound source.
      *
      * @param effect the effect
+     *
      * @return true if the effect was successfully detached, false if the effect isn't attached to this source (anymore)
      */
     public boolean detachEffect(SoundEffect effect) {
         for (int i = 0; i < this.effects.length; i++) {
             if (this.effects[i] == effect) {
-                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i,
-                                EXTEfx.AL_FILTER_NULL);
+                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
                 this.effects[i].removeSource(this);
                 this.effects[i] = null;
                 return true;
@@ -600,8 +595,7 @@ public abstract class SoundSource {
     public void detachAllEffects() {
         for (int i = 0; i < this.effects.length; i++) {
             if (this.effects[i] != null) {
-                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i,
-                                EXTEfx.AL_FILTER_NULL);
+                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
                 this.effects[i].removeSource(this);
                 this.effects[i] = null;
             }
@@ -624,6 +618,7 @@ public abstract class SoundSource {
      * Check {@link AudioDevice#getAvailableResamplers()} for a list of available resamplers.
      *
      * @param resampler the resampler name
+     *
      * @return true if successful, false if the desired resampler is not available
      */
     public boolean setResampler(String resampler) {
@@ -653,8 +648,7 @@ public abstract class SoundSource {
     void onEffectDisposal(SoundEffect effect) {
         for (int i = 0; i < this.effects.length; i++) {
             if (this.effects[i] == effect) {
-                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i,
-                                EXTEfx.AL_FILTER_NULL);
+                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
                 this.effects[i] = null;
                 this.nextSoundEffectSendId = i;
                 break;

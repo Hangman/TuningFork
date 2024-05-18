@@ -1,28 +1,29 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork;
 
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntArray;
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL10;
-
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL10;
+
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.IntArray;
+
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
  * A low level sound source class that can be fed with raw pcm data in a real-time fashion.
@@ -46,7 +47,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * Creates a new {@link PcmSoundSource} with the given specs.
      *
      * @param sampleRate the sample rate
-     * @param pcmFormat  the pcm format
+     * @param pcmFormat the pcm format
      */
     public PcmSoundSource(int sampleRate, PcmFormat pcmFormat) {
         final Audio audio = Audio.get();
@@ -69,15 +70,14 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     /**
      * Adds pcm data to the queue of this sound source.<br>
      * <br>
-     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero
-     * .<br> 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of
-     * zero.<br> Stereo data is expressed in an interleaved format, left channel sample followed by the right channel
-     * sample.<br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
      * <br>
-     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing,
-     * call {@link SoundSource#play() play()} after queueing samples.
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
      *
-     * @param pcm    the pcm data
+     * @param pcm the pcm data
      * @param offset the start index where to begin reading pcm data in the pcm byte array
      * @param length the length of the pcm data that should be read
      */
@@ -102,10 +102,10 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * <br>
      * float data is expressed as a signed value over the range -1 to +1, 0 is silence.<br>
      * <br>
-     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing,
-     * call {@link SoundSource#play() play()} after queueing samples.
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
      *
-     * @param pcm    the pcm data
+     * @param pcm the pcm data
      * @param offset the start index where to begin reading pcm data in the pcm byte array
      * @param length the length of the pcm data that should be read
      */
@@ -128,13 +128,12 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     /**
      * Adds pcm data to the queue of this sound source.<br>
      * <br>
-     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero
-     * .<br> 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of
-     * zero.<br> Stereo data is expressed in an interleaved format, left channel sample followed by the right channel
-     * sample.<br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
      * <br>
-     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing,
-     * call {@link SoundSource#play() play()} after queueing samples.
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
      *
      * @param pcm in native order
      */
@@ -149,13 +148,12 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     /**
      * Adds pcm data to the queue of this sound source.<br>
      * <br>
-     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero
-     * .<br> 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of
-     * zero.<br> Stereo data is expressed in an interleaved format, left channel sample followed by the right channel
-     * sample.<br>
+     * 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+     * 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+     * Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
      * <br>
-     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing,
-     * call {@link SoundSource#play() play()} after queueing samples.
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
      *
      * @param pcm in native order
      */
@@ -172,8 +170,8 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * <br>
      * float data is expressed as a signed value over the range -1 to +1, 0 is silence.<br>
      * <br>
-     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing,
-     * call {@link SoundSource#play() play()} after queueing samples.
+     * <b>Note:</b> An underflow of pcm data will cause the source to stop playing. If you want it to keep playing, call {@link SoundSource#play() play()} after
+     * queueing samples.
      *
      * @param pcm in native order
      */
@@ -194,8 +192,7 @@ public class PcmSoundSource extends SoundSource implements Disposable {
 
 
     /**
-     * Unqueues processed buffers. This is called automatically on each call to any of the queueSamples methods, so you
-     * never <b>have</b> to call it manually.
+     * Unqueues processed buffers. This is called automatically on each call to any of the queueSamples methods, so you never <b>have</b> to call it manually.
      */
     public void unqueueProcessedBuffers() {
         final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
@@ -206,8 +203,8 @@ public class PcmSoundSource extends SoundSource implements Disposable {
 
 
     /**
-     * Returns the number of queued buffers. This number is automatically decreased once a buffer is processed (finished
-     * playing). Each call to any of the queueSamples methods queues a buffer.
+     * Returns the number of queued buffers. This number is automatically decreased once a buffer is processed (finished playing). Each call to any of the
+     * queueSamples methods queues a buffer.
      *
      * @return the number of buffers queued
      */

@@ -1,26 +1,24 @@
 /**
  * Copyright 2022 Matthias Finke
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
 package de.pottgames.tuningfork.jukebox.song;
 
+import java.util.Objects;
+
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 
-import java.util.Objects;
-
 /**
- * An immutable settings data class for configuring a {@link Song}. It allows settings a general volume and fade-in
- * and fade-out parameters which are used to
+ * An immutable settings data class for configuring a {@link Song}. It allows settings a general volume and fade-in and fade-out parameters which are used to
  * control the playback of a song.
  *
  * @author Matthias
@@ -83,9 +81,7 @@ public class SongSettings {
      * @param fadeOutDuration fade-out duration in seconds
      * @param fadeOutCurve fade-out curve
      */
-    public SongSettings(
-            float volume, float fadeInDuration, Interpolation fadeInCurve, float fadeOutDuration,
-            Interpolation fadeOutCurve) {
+    public SongSettings(float volume, float fadeInDuration, Interpolation fadeInCurve, float fadeOutDuration, Interpolation fadeOutCurve) {
         this.volume = MathUtils.clamp(volume, 0f, 1f);
         this.fadeInDuration = fadeInDuration;
         this.fadeInCurve = fadeInCurve != null ? fadeInCurve : SongSettings.NO_INTERPOLATION;
@@ -186,8 +182,7 @@ public class SongSettings {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.fadeInCurve, this.fadeInDuration, this.fadeOutCurve, this.fadeOutDuration,
-                            this.volume);
+        return Objects.hash(this.fadeInCurve, this.fadeInDuration, this.fadeOutCurve, this.fadeOutDuration, this.volume);
     }
 
 
@@ -203,19 +198,17 @@ public class SongSettings {
             return false;
         }
         final SongSettings other = (SongSettings) obj;
-        return Objects.equals(this.fadeInCurve, other.fadeInCurve) &&
-               Float.floatToIntBits(this.fadeInDuration) == Float.floatToIntBits(other.fadeInDuration) &&
-               Objects.equals(this.fadeOutCurve, other.fadeOutCurve) &&
-               Float.floatToIntBits(this.fadeOutDuration) == Float.floatToIntBits(other.fadeOutDuration) &&
-               Float.floatToIntBits(this.volume) == Float.floatToIntBits(other.volume);
+        return Objects.equals(this.fadeInCurve, other.fadeInCurve) && Float.floatToIntBits(this.fadeInDuration) == Float.floatToIntBits(other.fadeInDuration)
+                && Objects.equals(this.fadeOutCurve, other.fadeOutCurve)
+                && Float.floatToIntBits(this.fadeOutDuration) == Float.floatToIntBits(other.fadeOutDuration)
+                && Float.floatToIntBits(this.volume) == Float.floatToIntBits(other.volume);
     }
 
 
     @Override
     public String toString() {
-        return "SongSettings [fadeInDuration=" + this.fadeInDuration + ", fadeOutDuration=" + this.fadeOutDuration +
-               ", fadeInCurve=" + this.fadeInCurve + ", fadeOutCurve=" + this.fadeOutCurve + ", volume=" + this.volume +
-               "]";
+        return "SongSettings [fadeInDuration=" + this.fadeInDuration + ", fadeOutDuration=" + this.fadeOutDuration + ", fadeInCurve=" + this.fadeInCurve
+                + ", fadeOutCurve=" + this.fadeOutCurve + ", volume=" + this.volume + "]";
     }
 
 }

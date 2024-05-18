@@ -1,19 +1,19 @@
 package de.pottgames.tuningfork.decoder;
 
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-import de.pottgames.tuningfork.decoder.util.Util;
-
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.decoder.util.Util;
+
 public class PcmDecoder implements WavDecoder {
-    protected       InputStream stream;
+    protected InputStream       stream;
     protected final PcmDataType pcmDataType;
-    protected       long        bytesRemaining;
-    private final   int         channels;
-    private         long        totalOutputSamplesPerChannel;
-    private final   int         sampleRate;
-    private final   int         bitsPerSample;
+    protected long              bytesRemaining;
+    private final int           channels;
+    private long                totalOutputSamplesPerChannel;
+    private final int           sampleRate;
+    private final int           bitsPerSample;
 
 
     public PcmDecoder(int bitsPerSample, int channels, int sampleRate, PcmDataType pcmDataType) {
