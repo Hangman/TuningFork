@@ -231,8 +231,7 @@ extends java.io.Closeable</pre>
 <li class="blockList">
 <h4>reset</h4>
 <pre><a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html" title="interface in de.pottgames.tuningfork.decoder">AudioStream</a>&nbsp;reset()</pre>
-<div class="block">Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new
- AudioStream. The AudioStream returned by
+<div class="block">Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new AudioStream. The AudioStream returned by
  this function will be used, regardless of whether it is a new instance or the old one.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -289,8 +288,7 @@ extends java.io.Closeable</pre>
 <li class="blockList">
 <h4>read</h4>
 <pre>int&nbsp;read(byte[]&nbsp;bytes)</pre>
-<div class="block">Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that
- were actually read.</div>
+<div class="block">Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that were actually read.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bytes</code> - the byte array to store the bytes in</dd>
@@ -320,8 +318,7 @@ extends java.io.Closeable</pre>
 <li class="blockList">
 <h4>getBlockSize</h4>
 <pre>default&nbsp;int&nbsp;getBlockSize()</pre>
-<div class="block">Returns the block size in bytes. This only applies for data that is organized in blocks like ADPCM, all other
- implementations should return -1.</div>
+<div class="block">Returns the block size in bytes. This only applies for data that is organized in blocks like ADPCM, all other implementations should return -1.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>block size in bytes</dd>
@@ -335,8 +332,7 @@ extends java.io.Closeable</pre>
 <li class="blockList">
 <h4>getBlockAlign</h4>
 <pre>default&nbsp;int&nbsp;getBlockAlign()</pre>
-<div class="block">Returns the block alignment in sample frames. This only applies for data that is organized in blocks like
- ADPCM, all other implementations should return
+<div class="block">Returns the block alignment in sample frames. This only applies for data that is organized in blocks like ADPCM, all other implementations should return
  -1.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

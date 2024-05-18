@@ -213,8 +213,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/StreamedSoundSource.html#getPlaybackPosition--">getPlaybackPosition</a></span>()</code>
 <div class="block">Returns the current playback position in seconds.<br>
- <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source
- .</b></div>
+ <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source .</b></div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -251,9 +250,10 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/StreamedSoundSource.html#setLoopPoints-float-float-">setLoopPoints</a></span>(float&nbsp;start,
              float&nbsp;end)</code>
-<div class="block">Specifies the two offsets the source will use to loop, expressed in seconds.<br> If the playback position is
- manually set to something &gt; end, the source will not loop and instead stop playback when it reaches the end of
- the sound.<br> The method will throw an exception if start &gt; end or if either is a negative value.</div>
+<div class="block">Specifies the two offsets the source will use to loop, expressed in seconds.<br>
+ If the playback position is manually set to something &gt; end, the source will not loop and instead stop playback when it reaches the end of the
+ sound.<br>
+ The method will throw an exception if start &gt; end or if either is a negative value.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -375,8 +375,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <h4>getPlaybackPosition</h4>
 <pre>public&nbsp;float&nbsp;getPlaybackPosition()</pre>
 <div class="block">Returns the current playback position in seconds.<br>
- <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source
- .</b></div>
+ <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source .</b></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html#getPlaybackPosition--">getPlaybackPosition</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" title="class in de.pottgames.tuningfork.jukebox.song">SongSource</a></code></dd>
@@ -393,11 +392,12 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <h4>setLoopPoints</h4>
 <pre>public&nbsp;void&nbsp;setLoopPoints(float&nbsp;start,
                           float&nbsp;end)</pre>
-<div class="block">Specifies the two offsets the source will use to loop, expressed in seconds.<br> If the playback position is
- manually set to something &gt; end, the source will not loop and instead stop playback when it reaches the end of
- the sound.<br> The method will throw an exception if start &gt; end or if either is a negative value. Values &gt;
- sound duration are not considered invalid, but they'll be clamped internally.<br> Setting start and end both to
- 0, deactivates the loop point mechanic.</div>
+<div class="block">Specifies the two offsets the source will use to loop, expressed in seconds.<br>
+ If the playback position is manually set to something &gt; end, the source will not loop and instead stop playback when it reaches the end of the
+ sound.<br>
+ The method will throw an exception if start &gt; end or if either is a negative value. Values &gt; sound duration are not considered invalid, but they'll
+ be clamped internally.<br>
+ Setting start and end both to 0, deactivates the loop point mechanic.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>start</code> - start position of the loop in seconds</dd>
@@ -427,8 +427,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <h4>setLooping</h4>
 <pre>public&nbsp;void&nbsp;setLooping(boolean&nbsp;value)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setLooping-boolean-">SoundSource</a></code></span></div>
-<div class="block">Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound
- again when it's finished playing.</div>
+<div class="block">Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound again when it's finished playing.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setLooping-boolean-">setLooping</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -528,7 +527,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html#getDuration--">getDuration</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" title="class in de.pottgames.tuningfork.jukebox.song">SongSource</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the duration of the attached sound<br> Returns -1f if the duration couldn't be measured.</dd>
+<dd>the duration of the attached sound<br>
+         Returns -1f if the duration couldn't be measured.</dd>
 </dl>
 </li>
 </ul>

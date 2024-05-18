@@ -371,8 +371,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setFrequency</h4>
 <pre>public&nbsp;<a href="../../../../de/pottgames/tuningfork/capture/CaptureConfig.html" title="class in de.pottgames.tuningfork.capture">CaptureConfig</a>&nbsp;setFrequency(int&nbsp;frequency)</pre>
-<div class="block">Sets the requested frequency for the <a href="../../../../de/pottgames/tuningfork/capture/CaptureDevice.html" title="class in de.pottgames.tuningfork.capture"><code>CaptureDevice</code></a>. Use common values like 44100, 48000, etc. - other
- values might not be supported by the driver.</div>
+<div class="block">Sets the requested frequency for the <a href="../../../../de/pottgames/tuningfork/capture/CaptureDevice.html" title="class in de.pottgames.tuningfork.capture"><code>CaptureDevice</code></a>. Use common values like 44100, 48000, etc. - other values might not be supported by the
+ driver.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frequency</code> - the frequency</dd>
@@ -388,10 +388,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setBufferSize</h4>
 <pre>public&nbsp;<a href="../../../../de/pottgames/tuningfork/capture/CaptureConfig.html" title="class in de.pottgames.tuningfork.capture">CaptureConfig</a>&nbsp;setBufferSize(int&nbsp;bufferSize)</pre>
-<div class="block">OpenAL uses a ring buffer internally to record audio data. If the buffer is full, it starts to overwrite the
- existing data. The buffer size defines how much audio data can be recorded before it gets overwritten.<br>
- <b>Note:</b> The implementation may use a larger buffer than requested if it needs to, but the implementation
- will set up a buffer of at least the requested size.</div>
+<div class="block">OpenAL uses a ring buffer internally to record audio data. If the buffer is full, it starts to overwrite the existing data. The buffer size defines how
+ much audio data can be recorded before it gets overwritten.<br>
+ <b>Note:</b> The implementation may use a larger buffer than requested if it needs to, but the implementation will set up a buffer of at least the
+ requested size.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bufferSize</code> - in samples</dd>

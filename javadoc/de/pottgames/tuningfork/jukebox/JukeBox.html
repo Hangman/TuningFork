@@ -109,8 +109,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">JukeBox</span>
 extends java.lang.Object</pre>
-<div class="block">A music player class playing <a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song"><code>Song</code></a>s from a <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a>. It's called JukeBox to avoid confusion with how
- libgdx uses the word 'Music'.</div>
+<div class="block">A music player class playing <a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song"><code>Song</code></a>s from a <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a>. It's called JukeBox to avoid confusion with how libgdx uses the word 'Music'.</div>
 </li>
 </ul>
 </div>
@@ -331,21 +330,24 @@ extends java.lang.Object</pre>
         float&nbsp;fadeOutDuration)</code>
 <div class="block">Fades out the currently playing song and stops the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> afterwards.<br>
  <br>
- There's a couple of reasons why the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> might stop early:<br> - the rest of the song is shorter than
- the desired fadeOutDuration<br> - the song duration is not available<br> - fadeOutCurve is null<br> -
- fadeOutDuration is smaller or equal 0<br></div>
+ There's a couple of reasons why the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> might stop early:<br>
+ - the rest of the song is shorter than the desired fadeOutDuration<br>
+ - the song duration is not available<br>
+ - fadeOutCurve is null<br>
+ - fadeOutDuration is smaller or equal 0<br></div>
 </td>
 </tr>
 <tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStopAndResume-com.badlogic.gdx.math.Interpolation-float-">softStopAndResume</a></span>(com.badlogic.gdx.math.Interpolation&nbsp;fadeOutCurve,
                  float&nbsp;fadeOutDuration)</code>
-<div class="block">Soft stops (see <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStop-com.badlogic.gdx.math.Interpolation-float-"><code>softStop(Interpolation, float)</code></a>), ends the current <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> and resumes playback
- afterward if possible.<br>
+<div class="block">Soft stops (see <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStop-com.badlogic.gdx.math.Interpolation-float-"><code>softStop(Interpolation, float)</code></a>), ends the current <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> and resumes playback afterward if possible.<br>
  <br>
- Since it may not be clear at first glance what the use cases are, here is an example:<br> The World-PlayList is
- running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList
- should begin playing.<br> This is achievable in 2 steps:<br> 1.</div>
+ Since it may not be clear at first glance what the use cases are, here is an example:<br>
+ The World-PlayList is running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList should begin
+ playing.<br>
+ This is achievable in 2 steps:<br>
+ 1.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
@@ -625,9 +627,11 @@ extends java.lang.Object</pre>
                         float&nbsp;fadeOutDuration)</pre>
 <div class="block">Fades out the currently playing song and stops the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> afterwards.<br>
  <br>
- There's a couple of reasons why the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> might stop early:<br> - the rest of the song is shorter than
- the desired fadeOutDuration<br> - the song duration is not available<br> - fadeOutCurve is null<br> -
- fadeOutDuration is smaller or equal 0<br></div>
+ There's a couple of reasons why the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> might stop early:<br>
+ - the rest of the song is shorter than the desired fadeOutDuration<br>
+ - the song duration is not available<br>
+ - fadeOutCurve is null<br>
+ - fadeOutDuration is smaller or equal 0<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fadeOutCurve</code> - the interpolation used to fade-out</dd>
@@ -645,13 +649,14 @@ extends java.lang.Object</pre>
 <h4>softStopAndResume</h4>
 <pre>public&nbsp;void&nbsp;softStopAndResume(com.badlogic.gdx.math.Interpolation&nbsp;fadeOutCurve,
                               float&nbsp;fadeOutDuration)</pre>
-<div class="block">Soft stops (see <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStop-com.badlogic.gdx.math.Interpolation-float-"><code>softStop(Interpolation, float)</code></a>), ends the current <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> and resumes playback
- afterward if possible.<br>
+<div class="block">Soft stops (see <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStop-com.badlogic.gdx.math.Interpolation-float-"><code>softStop(Interpolation, float)</code></a>), ends the current <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> and resumes playback afterward if possible.<br>
  <br>
- Since it may not be clear at first glance what the use cases are, here is an example:<br> The World-PlayList is
- running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList
- should begin playing.<br> This is achievable in 2 steps:<br> 1. change the theme in ThemePlayListProvider
- <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/ThemePlayListProvider.html#setTheme-int-"><code>ThemePlayListProvider.setTheme(int)</code></a><br> 2. call softStopAndResume on the JukeBox</div>
+ Since it may not be clear at first glance what the use cases are, here is an example:<br>
+ The World-PlayList is running, but the player gets ambushed, whereupon the World-PlayList should fade-out and the Danger-PlayList should begin
+ playing.<br>
+ This is achievable in 2 steps:<br>
+ 1. change the theme in ThemePlayListProvider <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/ThemePlayListProvider.html#setTheme-int-"><code>ThemePlayListProvider.setTheme(int)</code></a><br>
+ 2. call softStopAndResume on the JukeBox</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fadeOutCurve</code> - the interpolation used to fade-out</dd>

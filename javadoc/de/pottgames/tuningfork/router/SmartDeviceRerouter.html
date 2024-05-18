@@ -114,17 +114,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SmartDeviceRerouter</span>
 extends java.lang.Object
 implements <a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a></pre>
-<div class="block">The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still
- exists and whether it is the optimal
+<div class="block">The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still exists and whether it is the optimal
  connection. If not, it tries to establish a connection with the following prioritization:<br>
  <ul>
  <li>desired device</li>
  <li>current default device</li>
  </ul>
- The router is able to restore a previously lost connection to the desired device when it becomes available again.
- When not connected to the desired device,
- the router will establish a connection to the default device and also keep track of it, so when the user selects a
- new default device in the OS, the router
+ The router is able to restore a previously lost connection to the desired device when it becomes available again. When not connected to the desired device,
+ the router will establish a connection to the default device and also keep track of it, so when the user selects a new default device in the OS, the router
  will do the same accordingly.</div>
 </li>
 </ul>
@@ -201,8 +198,7 @@ implements <a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerout
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/router/SmartDeviceRerouter.html#updateDesiredDevice-java.lang.String-">updateDesiredDevice</a></span>(java.lang.String&nbsp;desiredDeviceSpecifier)</code>
-<div class="block">This method gets called when the user changes the device at runtime via
- <a href="../../../../de/pottgames/tuningfork/AudioDevice.html#switchToDevice-java.lang.String-"><code>AudioDevice.switchToDevice(String)</code></a>.</div>
+<div class="block">This method gets called when the user changes the device at runtime via <a href="../../../../de/pottgames/tuningfork/AudioDevice.html#switchToDevice-java.lang.String-"><code>AudioDevice.switchToDevice(String)</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -275,8 +271,7 @@ implements <a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerout
 <dd><code><a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#setup-long-java.lang.String-de.pottgames.tuningfork.ContextAttributes-">setup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>device</code> - the OpenAL device handle</dd>
-<dd><code>desiredDeviceSpecifier</code> - the device specifier that was specified in
-                               <a href="../../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setDeviceSpecifier-java.lang.String-"><code>AudioDeviceConfig.setDeviceSpecifier(String)</code></a></dd>
+<dd><code>desiredDeviceSpecifier</code> - the device specifier that was specified in <a href="../../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setDeviceSpecifier-java.lang.String-"><code>AudioDeviceConfig.setDeviceSpecifier(String)</code></a></dd>
 <dd><code>attributes</code> - the context attributes</dd>
 </dl>
 </li>
@@ -289,8 +284,7 @@ implements <a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerout
 <h4>updateDesiredDevice</h4>
 <pre>public&nbsp;void&nbsp;updateDesiredDevice(java.lang.String&nbsp;desiredDeviceSpecifier)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#updateDesiredDevice-java.lang.String-">AudioDeviceRerouter</a></code></span></div>
-<div class="block">This method gets called when the user changes the device at runtime via
- <a href="../../../../de/pottgames/tuningfork/AudioDevice.html#switchToDevice-java.lang.String-"><code>AudioDevice.switchToDevice(String)</code></a>.</div>
+<div class="block">This method gets called when the user changes the device at runtime via <a href="../../../../de/pottgames/tuningfork/AudioDevice.html#switchToDevice-java.lang.String-"><code>AudioDevice.switchToDevice(String)</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#updateDesiredDevice-java.lang.String-">updateDesiredDevice</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a></code></dd>

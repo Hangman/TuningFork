@@ -113,8 +113,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">SoundSource</span>
 extends java.lang.Object</pre>
-<div class="block">A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world .
- It enables you to play, pause, stop, position sounds and let's you set different effects on it.</div>
+<div class="block">A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world . It enables you to play, pause, stop,
+ position sounds and let's you set different effects on it.</div>
 </li>
 </ul>
 </div>
@@ -333,8 +333,7 @@ extends java.lang.Object</pre>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationFactor-float-">setAttenuationFactor</a></span>(float&nbsp;rolloff)</code>
-<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
- the source.</div>
+<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source.</div>
 </td>
 </tr>
 <tr id="i27" class="rowColor">
@@ -397,10 +396,9 @@ extends java.lang.Object</pre>
 <tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/SoundSource.html#setRelative-boolean-">setRelative</a></span>(boolean&nbsp;relative)</code>
-<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the
- listener's position.<br> If set to false, the position is the absolute position in the 3D world.<br> If set to
- true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical
- to the listener's position.</div>
+<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+ If set to false, the position is the absolute position in the 3D world.<br>
+ If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.</div>
 </td>
 </tr>
 <tr id="i37" class="rowColor">
@@ -438,9 +436,9 @@ extends java.lang.Object</pre>
 <tr id="i42" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/SoundSource.html#setVirtualization-de.pottgames.tuningfork.AudioConfig.Virtualization-">setVirtualization</a></span>(<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a>&nbsp;virtualization)</code>
-<div class="block">Sets the virtualization enabled state for this sound source.<br> OpenAL requires input channels to be down-mixed
- to the output channel configuration, possibly using HRTF or other virtualization techniques to give a sense of
- speakers that may not be physically present.</div>
+<div class="block">Sets the virtualization enabled state for this sound source.<br>
+ OpenAL requires input channels to be down-mixed to the output channel configuration, possibly using HRTF or other virtualization techniques to give a
+ sense of speakers that may not be physically present.</div>
 </td>
 </tr>
 <tr id="i43" class="rowColor">
@@ -518,8 +516,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setVolume</h4>
 <pre>public&nbsp;void&nbsp;setVolume(float&nbsp;volume)</pre>
-<div class="block">Sets the base volume of this sound source. The final output volume might differ depending on the source's
- position, listener position etc.</div>
+<div class="block">Sets the base volume of this sound source. The final output volume might differ depending on the source's position, listener position etc.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
@@ -550,8 +547,8 @@ extends java.lang.Object</pre>
 <div class="block">Sets the pitch of this sound source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pitch</code> - The pitch value, which must be &gt;= 0. Values less than 1 result in slower playback and a deeper
-              tone, while values &gt; 1 make it faster and produce a higher tone.</dd>
+<dd><code>pitch</code> - The pitch value, which must be &gt;= 0. Values less than 1 result in slower playback and a deeper tone, while values &gt; 1 make it faster
+            and produce a higher tone.</dd>
 </dl>
 </li>
 </ul>
@@ -565,8 +562,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the pitch of this sound source.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
- faster</dd>
+<dd>pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster</dd>
 </dl>
 </li>
 </ul>
@@ -587,10 +583,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setRelative</h4>
 <pre>public&nbsp;void&nbsp;setRelative(boolean&nbsp;relative)</pre>
-<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the
- listener's position.<br> If set to false, the position is the absolute position in the 3D world.<br> If set to
- true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical
- to the listener's position.</div>
+<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+ If set to false, the position is the absolute position in the 3D world.<br>
+ If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>relative</code> - true = relative, false = absolute</dd>
@@ -666,10 +661,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setRadius</h4>
 <pre>public&nbsp;void&nbsp;setRadius(float&nbsp;radius)</pre>
-<div class="block">Changes the source to a "large" source with a radius. The source has a raised cosine shape. A radius of 0 is the
- default (point-source).<br> The OpenAL documentation about this is very thin. I don't know nor have the resources
- to test how this really works with attenuation and directionality. If you happen to know, please PR a fix for
- this javadoc.</div>
+<div class="block">Changes the source to a "large" source with a radius. The source has a raised cosine shape. A radius of 0 is the default (point-source).<br>
+ The OpenAL documentation about this is very thin. I don't know nor have the resources to test how this really works with attenuation and directionality.
+ If you happen to know, please PR a fix for this javadoc.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>radius</code> - the radius</dd>
@@ -697,9 +691,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setSpeed</h4>
 <pre>public&nbsp;void&nbsp;setSpeed(com.badlogic.gdx.math.Vector3&nbsp;speed)</pre>
-<div class="block">Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position,
- you need to call setSpeed manually.<br> The speed is only used for calculating a Doppler effect. Note that you
- need to call set speed on the sound listener as well in order to get a proper Doppler effect.</div>
+<div class="block">Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+ The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+ Doppler effect.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>speed</code> - the speed</dd>
@@ -715,9 +709,9 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;void&nbsp;setSpeed(float&nbsp;x,
                      float&nbsp;y,
                      float&nbsp;z)</pre>
-<div class="block">Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position,
- you need to call setSpeed manually.<br> The speed is only used for calculating a Doppler effect. Note that you
- need to call set speed on the sound listener as well in order to get a proper Doppler effect.</div>
+<div class="block">Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+ The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+ Doppler effect.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - the speed on the x-axis</dd>
@@ -736,9 +730,8 @@ extends java.lang.Object</pre>
                             float&nbsp;coneInnerAngle,
                             float&nbsp;coneOuterAngle,
                             float&nbsp;outOfConeVolume)</pre>
-<div class="block">Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener
- hears the sound at full volume. Outside the outer cone angle the sound is even on the level specified by
- outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
+<div class="block">Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound at full volume. Outside
+ the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
  <a href="../../../de/pottgames/tuningfork/SoundSource.html#makeOmniDirectional--"><code>makeOmniDirectional()</code></a> to make the source non-directional again.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -756,8 +749,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setDirection</h4>
 <pre>public&nbsp;void&nbsp;setDirection(com.badlogic.gdx.math.Vector3&nbsp;direction)</pre>
-<div class="block">Sets the direction of this sound source. You need to call <a href="../../../de/pottgames/tuningfork/SoundSource.html#makeDirectional-com.badlogic.gdx.math.Vector3-float-float-float-"><code>makeDirectional(Vector3, float, float, float)</code></a>
- first, otherwise the direction will be ignored.</div>
+<div class="block">Sets the direction of this sound source. You need to call <a href="../../../de/pottgames/tuningfork/SoundSource.html#makeDirectional-com.badlogic.gdx.math.Vector3-float-float-float-"><code>makeDirectional(Vector3, float, float, float)</code></a> first, otherwise the direction will be
+ ignored.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>direction</code> - the direction</dd>
@@ -771,8 +764,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>makeOmniDirectional</h4>
 <pre>public&nbsp;void&nbsp;makeOmniDirectional()</pre>
-<div class="block">Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the
- source directional earlier.</div>
+<div class="block">Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the source directional earlier.</div>
 </li>
 </ul>
 <a name="isDirectional--">
@@ -816,9 +808,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setAttenuationFactor</h4>
 <pre>public&nbsp;void&nbsp;setAttenuationFactor(float&nbsp;rolloff)</pre>
-<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
- the source. A factor of 0.5 reduces the volume loss by half. With a factor of 2, the source loses volume twice as
- fast.</div>
+<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
+ volume loss by half. With a factor of 2, the source loses volume twice as fast.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rolloff</code> - (default depends on the attenuation model)</dd>
@@ -832,8 +823,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setAttenuationMinDistance</h4>
 <pre>public&nbsp;void&nbsp;setAttenuationMinDistance(float&nbsp;minDistance)</pre>
-<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should begin. The
- attenuation itself is controlled by the attenuation model and the attenuation factor of the source.</div>
+<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
+ attenuation model and the attenuation factor of the source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minDistance</code> - (default depends on the attenuation model)</dd>
@@ -847,8 +838,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setAttenuationMaxDistance</h4>
 <pre>public&nbsp;void&nbsp;setAttenuationMaxDistance(float&nbsp;maxDistance)</pre>
-<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should stop. The
- attenuation itself is controlled by the attenuation model and the attenuation factor of the source.</div>
+<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
+ attenuation model and the attenuation factor of the source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>maxDistance</code> - (default depends on the attenuation model)</dd>
@@ -876,8 +867,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAttenuationMinDistance</h4>
 <pre>public&nbsp;float&nbsp;getAttenuationMinDistance()</pre>
-<div class="block">Returns the minimum distance for the attenuation to start. See <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMinDistance-float-"><code>setAttenuationMinDistance(float)</code></a> for more
- information.</div>
+<div class="block">Returns the minimum distance for the attenuation to start. See <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMinDistance-float-"><code>setAttenuationMinDistance(float)</code></a> for more information.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the attenuation min distance (default depends on the attenuation model)</dd>
@@ -891,8 +881,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAttenuationMaxDistance</h4>
 <pre>public&nbsp;float&nbsp;getAttenuationMaxDistance()</pre>
-<div class="block">Returns the distance at which the attenuation will stop. See <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMaxDistance-float-"><code>setAttenuationMaxDistance(float)</code></a> for more
- information.</div>
+<div class="block">Returns the distance at which the attenuation will stop. See <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMaxDistance-float-"><code>setAttenuationMaxDistance(float)</code></a> for more information.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the attenuation max distance (default depends on the attenuation model)</dd>
@@ -906,10 +895,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setVirtualization</h4>
 <pre>public&nbsp;void&nbsp;setVirtualization(<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a>&nbsp;virtualization)</pre>
-<div class="block">Sets the virtualization enabled state for this sound source.<br> OpenAL requires input channels to be down-mixed
- to the output channel configuration, possibly using HRTF or other virtualization techniques to give a sense of
- speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output, so you
- can disable it.<br>
+<div class="block">Sets the virtualization enabled state for this sound source.<br>
+ OpenAL requires input channels to be down-mixed to the output channel configuration, possibly using HRTF or other virtualization techniques to give a
+ sense of speakers that may not be physically present. This leads to sometimes unexpected and unwanted audio output, so you can disable it.<br>
  <br>
  Check <a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork"><code>AudioConfig.Virtualization</code></a> for the different methods available.<br>
  <br>
@@ -973,8 +961,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setLooping</h4>
 <pre>public&nbsp;void&nbsp;setLooping(boolean&nbsp;looping)</pre>
-<div class="block">Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound
- again when it's finished playing.</div>
+<div class="block">Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound again when it's finished playing.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>looping</code> - true for looped playback</dd>
@@ -1066,12 +1053,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>attachEffect</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a>&nbsp;attachEffect(<a href="../../../de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a>&nbsp;effect)</pre>
-<div class="block">Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the
- oldest attached effect will be kicked out. Attaching an effect that is already attached to this source is a legal
- NOP.<br>
+<div class="block">Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+ Attaching an effect that is already attached to this source is a legal NOP.<br>
  <br>
- <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a> to change the number of available effect slots.<br> Call
- <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to retrieve the number of available effect slots.</div>
+ <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a> to change the number of available effect slots.<br>
+ Call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to retrieve the number of available effect slots.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>effect</code> - the sound effect</dd>
@@ -1089,13 +1075,12 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a>&nbsp;attachEffect(<a href="../../../de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a>&nbsp;effect,
                                 float&nbsp;lowFreqVolume,
                                 float&nbsp;highFreqVolume)</pre>
-<div class="block">Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the
- oldest attached effect will be kicked out. Attaching an effect that is already attached to this source is a legal
- NOP. Optionally you can set a filter that is only used for this effect, or null if you don't want to apply a
- filter. <br>
+<div class="block">Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+ Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used for this effect, or null if
+ you don't want to apply a filter. <br>
  <br>
- <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a> to change the number of available effect slots.<br> Call
- <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to retrieve the number of available effect slots.</div>
+ <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a> to change the number of available effect slots.<br>
+ Call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to retrieve the number of available effect slots.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>effect</code> - the sound effect</dd>

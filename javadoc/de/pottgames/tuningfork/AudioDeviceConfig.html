@@ -154,8 +154,7 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#rerouter">rerouter</a></span></code>
-<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current
- device is lost.</div>
+<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost.</div>
 </td>
 </tr>
 </table>
@@ -237,8 +236,7 @@ extends java.lang.Object</pre>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html" title="class in de.pottgames.tuningfork">AudioDeviceConfig</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setRerouter-de.pottgames.tuningfork.router.AudioDeviceRerouter-">setRerouter</a></span>(<a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a>&nbsp;rerouter)</code>
-<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current
- device is lost.</div>
+<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost.</div>
 </td>
 </tr>
 </table>
@@ -270,8 +268,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>deviceSpecifier</h4>
 <pre>protected&nbsp;java.lang.String deviceSpecifier</pre>
-<div class="block">Must be one of the device specifiers you can query with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#availableDevices--"><code>AudioDevice.availableDevices()</code></a>. Leave it null to
- use the default audio device.</div>
+<div class="block">Must be one of the device specifiers you can query with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#availableDevices--"><code>AudioDevice.availableDevices()</code></a>. Leave it null to use the default audio device.</div>
 </li>
 </ul>
 <a name="enableOutputLimiter">
@@ -291,10 +288,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>effectSlots</h4>
 <pre>protected&nbsp;int effectSlots</pre>
-<div class="block">Defines how many effects can be attached to sound sources. It's not guaranteed that the device will provide as
- many slots as requested. Call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to check how many effects are actually
- available.<br> Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable
- numbers).</div>
+<div class="block">Defines how many effects can be attached to sound sources. It's not guaranteed that the device will provide as many slots as requested. Call
+ <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to check how many effects are actually available.<br>
+ Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable numbers).</div>
 </li>
 </ul>
 <a name="rerouter">
@@ -304,9 +300,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>rerouter</h4>
 <pre>protected&nbsp;<a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a> rerouter</pre>
-<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current
- device is lost. May also be used to keep track of the default audio device of the OS and switch to it when a new
- default device is reported by the OS. Default: <a href="../../../de/pottgames/tuningfork/router/SmartDeviceRerouter.html" title="class in de.pottgames.tuningfork.router"><code>SmartDeviceRerouter</code></a></div>
+<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to
+ keep track of the default audio device of the OS and switch to it when a new default device is reported by the OS. Default: <a href="../../../de/pottgames/tuningfork/router/SmartDeviceRerouter.html" title="class in de.pottgames.tuningfork.router"><code>SmartDeviceRerouter</code></a></div>
 </li>
 </ul>
 <a name="outputMode">
@@ -316,8 +311,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>outputMode</h4>
 <pre>protected&nbsp;<a href="../../../de/pottgames/tuningfork/OutputMode.html" title="enum in de.pottgames.tuningfork">OutputMode</a> outputMode</pre>
-<div class="block">The desired output mode. It is just a hint for OpenAL and it might not give you the exact mode you wanted but its
- closest relative. Set <a href="../../../de/pottgames/tuningfork/OutputMode.html#ANY"><code>OutputMode.ANY</code></a> to let the system find the most fitting mode for you.</div>
+<div class="block">The desired output mode. It is just a hint for OpenAL and it might not give you the exact mode you wanted but its closest relative. Set
+ <a href="../../../de/pottgames/tuningfork/OutputMode.html#ANY"><code>OutputMode.ANY</code></a> to let the system find the most fitting mode for you.</div>
 </li>
 </ul>
 </li>
@@ -361,8 +356,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setDeviceSpecifier</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html" title="class in de.pottgames.tuningfork">AudioDeviceConfig</a>&nbsp;setDeviceSpecifier(java.lang.String&nbsp;deviceSpecifier)</pre>
-<div class="block">Must be one of the device specifiers you can query with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#availableDevices--"><code>AudioDevice.availableDevices()</code></a>. Leave it null to
- use the default audio device.</div>
+<div class="block">Must be one of the device specifiers you can query with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#availableDevices--"><code>AudioDevice.availableDevices()</code></a>. Leave it null to use the default audio device.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>deviceSpecifier</code> - the device name</dd>
@@ -412,10 +406,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setEffectSlots</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html" title="class in de.pottgames.tuningfork">AudioDeviceConfig</a>&nbsp;setEffectSlots(int&nbsp;effectSlots)</pre>
-<div class="block">Defines how many effects can be attached to sound sources. It's not guaranteed that the device will provide as
- many slots as requested. Call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to check how many effects are actually
- available.<br> Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable
- numbers).</div>
+<div class="block">Defines how many effects can be attached to sound sources. It's not guaranteed that the device will provide as many slots as requested. Call
+ <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to check how many effects are actually available.<br>
+ Default is 2, 16 is the maximum on my system for example (to give you an idea about reasonable numbers).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>effectSlots</code> - the number of effect slots</dd>
@@ -440,9 +433,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setRerouter</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html" title="class in de.pottgames.tuningfork">AudioDeviceConfig</a>&nbsp;setRerouter(<a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a>&nbsp;rerouter)</pre>
-<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current
- device is lost. May also be used to keep track of the default audio device of the OS and switch to it when a new
- default device is reported by the OS. Default: <a href="../../../de/pottgames/tuningfork/router/KeepAliveDeviceRerouter.html" title="class in de.pottgames.tuningfork.router"><code>KeepAliveDeviceRerouter</code></a></div>
+<div class="block">A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to
+ keep track of the default audio device of the OS and switch to it when a new default device is reported by the OS. Default:
+ <a href="../../../de/pottgames/tuningfork/router/KeepAliveDeviceRerouter.html" title="class in de.pottgames.tuningfork.router"><code>KeepAliveDeviceRerouter</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rerouter</code> - the audio device rerouter</dd>
@@ -467,9 +460,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setOutputMode</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html" title="class in de.pottgames.tuningfork">AudioDeviceConfig</a>&nbsp;setOutputMode(<a href="../../../de/pottgames/tuningfork/OutputMode.html" title="enum in de.pottgames.tuningfork">OutputMode</a>&nbsp;mode)</pre>
-<div class="block">Request an output mode of your choice. It is just a hint for OpenAL and it might not give you the exact mode you
- wanted but its closest relative. Set <a href="../../../de/pottgames/tuningfork/OutputMode.html#ANY"><code>OutputMode.ANY</code></a> to let the system find the most fitting mode for you,
- this is the default and recommended unless you have a specific reason to use another output mode.<br>
+<div class="block">Request an output mode of your choice. It is just a hint for OpenAL and it might not give you the exact mode you wanted but its closest relative. Set
+ <a href="../../../de/pottgames/tuningfork/OutputMode.html#ANY"><code>OutputMode.ANY</code></a> to let the system find the most fitting mode for you, this is the default and recommended unless you have a specific reason to use
+ another output mode.<br>
  <br>
  You can check the current output mode after initialization with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getOutputMode--"><code>AudioDevice.getOutputMode()</code></a>.</div>
 <dl>

@@ -121,8 +121,7 @@ extends java.lang.Enum&lt;<a href="../../../de/pottgames/tuningfork/DistanceAtte
 <div class="block">An enum that holds a list of available attenuation models.<br></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href=
-      "https://github.com/Hangman/TuningFork/wiki/The-Distance-Attenuation-Model">https://github
+<dd><a href= "https://github.com/Hangman/TuningFork/wiki/The-Distance-Attenuation-Model">https://github
       .com/Hangman/TuningFork/wiki/The-Distance-Attenuation-Model</a></dd>
 </dl>
 </li>
@@ -254,17 +253,12 @@ the order they are declared.</div>
 <div class="block">This text is taken from the official OpenAL documentation. You may want to take a look at
  <a href="https://www.openal.org/documentation/openal-1.1-specification.pdf"> it</a>.<br>
  <br>
- Inverse distance rolloff model, which is equivalent to the IASIG I3DL2 model with the exception that
- referenceDistance does not imply any clamping. gain
+ Inverse distance rolloff model, which is equivalent to the IASIG I3DL2 model with the exception that referenceDistance does not imply any clamping. gain
  = referenceDistance / (referenceDistance + rolloffFactor * (distance - referenceDistance))<br>
- The referenceDistance parameter used here is a per-source attribute which is the distance at which the
- listener will experience gain (unless the
- implementation had to clamp effective gain to the available dynamic range). rolloffFactor is per-source
- parameter the application can use to increase or
- decrease the range of a source by decreasing or increasing the attenuation, respectively. The default value is
- 1. The implementation is free to optimize
- for a rolloffFactor value of 0, which indicates that the application does not wish any distance attenuation on
- the respective source.</div>
+ The referenceDistance parameter used here is a per-source attribute which is the distance at which the listener will experience gain (unless the
+ implementation had to clamp effective gain to the available dynamic range). rolloffFactor is per-source parameter the application can use to increase or
+ decrease the range of a source by decreasing or increasing the attenuation, respectively. The default value is 1. The implementation is free to optimize
+ for a rolloffFactor value of 0, which indicates that the application does not wish any distance attenuation on the respective source.</div>
 </li>
 </ul>
 <a name="INVERSE_DISTANCE_CLAMPED">
@@ -277,10 +271,8 @@ the order they are declared.</div>
 <div class="block">This text is taken from the official OpenAL documentation. You may want to take a look at
  <a href="https://www.openal.org/documentation/openal-1.1-specification.pdf"> it</a>.<br>
  <br>
- This is the Inverse Distance Rolloff Model model, extended to guarantee that for distances below
- AL_REFERENCE_DISTANCE, gain is clamped. This mode is
- equivalent to the IASIG I3DL2 distance model. distance = max(distance,AL_REFERENCE_DISTANCE); distance = min
- (distance,AL_MAX_DISTANCE); gain =
+ This is the Inverse Distance Rolloff Model model, extended to guarantee that for distances below AL_REFERENCE_DISTANCE, gain is clamped. This mode is
+ equivalent to the IASIG I3DL2 distance model. distance = max(distance,AL_REFERENCE_DISTANCE); distance = min (distance,AL_MAX_DISTANCE); gain =
  AL_REFERENCE_DISTANCE / (AL_REFERENCE_DISTANCE + AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE));</div>
 </li>
 </ul>
@@ -294,10 +286,8 @@ the order they are declared.</div>
 <div class="block">This text is taken from the official OpenAL documentation. You may want to take a look at
  <a href="https://www.openal.org/documentation/openal-1.1-specification.pdf"> it</a>.<br>
  <br>
- This models a linear drop-off in gain as distance increases between the source and listener. distance = min
- (distance, AL_MAX_DISTANCE) // avoid negative
- gain gain = (1 – AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE) / (AL_MAX_DISTANCE –
- AL_REFERENCE_DISTANCE))</div>
+ This models a linear drop-off in gain as distance increases between the source and listener. distance = min (distance, AL_MAX_DISTANCE) // avoid negative
+ gain gain = (1 – AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE) / (AL_MAX_DISTANCE – AL_REFERENCE_DISTANCE))</div>
 </li>
 </ul>
 <a name="LINEAR_DISTANCE_CLAMPED">
@@ -310,10 +300,8 @@ the order they are declared.</div>
 <div class="block">This text is taken from the official OpenAL documentation. You may want to take a look at
  <a href="https://www.openal.org/documentation/openal-1.1-specification.pdf"> it</a>.<br>
  <br>
- This is the linear model, extended to guarantee that for distances below AL_REFERENCE_DISTANCE, gain is
- clamped. distance = max(distance,
- AL_REFERENCE_DISTANCE) distance = min(distance, AL_MAX_DISTANCE) gain = (1 – AL_ROLLOFF_FACTOR * (distance –
- AL_REFERENCE_DISTANCE) / (AL_MAX_DISTANCE –
+ This is the linear model, extended to guarantee that for distances below AL_REFERENCE_DISTANCE, gain is clamped. distance = max(distance,
+ AL_REFERENCE_DISTANCE) distance = min(distance, AL_MAX_DISTANCE) gain = (1 – AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE) / (AL_MAX_DISTANCE –
  AL_REFERENCE_DISTANCE))</div>
 </li>
 </ul>
@@ -327,8 +315,7 @@ the order they are declared.</div>
 <div class="block">This text is taken from the official OpenAL documentation. You may want to take a look at
  <a href="https://www.openal.org/documentation/openal-1.1-specification.pdf"> it</a>.<br>
  <br>
- This models an exponential dropoff in gain as distance increases between the source and listener. gain =
- (distance / AL_REFERENCE_DISTANCE) ^ (-
+ This models an exponential dropoff in gain as distance increases between the source and listener. gain = (distance / AL_REFERENCE_DISTANCE) ^ (-
  AL_ROLLOFF_FACTOR) where the ^ operation raises its first operand to the power of its second operand.</div>
 </li>
 </ul>
@@ -342,10 +329,8 @@ the order they are declared.</div>
 <div class="block">This text is taken from the official OpenAL documentation. You may want to take a look at
  <a href="https://www.openal.org/documentation/openal-1.1-specification.pdf"> it</a>.<br>
  <br>
- This is the exponential model, extended to guarantee that for distances below AL_REFERENCE_DISTANCE, gain is
- clamped. distance = max(distance,
- AL_REFERENCE_DISTANCE) distance = min(distance, AL_MAX_DISTANCE) gain = (distance / AL_REFERENCE_DISTANCE) ^
- (- AL_ROLLOFF_FACTOR)</div>
+ This is the exponential model, extended to guarantee that for distances below AL_REFERENCE_DISTANCE, gain is clamped. distance = max(distance,
+ AL_REFERENCE_DISTANCE) distance = min(distance, AL_MAX_DISTANCE) gain = (distance / AL_REFERENCE_DISTANCE) ^ (- AL_ROLLOFF_FACTOR)</div>
 </li>
 </ul>
 </li>

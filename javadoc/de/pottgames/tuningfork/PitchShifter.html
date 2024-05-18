@@ -114,8 +114,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PitchShifter</span>
 extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="class in de.pottgames.tuningfork">SoundEffectData</a></pre>
-<div class="block">The pitch shifter applies time-invariant pitch shifting to the input signal, over a one octave range and controllable
- at a semi-tone and cent resolution.</div>
+<div class="block">The pitch shifter applies time-invariant pitch shifting to the input signal, over a one octave range and controllable at a semi-tone and cent resolution.</div>
 </li>
 </ul>
 </div>
@@ -137,13 +136,15 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PitchShifter.html#coarseTune">coarseTune</a></span></code>
-<div class="block">Range: -12 - 12, Default: 12<br> This sets the number of semitones by which the pitch is shifted.</div>
+<div class="block">Range: -12 - 12, Default: 12<br>
+ This sets the number of semitones by which the pitch is shifted.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PitchShifter.html#fineTune">fineTune</a></span></code>
-<div class="block">Range: -50 - 50, Default: 0<br> This sets the number of cents between Semitones a pitch is shifted.</div>
+<div class="block">Range: -50 - 50, Default: 0<br>
+ This sets the number of cents between Semitones a pitch is shifted.</div>
 </td>
 </tr>
 </table>
@@ -189,8 +190,8 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../de/pottgames/tuningfork/PitchShifter.html" title="class in de.pottgames.tuningfork">PitchShifter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/PitchShifter.html#correctPitch-float-">correctPitch</a></span>(float&nbsp;pitch)</code>
-<div class="block">Sets <a href="../../../de/pottgames/tuningfork/PitchShifter.html#coarseTune"><code>coarseTune</code></a> and <a href="../../../de/pottgames/tuningfork/PitchShifter.html#fineTune"><code>fineTune</code></a> to values that try to
- correct a pitch applied to a <a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork"><code>SoundSource</code></a>, so that the sound appears to be played back at a pitch of 1.</div>
+<div class="block">Sets <a href="../../../de/pottgames/tuningfork/PitchShifter.html#coarseTune"><code>coarseTune</code></a> and <a href="../../../de/pottgames/tuningfork/PitchShifter.html#fineTune"><code>fineTune</code></a> to values that try to correct a pitch applied to a
+ <a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork"><code>SoundSource</code></a>, so that the sound appears to be played back at a pitch of 1.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -246,9 +247,9 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <li class="blockList">
 <h4>coarseTune</h4>
 <pre>public&nbsp;int coarseTune</pre>
-<div class="block">Range: -12 - 12, Default: 12<br> This sets the number of semitones by which the pitch is shifted. There are 12
- semitones per octave. Negative values create a downwards shift in pitch, positive values pitch the sound
- upwards.</div>
+<div class="block">Range: -12 - 12, Default: 12<br>
+ This sets the number of semitones by which the pitch is shifted. There are 12 semitones per octave. Negative values create a downwards shift in pitch,
+ positive values pitch the sound upwards.</div>
 </li>
 </ul>
 <a name="fineTune">
@@ -258,9 +259,9 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <li class="blockList">
 <h4>fineTune</h4>
 <pre>public&nbsp;int fineTune</pre>
-<div class="block">Range: -50 - 50, Default: 0<br> This sets the number of cents between Semitones a pitch is shifted. A Cent is
- 1/100th of a Semitone. Negative values create a downwards shift in pitch, positive values pitch the sound
- upwards.</div>
+<div class="block">Range: -50 - 50, Default: 0<br>
+ This sets the number of cents between Semitones a pitch is shifted. A Cent is 1/100th of a Semitone. Negative values create a downwards shift in pitch,
+ positive values pitch the sound upwards.</div>
 </li>
 </ul>
 </li>
@@ -331,12 +332,12 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <li class="blockList">
 <h4>correctPitch</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/PitchShifter.html" title="class in de.pottgames.tuningfork">PitchShifter</a>&nbsp;correctPitch(float&nbsp;pitch)</pre>
-<div class="block">Sets <a href="../../../de/pottgames/tuningfork/PitchShifter.html#coarseTune"><code>coarseTune</code></a> and <a href="../../../de/pottgames/tuningfork/PitchShifter.html#fineTune"><code>fineTune</code></a> to values that try to
- correct a pitch applied to a <a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork"><code>SoundSource</code></a>, so that the sound appears to be played back at a pitch of 1.
- This way, it is possible to change the playback speed of a sound without changing its pitch.<br>
+<div class="block">Sets <a href="../../../de/pottgames/tuningfork/PitchShifter.html#coarseTune"><code>coarseTune</code></a> and <a href="../../../de/pottgames/tuningfork/PitchShifter.html#fineTune"><code>fineTune</code></a> to values that try to correct a pitch applied to a
+ <a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork"><code>SoundSource</code></a>, so that the sound appears to be played back at a pitch of 1. This way, it is possible to change the playback speed of a sound
+ without changing its pitch.<br>
  <br>
- <b>Note:</b> In order to only hear the pitch corrected sound, the direct sound path must be muted with the
- help of <a href="../../../de/pottgames/tuningfork/SoundSource.html#setFilter-float-float-"><code>SoundSource.setFilter(float, float)</code></a> set to [0,0].</div>
+ <b>Note:</b> In order to only hear the pitch corrected sound, the direct sound path must be muted with the help of
+ <a href="../../../de/pottgames/tuningfork/SoundSource.html#setFilter-float-float-"><code>SoundSource.setFilter(float, float)</code></a> set to [0,0].</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pitch</code> - - pitch correction only works for 0.5 &lt;= pitch &lt;= 2</dd>

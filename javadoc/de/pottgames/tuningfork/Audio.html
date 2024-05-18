@@ -114,8 +114,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">Audio</span>
 extends java.lang.Object
 implements com.badlogic.gdx.utils.Disposable</pre>
-<div class="block">The main management and entry point of TuningFork. This class initializes the sound device and gives access to
- SoundSource's for advanced manual playback control.</div>
+<div class="block">The main management and entry point of TuningFork. This class initializes the sound device and gives access to SoundSource's for advanced manual playback
+ control.</div>
 </li>
 </ul>
 </div>
@@ -149,22 +149,19 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Audio.html#getDefaultAttenuationFactor--">getDefaultAttenuationFactor</a></span>()</code>
-<div class="block">Returns the default attenuation factor that is used to calculate the attenuation by the current default
- attenuation model.</div>
+<div class="block">Returns the default attenuation factor that is used to calculate the attenuation by the current default attenuation model.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Audio.html#getDefaultAttenuationMaxDistance--">getDefaultAttenuationMaxDistance</a></span>()</code>
-<div class="block">Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default
- attenuation model.</div>
+<div class="block">Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default attenuation model.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Audio.html#getDefaultAttenuationMinDistance--">getDefaultAttenuationMinDistance</a></span>()</code>
-<div class="block">Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default
- attenuation model.</div>
+<div class="block">Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default attenuation model.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -441,8 +438,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <tr id="i43" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Audio.html#setDefaultAttenuationFactor-float-">setDefaultAttenuationFactor</a></span>(float&nbsp;rolloff)</code>
-<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
- the source.</div>
+<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source.</div>
 </td>
 </tr>
 <tr id="i44" class="altColor">
@@ -460,8 +456,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <tr id="i46" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Audio.html#setDefaultResampler-java.lang.String-">setDefaultResampler</a></span>(java.lang.String&nbsp;resampler)</code>
-<div class="block">Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained,
- etc.).<br> Sources that are created afterward are also initialized with the new default resampler.<br>
+<div class="block">Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
+ Sources that are created afterward are also initialized with the new default resampler.<br>
  <br>
  Check <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getAvailableResamplers--"><code>AudioDevice.getAvailableResamplers()</code></a> for a list of available resamplers.</div>
 </td>
@@ -473,10 +469,10 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <tr id="i48" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Audio.html#setDefaultVirtualization-de.pottgames.tuningfork.AudioConfig.Virtualization-">setDefaultVirtualization</a></span>(<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a>&nbsp;virtualization)</code>
-<div class="block">Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused,
- obtained, etc.).<br> Sources that are created afterward are also initialized with the new default virtualization
- method.<br> Unless you have a specific reason to change this at runtime, it's recommended to set the default via
- <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a> on <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a>.<br>
+<div class="block">Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
+ Sources that are created afterward are also initialized with the new default virtualization method.<br>
+ Unless you have a specific reason to change this at runtime, it's recommended to set the default via <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a> on
+ <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a>.<br>
  <br>
  See <a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork"><code>AudioConfig.Virtualization</code></a> for the different options available.</div>
 </td>
@@ -546,8 +542,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>init</h4>
 <pre>public static&nbsp;<a href="../../../de/pottgames/tuningfork/Audio.html" title="class in de.pottgames.tuningfork">Audio</a>&nbsp;init()</pre>
-<div class="block">Initializes an Audio instance with the default <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. Errors are logged but exceptions are silently
- ignored. Call <a href="../../../de/pottgames/tuningfork/Audio.html#initSafe-de.pottgames.tuningfork.AudioConfig-"><code>initSafe(AudioConfig)</code></a> instead, if you want to handle exceptions.</div>
+<div class="block">Initializes an Audio instance with the default <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. Errors are logged but exceptions are silently ignored. Call
+ <a href="../../../de/pottgames/tuningfork/Audio.html#initSafe-de.pottgames.tuningfork.AudioConfig-"><code>initSafe(AudioConfig)</code></a> instead, if you want to handle exceptions.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the initialized Audio instance or null on failure</dd>
@@ -563,15 +559,14 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <pre>public static&nbsp;<a href="../../../de/pottgames/tuningfork/Audio.html" title="class in de.pottgames.tuningfork">Audio</a>&nbsp;initSafe()
                       throws <a href="../../../de/pottgames/tuningfork/OpenDeviceException.html" title="class in de.pottgames.tuningfork">OpenDeviceException</a>,
                              <a href="../../../de/pottgames/tuningfork/UnsupportedAudioDeviceException.html" title="class in de.pottgames.tuningfork">UnsupportedAudioDeviceException</a></pre>
-<div class="block">Initializes an Audio instance with the default <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. If you don't want to take care of exceptions,
- call <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a> instead.</div>
+<div class="block">Initializes an Audio instance with the default <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. If you don't want to take care of exceptions, call <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a>
+ instead.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the initialized Audio instance</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/OpenDeviceException.html" title="class in de.pottgames.tuningfork">OpenDeviceException</a></code> - is thrown when a device couldn't be opened</dd>
-<dd><code><a href="../../../de/pottgames/tuningfork/UnsupportedAudioDeviceException.html" title="class in de.pottgames.tuningfork">UnsupportedAudioDeviceException</a></code> - is thrown when the desired device couldn't be found or isn't a valid
-                                         device</dd>
+<dd><code><a href="../../../de/pottgames/tuningfork/UnsupportedAudioDeviceException.html" title="class in de.pottgames.tuningfork">UnsupportedAudioDeviceException</a></code> - is thrown when the desired device couldn't be found or isn't a valid device</dd>
 </dl>
 </li>
 </ul>
@@ -582,8 +577,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>init</h4>
 <pre>public static&nbsp;<a href="../../../de/pottgames/tuningfork/Audio.html" title="class in de.pottgames.tuningfork">Audio</a>&nbsp;init(<a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork">AudioConfig</a>&nbsp;config)</pre>
-<div class="block">Initializes an Audio instance with the given <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. Errors are logged but exceptions are silently
- ignored. Call <a href="../../../de/pottgames/tuningfork/Audio.html#initSafe-de.pottgames.tuningfork.AudioConfig-"><code>initSafe(AudioConfig)</code></a> instead, if you want to handle exceptions.</div>
+<div class="block">Initializes an Audio instance with the given <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. Errors are logged but exceptions are silently ignored. Call
+ <a href="../../../de/pottgames/tuningfork/Audio.html#initSafe-de.pottgames.tuningfork.AudioConfig-"><code>initSafe(AudioConfig)</code></a> instead, if you want to handle exceptions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>config</code> - the audio config</dd>
@@ -601,8 +596,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <pre>public static&nbsp;<a href="../../../de/pottgames/tuningfork/Audio.html" title="class in de.pottgames.tuningfork">Audio</a>&nbsp;initSafe(<a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork">AudioConfig</a>&nbsp;config)
                       throws <a href="../../../de/pottgames/tuningfork/OpenDeviceException.html" title="class in de.pottgames.tuningfork">OpenDeviceException</a>,
                              <a href="../../../de/pottgames/tuningfork/UnsupportedAudioDeviceException.html" title="class in de.pottgames.tuningfork">UnsupportedAudioDeviceException</a></pre>
-<div class="block">Initializes an Audio instance with the given <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. If you don't want to take care of exceptions,
- call <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a> instead.</div>
+<div class="block">Initializes an Audio instance with the given <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a>. If you don't want to take care of exceptions, call <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a>
+ instead.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>config</code> - the audio config</dd>
@@ -610,8 +605,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dd>the initialized Audio instance</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/OpenDeviceException.html" title="class in de.pottgames.tuningfork">OpenDeviceException</a></code> - is thrown when a device couldn't be opened</dd>
-<dd><code><a href="../../../de/pottgames/tuningfork/UnsupportedAudioDeviceException.html" title="class in de.pottgames.tuningfork">UnsupportedAudioDeviceException</a></code> - is thrown when the desired device couldn't be found or isn't a valid
-                                         device</dd>
+<dd><code><a href="../../../de/pottgames/tuningfork/UnsupportedAudioDeviceException.html" title="class in de.pottgames.tuningfork">UnsupportedAudioDeviceException</a></code> - is thrown when the desired device couldn't be found or isn't a valid device</dd>
 </dl>
 </li>
 </ul>
@@ -650,18 +644,16 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDistanceAttenuationModel</h4>
 <pre>public&nbsp;void&nbsp;setDistanceAttenuationModel(<a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html" title="enum in de.pottgames.tuningfork">DistanceAttenuationModel</a>&nbsp;model)</pre>
-<div class="block">As the listener moves away from a sound source, the volume of the sound source decreases for the listener. The
- Attenuation Model is responsible for this calculation.<br>
+<div class="block">As the listener moves away from a sound source, the volume of the sound source decreases for the listener. The Attenuation Model is responsible for this
+ calculation.<br>
  <br>
- <b>Note:</b> Setting a DistanceAttenuationModel overwrites the default min and max attenuation distance as
- well as the attenuation factor that is used for new sound sources. It won't affect existing ones.<br>
+ <b>Note:</b> Setting a DistanceAttenuationModel overwrites the default min and max attenuation distance as well as the attenuation factor that is used
+ for new sound sources. It won't affect existing ones.<br>
  <br>
  There are several <a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html" title="enum in de.pottgames.tuningfork"><code>models</code></a> to choose from, including a
  <a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html#LINEAR_DISTANCE_CLAMPED"><code>linear model</code></a> and a
- <a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html#INVERSE_DISTANCE_CLAMPED"><code>semi-realistic model</code></a> based on
- the real world. By default the
- <a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html#INVERSE_DISTANCE_CLAMPED"><code>INVERSE_DISTANCE_CLAMPED</code></a> model
- is used.</div>
+ <a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html#INVERSE_DISTANCE_CLAMPED"><code>semi-realistic model</code></a> based on the real world. By default the
+ <a href="../../../de/pottgames/tuningfork/DistanceAttenuationModel.html#INVERSE_DISTANCE_CLAMPED"><code>INVERSE_DISTANCE_CLAMPED</code></a> model is used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>model</code> - the model</dd>
@@ -675,11 +667,9 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDefaultAttenuationMinDistance</h4>
 <pre>public&nbsp;void&nbsp;setDefaultAttenuationMinDistance(float&nbsp;distance)</pre>
-<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should begin. The
- attenuation itself is controlled by the attenuation model and the attenuation factor of the source. This value is
- used for all sources that are created/obtained afterwards, it doesn't affect existing or already obtained
- sources. If you want to set this per source, you can do so:
- <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMinDistance-float-"><code>SoundSource.setAttenuationMinDistance(float)</code></a>.</div>
+<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
+ attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
+ existing or already obtained sources. If you want to set this per source, you can do so: <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMinDistance-float-"><code>SoundSource.setAttenuationMinDistance(float)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>distance</code> - (default depends on the attenuation model)</dd>
@@ -693,11 +683,9 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDefaultAttenuationMaxDistance</h4>
 <pre>public&nbsp;void&nbsp;setDefaultAttenuationMaxDistance(float&nbsp;distance)</pre>
-<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should stop. The
- attenuation itself is controlled by the attenuation model and the attenuation factor of the source. This value is
- used for all sources that are created/obtained afterwards, it doesn't affect existing or already obtained
- sources. If you want to set this per source, you can do so:
- <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMaxDistance-float-"><code>SoundSource.setAttenuationMaxDistance(float)</code></a>.</div>
+<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
+ attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
+ existing or already obtained sources. If you want to set this per source, you can do so: <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMaxDistance-float-"><code>SoundSource.setAttenuationMaxDistance(float)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>distance</code> - (default depends on the attenuation model)</dd>
@@ -711,10 +699,9 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDefaultAttenuationFactor</h4>
 <pre>public&nbsp;void&nbsp;setDefaultAttenuationFactor(float&nbsp;rolloff)</pre>
-<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
- the source. A factor of 0.5 reduces the volume loss by half. With a factor of 2, the source loses volume twice as
- fast. This factor is used for all sources that are created/obtained afterwards, it doesn't affect existing or
- already obtained sources. If you want to set this per source, you can do so:
+<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
+ volume loss by half. With a factor of 2, the source loses volume twice as fast. This factor is used for all sources that are created/obtained afterwards,
+ it doesn't affect existing or already obtained sources. If you want to set this per source, you can do so:
  <a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationFactor-float-"><code>SoundSource.setAttenuationFactor(float)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -729,8 +716,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>getDefaultAttenuationMinDistance</h4>
 <pre>public&nbsp;float&nbsp;getDefaultAttenuationMinDistance()</pre>
-<div class="block">Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default
- attenuation model.</div>
+<div class="block">Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default attenuation model.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the default attenuation min distance</dd>
@@ -744,8 +730,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>getDefaultAttenuationMaxDistance</h4>
 <pre>public&nbsp;float&nbsp;getDefaultAttenuationMaxDistance()</pre>
-<div class="block">Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default
- attenuation model.</div>
+<div class="block">Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default attenuation model.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the default attenuation max distance</dd>
@@ -759,8 +744,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>getDefaultAttenuationFactor</h4>
 <pre>public&nbsp;float&nbsp;getDefaultAttenuationFactor()</pre>
-<div class="block">Returns the default attenuation factor that is used to calculate the attenuation by the current default
- attenuation model.</div>
+<div class="block">Returns the default attenuation factor that is used to calculate the attenuation by the current default attenuation model.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the default attenuation factor</dd>
@@ -774,8 +758,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>getDefaultVirtualization</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a>&nbsp;getDefaultVirtualization()</pre>
-<div class="block">Returns whether virtualization is enabled or disabled by default for all sound sources. See
- <a href="../../../de/pottgames/tuningfork/AudioConfig.html#setVirtualization-de.pottgames.tuningfork.AudioConfig.Virtualization-"><code>AudioConfig.setVirtualization(Virtualization)</code></a> for more info.</div>
+<div class="block">Returns whether virtualization is enabled or disabled by default for all sound sources. See <a href="../../../de/pottgames/tuningfork/AudioConfig.html#setVirtualization-de.pottgames.tuningfork.AudioConfig.Virtualization-"><code>AudioConfig.setVirtualization(Virtualization)</code></a> for
+ more info.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the virtualization method</dd>
@@ -789,10 +773,10 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDefaultVirtualization</h4>
 <pre>public&nbsp;void&nbsp;setDefaultVirtualization(<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a>&nbsp;virtualization)</pre>
-<div class="block">Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused,
- obtained, etc.).<br> Sources that are created afterward are also initialized with the new default virtualization
- method.<br> Unless you have a specific reason to change this at runtime, it's recommended to set the default via
- <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a> on <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a>.<br>
+<div class="block">Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
+ Sources that are created afterward are also initialized with the new default virtualization method.<br>
+ Unless you have a specific reason to change this at runtime, it's recommended to set the default via <a href="../../../de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork"><code>AudioConfig</code></a> on
+ <a href="../../../de/pottgames/tuningfork/Audio.html#init-de.pottgames.tuningfork.AudioConfig-"><code>init(AudioConfig)</code></a>.<br>
  <br>
  See <a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork"><code>AudioConfig.Virtualization</code></a> for the different options available.</div>
 <dl>
@@ -854,10 +838,9 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDopplerFactor</h4>
 <pre>public&nbsp;void&nbsp;setDopplerFactor(float&nbsp;dopplerFactor)</pre>
-<div class="block">Changing the doppler factor exaggerates or de-emphasizes the doppler effect. Physically accurate doppler
- calculation might not give the desired result, so changing this to your needs is fine. The default doppler factor
- is 1. Values &lt; 0 are ignored, 0 turns the doppler effect off, values &gt; 1 will increase the strength of the
- doppler effect.</div>
+<div class="block">Changing the doppler factor exaggerates or de-emphasizes the doppler effect. Physically accurate doppler calculation might not give the desired result,
+ so changing this to your needs is fine. The default doppler factor is 1. Values &lt; 0 are ignored, 0 turns the doppler effect off, values &gt; 1 will
+ increase the strength of the doppler effect.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dopplerFactor</code> - (default 1)</dd>
@@ -871,8 +854,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>obtainSource</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html" title="class in de.pottgames.tuningfork">BufferedSoundSource</a>&nbsp;obtainSource(<a href="../../../de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork">SoundBuffer</a>&nbsp;buffer)</pre>
-<div class="block">Returns a <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html" title="class in de.pottgames.tuningfork"><code>BufferedSoundSource</code></a> for permanent use. Call <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#free--"><code>free()</code></a> on it to
- return it to the pool of available sources.</div>
+<div class="block">Returns a <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html" title="class in de.pottgames.tuningfork"><code>BufferedSoundSource</code></a> for permanent use. Call <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#free--"><code>free()</code></a> on it to return it to the pool of available
+ sources.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
@@ -903,9 +886,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <h4>playAtTime</h4>
 <pre>protected&nbsp;void&nbsp;playAtTime(<a href="../../../de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork">SoundBuffer</a>&nbsp;buffer,
                           long&nbsp;time)</pre>
-<div class="block">Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing
- else. Positive values that point to the past will make the source play immediately. The source will be in
- playing-state while waiting for the start time to be reached.</div>
+<div class="block">Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
+ past will make the source play immediately. The source will be in playing-state while waiting for the start time to be reached.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
@@ -977,8 +959,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-               faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 </dl>
 </li>
 </ul>
@@ -998,8 +979,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1
-                       making it faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 <dd><code>lowFreqVolume</code> - the volume of low frequencies</dd>
 <dd><code>highFreqVolume</code> - the volume of high frequencies</dd>
 </dl>
@@ -1020,8 +1000,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-               faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 <dd><code>effect</code> - the sound effect</dd>
 </dl>
 </li>
@@ -1041,8 +1020,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-               faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 <dd><code>pan</code> - in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)</dd>
 </dl>
 </li>
@@ -1063,8 +1041,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-               faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 <dd><code>pan</code> - in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)</dd>
 <dd><code>effect</code> - the sound effect</dd>
 </dl>
@@ -1221,8 +1198,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-                 faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 <dd><code>position</code> - the position in 3D space</dd>
 </dl>
 </li>
@@ -1243,8 +1219,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buffer</code> - the sound buffer</dd>
 <dd><code>volume</code> - in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)</dd>
-<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it
-                 faster (default 1)</dd>
+<dd><code>pitch</code> - in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)</dd>
 <dd><code>position</code> - the position in 3D space</dd>
 <dd><code>effect</code> - the sound effect</dd>
 </dl>
@@ -1257,8 +1232,8 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <li class="blockList">
 <h4>setDefaultResampler</h4>
 <pre>public&nbsp;boolean&nbsp;setDefaultResampler(java.lang.String&nbsp;resampler)</pre>
-<div class="block">Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained,
- etc.).<br> Sources that are created afterward are also initialized with the new default resampler.<br>
+<div class="block">Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
+ Sources that are created afterward are also initialized with the new default resampler.<br>
  <br>
  Check <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getAvailableResamplers--"><code>AudioDevice.getAvailableResamplers()</code></a> for a list of available resamplers.</div>
 <dl>

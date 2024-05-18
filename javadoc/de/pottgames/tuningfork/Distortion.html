@@ -114,14 +114,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">Distortion</span>
 extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="class in de.pottgames.tuningfork">SoundEffectData</a></pre>
-<div class="block">The distortion effect simulates turning up (overdriving) the gain stage on a guitar amplifier or adding a
- distortion pedal to an instrument’s output. It is
- achieved by clipping the signal (adding more square wave-like components) and adding rich harmonics. The
- distortion effect could be very useful for adding
- extra dynamics to engine sounds in a driving simulator, or modifying samples such as vocal communications. The
- OpenAL Effects Extension distortion effect
- also includes EQ on the output signal, to help ‘rein in’ excessive frequency content in distorted audio. A
- low-pass filter is applied to input signal before
+<div class="block">The distortion effect simulates turning up (overdriving) the gain stage on a guitar amplifier or adding a distortion pedal to an instrument’s output. It is
+ achieved by clipping the signal (adding more square wave-like components) and adding rich harmonics. The distortion effect could be very useful for adding
+ extra dynamics to engine sounds in a driving simulator, or modifying samples such as vocal communications. The OpenAL Effects Extension distortion effect
+ also includes EQ on the output signal, to help ‘rein in’ excessive frequency content in distorted audio. A low-pass filter is applied to input signal before
  the distortion effect, to limit excessive distorted signals at high frequencies.</div>
 </li>
 </ul>
@@ -173,8 +169,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Distortion.html#lowpassCutoff">lowpassCutoff</a></span></code>
 <div class="block">Range: 80.0 - 24000.0, Default: 8000.0<br>
- Input signal can have a low pass filter applied, to limit the amount of high frequency signal feeding into the
- distortion effect.</div>
+ Input signal can have a low pass filter applied, to limit the amount of high frequency signal feeding into the distortion effect.</div>
 </td>
 </tr>
 </table>
@@ -263,8 +258,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>edge</h4>
 <pre>public&nbsp;float edge</pre>
 <div class="block">Range: 0.0 - 1.0, Default: 0.2<br>
- This property controls the shape of the distortion. The higher the value for Edge, the ‘dirtier’ and ‘fuzzier’
- the effect.</div>
+ This property controls the shape of the distortion. The higher the value for Edge, the ‘dirtier’ and ‘fuzzier’ the effect.</div>
 </li>
 </ul>
 <a name="gain">
@@ -286,8 +280,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>lowpassCutoff</h4>
 <pre>public&nbsp;float lowpassCutoff</pre>
 <div class="block">Range: 80.0 - 24000.0, Default: 8000.0<br>
- Input signal can have a low pass filter applied, to limit the amount of high frequency signal feeding into the
- distortion effect.</div>
+ Input signal can have a low pass filter applied, to limit the amount of high frequency signal feeding into the distortion effect.</div>
 </li>
 </ul>
 <a name="eqCenter">

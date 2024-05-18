@@ -340,13 +340,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>loadFastImaAdpcm</h4>
 <pre>public static&nbsp;<a href="../../../de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork">SoundBuffer</a>&nbsp;loadFastImaAdpcm(java.lang.String&nbsp;path)</pre>
-<div class="block">Disclaimer: This is a special use case load method. If you just want to load a wav, no matter what encoding, use
- one of the other load methods.<br>
+<div class="block">Disclaimer: This is a special use case load method. If you just want to load a wav, no matter what encoding, use one of the other load methods.<br>
  <br>
- Loads an IMA ADPCM encoded wav file into a <a href="../../../de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a>. The file must be present on the file system (not
- packed into a jar), be careful with this as packing everything is libGDXs default behavior. Loading is completely
- done in native code and therefore a bit faster. Leads to a crash when fed with a wav file that is not IMA ADPCM
- encoded.</div>
+ Loads an IMA ADPCM encoded wav file into a <a href="../../../de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a>. The file must be present on the file system (not packed into a jar), be careful with this
+ as packing everything is libGDXs default behavior. Loading is completely done in native code and therefore a bit faster. Leads to a crash when fed with a
+ wav file that is not IMA ADPCM encoded.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>path</code> - must be a file that exists on the file system</dd>

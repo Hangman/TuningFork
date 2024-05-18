@@ -114,8 +114,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">Flanger</span>
 extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="class in de.pottgames.tuningfork">SoundEffectData</a></pre>
-<div class="block">The flanger effect creates a “tearing” or “whooshing” sound (like a jet flying overhead). It works by sampling a
- portion of the input signal, delaying it by
+<div class="block">The flanger effect creates a “tearing” or “whooshing” sound (like a jet flying overhead). It works by sampling a portion of the input signal, delaying it by
  a period modulated between 0 and 4ms by a low-frequency oscillator, and then mixing it with the source signal.</div>
 </li>
 </ul>
@@ -139,8 +138,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Flanger.html#delay">delay</a></span></code>
 <div class="block">Range: 0.0 - 0.004, Default: 0.002<br>
- The average amount of time the sample is delayed before it is played back; with feedback, the amount of time
- between iterations of the sample.</div>
+ The average amount of time the sample is delayed before it is played back; with feedback, the amount of time between iterations of the sample.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -268,8 +266,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>waveform</h4>
 <pre>public&nbsp;int waveform</pre>
 <div class="block">0 = sinusoid, 1 = triangle<br>
- Selects the shape of the LFO waveform that controls the amount of the delay of the sampled signal. Zero is a
- sinusoid and one is a triangle.</div>
+ Selects the shape of the LFO waveform that controls the amount of the delay of the sampled signal. Zero is a sinusoid and one is a triangle.</div>
 </li>
 </ul>
 <a name="phase">
@@ -280,8 +277,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>phase</h4>
 <pre>public&nbsp;int phase</pre>
 <div class="block">Range: -180 - 180, Default: 0<br>
- This changes the phase difference between the left and right LFO’s. At zero degrees the two LFOs are
- synchronized.</div>
+ This changes the phase difference between the left and right LFO’s. At zero degrees the two LFOs are synchronized.</div>
 </li>
 </ul>
 <a name="rate">
@@ -292,8 +288,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>rate</h4>
 <pre>public&nbsp;float rate</pre>
 <div class="block">Range: 0.0 - 10.0, Default: 0.27<br>
- The number of times per second the LFO controlling the amount of delay repeats. Higher values increase the
- pitch modulation.</div>
+ The number of times per second the LFO controlling the amount of delay repeats. Higher values increase the pitch modulation.</div>
 </li>
 </ul>
 <a name="depth">
@@ -315,10 +310,8 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>feedback</h4>
 <pre>public&nbsp;float feedback</pre>
 <div class="block">Range: -1.0 - 1.0, Default: -0.5<br>
- This is the amount of the output signal level fed back into the effect’s input. A negative value will reverse
- the phase of the feedback signal. Use this
- parameter to create an “intense metallic” effect. At full magnitude, the identical sample will repeat
- endlessly. At less than full magnitude, the sample
+ This is the amount of the output signal level fed back into the effect’s input. A negative value will reverse the phase of the feedback signal. Use this
+ parameter to create an “intense metallic” effect. At full magnitude, the identical sample will repeat endlessly. At less than full magnitude, the sample
  will repeat and fade out over time.</div>
 </li>
 </ul>
@@ -330,8 +323,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>delay</h4>
 <pre>public&nbsp;float delay</pre>
 <div class="block">Range: 0.0 - 0.004, Default: 0.002<br>
- The average amount of time the sample is delayed before it is played back; with feedback, the amount of time
- between iterations of the sample.</div>
+ The average amount of time the sample is delayed before it is played back; with feedback, the amount of time between iterations of the sample.</div>
 </li>
 </ul>
 </li>

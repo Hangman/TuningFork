@@ -148,16 +148,16 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../de/pottgames/tuningfork/decoder/util/Util.html#intOfBigEndianBytes-byte:A-int-">intOfBigEndianBytes</a></span>(byte[]&nbsp;source,
                    int&nbsp;offset)</code>
-<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
- value representing a signed integer using big-endian byte order.</div>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int value representing a signed integer using
+ big-endian byte order.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../de/pottgames/tuningfork/decoder/util/Util.html#intOfLittleEndianBytes-byte:A-int-">intOfLittleEndianBytes</a></span>(byte[]&nbsp;source,
                       int&nbsp;offset)</code>
-<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
- value representing a signed integer using little-endian byte order.</div>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int value representing a signed integer using
+ little-endian byte order.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -193,16 +193,14 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../de/pottgames/tuningfork/decoder/util/Util.html#longOfBigEndianBytes-byte:A-int-">longOfBigEndianBytes</a></span>(byte[]&nbsp;source,
                     int&nbsp;offset)</code>
-<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
- value using big-endian byte order.</div>
+<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long value using big-endian byte order.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../de/pottgames/tuningfork/decoder/util/Util.html#longOfLittleEndianBytes-byte:A-int-">longOfLittleEndianBytes</a></span>(byte[]&nbsp;source,
                        int&nbsp;offset)</code>
-<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
- value using little-endian byte order.</div>
+<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long value using little-endian byte order.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -216,9 +214,9 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../de/pottgames/tuningfork/decoder/util/Util.html#readAll-java.io.InputStream-byte:A-int-">readAll</a></span>(java.io.InputStream&nbsp;stream,
        byte[]&nbsp;output,
        int&nbsp;limit)</code>
-<div class="block">Reads bytes from the provided input stream into the given output buffer, up to the specified limit.<br> This
- method attempts to read bytes from the input stream into the output buffer until either the specified limit is
- reached or the end of the input stream is encountered.</div>
+<div class="block">Reads bytes from the provided input stream into the given output buffer, up to the specified limit.<br>
+ This method attempts to read bytes from the input stream into the output buffer until either the specified limit is reached or the end of the input
+ stream is encountered.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -231,8 +229,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../de/pottgames/tuningfork/decoder/util/Util.html#uIntOfBigEndianBytes-byte:A-int-">uIntOfBigEndianBytes</a></span>(byte[]&nbsp;source,
                     int&nbsp;offset)</code>
-<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into a long
- value representing an unsigned integer using big-endian byte order.</div>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into a long value representing an unsigned integer
+ using big-endian byte order.</div>
 </td>
 </tr>
 </table>
@@ -357,7 +355,7 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a byte array that contains the data of the stream</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
+<dd><code>java.io.IOException</code> - IOException</dd>
 </dl>
 </li>
 </ul>
@@ -371,9 +369,9 @@ extends java.lang.Object</pre>
                           byte[]&nbsp;output,
                           int&nbsp;limit)
                    throws java.io.IOException</pre>
-<div class="block">Reads bytes from the provided input stream into the given output buffer, up to the specified limit.<br> This
- method attempts to read bytes from the input stream into the output buffer until either the specified limit is
- reached or the end of the input stream is encountered.</div>
+<div class="block">Reads bytes from the provided input stream into the given output buffer, up to the specified limit.<br>
+ This method attempts to read bytes from the input stream into the output buffer until either the specified limit is reached or the end of the input
+ stream is encountered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>stream</code> - The input stream to read from.</dd>
@@ -394,8 +392,7 @@ extends java.lang.Object</pre>
 <h4>longOfBigEndianBytes</h4>
 <pre>public static&nbsp;long&nbsp;longOfBigEndianBytes(byte[]&nbsp;source,
                                         int&nbsp;offset)</pre>
-<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
- value using big-endian byte order.</div>
+<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long value using big-endian byte order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - The source byte array.</dd>
@@ -413,8 +410,7 @@ extends java.lang.Object</pre>
 <h4>longOfLittleEndianBytes</h4>
 <pre>public static&nbsp;long&nbsp;longOfLittleEndianBytes(byte[]&nbsp;source,
                                            int&nbsp;offset)</pre>
-<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long
- value using little-endian byte order.</div>
+<div class="block">Converts a sequence of 8 bytes from the specified source array, starting at the specified offset, into a long value using little-endian byte order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - The source byte array.</dd>
@@ -432,8 +428,8 @@ extends java.lang.Object</pre>
 <h4>uIntOfBigEndianBytes</h4>
 <pre>public static&nbsp;long&nbsp;uIntOfBigEndianBytes(byte[]&nbsp;source,
                                         int&nbsp;offset)</pre>
-<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into a long
- value representing an unsigned integer using big-endian byte order.</div>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into a long value representing an unsigned integer
+ using big-endian byte order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - The source byte array.</dd>
@@ -451,8 +447,8 @@ extends java.lang.Object</pre>
 <h4>intOfBigEndianBytes</h4>
 <pre>public static&nbsp;int&nbsp;intOfBigEndianBytes(byte[]&nbsp;source,
                                       int&nbsp;offset)</pre>
-<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
- value representing a signed integer using big-endian byte order.</div>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int value representing a signed integer using
+ big-endian byte order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - The source byte array.</dd>
@@ -470,8 +466,8 @@ extends java.lang.Object</pre>
 <h4>intOfLittleEndianBytes</h4>
 <pre>public static&nbsp;int&nbsp;intOfLittleEndianBytes(byte[]&nbsp;source,
                                          int&nbsp;offset)</pre>
-<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int
- value representing a signed integer using little-endian byte order.</div>
+<div class="block">Converts a sequence of 4 bytes from the specified source array, starting at the specified offset, into an int value representing a signed integer using
+ little-endian byte order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - The source byte array.</dd>

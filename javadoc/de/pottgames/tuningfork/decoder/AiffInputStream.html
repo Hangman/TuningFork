@@ -266,8 +266,8 @@ implements <a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html
 <li class="blockList">
 <h4>AiffInputStream</h4>
 <pre>public&nbsp;AiffInputStream(java.io.InputStream&nbsp;stream)</pre>
-<div class="block">Initializes a <a href="../../../../de/pottgames/tuningfork/decoder/AiffInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>AiffInputStream</code></a> from an <code>InputStream</code>. This stream does not support the reset
- function. Use <a href="../../../../de/pottgames/tuningfork/decoder/AiffInputStream.html#AiffInputStream-com.badlogic.gdx.files.FileHandle-"><code>AiffInputStream(FileHandle)</code></a> instead to get the full functionality.</div>
+<div class="block">Initializes a <a href="../../../../de/pottgames/tuningfork/decoder/AiffInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>AiffInputStream</code></a> from an <code>InputStream</code>. This stream does not support the reset function. Use
+ <a href="../../../../de/pottgames/tuningfork/decoder/AiffInputStream.html#AiffInputStream-com.badlogic.gdx.files.FileHandle-"><code>AiffInputStream(FileHandle)</code></a> instead to get the full functionality.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>stream</code> - the input stream</dd>
@@ -304,8 +304,7 @@ implements <a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html
 <h4>read</h4>
 <pre>public&nbsp;int&nbsp;read(byte[]&nbsp;bytes)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html#read-byte:A-">AudioStream</a></code></span></div>
-<div class="block">Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that
- were actually read.</div>
+<div class="block">Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that were actually read.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html#read-byte:A-">read</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html" title="interface in de.pottgames.tuningfork.decoder">AudioStream</a></code></dd>
@@ -350,8 +349,7 @@ implements <a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html
 <h4>reset</h4>
 <pre>public&nbsp;<a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html" title="interface in de.pottgames.tuningfork.decoder">AudioStream</a>&nbsp;reset()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../de/pottgames/tuningfork/decoder/AudioStream.html#reset--">AudioStream</a></code></span></div>
-<div class="block">Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new
- AudioStream. The AudioStream returned by
+<div class="block">Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new AudioStream. The AudioStream returned by
  this function will be used, regardless of whether it is a new instance or the old one.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

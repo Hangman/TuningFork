@@ -109,8 +109,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">AudioDevice</span>
 extends java.lang.Object</pre>
-<div class="block">A class that gives access to some audio hardware device specific settings. Allows to query and change hardware
- specific settings.</div>
+<div class="block">A class that gives access to some audio hardware device specific settings. Allows to query and change hardware specific settings.</div>
 </li>
 </ul>
 </div>
@@ -186,17 +185,16 @@ extends java.lang.Object</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/AudioDevice.html#getClockTime--">getClockTime</a></span>()</code>
-<div class="block">Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the
- system clock's tick rate (the infamous timer drift).</div>
+<div class="block">Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the system clock's tick rate (the infamous timer
+ drift).</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/AudioDevice.html#getClockTimeAndLatency--">getClockTimeAndLatency</a></span>()</code>
-<div class="block">This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling
- both functions separately.<br> See <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getClockTime--"><code>getClockTime()</code></a> and <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getLatency--"><code>getLatency()</code></a> for a detailed
- explanation.<br> The returned long array is "owned" by the <a href="../../../de/pottgames/tuningfork/AudioDevice.html" title="class in de.pottgames.tuningfork"><code>AudioDevice</code></a> class, so you shouldn't hold a
- reference to it but rather copy the values.</div>
+<div class="block">This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling both functions separately.<br>
+ See <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getClockTime--"><code>getClockTime()</code></a> and <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getLatency--"><code>getLatency()</code></a> for a detailed explanation.<br>
+ The returned long array is "owned" by the <a href="../../../de/pottgames/tuningfork/AudioDevice.html" title="class in de.pottgames.tuningfork"><code>AudioDevice</code></a> class, so you shouldn't hold a reference to it but rather copy the values.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -264,8 +262,7 @@ extends java.lang.Object</pre>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/AudioDevice.html#onAlEvent-de.pottgames.tuningfork.AlEvent-">onAlEvent</a></span>(<a href="../../../de/pottgames/tuningfork/AlEvent.html" title="class in de.pottgames.tuningfork">AlEvent</a>&nbsp;event)</code>
-<div class="block">This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has
- registered.</div>
+<div class="block">This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has registered.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
@@ -275,8 +272,8 @@ extends java.lang.Object</pre>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/AudioDevice.html#setDeviceRerouter-de.pottgames.tuningfork.router.AudioDeviceRerouter-">setDeviceRerouter</a></span>(<a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a>&nbsp;rerouter)</code>
-<div class="block">Sets the device rerouter, calls <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#setup-long-java.lang.String-de.pottgames.tuningfork.ContextAttributes-"><code>setup</code></a> and
- <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#start--"><code>start</code></a> on it.</div>
+<div class="block">Sets the device rerouter, calls <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#setup-long-java.lang.String-de.pottgames.tuningfork.ContextAttributes-"><code>setup</code></a> and <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#start--"><code>start</code></a> on
+ it.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
@@ -339,9 +336,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>availableDevices</h4>
 <pre>public static&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;availableDevices()</pre>
-<div class="block">Returns a list of identifiers of available sound devices. You can use an identifier in
- <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setDeviceSpecifier-java.lang.String-"><code>AudioDeviceConfig.setDeviceSpecifier(String)</code></a> to request a specific sound device for audio playback or
- switch to a device at runtime with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#switchToDevice-java.lang.String-"><code>switchToDevice(String)</code></a>.</div>
+<div class="block">Returns a list of identifiers of available sound devices. You can use an identifier in <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setDeviceSpecifier-java.lang.String-"><code>AudioDeviceConfig.setDeviceSpecifier(String)</code></a> to request a
+ specific sound device for audio playback or switch to a device at runtime with <a href="../../../de/pottgames/tuningfork/AudioDevice.html#switchToDevice-java.lang.String-"><code>switchToDevice(String)</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the list</dd>
@@ -364,9 +360,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isConnected</h4>
 <pre>public&nbsp;boolean&nbsp;isConnected()</pre>
-<div class="block">Returns whether the audio output device is still connected. While most people are using either PCI audio cards or
- a chip welded to their motherboard, there are many devices that are more dynamic in nature, such as USB and
- Firewire based-units. Such units may lose external power or may have their cables unplugged at runtime.<br>
+<div class="block">Returns whether the audio output device is still connected. While most people are using either PCI audio cards or a chip welded to their motherboard,
+ there are many devices that are more dynamic in nature, such as USB and Firewire based-units. Such units may lose external power or may have their cables
+ unplugged at runtime.<br>
  <br>
  <b>Note:</b> Not all operating systems and/or drivers will report a disconnected device.</div>
 <dl>
@@ -385,8 +381,7 @@ extends java.lang.Object</pre>
 <div class="block">Switches to another audio device.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>deviceSpecifier</code> - must be one of the devices returned by <a href="../../../de/pottgames/tuningfork/AudioDevice.html#availableDevices--"><code>availableDevices()</code></a> or null to
-                        switch to the default device.</dd>
+<dd><code>deviceSpecifier</code> - must be one of the devices returned by <a href="../../../de/pottgames/tuningfork/AudioDevice.html#availableDevices--"><code>availableDevices()</code></a> or null to switch to the default device.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if successful</dd>
 </dl>
@@ -399,9 +394,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setDeviceRerouter</h4>
 <pre>public&nbsp;void&nbsp;setDeviceRerouter(<a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html" title="interface in de.pottgames.tuningfork.router">AudioDeviceRerouter</a>&nbsp;rerouter)</pre>
-<div class="block">Sets the device rerouter, calls <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#setup-long-java.lang.String-de.pottgames.tuningfork.ContextAttributes-"><code>setup</code></a> and
- <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#start--"><code>start</code></a> on it. If there was another rerouter active, it gets
- <code>disposed</code>.</div>
+<div class="block">Sets the device rerouter, calls <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#setup-long-java.lang.String-de.pottgames.tuningfork.ContextAttributes-"><code>setup</code></a> and <a href="../../../de/pottgames/tuningfork/router/AudioDeviceRerouter.html#start--"><code>start</code></a> on
+ it. If there was another rerouter active, it gets <code>disposed</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rerouter</code> - the rerouter</dd>
@@ -429,8 +423,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getOutputMode</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/OutputMode.html" title="enum in de.pottgames.tuningfork">OutputMode</a>&nbsp;getOutputMode()</pre>
-<div class="block">Returns the output mode of the device. It includes the channel configuration of the physical (if not virtual)
- sound hardware this device is connected to.</div>
+<div class="block">Returns the output mode of the device. It includes the channel configuration of the physical (if not virtual) sound hardware this device is connected to.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the output mode</dd>
@@ -444,8 +437,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isHrtfSupported</h4>
 <pre>public&nbsp;boolean&nbsp;isHrtfSupported()</pre>
-<div class="block">Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is
- available, call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getAvailableHrtfs--"><code>getAvailableHrtfs()</code></a> to query for profiles.</div>
+<div class="block">Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is available, call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getAvailableHrtfs--"><code>getAvailableHrtfs()</code></a> to
+ query for profiles.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if supported</dd>
@@ -490,8 +483,7 @@ extends java.lang.Object</pre>
 <div class="block">Enables hrtf on this device.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>specifier</code> - the hrtf configuration specifier. Must be one of the strings included in the list from
-                  <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getAvailableHrtfs--"><code>getAvailableHrtfs()</code></a></dd>
+<dd><code>specifier</code> - the hrtf configuration specifier. Must be one of the strings included in the list from <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getAvailableHrtfs--"><code>getAvailableHrtfs()</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true on success, false on failure</dd>
 </dl>
@@ -514,9 +506,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAvailableResamplers</h4>
 <pre>public&nbsp;com.badlogic.gdx.utils.Array&lt;java.lang.String&gt;&nbsp;getAvailableResamplers()</pre>
-<div class="block">Returns a list of available resamplers for this device. The list is ordered by performance impact. That is,
- indices closer to 0 are of lower impact, and the higher index values have higher impact.<br> Mostly, a higher
- performance impact also means a better result in terms of quality, though this isn't true in all cases.<br>
+<div class="block">Returns a list of available resamplers for this device. The list is ordered by performance impact. That is, indices closer to 0 are of lower impact, and
+ the higher index values have higher impact.<br>
+ Mostly, a higher performance impact also means a better result in terms of quality, though this isn't true in all cases.<br>
  <br>
  If you need more information on what resampler is best for you, here's a video recommendation:
  <a href="https://www.youtube.com/watch?v=62U6UnaUGDE">https://www.youtube.com/watch?v=62U6UnaUGDE</a></div>
@@ -533,8 +525,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getNumberOfEffectSlots</h4>
 <pre>public&nbsp;int&nbsp;getNumberOfEffectSlots()</pre>
-<div class="block">Returns the number of available effect slots. If you want to change the number, see
- <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a>.</div>
+<div class="block">Returns the number of available effect slots. If you want to change the number, see <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the number of effect slots available for each source</dd>
@@ -587,8 +578,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getClockTime</h4>
 <pre>public&nbsp;long&nbsp;getClockTime()</pre>
-<div class="block">Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the
- system clock's tick rate (the infamous timer drift).</div>
+<div class="block">Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the system clock's tick rate (the infamous timer
+ drift).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the device time in nanoseconds</dd>
@@ -602,8 +593,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getLatency</h4>
 <pre>public&nbsp;long&nbsp;getLatency()</pre>
-<div class="block">Returns the current audio device latency in nanoseconds. This is effectively the delay for the samples rendered
- at the the device's current clock time from reaching the physical output.</div>
+<div class="block">Returns the current audio device latency in nanoseconds. This is effectively the delay for the samples rendered at the the device's current clock time
+ from reaching the physical output.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>latency in nanoseconds</dd>
@@ -617,10 +608,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getClockTimeAndLatency</h4>
 <pre>public&nbsp;long[]&nbsp;getClockTimeAndLatency()</pre>
-<div class="block">This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling
- both functions separately.<br> See <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getClockTime--"><code>getClockTime()</code></a> and <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getLatency--"><code>getLatency()</code></a> for a detailed
- explanation.<br> The returned long array is "owned" by the <a href="../../../de/pottgames/tuningfork/AudioDevice.html" title="class in de.pottgames.tuningfork"><code>AudioDevice</code></a> class, so you shouldn't hold a
- reference to it but rather copy the values.</div>
+<div class="block">This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling both functions separately.<br>
+ See <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getClockTime--"><code>getClockTime()</code></a> and <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getLatency--"><code>getLatency()</code></a> for a detailed explanation.<br>
+ The returned long array is "owned" by the <a href="../../../de/pottgames/tuningfork/AudioDevice.html" title="class in de.pottgames.tuningfork"><code>AudioDevice</code></a> class, so you shouldn't hold a reference to it but rather copy the values.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a long array that holds the time at index 0 and the latency at index 1. The length of 2 is guaranteed.</dd>
@@ -634,8 +624,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>onAlEvent</h4>
 <pre>protected&nbsp;void&nbsp;onAlEvent(<a href="../../../de/pottgames/tuningfork/AlEvent.html" title="class in de.pottgames.tuningfork">AlEvent</a>&nbsp;event)</pre>
-<div class="block">This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has
- registered.</div>
+<div class="block">This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has registered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>event</code> - the OpenAL event</dd>

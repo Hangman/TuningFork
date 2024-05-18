@@ -243,8 +243,7 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#setAttenuationFactor-float-">setAttenuationFactor</a></span>(float&nbsp;rolloff)</code>
-<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
- the source.</div>
+<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -294,10 +293,9 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#setRelative-boolean-">setRelative</a></span>(boolean&nbsp;relative)</code>
-<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the
- listener's position.<br> If set to false, the position is the absolute position in the 3D world.<br> If set to
- true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical
- to the listener's position.</div>
+<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+ If set to false, the position is the absolute position in the 3D world.<br>
+ If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
@@ -357,8 +355,7 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setVolume</h4>
 <pre>public&nbsp;void&nbsp;setVolume(float&nbsp;volume)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setVolume-float-">SoundSource</a></code></span></div>
-<div class="block">Sets the base volume of this sound source. The final output volume might differ depending on the source's
- position, listener position etc.</div>
+<div class="block">Sets the base volume of this sound source. The final output volume might differ depending on the source's position, listener position etc.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setVolume-float-">setVolume</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -380,8 +377,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setPitch-float-">setPitch</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pitch</code> - The pitch value, which must be &gt;= 0. Values less than 1 result in slower playback and a deeper
-              tone, while values &gt; 1 make it faster and produce a higher tone.</dd>
+<dd><code>pitch</code> - The pitch value, which must be &gt;= 0. Values less than 1 result in slower playback and a deeper tone, while values &gt; 1 make it faster
+            and produce a higher tone.</dd>
 </dl>
 </li>
 </ul>
@@ -407,10 +404,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <li class="blockList">
 <h4>playAtTime</h4>
 <pre>public&nbsp;void&nbsp;playAtTime(long&nbsp;time)</pre>
-<div class="block">Plays the sound at the specified time. Negative values for time will result in an error log entry but do
- nothing else. Positive values that point to the
- past will make the source play immediately. The source will be in playing-state while waiting for the start
- time to be reached. A call to <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#play--"><code>play()</code></a>
+<div class="block">Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
+ past will make the source play immediately. The source will be in playing-state while waiting for the start time to be reached. A call to <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#play--"><code>play()</code></a>
  will not play the sound immediately anymore. In order to delete the play-at-time, call <a href="../../../de/pottgames/tuningfork/BufferedSoundSource.html#stop--"><code>stop()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -426,10 +421,9 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setRelative</h4>
 <pre>public&nbsp;void&nbsp;setRelative(boolean&nbsp;relative)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setRelative-boolean-">SoundSource</a></code></span></div>
-<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the
- listener's position.<br> If set to false, the position is the absolute position in the 3D world.<br> If set to
- true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical
- to the listener's position.</div>
+<div class="block">Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
+ If set to false, the position is the absolute position in the 3D world.<br>
+ If set to true, the position is relative to the listener's position, meaning a position of x=0,y=0,z=0 is always identical to the listener's position.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setRelative-boolean-">setRelative</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -497,9 +491,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setAttenuationFactor</h4>
 <pre>public&nbsp;void&nbsp;setAttenuationFactor(float&nbsp;rolloff)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationFactor-float-">SoundSource</a></code></span></div>
-<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from
- the source. A factor of 0.5 reduces the volume loss by half. With a factor of 2, the source loses volume twice as
- fast.</div>
+<div class="block">This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
+ volume loss by half. With a factor of 2, the source loses volume twice as fast.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationFactor-float-">setAttenuationFactor</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -516,8 +509,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setAttenuationMinDistance</h4>
 <pre>public&nbsp;void&nbsp;setAttenuationMinDistance(float&nbsp;minDistance)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMinDistance-float-">SoundSource</a></code></span></div>
-<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should begin. The
- attenuation itself is controlled by the attenuation model and the attenuation factor of the source.</div>
+<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
+ attenuation model and the attenuation factor of the source.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMinDistance-float-">setAttenuationMinDistance</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -534,8 +527,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setAttenuationMaxDistance</h4>
 <pre>public&nbsp;void&nbsp;setAttenuationMaxDistance(float&nbsp;maxDistance)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMaxDistance-float-">SoundSource</a></code></span></div>
-<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should stop. The
- attenuation itself is controlled by the attenuation model and the attenuation factor of the source.</div>
+<div class="block">Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
+ attenuation model and the attenuation factor of the source.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setAttenuationMaxDistance-float-">setAttenuationMaxDistance</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -555,9 +548,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
                             float&nbsp;coneOuterAngle,
                             float&nbsp;outOfConeVolume)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#makeDirectional-com.badlogic.gdx.math.Vector3-float-float-float-">SoundSource</a></code></span></div>
-<div class="block">Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener
- hears the sound at full volume. Outside the outer cone angle the sound is even on the level specified by
- outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
+<div class="block">Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound at full volume. Outside
+ the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
  <a href="../../../de/pottgames/tuningfork/SoundSource.html#makeOmniDirectional--"><code>SoundSource.makeOmniDirectional()</code></a> to make the source non-directional again.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -578,8 +570,8 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setDirection</h4>
 <pre>public&nbsp;void&nbsp;setDirection(com.badlogic.gdx.math.Vector3&nbsp;direction)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setDirection-com.badlogic.gdx.math.Vector3-">SoundSource</a></code></span></div>
-<div class="block">Sets the direction of this sound source. You need to call <a href="../../../de/pottgames/tuningfork/SoundSource.html#makeDirectional-com.badlogic.gdx.math.Vector3-float-float-float-"><code>SoundSource.makeDirectional(Vector3, float, float, float)</code></a>
- first, otherwise the direction will be ignored.</div>
+<div class="block">Sets the direction of this sound source. You need to call <a href="../../../de/pottgames/tuningfork/SoundSource.html#makeDirectional-com.badlogic.gdx.math.Vector3-float-float-float-"><code>SoundSource.makeDirectional(Vector3, float, float, float)</code></a> first, otherwise the direction will be
+ ignored.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setDirection-com.badlogic.gdx.math.Vector3-">setDirection</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -596,8 +588,7 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>makeOmniDirectional</h4>
 <pre>public&nbsp;void&nbsp;makeOmniDirectional()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#makeOmniDirectional--">SoundSource</a></code></span></div>
-<div class="block">Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the
- source directional earlier.</div>
+<div class="block">Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the source directional earlier.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#makeOmniDirectional--">makeOmniDirectional</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -614,9 +605,9 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
                      float&nbsp;y,
                      float&nbsp;z)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setSpeed-float-float-float-">SoundSource</a></code></span></div>
-<div class="block">Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position,
- you need to call setSpeed manually.<br> The speed is only used for calculating a Doppler effect. Note that you
- need to call set speed on the sound listener as well in order to get a proper Doppler effect.</div>
+<div class="block">Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
+ The speed is only used for calculating a Doppler effect. Note that you need to call set speed on the sound listener as well in order to get a proper
+ Doppler effect.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setSpeed-float-float-float-">setSpeed</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -635,8 +626,7 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>setLooping</h4>
 <pre>public&nbsp;void&nbsp;setLooping(boolean&nbsp;looping)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setLooping-boolean-">SoundSource</a></code></span></div>
-<div class="block">Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound
- again when it's finished playing.</div>
+<div class="block">Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound again when it's finished playing.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#setLooping-boolean-">setLooping</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>
@@ -730,12 +720,11 @@ extends <a href="../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" 
 <h4>attachEffect</h4>
 <pre>public&nbsp;<a href="../../../de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a>&nbsp;attachEffect(<a href="../../../de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a>&nbsp;effect)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html#attachEffect-de.pottgames.tuningfork.SoundEffect-">SoundSource</a></code></span></div>
-<div class="block">Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the
- oldest attached effect will be kicked out. Attaching an effect that is already attached to this source is a legal
- NOP.<br>
+<div class="block">Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
+ Attaching an effect that is already attached to this source is a legal NOP.<br>
  <br>
- <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a> to change the number of available effect slots.<br> Call
- <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to retrieve the number of available effect slots.</div>
+ <a href="../../../de/pottgames/tuningfork/AudioDeviceConfig.html#setEffectSlots-int-"><code>AudioDeviceConfig.setEffectSlots(int)</code></a> to change the number of available effect slots.<br>
+ Call <a href="../../../de/pottgames/tuningfork/AudioDevice.html#getNumberOfEffectSlots--"><code>AudioDevice.getNumberOfEffectSlots()</code></a> to retrieve the number of available effect slots.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../de/pottgames/tuningfork/SoundSource.html#attachEffect-de.pottgames.tuningfork.SoundEffect-">attachEffect</a></code>&nbsp;in class&nbsp;<code><a href="../../../de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></code></dd>

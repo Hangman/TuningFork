@@ -114,12 +114,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">VocalMorpher</span>
 extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="class in de.pottgames.tuningfork">SoundEffectData</a></pre>
-<div class="block">The vocal morpher consists of a pair of 4-band formant filters, used to impose vocal tract effects upon the input
- signal. If the input signal is a broadband
- sound such as pink noise or a car engine, the vocal morpher can provide a wide variety of filtering effects. A
- low-frequency oscillator can be used to morph
- the filtering effect between two different phonemes. The vocal morpher is not necessarily intended for use on
- voice signals; it is primarily intended for
+<div class="block">The vocal morpher consists of a pair of 4-band formant filters, used to impose vocal tract effects upon the input signal. If the input signal is a broadband
+ sound such as pink noise or a car engine, the vocal morpher can provide a wide variety of filtering effects. A low-frequency oscillator can be used to morph
+ the filtering effect between two different phonemes. The vocal morpher is not necessarily intended for use on voice signals; it is primarily intended for
  pitched noise effects, vocal-like wind effects, etc.</div>
 </li>
 </ul>
@@ -259,8 +256,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>phonemea</h4>
 <pre>public&nbsp;int phonemea</pre>
 <div class="block">Range: 0 - 29, Default: 0<br>
- If both parameters are set to the same phoneme, that determines the filtering effect that will be heard. If
- these two parameters are set to different
+ If both parameters are set to the same phoneme, that determines the filtering effect that will be heard. If these two parameters are set to different
  phonemes, the filtering effect will morph between the two settings at a rate specified by AL_VOCAL_MORPHER_RATE.</div>
 </li>
 </ul>
@@ -272,8 +268,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>phonemeb</h4>
 <pre>public&nbsp;int phonemeb</pre>
 <div class="block">Range: 0 - 29, Default: 10<br>
- If both parameters are set to the same phoneme, that determines the filtering effect that will be heard. If
- these two parameters are set to different
+ If both parameters are set to the same phoneme, that determines the filtering effect that will be heard. If these two parameters are set to different
  phonemes, the filtering effect will morph between the two settings at a rate specified by AL_VOCAL_MORPHER_RATE.</div>
 </li>
 </ul>
@@ -307,10 +302,8 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>waveform</h4>
 <pre>public&nbsp;int waveform</pre>
 <div class="block">0 = sinus, 1 = triangle, 2 = saw<br>
- This controls the shape of the low-frequency oscillator used to morph between the two phoneme filters. By
- selecting a saw tooth wave and a slow
- AL_VOCAL_MORPHER_RATE, one can create a filtering effect that slowly increases or decreases in pitch
- (depending on which of the two phoneme filters A or
+ This controls the shape of the low-frequency oscillator used to morph between the two phoneme filters. By selecting a saw tooth wave and a slow
+ AL_VOCAL_MORPHER_RATE, one can create a filtering effect that slowly increases or decreases in pitch (depending on which of the two phoneme filters A or
  B is perceived as being higher-pitched).</div>
 </li>
 </ul>

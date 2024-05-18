@@ -219,9 +219,8 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>ON</h4>
 <pre>public static final&nbsp;<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a> ON</pre>
-<div class="block">Virtualization is on. Input channels will not be mapped to the corresponding output channels, instead OpenAL
- decides where to play each channel based on the spatialization algorithm. Applies only when playing non-mono
- audio.</div>
+<div class="block">Virtualization is on. Input channels will not be mapped to the corresponding output channels, instead OpenAL decides where to play each channel based
+ on the spatialization algorithm. Applies only when playing non-mono audio.</div>
 </li>
 </ul>
 <a name="OFF_DROP_CHANNELS">
@@ -231,10 +230,9 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>OFF_DROP_CHANNELS</h4>
 <pre>public static final&nbsp;<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a> OFF_DROP_CHANNELS</pre>
-<div class="block">Virtualizations is off. Input channels are routed to output channels as-is, input channels that don't match
- an output channel will be dropped.<br> An example: You try to play a 4-channel sound file on a stereo system.
- With this setting, only channel 1 and 2 are played, channel 3 and 4 will be ignored. Applies only when
- playing non-mono audio.</div>
+<div class="block">Virtualizations is off. Input channels are routed to output channels as-is, input channels that don't match an output channel will be dropped.<br>
+ An example: You try to play a 4-channel sound file on a stereo system. With this setting, only channel 1 and 2 are played, channel 3 and 4 will be
+ ignored. Applies only when playing non-mono audio.</div>
 </li>
 </ul>
 <a name="OFF_REMIX_CHANNELS">
@@ -244,14 +242,13 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>OFF_REMIX_CHANNELS</h4>
 <pre>public static final&nbsp;<a href="../../../de/pottgames/tuningfork/AudioConfig.Virtualization.html" title="enum in de.pottgames.tuningfork">AudioConfig.Virtualization</a> OFF_REMIX_CHANNELS</pre>
-<div class="block">Virtualization is off. Input channels are routed to output channels as-is, input channels that do not match
- an output channel are mixed into the closest available output channel.<br> An example: You try to play a
- 4-channel sound file on a stereo system. With this setting, channel 1 and 3 are mapped to the left speaker,
- channel 2 and 4 to the right speaker. Applies only when playing non-mono audio.<br>
+<div class="block">Virtualization is off. Input channels are routed to output channels as-is, input channels that do not match an output channel are mixed into the
+ closest available output channel.<br>
+ An example: You try to play a 4-channel sound file on a stereo system. With this setting, channel 1 and 3 are mapped to the left speaker, channel 2
+ and 4 to the right speaker. Applies only when playing non-mono audio.<br>
  <br>
- <b>Warning: </b>The non-matching channels are mixed-in at a super low volume, I don't know why OpenAL does
- it this way but there's probably a reason. However, it is not what I'd expect it to be, hence the
- experimental feature flag until I have sorted this out.</div>
+ <b>Warning: </b>The non-matching channels are mixed-in at a super low volume, I don't know why OpenAL does it this way but there's probably a reason.
+ However, it is not what I'd expect it to be, hence the experimental feature flag until I have sorted this out.</div>
 </li>
 </ul>
 </li>

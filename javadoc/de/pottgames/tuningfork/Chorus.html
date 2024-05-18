@@ -114,12 +114,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">Chorus</span>
 extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="class in de.pottgames.tuningfork">SoundEffectData</a></pre>
-<div class="block">The chorus effect essentially replays the input audio accompanied by another slightly delayed version of the
- signal, creating a ‘doubling’ effect. This was
- originally intended to emulate the effect of several musicians playing the same notes simultaneously, to create a
- thicker, more satisfying sound. To add some
- variation to the effect, the delay time of the delayed versions of the input signal is modulated by an adjustable
- oscillating waveform. This causes subtle
+<div class="block">The chorus effect essentially replays the input audio accompanied by another slightly delayed version of the signal, creating a ‘doubling’ effect. This was
+ originally intended to emulate the effect of several musicians playing the same notes simultaneously, to create a thicker, more satisfying sound. To add some
+ variation to the effect, the delay time of the delayed versions of the input signal is modulated by an adjustable oscillating waveform. This causes subtle
  shifts in the pitch of the delayed signals, emphasizing the thickening effect.</div>
 </li>
 </ul>
@@ -143,8 +140,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../de/pottgames/tuningfork/Chorus.html#delay">delay</a></span></code>
 <div class="block">Range: 0.0 - 0.016, Default: 0.016<br>
- This property controls the average amount of time the sample is delayed before it is played back, and with
- feedback, the amount of time between
+ This property controls the average amount of time the sample is delayed before it is played back, and with feedback, the amount of time between
  iterations of the sample.</div>
 </td>
 </tr>
@@ -288,8 +284,7 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>phase</h4>
 <pre>public&nbsp;int phase</pre>
 <div class="block">Range: -180 - 180, Default: 90<br>
- This property controls the phase difference between the left and right LFO’s. At zero degrees the two LFOs are
- synchronized. Use this parameter to create
+ This property controls the phase difference between the left and right LFO’s. At zero degrees the two LFOs are synchronized. Use this parameter to create
  the illusion of an expanded stereo field of the output signal.</div>
 </li>
 </ul>
@@ -323,10 +318,8 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>feedback</h4>
 <pre>public&nbsp;float feedback</pre>
 <div class="block">Range: -1.0 - 1.0, Default: 0.25<br>
- This property controls the amount of processed signal that is fed back to the input of the chorus effect.
- Negative values will reverse the phase of the
- feedback signal. At full magnitude the identical sample will repeat endlessly. At lower magnitudes the sample
- will repeat and fade out over time. Use
+ This property controls the amount of processed signal that is fed back to the input of the chorus effect. Negative values will reverse the phase of the
+ feedback signal. At full magnitude the identical sample will repeat endlessly. At lower magnitudes the sample will repeat and fade out over time. Use
  this parameter to create a “cascading” chorus effect.</div>
 </li>
 </ul>
@@ -338,10 +331,8 @@ extends <a href="../../../de/pottgames/tuningfork/SoundEffectData.html" title="c
 <h4>delay</h4>
 <pre>public&nbsp;float delay</pre>
 <div class="block">Range: 0.0 - 0.016, Default: 0.016<br>
- This property controls the average amount of time the sample is delayed before it is played back, and with
- feedback, the amount of time between
- iterations of the sample. Larger values lower the pitch. Smaller values make the chorus sound like a flanger,
- but with different frequency
+ This property controls the average amount of time the sample is delayed before it is played back, and with feedback, the amount of time between
+ iterations of the sample. Larger values lower the pitch. Smaller values make the chorus sound like a flanger, but with different frequency
  characteristics.</div>
 </li>
 </ul>
