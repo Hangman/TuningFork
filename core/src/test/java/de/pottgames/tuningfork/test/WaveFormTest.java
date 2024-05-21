@@ -36,11 +36,13 @@ import de.pottgames.tuningfork.misc.PcmUtil;
  * @author Matthias
  */
 public class WaveFormTest extends ApplicationAdapter {
-    private static final int   VIEWPORT_WIDTH    = 1600;
-    private static final int   VIEWPORT_HEIGHT   = (int) (WaveFormTest.VIEWPORT_WIDTH / 16f * 9f);
-    private static final float WAVEFORM_HEIGHT   = 100f;
-    private static final float CURSOR_WIDTH      = 4f;
-    private static final float CURSOR_WIDTH_HALF = WaveFormTest.CURSOR_WIDTH / 2f;
+    private static final String[] TEST_FILES        = { "numbers.wav", "numbers_8bit_mono.wav", "quadrophonic.wav", "32bit_float_numbers.wav",
+            "64bit_float_numbers.wav", "carnivalrides.ogg", "numbers.mp3", "numbers_16bit_stereo.flac", "42_accordion_melodious_phrase_stereo.qoa" };
+    private static final int      VIEWPORT_WIDTH    = 1600;
+    private static final int      VIEWPORT_HEIGHT   = (int) (WaveFormTest.VIEWPORT_WIDTH / 16f * 9f);
+    private static final float    WAVEFORM_HEIGHT   = 100f;
+    private static final float    CURSOR_WIDTH      = 4f;
+    private static final float    CURSOR_WIDTH_HALF = WaveFormTest.CURSOR_WIDTH / 2f;
 
     private FitViewport        viewport;
     private OrthographicCamera camera;
@@ -50,7 +52,7 @@ public class WaveFormTest extends ApplicationAdapter {
     private ReadableSoundBuffer sound;
     private BufferedSoundSource soundSource;
 
-    private float[][] waveform = new float[8][0];
+    private float[][] waveform;
 
 
     @Override
@@ -61,15 +63,7 @@ public class WaveFormTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // Some files to test this with
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers.wav"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers_8bit_mono.wav"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("quadrophonic.wav"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("32bit_float_numbers.wav"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("64bit_float_numbers.wav"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("carnivalrides.ogg"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers.mp3"));
-        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers_16bit_stereo.flac"));
-        this.sound = SoundLoader.loadReadable(Gdx.files.internal("42_accordion_melodious_phrase_stereo.qoa"));
+        this.sound = SoundLoader.loadReadable(Gdx.files.internal(WaveFormTest.TEST_FILES[8]));
 
         // Extract the data we need to create the waveform
         final PcmFormat format = this.sound.getPcmFormat();
@@ -84,8 +78,6 @@ public class WaveFormTest extends ApplicationAdapter {
         // Totally optional but often desired: normalizing the wave form
         this.normalizeWaveForm(this.waveform);
 
-        // And finally the usual TuningFork sound stuff you're familiar with to play the sound. The only difference here is that you create the SoundBuffer
-        // manually instead of letting the SoundLoader do the magic for you.
         this.soundSource = this.audio.obtainSource(this.sound);
         this.soundSource.setLooping(true);
         this.soundSource.play();
