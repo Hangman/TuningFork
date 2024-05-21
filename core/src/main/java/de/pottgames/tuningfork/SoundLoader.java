@@ -12,9 +12,13 @@
 
 package de.pottgames.tuningfork;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import com.badlogic.gdx.files.FileHandle;
+
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.decoder.AudioStream;
 
 /**
  * The SoundLoader class provides utility methods for loading audio files into SoundBuffers.<br>
@@ -84,6 +88,50 @@ public abstract class SoundLoader {
      */
     public static ReadableSoundBuffer loadReadableReverse(FileHandle file) {
         return SoundLoader.loadReadable(file, true);
+    }
+
+
+    /**
+     * Loads a SoundBuffer from any AudioStream.
+     *
+     * @param stream
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer load(AudioStream stream) {
+        return SoundLoader.load(stream, false);
+    }
+
+
+    /**
+     * Loads a ReadableSoundBuffer from any AudioStream.
+     *
+     * @param stream
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(AudioStream stream) {
+        return (ReadableSoundBuffer) SoundLoader.load(stream, true);
+    }
+
+
+    private static SoundBuffer load(AudioStream stream, boolean readableBuffer) {
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096 * 8);
+        final byte[] tempBuffer = new byte[8192];
+        int numBytesRead = 0;
+        while ((numBytesRead = stream.read(tempBuffer)) > 0) {
+            buffer.write(tempBuffer, 0, numBytesRead);
+        }
+
+        final int channels = stream.getChannels();
+        final int sampleRate = stream.getSampleRate();
+        final int bitsPerSample = stream.getBitsPerSample();
+        final PcmDataType pcmDataType = stream.getPcmDataType();
+        final int blockAlign = stream.getBlockAlign();
+        if (readableBuffer) {
+            return new ReadableSoundBuffer(buffer.toByteArray(), channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
+        }
+        return new SoundBuffer(buffer.toByteArray(), channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
     }
 
 
