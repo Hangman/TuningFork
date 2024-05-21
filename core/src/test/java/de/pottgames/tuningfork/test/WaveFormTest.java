@@ -62,7 +62,8 @@ public class WaveFormTest extends ApplicationAdapter {
         this.renderer = new ShapeRenderer();
         this.audio = Audio.init();
 
-        // Some files to test this with
+        // Load a ReadableSoundBuffer instead of just a default SoundBuffer.
+        // That will allow us to read the audio data later on.
         this.sound = SoundLoader.loadReadable(Gdx.files.internal(WaveFormTest.TEST_FILES[8]));
 
         // Extract the data we need to create the waveform
