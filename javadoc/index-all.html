@@ -204,6 +204,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html#artist">artist</a></span> - Variable in class de.pottgames.tuningfork.jukebox.song.<a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html" title="class in de.pottgames.tuningfork.jukebox.song">SongMeta</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AudioConfig.html#assetManager">assetManager</a></span> - Variable in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork">AudioConfig</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/StreamManager.AsyncTask.html#AsyncTask--">AsyncTask()</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/StreamManager.AsyncTask.html" title="class in de.pottgames.tuningfork">StreamManager.AsyncTask</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/OggInputStream.html#atEnd--">atEnd()</a></span> - Method in class de.pottgames.tuningfork.decoder.<a href="de/pottgames/tuningfork/decoder/OggInputStream.html" title="class in de.pottgames.tuningfork.decoder">OggInputStream</a></dt>
@@ -976,6 +978,13 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/Mp3InputStream.html#file">file</a></span> - Variable in class de.pottgames.tuningfork.decoder.<a href="de/pottgames/tuningfork/decoder/Mp3InputStream.html" title="class in de.pottgames.tuningfork.decoder">Mp3InputStream</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html#file">file</a></span> - Variable in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter</a></dt>
+<dd>
+<div class="block">A custom FileHandle object that can be set to specify an alternative file path for the asset.<br>
+ If this is set, this path takes priority over the file name String given to the load function of the asset manager.<br>
+ You can give the asset manager load method an arbitrary String that is just used to identify the asset, it must not point to the real file.<br>
+ This is useful when multiple instances of the same asset need to be loaded with different configurations.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBufferLoader.SoundBufferLoaderParameter.html#file">file</a></span> - Variable in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBufferLoader.SoundBufferLoaderParameter.html" title="class in de.pottgames.tuningfork">SoundBufferLoader.SoundBufferLoaderParameter</a></dt>
 <dd>
 <div class="block">A custom FileHandle object that can be set to specify an alternative file path for the asset.<br>
@@ -1092,7 +1101,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/logger/GdxLogger.html#GdxLogger--">GdxLogger()</a></span> - Constructor for class de.pottgames.tuningfork.logger.<a href="de/pottgames/tuningfork/logger/GdxLogger.html" title="class in de.pottgames.tuningfork.logger">GdxLogger</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBuffer.html#generateBufferAndUpload-java.nio.ShortBuffer-int-int-de.pottgames.tuningfork.PcmFormat.PcmDataType-int-int-">generateBufferAndUpload(ShortBuffer, int, int, PcmFormat.PcmDataType, int, int)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork">SoundBuffer</a></dt>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBuffer.html#generateBufferAndUpload-java.nio.ShortBuffer-int-int-">generateBufferAndUpload(ShortBuffer, int, int)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork">SoundBuffer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/EaxReverb.html#generic--">generic()</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/EaxReverb.html" title="class in de.pottgames.tuningfork">EaxReverb</a></dt>
 <dd>&nbsp;</dd>
@@ -1112,6 +1121,8 @@
 <dd>
 <div class="block">Returns the artist.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AudioConfig.html#getAssetManager--">getAssetManager()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork">AudioConfig</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundEffect.html#getAttachedSources-com.badlogic.gdx.utils.Array-">getAttachedSources(Array&lt;SoundSource&gt;)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundEffect.html" title="class in de.pottgames.tuningfork">SoundEffect</a></dt>
 <dd>
 <div class="block">Saves all <a href="de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork"><code>SoundSource</code></a>s that this SoundEffect is currently attached to in the list specified in the parameter.</div>
@@ -1131,6 +1142,10 @@
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html#getAttribute-java.lang.Object-">getAttribute(Object)</a></span> - Method in class de.pottgames.tuningfork.jukebox.song.<a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html" title="class in de.pottgames.tuningfork.jukebox.song">SongMeta</a></dt>
 <dd>
 <div class="block">Returns the value that is connected to the given key.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBuffer.html#getAudioData--">getAudioData()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork">ReadableSoundBuffer</a></dt>
+<dd>
+<div class="block">Returns a copy of the audio data (no allocation involved here) used in this SoundBuffer.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AudioDevice.html#getAvailableHrtfs--">getAvailableHrtfs()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AudioDevice.html" title="class in de.pottgames.tuningfork">AudioDevice</a></dt>
 <dd>
@@ -1265,6 +1280,8 @@
 <dd>
 <div class="block">Returns whether virtualization is enabled or disabled by default for all sound sources.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html#getDependencies-java.lang.String-com.badlogic.gdx.files.FileHandle-de.pottgames.tuningfork.ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter-">getDependencies(String, FileHandle, ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBufferLoader.html#getDependencies-java.lang.String-com.badlogic.gdx.files.FileHandle-de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter-">getDependencies(String, FileHandle, SoundBufferLoader.SoundBufferLoaderParameter)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBufferLoader.html" title="class in de.pottgames.tuningfork">SoundBufferLoader</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Audio.html#getDevice--">getDevice()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Audio.html" title="class in de.pottgames.tuningfork">Audio</a></dt>
@@ -1450,6 +1467,10 @@
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/capture/CaptureDevice.html#getPcmFormat--">getPcmFormat()</a></span> - Method in class de.pottgames.tuningfork.capture.<a href="de/pottgames/tuningfork/capture/CaptureDevice.html" title="class in de.pottgames.tuningfork.capture">CaptureDevice</a></dt>
 <dd>
 <div class="block">Returns the pcm format of the device.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBuffer.html#getPcmFormat--">getPcmFormat()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork">SoundBuffer</a></dt>
+<dd>
+<div class="block">Returns the PcmFormat of this SoundBuffer.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundSource.html#getPitch--">getPitch()</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundSource.html" title="class in de.pottgames.tuningfork">SoundSource</a></dt>
 <dd>
@@ -2100,15 +2121,157 @@
 <dd>
 <div class="block">Loads a <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a> from a <a href="de/pottgames/tuningfork/decoder/WavInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>WavInputStream</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html#loadAsync-com.badlogic.gdx.assets.AssetManager-java.lang.String-com.badlogic.gdx.files.FileHandle-de.pottgames.tuningfork.ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter-">loadAsync(AssetManager, String, FileHandle, ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBufferLoader.html#loadAsync-com.badlogic.gdx.assets.AssetManager-java.lang.String-com.badlogic.gdx.files.FileHandle-de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter-">loadAsync(AssetManager, String, FileHandle, SoundBufferLoader.SoundBufferLoaderParameter)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBufferLoader.html" title="class in de.pottgames.tuningfork">SoundBufferLoader</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadFastImaAdpcm-java.lang.String-">loadFastImaAdpcm(String)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
 <dd>
 <div class="block">Disclaimer: This is a special use case load method.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadFastImaAdpcmReadable-java.lang.String-">loadFastImaAdpcmReadable(String)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Disclaimer: This is a special use case load method.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadNonPacked-java.lang.String-">loadNonPacked(String)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
 <dd>
 <div class="block">Loads an ogg into a <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadNonPackedReadable-java.lang.String-">loadNonPackedReadable(String)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
+<dd>
+<div class="block">Loads an ogg into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AiffLoader.html#loadReadable-java.io.File-">loadReadable(File)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork">AiffLoader</a></dt>
+<dd>
+<div class="block">Loads an aiff file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AiffLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork">AiffLoader</a></dt>
+<dd>
+<div class="block">Loads an aiff file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AiffLoader.html#loadReadable-java.io.InputStream-">loadReadable(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork">AiffLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from an <code>InputStream</code> and closes it afterwards.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AiffLoader.html#loadReadable-de.pottgames.tuningfork.decoder.AiffInputStream-">loadReadable(AiffInputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork">AiffLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from a <a href="de/pottgames/tuningfork/decoder/AiffInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>AiffInputStream</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/FlacLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/FlacLoader.html" title="class in de.pottgames.tuningfork">FlacLoader</a></dt>
+<dd>
+<div class="block">Loads a flac file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/FlacLoader.html#loadReadable-java.io.File-">loadReadable(File)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/FlacLoader.html" title="class in de.pottgames.tuningfork">FlacLoader</a></dt>
+<dd>
+<div class="block">Loads a flac file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/FlacLoader.html#loadReadable-java.io.InputStream-">loadReadable(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/FlacLoader.html" title="class in de.pottgames.tuningfork">FlacLoader</a></dt>
+<dd>
+<div class="block">Loads a flac stream into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> and closes it afterward.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Mp3Loader.html#loadReadable-java.io.File-">loadReadable(File)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Mp3Loader.html" title="class in de.pottgames.tuningfork">Mp3Loader</a></dt>
+<dd>
+<div class="block">Loads a mp3 into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Mp3Loader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Mp3Loader.html" title="class in de.pottgames.tuningfork">Mp3Loader</a></dt>
+<dd>
+<div class="block">Loads sound data from a <code>FileHandle</code> into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> using the mp3 decoder and closes the stream afterward.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Mp3Loader.html#loadReadable-java.io.InputStream-">loadReadable(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Mp3Loader.html" title="class in de.pottgames.tuningfork">Mp3Loader</a></dt>
+<dd>
+<div class="block">Loads a mp3 into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> and closes the InputStream afterward.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadReadable-java.io.File-">loadReadable(File)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
+<dd>
+<div class="block">Loads an ogg into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
+<dd>
+<div class="block">Loads an ogg into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadReadable-java.io.InputStream-">loadReadable(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
+<dd>
+<div class="block">Loads an ogg into a <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a> and closes the InputStream afterward.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadReadable-de.pottgames.tuningfork.decoder.OggInputStream-">loadReadable(OggInputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from a <a href="de/pottgames/tuningfork/decoder/OggInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>OggInputStream</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/QoaLoader.html#loadReadable-java.io.File-">loadReadable(File)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/QoaLoader.html" title="class in de.pottgames.tuningfork">QoaLoader</a></dt>
+<dd>
+<div class="block">Loads a qoa file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/QoaLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/QoaLoader.html" title="class in de.pottgames.tuningfork">QoaLoader</a></dt>
+<dd>
+<div class="block">Loads a qoa file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/QoaLoader.html#loadReadable-java.io.InputStream-">loadReadable(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/QoaLoader.html" title="class in de.pottgames.tuningfork">QoaLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from an <code>InputStream</code> and closes it afterwards.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/QoaLoader.html#loadReadable-de.pottgames.tuningfork.decoder.QoaInputStream-">loadReadable(QoaInputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/QoaLoader.html" title="class in de.pottgames.tuningfork">QoaLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from a <a href="de/pottgames/tuningfork/decoder/QoaInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>QoaInputStream</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundLoader.html" title="class in de.pottgames.tuningfork">SoundLoader</a></dt>
+<dd>
+<div class="block">Loads an audio file from the specified FileHandle and returns a SoundBuffer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-boolean-">loadReadable(FileHandle, boolean)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundLoader.html" title="class in de.pottgames.tuningfork">SoundLoader</a></dt>
+<dd>
+<div class="block">Loads an audio file from the specified FileHandle and returns a ReadableSoundBuffer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadable-java.io.File-">loadReadable(File)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a wav file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadable-java.io.File-boolean-">loadReadable(File, boolean)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a wav file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-">loadReadable(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a wav file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadable-com.badlogic.gdx.files.FileHandle-boolean-">loadReadable(FileHandle, boolean)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a wav file into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadable-java.io.InputStream-">loadReadable(InputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from an <code>InputStream</code> and closes it afterward.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadable-de.pottgames.tuningfork.decoder.WavInputStream-">loadReadable(WavInputStream)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a> from a <a href="de/pottgames/tuningfork/decoder/WavInputStream.html" title="class in de.pottgames.tuningfork.decoder"><code>WavInputStream</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AiffLoader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork">AiffLoader</a></dt>
+<dd>
+<div class="block">Loads an aiff file in reverse into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/FlacLoader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/FlacLoader.html" title="class in de.pottgames.tuningfork">FlacLoader</a></dt>
+<dd>
+<div class="block">Loads a flac file in reverse into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Mp3Loader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Mp3Loader.html" title="class in de.pottgames.tuningfork">Mp3Loader</a></dt>
+<dd>
+<div class="block">Loads an mp3 file in reverse into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/OggLoader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/OggLoader.html" title="class in de.pottgames.tuningfork">OggLoader</a></dt>
+<dd>
+<div class="block">Loads an ogg file in reverse into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/QoaLoader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/QoaLoader.html" title="class in de.pottgames.tuningfork">QoaLoader</a></dt>
+<dd>
+<div class="block">Loads a qoa file in reverse into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundLoader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundLoader.html" title="class in de.pottgames.tuningfork">SoundLoader</a></dt>
+<dd>
+<div class="block">Loads an audio file from the specified FileHandle and reverses the audio data.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/WaveLoader.html#loadReadableReverse-com.badlogic.gdx.files.FileHandle-">loadReadableReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/WaveLoader.html" title="class in de.pottgames.tuningfork">WaveLoader</a></dt>
+<dd>
+<div class="block">Loads a wav file in reverse into a <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AiffLoader.html#loadReverse-com.badlogic.gdx.files.FileHandle-">loadReverse(FileHandle)</a></span> - Static method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork">AiffLoader</a></dt>
 <dd>
@@ -2138,6 +2301,8 @@
 <dd>
 <div class="block">Loads a wav file in reverse into a <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html#loadSync-com.badlogic.gdx.assets.AssetManager-java.lang.String-com.badlogic.gdx.files.FileHandle-de.pottgames.tuningfork.ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter-">loadSync(AssetManager, String, FileHandle, ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBufferLoader.html#loadSync-com.badlogic.gdx.assets.AssetManager-java.lang.String-com.badlogic.gdx.files.FileHandle-de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter-">loadSync(AssetManager, String, FileHandle, SoundBufferLoader.SoundBufferLoaderParameter)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBufferLoader.html" title="class in de.pottgames.tuningfork">SoundBufferLoader</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AudioConfig.html#logger">logger</a></span> - Variable in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork">AudioConfig</a></dt>
@@ -3039,6 +3204,46 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/WavInputStream.html#read-byte:A-">read(byte[])</a></span> - Method in class de.pottgames.tuningfork.decoder.<a href="de/pottgames/tuningfork/decoder/WavInputStream.html" title="class in de.pottgames.tuningfork.decoder">WavInputStream</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><span class="typeNameLink">ReadableSoundBuffer</span></a> - Class in <a href="de/pottgames/tuningfork/package-summary.html">de.pottgames.tuningfork</a></dt>
+<dd>
+<div class="block">A <a href="de/pottgames/tuningfork/SoundBuffer.html" title="class in de.pottgames.tuningfork"><code>SoundBuffer</code></a> that keeps a copy of the audio data that can be read.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBuffer.html#ReadableSoundBuffer-byte:A-int-int-int-de.pottgames.tuningfork.PcmFormat.PcmDataType-">ReadableSoundBuffer(byte[], int, int, int, PcmFormat.PcmDataType)</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork">ReadableSoundBuffer</a></dt>
+<dd>
+<div class="block">Creates a SoundBuffer with the given pcm data.<br>
+ <br>
+ 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+ 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+ Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+ The interleaved format also applies to surround sound.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBuffer.html#ReadableSoundBuffer-java.nio.ShortBuffer-int-int-int-de.pottgames.tuningfork.PcmFormat.PcmDataType-int-">ReadableSoundBuffer(ShortBuffer, int, int, int, PcmFormat.PcmDataType, int)</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork">ReadableSoundBuffer</a></dt>
+<dd>
+<div class="block">Creates a SoundBuffer with the given pcm data.<br>
+ 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+ 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+ Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+ The interleaved format also applies to surround sound.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBuffer.html#ReadableSoundBuffer-byte:A-int-int-int-de.pottgames.tuningfork.PcmFormat.PcmDataType-int-">ReadableSoundBuffer(byte[], int, int, int, PcmFormat.PcmDataType, int)</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork">ReadableSoundBuffer</a></dt>
+<dd>
+<div class="block">Creates a SoundBuffer with the given pcm data.<br>
+ Consider using <code>#ReadableSoundBuffer(byte[], int, int, int, PcmDataType)</code> instead if you're not providing MS_ADPCM data.<br>
+ 8-bit data is expressed as an unsigned value over the range 0 to 255, 128 being an audio output level of zero .<br>
+ 16-bit data is expressed as a signed value over the range -32768 to 32767, 0 being an audio output level of zero.<br>
+ Stereo data is expressed in an interleaved format, left channel sample followed by the right channel sample.<br>
+ The interleaved format also applies to surround sound.</div>
+</dd>
+<dt><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html" title="class in de.pottgames.tuningfork"><span class="typeNameLink">ReadableSoundBufferLoader</span></a> - Class in <a href="de/pottgames/tuningfork/package-summary.html">de.pottgames.tuningfork</a></dt>
+<dd>
+<div class="block">This class can be used to load <a href="de/pottgames/tuningfork/ReadableSoundBuffer.html" title="class in de.pottgames.tuningfork"><code>ReadableSoundBuffer</code></a>s asynchronously.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html#ReadableSoundBufferLoader-com.badlogic.gdx.assets.loaders.FileHandleResolver-">ReadableSoundBufferLoader(FileHandleResolver)</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html" title="class in de.pottgames.tuningfork"><span class="typeNameLink">ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter</span></a> - Class in <a href="de/pottgames/tuningfork/package-summary.html">de.pottgames.tuningfork</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html#ReadableSoundBufferLoaderParameter--">ReadableSoundBufferLoaderParameter()</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/decoder/util/Util.html#readAll-java.io.InputStream-byte:A-int-">readAll(InputStream, byte[], int)</a></span> - Static method in class de.pottgames.tuningfork.decoder.util.<a href="de/pottgames/tuningfork/decoder/util/Util.html" title="class in de.pottgames.tuningfork.decoder.util">Util</a></dt>
 <dd>
 <div class="block">Reads bytes from the provided input stream into the given output buffer, up to the specified limit.<br>
@@ -3082,6 +3287,10 @@
  <br>
  It is important to note that the direction of the vector is interpreted in the coordinate system of the user, without taking into account the orientation
  of the virtual listener.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Audio.html#registerAssetManagerLoaders-com.badlogic.gdx.assets.AssetManager-">registerAssetManagerLoaders(AssetManager)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Audio.html" title="class in de.pottgames.tuningfork">Audio</a></dt>
+<dd>
+<div class="block">Registers TuningFork's async loaders on libGDX's AssetManager.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/StreamManager.html#registerSource-de.pottgames.tuningfork.StreamedSoundSource-">registerSource(StreamedSoundSource)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/StreamManager.html" title="class in de.pottgames.tuningfork">StreamManager</a></dt>
 <dd>&nbsp;</dd>
@@ -3169,6 +3378,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/Reverb.html#Reverb--">Reverb()</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/Reverb.html" title="class in de.pottgames.tuningfork">Reverb</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html#reverse">reverse</a></span> - Variable in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter.html" title="class in de.pottgames.tuningfork">ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter</a></dt>
+<dd>
+<div class="block">Loads the file for reversed playback.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundBufferLoader.SoundBufferLoaderParameter.html#reverse">reverse</a></span> - Variable in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundBufferLoader.SoundBufferLoaderParameter.html" title="class in de.pottgames.tuningfork">SoundBufferLoader.SoundBufferLoaderParameter</a></dt>
 <dd>
 <div class="block">Loads the file for reversed playback.</div>
@@ -3233,6 +3446,10 @@
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html#setArtist-java.lang.String-">setArtist(String)</a></span> - Method in class de.pottgames.tuningfork.jukebox.song.<a href="de/pottgames/tuningfork/jukebox/song/SongMeta.html" title="class in de.pottgames.tuningfork.jukebox.song">SongMeta</a></dt>
 <dd>
 <div class="block">Sets the artist.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/AudioConfig.html#setAssetManager-com.badlogic.gdx.assets.AssetManager-">setAssetManager(AssetManager)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/AudioConfig.html" title="class in de.pottgames.tuningfork">AudioConfig</a></dt>
+<dd>
+<div class="block">Sets a libGDX <code>AssetManager</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/BufferedSoundSource.html#setAttenuationFactor-float-">setAttenuationFactor(float)</a></span> - Method in class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/BufferedSoundSource.html" title="class in de.pottgames.tuningfork">BufferedSoundSource</a></dt>
 <dd>&nbsp;</dd>
@@ -3731,6 +3948,7 @@
  <a href="de/pottgames/tuningfork/Mp3Loader.html" title="class in de.pottgames.tuningfork"><code>Mp3Loader</code></a>
  <a href="de/pottgames/tuningfork/FlacLoader.html" title="class in de.pottgames.tuningfork"><code>FlacLoader</code></a>
  <a href="de/pottgames/tuningfork/AiffLoader.html" title="class in de.pottgames.tuningfork"><code>AiffLoader</code></a>
+ <a href="de/pottgames/tuningfork/QoaLoader.html" title="class in de.pottgames.tuningfork"><code>QoaLoader</code></a>
  </div>
 </dd>
 <dt><span class="memberNameLink"><a href="de/pottgames/tuningfork/SoundLoader.html#SoundLoader--">SoundLoader()</a></span> - Constructor for class de.pottgames.tuningfork.<a href="de/pottgames/tuningfork/SoundLoader.html" title="class in de.pottgames.tuningfork">SoundLoader</a></dt>
