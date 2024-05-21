@@ -132,6 +132,7 @@ tasks {
         exclude("de/pottgames/tuningfork/test/ThemePlayListProviderTest.class")
         exclude("de/pottgames/tuningfork/test/QoaTest.class")
         exclude("de/pottgames/tuningfork/test/WaveFormTest.class")
+        exclude("de/pottgames/tuningfork/test/SoundLoaderAudioStreamTest.class")
         exclude("de/pottgames/tuningfork/test/unit/DurationTest.class")
         exclude("de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class")
         exclude("de/pottgames/tuningfork/test/unit/SoundLoaderUnitTest.class")
