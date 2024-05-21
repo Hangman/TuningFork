@@ -23,6 +23,7 @@ import de.pottgames.tuningfork.decoder.QoaInputStream;
 import de.pottgames.tuningfork.misc.PcmUtil;
 
 public class QoaLoader {
+
     /**
      * Loads a qoa file into a {@link SoundBuffer}.
      *
@@ -32,6 +33,18 @@ public class QoaLoader {
      */
     public static SoundBuffer load(File file) {
         return QoaLoader.load(Gdx.files.absolute(file.getAbsolutePath()));
+    }
+
+
+    /**
+     * Loads a qoa file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(File file) {
+        return QoaLoader.loadReadable(Gdx.files.absolute(file.getAbsolutePath()));
     }
 
 
@@ -49,6 +62,19 @@ public class QoaLoader {
 
 
     /**
+     * Loads a qoa file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(FileHandle file) {
+        final QoaInputStream input = new QoaInputStream(file, false);
+        return QoaLoader.loadReadable(input);
+    }
+
+
+    /**
      * Loads a {@link SoundBuffer} from an {@link InputStream} and closes it afterwards.
      *
      * @param stream the input stream
@@ -58,6 +84,19 @@ public class QoaLoader {
     public static SoundBuffer load(InputStream stream) {
         final QoaInputStream input = new QoaInputStream(stream, false);
         return QoaLoader.load(input);
+    }
+
+
+    /**
+     * Loads a {@link ReadableSoundBuffer} from an {@link InputStream} and closes it afterwards.
+     *
+     * @param stream the input stream
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(InputStream stream) {
+        final QoaInputStream input = new QoaInputStream(stream, false);
+        return QoaLoader.loadReadable(input);
     }
 
 
@@ -74,6 +113,28 @@ public class QoaLoader {
             final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * input.getChannels() * (input.getBitsPerSample() / 8)];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
+                    input.getBlockAlign());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads a {@link ReadableSoundBuffer} from a {@link QoaInputStream}.
+     *
+     * @param input the QoaInputStream
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(QoaInputStream input) {
+        ReadableSoundBuffer result = null;
+        try {
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * input.getChannels() * (input.getBitsPerSample() / 8)];
+            input.read(buffer);
+            result = new ReadableSoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
                     input.getBlockAlign());
         } finally {
             StreamUtils.closeQuietly(input);
@@ -102,6 +163,34 @@ public class QoaLoader {
             input.read(buffer);
             final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
             result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
+                    input.getBlockAlign());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads a qoa file in reverse into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadableReverse(FileHandle file) {
+        final QoaInputStream input = new QoaInputStream(file, false);
+        ReadableSoundBuffer result = null;
+        try {
+            if (input.getBitsPerSample() % 8 != 0) {
+                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+            }
+
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * input.getChannels() * (input.getBitsPerSample() / 8)];
+            input.read(buffer);
+            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
+            result = new ReadableSoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
                     input.getBlockAlign());
         } finally {
             StreamUtils.closeQuietly(input);

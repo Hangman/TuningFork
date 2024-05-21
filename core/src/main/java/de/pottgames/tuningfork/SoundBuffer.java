@@ -42,6 +42,7 @@ public class SoundBuffer implements Disposable {
     private final TuningForkLogger logger;
     private final ErrorLogger      errorLogger;
     private final int              bufferId;
+    private final PcmFormat        pcmFormat;
     private final float            duration;
     private final int              samplesPerChannel;
     private final float[]          loopPointCache = new float[2];
@@ -85,7 +86,11 @@ public class SoundBuffer implements Disposable {
         this.logger = this.audio.getLogger();
         this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
 
-        this.bufferId = this.generateBufferAndUpload(pcm, channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
+        if (this.pcmFormat == null) {
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
+        }
+        this.bufferId = this.generateBufferAndUpload(pcm, blockAlign, sampleRate);
         this.samplesPerChannel = this.fetchSamplesPerChannel();
         this.duration = this.fetchDuration();
     }
@@ -117,24 +122,23 @@ public class SoundBuffer implements Disposable {
         buffer.put(pcm);
         buffer.flip();
 
-        this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), channels, bitsPerSample, pcmDataType, blockAlign, sampleRate);
+        this.pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
+        if (this.pcmFormat == null) {
+            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
+        }
+        this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), blockAlign, sampleRate);
         this.samplesPerChannel = this.fetchSamplesPerChannel();
 
         this.duration = this.fetchDuration();
     }
 
 
-    protected int generateBufferAndUpload(ShortBuffer pcm, int channels, int bitsPerSample, PcmDataType pcmDataType, int blockAlign, int sampleRate) {
-        final PcmFormat pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
-        if (pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
-        }
-
+    protected int generateBufferAndUpload(ShortBuffer pcm, int blockAlign, int sampleRate) {
         final int bufferId = AL10.alGenBuffers();
         if (blockAlign > 0) {
             AL11.alBufferi(bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
         }
-        AL10.alBufferData(bufferId, pcmFormat.getAlId(), pcm, sampleRate);
+        AL10.alBufferData(bufferId, this.pcmFormat.getAlId(), pcm, sampleRate);
 
         if (!this.errorLogger.checkLogError("Failed to create the SoundBuffer")) {
             this.logger.debug(this.getClass(), "SoundBuffer successfully created");
@@ -446,6 +450,16 @@ public class SoundBuffer implements Disposable {
 
     int getBufferId() {
         return this.bufferId;
+    }
+
+
+    /**
+     * Returns the PcmFormat of this SoundBuffer.
+     *
+     * @return the PcmFormat
+     */
+    public PcmFormat getPcmFormat() {
+        return this.pcmFormat;
     }
 
 

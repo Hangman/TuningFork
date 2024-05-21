@@ -14,6 +14,8 @@ package de.pottgames.tuningfork;
 
 import org.lwjgl.openal.AL10;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -133,6 +135,10 @@ public class Audio implements Disposable {
         Audio.instance = this;
         this.publicFilter = new Filter(1f, 1f);
         this.streamManager = new StreamManager(config, this.logger);
+        final AssetManager assetManager = config.getAssetManager();
+        if (assetManager != null) {
+            this.registerAssetManagerLoaders(assetManager);
+        }
 
         // SET DEFAULTS
         this.setDistanceAttenuationModel(config.getDistanceAttenuationModel());
@@ -838,6 +844,22 @@ public class Audio implements Disposable {
      */
     public SoundListener getListener() {
         return this.listener;
+    }
+
+
+    /**
+     * Registers TuningFork's async loaders on libGDX's AssetManager. If you provided an AssetManager in the {@link AudioConfig}, loaders have been registered
+     * and you can skip this step.
+     *
+     * @param manager the libGDX asset manager
+     */
+    public void registerAssetManagerLoaders(AssetManager manager) {
+        if (manager.getLoader(SoundBuffer.class) == null) {
+            manager.setLoader(SoundBuffer.class, new SoundBufferLoader(new InternalFileHandleResolver()));
+        }
+        if (manager.getLoader(ReadableSoundBuffer.class) == null) {
+            manager.setLoader(ReadableSoundBuffer.class, new ReadableSoundBufferLoader(new InternalFileHandleResolver()));
+        }
     }
 
 

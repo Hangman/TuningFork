@@ -18,6 +18,8 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.SOFTDirectChannelsRemix;
 import org.lwjgl.openal.SOFTSourceSpatialize;
 
+import com.badlogic.gdx.assets.AssetManager;
+
 import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavInputStream;
@@ -36,6 +38,7 @@ public class AudioConfig {
     protected TuningForkLogger         logger;
     protected WavDecoderProvider       wavDecoderProvider;
     protected boolean                  useNativeDecoders = true;
+    protected AssetManager             assetManager;
 
 
     /**
@@ -197,6 +200,26 @@ public class AudioConfig {
      */
     public AudioConfig setSpatialization(Spatialization spatialization) {
         this.spatialization = spatialization;
+        return this;
+    }
+
+
+    public AssetManager getAssetManager() {
+        return this.assetManager;
+    }
+
+
+    /**
+     * Sets a libGDX {@link com.badlogic.gdx.assets.AssetManager AssetManager}. If set, the TuningFork loaders will be registered automatically when
+     * {@link Audio} is initialized. If you can't provide an AssetManager at the time of initialization, use
+     * {@link Audio#registerAssetManagerLoaders(AssetManager)} later or register the loaders manually.
+     *
+     * @param assetManager
+     *
+     * @return this
+     */
+    public AudioConfig setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
         return this;
     }
 

@@ -26,6 +26,7 @@ import com.badlogic.gdx.files.FileHandle;
  * <li>{@link Mp3Loader}</li>
  * <li>{@link FlacLoader}</li>
  * <li>{@link AiffLoader}</li>
+ * <li>{@link QoaLoader}</li>
  * </ul>
  */
 public abstract class SoundLoader {
@@ -45,6 +46,20 @@ public abstract class SoundLoader {
 
 
     /**
+     * Loads an audio file from the specified FileHandle and returns a SoundBuffer.
+     *
+     * @param file The FileHandle pointing to the audio file.
+     *
+     * @return A ReadableSoundBuffer containing the audio data.
+     *
+     * @throws TuningForkRuntimeException If there is an error during loading or if the file type cannot be identified.
+     */
+    public static ReadableSoundBuffer loadReadable(FileHandle file) {
+        return SoundLoader.loadReadable(file, false);
+    }
+
+
+    /**
      * Loads an audio file from the specified FileHandle and reverses the audio data.
      *
      * @param file The FileHandle pointing to the audio file.
@@ -55,6 +70,20 @@ public abstract class SoundLoader {
      */
     public static SoundBuffer loadReverse(FileHandle file) {
         return SoundLoader.load(file, true);
+    }
+
+
+    /**
+     * Loads an audio file from the specified FileHandle and reverses the audio data.
+     *
+     * @param file The FileHandle pointing to the audio file.
+     *
+     * @return A ReadableSoundBuffer containing the reversed audio data.
+     *
+     * @throws TuningForkRuntimeException If there is an error during loading or if the file type cannot be identified.
+     */
+    public static ReadableSoundBuffer loadReadableReverse(FileHandle file) {
+        return SoundLoader.loadReadable(file, true);
     }
 
 
@@ -98,6 +127,56 @@ public abstract class SoundLoader {
                     return reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
                 case QOA:
                     return reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
+            }
+        }
+
+        throw new TuningForkRuntimeException("Couldn't identify file type: " + file);
+    }
+
+
+    /**
+     * Loads an audio file from the specified FileHandle and returns a ReadableSoundBuffer. Optionally, it can load the audio in reverse order if the 'reverse'
+     * parameter is set to true.
+     *
+     * @param file The FileHandle pointing to the audio file.
+     * @param reverse Whether to load the audio in reverse order.
+     *
+     * @return A ReadableSoundBuffer containing the audio data.
+     *
+     *
+     * @throws TuningForkRuntimeException If there is an error during loading or if the file type cannot be identified.
+     *
+     * @see ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(FileHandle file, boolean reverse) {
+        if (file == null) {
+            throw new TuningForkRuntimeException("file must not be null");
+        }
+
+        final String fileExtension = file.extension();
+        SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        if (soundFileType == null) {
+            try {
+                soundFileType = SoundFileType.parseFromFile(file);
+            } catch (final IOException e) {
+                throw new TuningForkRuntimeException(e);
+            }
+        }
+
+        if (soundFileType != null) {
+            switch (soundFileType) {
+                case FLAC:
+                    return reverse ? FlacLoader.loadReadableReverse(file) : FlacLoader.loadReadable(file);
+                case OGG:
+                    return reverse ? OggLoader.loadReadableReverse(file) : OggLoader.loadReadable(file);
+                case WAV:
+                    return reverse ? WaveLoader.loadReadableReverse(file) : WaveLoader.loadReadable(file);
+                case MP3:
+                    return reverse ? Mp3Loader.loadReadableReverse(file) : Mp3Loader.loadReadable(file);
+                case AIFF:
+                    return reverse ? AiffLoader.loadReadableReverse(file) : AiffLoader.loadReadable(file);
+                case QOA:
+                    return reverse ? QoaLoader.loadReadableReverse(file) : QoaLoader.loadReadable(file);
             }
         }
 

@@ -37,6 +37,18 @@ public abstract class AiffLoader {
 
 
     /**
+     * Loads an aiff file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(File file) {
+        return AiffLoader.loadReadable(Gdx.files.absolute(file.getAbsolutePath()));
+    }
+
+
+    /**
      * Loads an aiff file into a {@link SoundBuffer}.
      *
      * @param file the file handle
@@ -46,6 +58,19 @@ public abstract class AiffLoader {
     public static SoundBuffer load(FileHandle file) {
         final AiffInputStream input = new AiffInputStream(file);
         return AiffLoader.load(input);
+    }
+
+
+    /**
+     * Loads an aiff file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(FileHandle file) {
+        final AiffInputStream input = new AiffInputStream(file);
+        return AiffLoader.loadReadable(input);
     }
 
 
@@ -63,6 +88,19 @@ public abstract class AiffLoader {
 
 
     /**
+     * Loads a {@link ReadableSoundBuffer} from an {@link InputStream} and closes it afterwards.
+     *
+     * @param stream the input stream
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(InputStream stream) {
+        final AiffInputStream input = new AiffInputStream(stream);
+        return AiffLoader.loadReadable(input);
+    }
+
+
+    /**
      * Loads a {@link SoundBuffer} from a {@link AiffInputStream}.
      *
      * @param input the AiffInputStream
@@ -75,6 +113,27 @@ public abstract class AiffLoader {
             final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads a {@link ReadableSoundBuffer} from a {@link AiffInputStream}.
+     *
+     * @param input the AiffInputStream
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(AiffInputStream input) {
+        ReadableSoundBuffer result = null;
+        try {
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            input.read(buffer);
+            result = new ReadableSoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }
@@ -102,6 +161,33 @@ public abstract class AiffLoader {
             input.read(buffer);
             final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
             result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads an aiff file in reverse into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     *
+     * @return the ReadableSoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadableReverse(FileHandle file) {
+        final AiffInputStream input = new AiffInputStream(file);
+        ReadableSoundBuffer result = null;
+        try {
+            if (input.getBitsPerSample() % 8 != 0) {
+                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+            }
+
+            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            input.read(buffer);
+            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
+            result = new ReadableSoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
         } finally {
             StreamUtils.closeQuietly(input);
         }

@@ -14,46 +14,61 @@ package de.pottgames.tuningfork.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
+import de.pottgames.tuningfork.ReadableSoundBuffer;
+import de.pottgames.tuningfork.ReadableSoundBufferLoader.ReadableSoundBufferLoaderParameter;
 import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.SoundBufferLoader;
+import de.pottgames.tuningfork.SoundSource;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class AsyncLoadTest extends ApplicationAdapter {
-    private static final String FILE_PATH = "numbers.wav";
+    private static final String FILE_1                    = "guitar.wav";
+    private static final String FILE_2                    = "numbers.aiff";
     private Audio               audio;
     private AssetManager        assetManager;
-    private boolean             played    = false;
+    private SoundSource         source;
+    private boolean             playedSoundBuffer         = false;
+    private boolean             playedReadableSoundBuffer = false;
 
 
     @Override
     public void create() {
-        // INIT AUDIO
+        this.assetManager = new AssetManager();
+
         final AudioConfig config = new AudioConfig();
+        config.setAssetManager(this.assetManager);
         config.setLogger(new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR));
         this.audio = Audio.init(config);
 
-        // LOAD SOUND ASYNC
-        this.assetManager = new AssetManager();
-        final FileHandleResolver resolver = new InternalFileHandleResolver();
-        this.assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
-        this.assetManager.load(AsyncLoadTest.FILE_PATH, SoundBuffer.class);
+        // If you cannot provide an AssetManager in the AudioConfig, use this:
+        // this.audio.registerAssetManagerLoaders(this.assetManager);
+
+        this.assetManager.load(AsyncLoadTest.FILE_1, SoundBuffer.class);
+        final ReadableSoundBufferLoaderParameter parameter = new ReadableSoundBufferLoaderParameter();
+        parameter.reverse = true;
+        this.assetManager.load(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class, parameter);
     }
 
 
     @Override
     public void render() {
-        if (this.assetManager.update(15) && !this.played) {
-            final SoundBuffer soundBuffer = this.assetManager.get(AsyncLoadTest.FILE_PATH, SoundBuffer.class);
-            soundBuffer.play();
-            this.played = true;
+        if (this.assetManager.update(15)) {
+            if (!this.playedSoundBuffer) {
+                final SoundBuffer soundBuffer = this.assetManager.get(AsyncLoadTest.FILE_1, SoundBuffer.class);
+                this.source = this.audio.obtainSource(soundBuffer);
+                this.source.play();
+                this.playedSoundBuffer = true;
+            } else if (this.source != null && !this.source.isPlaying() && !this.playedReadableSoundBuffer) {
+                final ReadableSoundBuffer buffer = this.assetManager.get(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class);
+                buffer.play();
+                this.playedReadableSoundBuffer = true;
+            }
+
         }
     }
 

@@ -20,15 +20,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.StreamUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.PcmFormat;
-import de.pottgames.tuningfork.SoundBuffer;
-import de.pottgames.tuningfork.decoder.WavInputStream;
-import de.pottgames.tuningfork.misc.Objects;
+import de.pottgames.tuningfork.ReadableSoundBuffer;
+import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.misc.PcmUtil;
 
 /**
@@ -49,7 +47,7 @@ public class WaveFormTest extends ApplicationAdapter {
     private ShapeRenderer      renderer;
 
     private Audio               audio;
-    private SoundBuffer         sound;
+    private ReadableSoundBuffer sound;
     private BufferedSoundSource soundSource;
 
     private float[][] waveform = new float[8][0];
@@ -63,30 +61,24 @@ public class WaveFormTest extends ApplicationAdapter {
         this.audio = Audio.init();
 
         // Some files to test this with
-        // final WavInputStream input = new WavInputStream(Gdx.files.internal("numbers.wav"));
-        // final WavInputStream input = new WavInputStream(Gdx.files.internal("numbers_8bit_mono.wav"));
-        final WavInputStream input = new WavInputStream(Gdx.files.internal("quadrophonic.wav"));
-        // final WavInputStream input = new WavInputStream(Gdx.files.internal("32bit_float_numbers.wav"));
-        // final WavInputStream input = new WavInputStream(Gdx.files.internal("64bit_float_numbers.wav"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers.wav"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers_8bit_mono.wav"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("quadrophonic.wav"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("32bit_float_numbers.wav"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("64bit_float_numbers.wav"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("carnivalrides.ogg"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers.mp3"));
+        // this.sound = SoundLoader.loadReadable(Gdx.files.internal("numbers_16bit_stereo.flac"));
+        this.sound = SoundLoader.loadReadable(Gdx.files.internal("42_accordion_melodious_phrase_stereo.qoa"));
 
-        // Extract meta data from the stream
-        final int channels = input.getChannels();
-        final int sampleRate = input.getSampleRate();
-        final int sampleDepth = input.getBitsPerSample();
-        final int blockAlign = input.getBlockAlign();
-        final PcmFormat format = PcmFormat.determineFormat(channels, sampleDepth, input.getPcmDataType());
+        // Extract the data we need to create the waveform
+        final PcmFormat format = this.sound.getPcmFormat();
+        final int channels = format.getChannels();
 
-        // Read the audio data
-        final byte[] buffer = new byte[(int) input.bytesRemaining()];
-        input.read(buffer);
-
-        // We have all the data we need, so let's close the stream
-        StreamUtils.closeQuietly(input);
-
-        // Create the wave form of each channel
+        // Create the waveform of each channel
         this.waveform = new float[channels][0];
         for (int channel = 0; channel < channels; channel++) {
-            this.waveform[channel] = this.analyzeWaveForm(buffer, format, channel + 1);
+            this.waveform[channel] = this.analyzeWaveForm(this.sound.getAudioData(), format, channel + 1);
         }
 
         // Totally optional but often desired: normalizing the wave form
@@ -94,7 +86,6 @@ public class WaveFormTest extends ApplicationAdapter {
 
         // And finally the usual TuningFork sound stuff you're familiar with to play the sound. The only difference here is that you create the SoundBuffer
         // manually instead of letting the SoundLoader do the magic for you.
-        this.sound = new SoundBuffer(buffer, channels, sampleRate, sampleDepth, format.getDataType(), blockAlign);
         this.soundSource = this.audio.obtainSource(this.sound);
         this.soundSource.setLooping(true);
         this.soundSource.play();
@@ -102,14 +93,13 @@ public class WaveFormTest extends ApplicationAdapter {
 
 
     private float[] analyzeWaveForm(byte[] buffer, PcmFormat format, int channel) {
-        Objects.requireNonNull(format);
         final int bytesPerSample = format.getBitsPerSample() / 8;
 
-        // This defines the resolution of the wave form (how many samples a single point of the visual wave form represents)
+        // This defines the resolution of the wave form (how many samples a single point of the waveform represents)
         final int samplesPerUnit = buffer.length / format.getChannels() / bytesPerSample / WaveFormTest.VIEWPORT_WIDTH;
         final float[] waveform = new float[WaveFormTest.VIEWPORT_WIDTH];
 
-        // For each point in the visual wave form, calculate the average amplitude of the samples it represents
+        // For each point in the waveform, calculate the average amplitude of the samples it represents
         for (int i = 0; i < waveform.length; i++) {
             final int startIndex = i * samplesPerUnit;
             waveform[i] = PcmUtil.averageSample(buffer, format, startIndex, startIndex + samplesPerUnit, channel);

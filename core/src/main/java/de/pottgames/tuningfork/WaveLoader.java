@@ -40,6 +40,18 @@ public abstract class WaveLoader {
 
 
     /**
+     * Loads a wav file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(File file) {
+        return WaveLoader.loadReadable(Gdx.files.absolute(file.getAbsolutePath()));
+    }
+
+
+    /**
      * Loads a wav file into a {@link SoundBuffer}.
      *
      * @param file the file
@@ -53,6 +65,19 @@ public abstract class WaveLoader {
 
 
     /**
+     * Loads a wav file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file
+     * @param useJavaDecoder enforces the java decoder instead of the native one
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(File file, boolean useJavaDecoder) {
+        return WaveLoader.loadReadable(Gdx.files.absolute(file.getAbsolutePath()), useJavaDecoder);
+    }
+
+
+    /**
      * Loads a wav file into a {@link SoundBuffer}.
      *
      * @param file the file handle
@@ -62,6 +87,19 @@ public abstract class WaveLoader {
     public static SoundBuffer load(FileHandle file) {
         final WavInputStream input = new WavInputStream(file, false);
         return WaveLoader.load(input);
+    }
+
+
+    /**
+     * Loads a wav file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(FileHandle file) {
+        final WavInputStream input = new WavInputStream(file, false);
+        return WaveLoader.loadReadable(input);
     }
 
 
@@ -80,6 +118,20 @@ public abstract class WaveLoader {
 
 
     /**
+     * Loads a wav file into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     * @param useJavaDecoder enforces the java decoder instead of the native one
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(FileHandle file, boolean useJavaDecoder) {
+        final WavInputStream input = new WavInputStream(file, useJavaDecoder);
+        return WaveLoader.loadReadable(input);
+    }
+
+
+    /**
      * Loads a {@link SoundBuffer} from an {@link InputStream} and closes it afterward.
      *
      * @param stream the input stream
@@ -89,6 +141,19 @@ public abstract class WaveLoader {
     public static SoundBuffer load(InputStream stream) {
         final WavInputStream input = new WavInputStream(stream, false);
         return WaveLoader.load(input);
+    }
+
+
+    /**
+     * Loads a {@link ReadableSoundBuffer} from an {@link InputStream} and closes it afterward.
+     *
+     * @param stream the input stream
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(InputStream stream) {
+        final WavInputStream input = new WavInputStream(stream, false);
+        return WaveLoader.loadReadable(input);
     }
 
 
@@ -105,6 +170,28 @@ public abstract class WaveLoader {
             final byte[] buffer = new byte[(int) input.bytesRemaining()];
             input.read(buffer);
             result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
+                    input.getBlockAlign());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads a {@link ReadableSoundBuffer} from a {@link WavInputStream}.
+     *
+     * @param input the WavInputStream
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadable(WavInputStream input) {
+        ReadableSoundBuffer result = null;
+        try {
+            final byte[] buffer = new byte[(int) input.bytesRemaining()];
+            input.read(buffer);
+            result = new ReadableSoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
                     input.getBlockAlign());
         } finally {
             StreamUtils.closeQuietly(input);
@@ -140,6 +227,31 @@ public abstract class WaveLoader {
 
 
     /**
+     * Disclaimer: This is a special use case load method. If you just want to load a wav, no matter what encoding, use one of the other load methods.<br>
+     * <br>
+     * Loads an IMA ADPCM encoded wav file into a {@link ReadableSoundBuffer}. The file must be present on the file system (not packed into a jar), be careful
+     * with this as packing everything is libGDXs default behavior. Loading is completely done in native code and therefore a bit faster. Leads to a crash when
+     * fed with a wav file that is not IMA ADPCM encoded.
+     *
+     * @param path must be a file that exists on the file system
+     *
+     * @return the SoundBuffer
+     */
+    public static SoundBuffer loadFastImaAdpcmReadable(String path) {
+        if (!Audio.get().isNativeDecodersAvailable()) {
+            return null;
+        }
+
+        final ImaAdpcmRs decoder = new ImaAdpcmRs();
+        final ImaAdpcmData data = decoder.decodeFile(path);
+        if (data == null) {
+            throw new TuningForkRuntimeException("Error decoding " + path);
+        }
+        return new ReadableSoundBuffer(data.pcmData, data.numChannels, data.sampleRate, 16, PcmDataType.INTEGER);
+    }
+
+
+    /**
      * Loads a wav file in reverse into a {@link SoundBuffer}.
      *
      * @param file the file handle
@@ -158,6 +270,34 @@ public abstract class WaveLoader {
             input.read(buffer);
             final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
             result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
+                    input.getBlockAlign());
+        } finally {
+            StreamUtils.closeQuietly(input);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Loads a wav file in reverse into a {@link ReadableSoundBuffer}.
+     *
+     * @param file the file handle
+     *
+     * @return the SoundBuffer
+     */
+    public static ReadableSoundBuffer loadReadableReverse(FileHandle file) {
+        final WavInputStream input = new WavInputStream(file, false);
+        ReadableSoundBuffer result = null;
+        try {
+            if (input.getBitsPerSample() % 8 != 0) {
+                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+            }
+
+            final byte[] buffer = new byte[(int) input.bytesRemaining()];
+            input.read(buffer);
+            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
+            result = new ReadableSoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType(),
                     input.getBlockAlign());
         } finally {
             StreamUtils.closeQuietly(input);
