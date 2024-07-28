@@ -71,4 +71,15 @@ public interface JukeBoxObserver {
      */
     void onJukeBoxEnd();
 
+
+    /**
+     * This method is called when the master volume of the {@link JukeBox} changed by calling {@link JukeBox#setVolume(float)}.
+     *
+     * @param oldVolume the volume before the change
+     * @param newVolume the new volume after the change
+     */
+    default void onMasterVolumeChanged(float oldVolume, float newVolume) {
+        // do nothing by default
+    }
+
 }

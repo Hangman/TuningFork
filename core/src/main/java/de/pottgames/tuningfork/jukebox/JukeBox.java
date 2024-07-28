@@ -13,6 +13,7 @@
 package de.pottgames.tuningfork.jukebox;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
@@ -36,6 +37,7 @@ public class JukeBox {
     protected final PlayListProvider       playListProvider;
     protected Song                         currentSong;
     protected boolean                      stopped  = true;
+    protected float                        volume   = 1f;
 
     protected boolean       softStop       = false;
     private boolean         softStopResume = false;
@@ -84,7 +86,7 @@ public class JukeBox {
             if (this.softStop) {
                 this.softStopFade(source);
             } else {
-                source.setVolume(fadeVolume);
+                source.setVolume(fadeVolume * this.volume);
             }
         } else {
             this.resetSoftStop(true);
@@ -103,7 +105,7 @@ public class JukeBox {
         final float alpha = secondsSinceSoftStop / this.softStopFadeDuration;
         if (alpha < 1f) {
             final float softFadeVolume = (1f - this.softStopFadeCurve.apply(alpha)) * this.softStopFadeStartVolume;
-            source.setVolume(softFadeVolume);
+            source.setVolume(softFadeVolume * this.volume);
         } else {
             this.stop();
             if (this.softStopResume) {
@@ -147,6 +149,37 @@ public class JukeBox {
             return settings.fadeVolume(FadeType.OUT, alpha);
         }
         return -1f;
+    }
+
+
+    /**
+     * Sets the master volume of the Jukebox.<br>
+     * The change isn't applied immediately, it will be applied in the next call to {@link JukeBox#update()}.<br>
+     * The final volume equation looks like:<br>
+     * <code>
+     * master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
+     * </code>
+     *
+     * @param volume
+     */
+    public void setVolume(float volume) {
+        final float oldVolume = this.volume;
+        this.volume = MathUtils.clamp(volume, 0f, 1f);
+        this.pushVolumeEvent(oldVolume, this.volume);
+    }
+
+
+    /**
+     * Returns the JukeBox's master volume.<br>
+     * The final volume equation looks like:<br>
+     * <code>
+     * master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
+     * </code>
+     *
+     * @return the master volume
+     */
+    public float getVolume() {
+        return this.volume;
     }
 
 
@@ -376,6 +409,15 @@ public class JukeBox {
     }
 
 
+    protected void pushVolumeEvent(float oldVolume, float newVolume) {
+        final JukeBoxEvent event = this.eventPool.obtain();
+        event.setType(JukeBoxEventType.MASTER_VOLUME_CHANGE);
+        event.setOldVolume(oldVolume);
+        event.setNewVolume(newVolume);
+        this.eventHistory.add(event);
+    }
+
+
     protected void pushEvent(JukeBoxEventType type) {
         final JukeBoxEvent event = this.eventPool.obtain();
         event.setType(type);
@@ -428,10 +470,21 @@ public class JukeBox {
                     break;
                 case NONE:
                     break;
+                case MASTER_VOLUME_CHANGE:
+                    this.notifyVolumeChange(event.getOldVolume(), event.getNewVolume());
+                    break;
             }
             this.eventPool.free(event);
         }
         this.eventHistory.clear();
+    }
+
+
+    protected void notifyVolumeChange(float oldVolume, float newVolume) {
+        for (int i = 0; i < this.observer.size; i++) {
+            final JukeBoxObserver observer = this.observer.get(i);
+            observer.onMasterVolumeChanged(oldVolume, newVolume);
+        }
     }
 
 

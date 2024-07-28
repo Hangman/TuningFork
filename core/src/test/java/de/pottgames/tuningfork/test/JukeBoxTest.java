@@ -128,6 +128,12 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             this.audio.getListener().setPosition(100f, 0f, 0f);
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            this.jukeBox.setVolume(this.jukeBox.getVolume() + 0.1f);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            this.jukeBox.setVolume(this.jukeBox.getVolume() - 0.1f);
+        }
 
         this.jukeBox.update();
     }
@@ -196,6 +202,12 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
     @Override
     public void onJukeBoxPause() {
         System.out.println(JukeBoxTest.timeStamp() + " JukeBox paused");
+    }
+
+
+    @Override
+    public void onMasterVolumeChanged(float oldVolume, float newVolume) {
+        System.out.println(JukeBoxTest.timeStamp() + " Master volume changed from " + oldVolume + " to " + newVolume);
     }
 
 
