@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -176,6 +176,10 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#stopped">stopped</a></span></code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#volume">volume</a></span></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -247,84 +251,115 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#getVolume--">getVolume</a></span>()</code>
+<div class="block">Returns the JukeBox's master volume.<br>
+ The final volume equation looks like:<br>
+ <code>
+ master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
+ </code></div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#handleEvents--">handleEvents</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#isPlaying--">isPlaying</a></span>()</code>
 <div class="block">Returns true if this <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> is playing at the moment.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#nextSong--">nextSong</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifyJukeBoxEnd--">notifyJukeBoxEnd</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifyJukeBoxPause--">notifyJukeBoxPause</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifyJukeBoxStart--">notifyJukeBoxStart</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifyPlayListEnd-de.pottgames.tuningfork.jukebox.playlist.PlayList-">notifyPlayListEnd</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a>&nbsp;playList)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifyPlayListStart-de.pottgames.tuningfork.jukebox.playlist.PlayList-">notifyPlayListStart</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a>&nbsp;playList)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifySongEnd-de.pottgames.tuningfork.jukebox.song.Song-">notifySongEnd</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a>&nbsp;song)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifySongStart-de.pottgames.tuningfork.jukebox.song.Song-">notifySongStart</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a>&nbsp;song)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#notifyVolumeChange-float-float-">notifyVolumeChange</a></span>(float&nbsp;oldVolume,
+                  float&nbsp;newVolume)</code>&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#pause--">pause</a></span>()</code>
 <div class="block">Pauses playback.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#play--">play</a></span>()</code>
 <div class="block">Starts playback.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#pushEvent-de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType-">pushEvent</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.JukeBoxEventType.html" title="enum in de.pottgames.tuningfork.jukebox">JukeBoxEvent.JukeBoxEventType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#pushEvent-de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType-de.pottgames.tuningfork.jukebox.playlist.PlayList-">pushEvent</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.JukeBoxEventType.html" title="enum in de.pottgames.tuningfork.jukebox">JukeBoxEvent.JukeBoxEventType</a>&nbsp;type,
          <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a>&nbsp;playList)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#pushEvent-de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType-de.pottgames.tuningfork.jukebox.song.Song-">pushEvent</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.JukeBoxEventType.html" title="enum in de.pottgames.tuningfork.jukebox">JukeBoxEvent.JukeBoxEventType</a>&nbsp;type,
          <a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a>&nbsp;song)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#pushVolumeEvent-float-float-">pushVolumeEvent</a></span>(float&nbsp;oldVolume,
+               float&nbsp;newVolume)</code>&nbsp;</td>
+</tr>
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#removeObserver-de.pottgames.tuningfork.jukebox.JukeBoxObserver-">removeObserver</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxObserver.html" title="interface in de.pottgames.tuningfork.jukebox">JukeBoxObserver</a>&nbsp;observer)</code>
 <div class="block">Removes an observer.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#resetSoftStop-boolean-">resetSoftStop</a></span>(boolean&nbsp;clearResume)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i26" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#setVolume-float-">setVolume</a></span>(float&nbsp;volume)</code>
+<div class="block">Sets the master volume of the Jukebox.<br>
+ The change isn't applied immediately, it will be applied in the next call to <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#update--"><code>update()</code></a>.<br>
+ The final volume equation looks like:<br>
+ <code>
+ master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
+ </code></div>
+</td>
+</tr>
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStop-com.badlogic.gdx.math.Interpolation-float-">softStop</a></span>(com.badlogic.gdx.math.Interpolation&nbsp;fadeOutCurve,
         float&nbsp;fadeOutDuration)</code>
@@ -337,7 +372,7 @@ extends java.lang.Object</pre>
  - fadeOutDuration is smaller or equal 0<br></div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStopAndResume-com.badlogic.gdx.math.Interpolation-float-">softStopAndResume</a></span>(com.badlogic.gdx.math.Interpolation&nbsp;fadeOutCurve,
                  float&nbsp;fadeOutDuration)</code>
@@ -350,17 +385,17 @@ extends java.lang.Object</pre>
  1.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#softStopFade-de.pottgames.tuningfork.jukebox.song.SongSource-">softStopFade</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/song/SongSource.html" title="class in de.pottgames.tuningfork.jukebox.song">SongSource</a>&nbsp;source)</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#stop--">stop</a></span>()</code>
 <div class="block">Stops playback and resets the current <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> if applicable.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#update--">update</a></span>()</code>
 <div class="block">Updates the JukeBox.</div>
@@ -431,6 +466,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>stopped</h4>
 <pre>protected&nbsp;boolean stopped</pre>
+</li>
+</ul>
+<a name="volume">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>volume</h4>
+<pre>protected&nbsp;float volume</pre>
 </li>
 </ul>
 <a name="softStop">
@@ -576,6 +620,43 @@ extends java.lang.Object</pre>
                         <a href="../../../../de/pottgames/tuningfork/jukebox/song/SongSettings.html" title="class in de.pottgames.tuningfork.jukebox.song">SongSettings</a>&nbsp;settings,
                         float&nbsp;playbackPos,
                         float&nbsp;songDuration)</pre>
+</li>
+</ul>
+<a name="setVolume-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVolume</h4>
+<pre>public&nbsp;void&nbsp;setVolume(float&nbsp;volume)</pre>
+<div class="block">Sets the master volume of the Jukebox.<br>
+ The change isn't applied immediately, it will be applied in the next call to <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#update--"><code>update()</code></a>.<br>
+ The final volume equation looks like:<br>
+ <code>
+ master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
+ </code></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>volume</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="getVolume--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getVolume</h4>
+<pre>public&nbsp;float&nbsp;getVolume()</pre>
+<div class="block">Returns the JukeBox's master volume.<br>
+ The final volume equation looks like:<br>
+ <code>
+ master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
+ </code></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the master volume</dd>
+</dl>
 </li>
 </ul>
 <a name="play--">
@@ -739,6 +820,16 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a name="pushVolumeEvent-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pushVolumeEvent</h4>
+<pre>protected&nbsp;void&nbsp;pushVolumeEvent(float&nbsp;oldVolume,
+                               float&nbsp;newVolume)</pre>
+</li>
+</ul>
 <a name="pushEvent-de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType-">
 <!--   -->
 </a>
@@ -775,6 +866,16 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>handleEvents</h4>
 <pre>protected&nbsp;void&nbsp;handleEvents()</pre>
+</li>
+</ul>
+<a name="notifyVolumeChange-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>notifyVolumeChange</h4>
+<pre>protected&nbsp;void&nbsp;notifyVolumeChange(float&nbsp;oldVolume,
+                                  float&nbsp;newVolume)</pre>
 </li>
 </ul>
 <a name="notifySongStart-de.pottgames.tuningfork.jukebox.song.Song-">

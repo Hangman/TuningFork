@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -169,30 +169,46 @@ implements com.badlogic.gdx.utils.Pool.Poolable</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#getNewVolume--">getNewVolume</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#getOldVolume--">getOldVolume</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#getPlayList--">getPlayList</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#getSong--">getSong</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.JukeBoxEventType.html" title="enum in de.pottgames.tuningfork.jukebox">JukeBoxEvent.JukeBoxEventType</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#getType--">getType</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#reset--">reset</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#setNewVolume-float-">setNewVolume</a></span>(float&nbsp;newVolume)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#setOldVolume-float-">setOldVolume</a></span>(float&nbsp;oldVolume)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#setPlayList-de.pottgames.tuningfork.jukebox.playlist.PlayList-">setPlayList</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a>&nbsp;playList)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#setSong-de.pottgames.tuningfork.jukebox.song.Song-">setSong</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a>&nbsp;song)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.html#setType-de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType-">setType</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.JukeBoxEventType.html" title="enum in de.pottgames.tuningfork.jukebox">JukeBoxEvent.JukeBoxEventType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
@@ -296,10 +312,46 @@ implements com.badlogic.gdx.utils.Pool.Poolable</pre>
 <a name="setType-de.pottgames.tuningfork.jukebox.JukeBoxEvent.JukeBoxEventType-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setType</h4>
 <pre>public&nbsp;void&nbsp;setType(<a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxEvent.JukeBoxEventType.html" title="enum in de.pottgames.tuningfork.jukebox">JukeBoxEvent.JukeBoxEventType</a>&nbsp;type)</pre>
+</li>
+</ul>
+<a name="getOldVolume--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOldVolume</h4>
+<pre>public&nbsp;float&nbsp;getOldVolume()</pre>
+</li>
+</ul>
+<a name="setOldVolume-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOldVolume</h4>
+<pre>public&nbsp;void&nbsp;setOldVolume(float&nbsp;oldVolume)</pre>
+</li>
+</ul>
+<a name="getNewVolume--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNewVolume</h4>
+<pre>public&nbsp;float&nbsp;getNewVolume()</pre>
+</li>
+</ul>
+<a name="setNewVolume-float-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setNewVolume</h4>
+<pre>public&nbsp;void&nbsp;setNewVolume(float&nbsp;newVolume)</pre>
 </li>
 </ul>
 </li>
