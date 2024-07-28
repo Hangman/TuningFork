@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":18,"i4":6,"i5":6,"i6":6,"i7":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -138,31 +138,24 @@ var activeTableTab = "activeTableTab";
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>default void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxObserver.html#onMasterVolumeChanged-float-float-">onMasterVolumeChanged</a></span>(float&nbsp;oldVolume,
-                     float&nbsp;newVolume)</code>
-<div class="block">This method is called when the master volume of the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> changed by calling <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#setVolume-float-"><code>JukeBox.setVolume(float)</code></a>.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxObserver.html#onPlayListEnd-de.pottgames.tuningfork.jukebox.playlist.PlayList-">onPlayListEnd</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a>&nbsp;playList)</code>
 <div class="block">This method is called when a <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> finished playing.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxObserver.html#onPlayListStart-de.pottgames.tuningfork.jukebox.playlist.PlayList-">onPlayListStart</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist">PlayList</a>&nbsp;playList)</code>
 <div class="block">This method is called when a new <a href="../../../../de/pottgames/tuningfork/jukebox/playlist/PlayList.html" title="class in de.pottgames.tuningfork.jukebox.playlist"><code>PlayList</code></a> is used to play songs.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxObserver.html#onSongEnd-de.pottgames.tuningfork.jukebox.song.Song-">onSongEnd</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a>&nbsp;song)</code>
 <div class="block">This method is called when a song finished playing.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../de/pottgames/tuningfork/jukebox/JukeBoxObserver.html#onSongStart-de.pottgames.tuningfork.jukebox.song.Song-">onSongStart</a></span>(<a href="../../../../de/pottgames/tuningfork/jukebox/song/Song.html" title="class in de.pottgames.tuningfork.jukebox.song">Song</a>&nbsp;song)</code>
 <div class="block">This method is called when a new song is played.</div>
@@ -262,27 +255,11 @@ var activeTableTab = "activeTableTab";
 <a name="onJukeBoxEnd--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>onJukeBoxEnd</h4>
 <pre>void&nbsp;onJukeBoxEnd()</pre>
 <div class="block">This method is called when the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> stops playing, either by running out of songs/playlists or by being stopped manually.</div>
-</li>
-</ul>
-<a name="onMasterVolumeChanged-float-float-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>onMasterVolumeChanged</h4>
-<pre>default&nbsp;void&nbsp;onMasterVolumeChanged(float&nbsp;oldVolume,
-                                   float&nbsp;newVolume)</pre>
-<div class="block">This method is called when the master volume of the <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html" title="class in de.pottgames.tuningfork.jukebox"><code>JukeBox</code></a> changed by calling <a href="../../../../de/pottgames/tuningfork/jukebox/JukeBox.html#setVolume-float-"><code>JukeBox.setVolume(float)</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>oldVolume</code> - the volume before the change</dd>
-<dd><code>newVolume</code> - the new volume after the change</dd>
-</dl>
 </li>
 </ul>
 </li>
