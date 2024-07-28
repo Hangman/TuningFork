@@ -9,8 +9,8 @@ public class JukeBoxEvent implements Poolable {
     private JukeBoxEventType type;
     private Song             song;
     private PlayList         playList;
-    private float            oldVolume;
-    private float            newVolume;
+    private float            oldVolume = -1f;
+    private float            newVolume = -1f;
 
 
     @Override
@@ -18,6 +18,8 @@ public class JukeBoxEvent implements Poolable {
         this.setType(JukeBoxEventType.NONE);
         this.setSong(null);
         this.setPlayList(null);
+        this.oldVolume = -1f;
+        this.newVolume = -1f;
     }
 
 
@@ -55,7 +57,7 @@ public class JukeBoxEvent implements Poolable {
 
 
     public float getOldVolume() {
-        return oldVolume;
+        return this.oldVolume;
     }
 
 
@@ -65,7 +67,7 @@ public class JukeBoxEvent implements Poolable {
 
 
     public float getNewVolume() {
-        return newVolume;
+        return this.newVolume;
     }
 
 
