@@ -205,12 +205,6 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
     }
 
 
-    @Override
-    public void onMasterVolumeChanged(float oldVolume, float newVolume) {
-        System.out.println(JukeBoxTest.timeStamp() + " Master volume changed from " + oldVolume + " to " + newVolume);
-    }
-
-
     private static String timeStamp() {
         return "[" + System.currentTimeMillis() + "]";
     }

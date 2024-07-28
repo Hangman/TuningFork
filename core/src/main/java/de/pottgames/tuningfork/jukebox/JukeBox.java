@@ -466,14 +466,6 @@ public class JukeBox {
     }
 
 
-    protected void notifyVolumeChange(float oldVolume, float newVolume) {
-        for (int i = 0; i < this.observer.size; i++) {
-            final JukeBoxObserver observer = this.observer.get(i);
-            observer.onMasterVolumeChanged(oldVolume, newVolume);
-        }
-    }
-
-
     protected void notifySongStart(Song song) {
         for (int i = 0; i < this.observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
