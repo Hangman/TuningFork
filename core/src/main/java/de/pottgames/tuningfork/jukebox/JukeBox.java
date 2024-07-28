@@ -163,9 +163,7 @@ public class JukeBox {
      * @param volume
      */
     public void setVolume(float volume) {
-        final float oldVolume = this.volume;
         this.volume = MathUtils.clamp(volume, 0f, 1f);
-        this.pushVolumeEvent(oldVolume, this.volume);
     }
 
 
@@ -409,15 +407,6 @@ public class JukeBox {
     }
 
 
-    protected void pushVolumeEvent(float oldVolume, float newVolume) {
-        final JukeBoxEvent event = this.eventPool.obtain();
-        event.setType(JukeBoxEventType.MASTER_VOLUME_CHANGE);
-        event.setOldVolume(oldVolume);
-        event.setNewVolume(newVolume);
-        this.eventHistory.add(event);
-    }
-
-
     protected void pushEvent(JukeBoxEventType type) {
         final JukeBoxEvent event = this.eventPool.obtain();
         event.setType(type);
@@ -469,9 +458,6 @@ public class JukeBox {
                     this.notifySongStart(event.getSong());
                     break;
                 case NONE:
-                    break;
-                case MASTER_VOLUME_CHANGE:
-                    this.notifyVolumeChange(event.getOldVolume(), event.getNewVolume());
                     break;
             }
             this.eventPool.free(event);
