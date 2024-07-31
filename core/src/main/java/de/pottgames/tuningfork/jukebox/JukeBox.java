@@ -160,7 +160,7 @@ public class JukeBox {
      * master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
      * </code>
      *
-     * @param volume
+     * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume, values outside of the range will be clamped
      */
     public void setVolume(float volume) {
         this.volume = MathUtils.clamp(volume, 0f, 1f);
@@ -174,7 +174,7 @@ public class JukeBox {
      * master volume = JukeBox.getVolume() * SongSettings.fadeVolume()
      * </code>
      *
-     * @return the master volume
+     * @return the master volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume
      */
     public float getVolume() {
         return this.volume;
