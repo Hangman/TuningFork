@@ -17,128 +17,131 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: false
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
-    - name: Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
 
-    - name: Build Rust library (Linux)
-      run: |
-        cd decoders_rs
-        cargo build --release
-        cd ..
+      - name: Build Rust library (Linux)
+        run: |
+          cd decoders_rs
+          cargo build --release
+          cd ..
 
-    - name: Copy Linux binary
-      run: mv -f decoders_rs/target/release/libdecoders_rs64.so core/src/main/resources/libdecoders_rs64.so
+      - name: Copy Linux binary
+        run: mv -f decoders_rs/target/release/libdecoders_rs64.so core/src/main/resources/libdecoders_rs64.so
 
-    - name: Commit native library
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GIT_USER_NAME: github-actions[bot]
-        GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-      run: |
-        git config --global user.name "${GIT_USER_NAME}"
-        git config --global user.email "${GIT_USER_EMAIL}"
-        git add core/src/main/resources/
-        git diff-index --quiet HEAD || git commit -m "Update Linux natives" || echo "No changes to commit"
+      - name: Commit native library
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_USER_NAME: github-actions[bot]
+          GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git config --global user.name "${GIT_USER_NAME}"
+          git config --global user.email "${GIT_USER_EMAIL}"
+          git add core/src/main/resources/
+          git diff-index --quiet HEAD || git commit -m "Update Linux natives" || echo "No changes to commit"
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
-        branch: ${{ github.ref }}
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
   build-windows:
     needs: build-linux
     runs-on: windows-latest
-      
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: false
-      
-    - name: Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-      
-    - name: Build Rust library (Windows)
-      run: |
-        cd decoders_rs
-        cargo build --release
-        cd ..
-      
-    - name: Copy Windows binary
-      run: mv -Force decoders_rs/target/release/decoders_rs64.dll core/src/main/resources/decoders_rs64.dll
-      
-    - name: Commit native library
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        echo "GIT_USER_NAME: $GIT_USER_NAME"
-        echo "GIT_USER_EMAIL: $GIT_USER_EMAIL"
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git pull origin
-        git add core/src/main/resources/
-        git diff-index --quiet HEAD || git commit -m "Update Windows natives" || echo "No changes to commit"
-      
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
-        branch: ${{ github.ref }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Build Rust library (Windows)
+        run: |
+          cd decoders_rs
+          cargo build --release
+          cd ..
+
+      - name: Copy Windows binary
+        run: mv -Force decoders_rs/target/release/decoders_rs64.dll core/src/main/resources/decoders_rs64.dll
+
+      - name: Commit native library
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "GIT_USER_NAME: $GIT_USER_NAME"
+          echo "GIT_USER_EMAIL: $GIT_USER_EMAIL"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull origin
+          git add core/src/main/resources/
+          git diff-index --quiet HEAD || git commit -m "Update Windows natives" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
   build-macos:
     needs: build-windows
     runs-on: macos-latest
     strategy:
       matrix:
-        architecture: [arm64]
-      
+        architecture: [ arm64 ]
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: false
-      
-    - name: Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-      
-    - name: Build Rust library (MacOS)
-      run: |
-        cd decoders_rs
-        cargo build --release
-        cd ..
-      
-    - name: Copy MacOS binary
-      run: mv -f decoders_rs/target/release/libdecoders_rs64.dylib core/src/main/resources/libdecoders_rsarm64.dylib
-      
-    - name: Commit native library
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GIT_USER_NAME: github-actions[bot]
-        GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-      run: |
-        git config --global user.name "${GIT_USER_NAME}"
-        git config --global user.email "${GIT_USER_EMAIL}"
-        git pull origin
-        git add core/src/main/resources/
-        git diff-index --quiet HEAD || git commit -m "Update MacOS natives" || echo "No changes to commit"
-      
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.TF_WORKFLOW_TOKEN }}
-        branch: ${{ github.ref }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Build Rust library (MacOS)
+        run: |
+          cd decoders_rs
+          cargo build --release
+          cd ..
+
+      - name: Copy MacOS binary
+        run: mv -f decoders_rs/target/release/libdecoders_rs64.dylib core/src/main/resources/libdecoders_rsarm64.dylib
+
+      - name: Commit native library
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_USER_NAME: github-actions[bot]
+          GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git config --global user.name "${GIT_USER_NAME}"
+          git config --global user.email "${GIT_USER_EMAIL}"
+          git pull origin
+          git add core/src/main/resources/
+          git diff-index --quiet HEAD || git commit -m "Update MacOS natives" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
