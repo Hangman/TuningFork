@@ -10,7 +10,7 @@ on:
       - 'decoders_rs/**'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-linux:
