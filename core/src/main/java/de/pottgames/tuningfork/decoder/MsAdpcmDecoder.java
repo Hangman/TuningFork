@@ -35,16 +35,16 @@ public class MsAdpcmDecoder implements WavDecoder {
         this.channels = channels;
         this.sampleRate = sampleRate;
         this.blockSize = blockSize;
-        this.blockAlign = (blockSize / channels - 7) * 2 + 2;
+        blockAlign = (blockSize / channels - 7) * 2 + 2;
     }
 
 
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.bytesRemaining = streamLength;
-        final int numberOfBlocks = (int) (streamLength / this.blockSize);
-        this.totalSamplesPerChannel = numberOfBlocks * this.blockAlign;
+        bytesRemaining = streamLength;
+        final int numberOfBlocks = (int) (streamLength / blockSize);
+        totalSamplesPerChannel = numberOfBlocks * blockAlign;
     }
 
 
@@ -52,23 +52,23 @@ public class MsAdpcmDecoder implements WavDecoder {
     public int read(byte[] output) throws IOException {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
 
-        if (this.bytesRemaining <= 0) {
+        if (bytesRemaining <= 0) {
             return -1;
         }
 
         int bytesToRead = output.length;
         int offset = 0;
 
-        while (bytesToRead > 0 && this.bytesRemaining > 0) {
-            final int bytesRead = this.stream.read(output, offset, (int) Math.min(bytesToRead, this.bytesRemaining));
+        while (bytesToRead > 0 && bytesRemaining > 0) {
+            final int bytesRead = stream.read(output, offset, (int) Math.min(bytesToRead, bytesRemaining));
             if (bytesRead == -1) {
                 if (offset > 0) {
                     return offset;
                 }
-                this.bytesRemaining = 0;
+                bytesRemaining = 0;
                 return -1;
             }
-            this.bytesRemaining -= bytesRead;
+            bytesRemaining -= bytesRead;
             bytesToRead -= bytesRead;
             offset += bytesRead;
         }
@@ -91,31 +91,31 @@ public class MsAdpcmDecoder implements WavDecoder {
 
     @Override
     public int blockAlign() {
-        return this.blockAlign;
+        return blockAlign;
     }
 
 
     @Override
     public int blockSize() {
-        return this.blockSize;
+        return blockSize;
     }
 
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalSamplesPerChannel;
+        return totalSamplesPerChannel;
     }
 
 
@@ -127,13 +127,13 @@ public class MsAdpcmDecoder implements WavDecoder {
 
     @Override
     public long bytesRemaining() {
-        return this.bytesRemaining;
+        return bytesRemaining;
     }
 
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 }

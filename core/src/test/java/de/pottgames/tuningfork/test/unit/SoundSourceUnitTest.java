@@ -40,87 +40,87 @@ public class SoundSourceUnitTest {
     public void setup() {
         Gdx.files = new Lwjgl3Files(); // hack setup gdx because we only need Gdx.files in order to run properly
 
-        this.audio = Audio.init(new AudioConfig().setLogger(new ConsoleLogger(LogLevel.INFO_WARN_ERROR)));
-        this.sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
-        this.source = this.audio.obtainSource(this.sound);
+        audio = Audio.init(new AudioConfig().setLogger(new ConsoleLogger(LogLevel.INFO_WARN_ERROR)));
+        sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
+        source = audio.obtainSource(sound);
     }
 
 
     @Test
     public void testVolume() {
-        Assertions.assertEquals(this.source.getVolume(), 1f);
+        Assertions.assertEquals(source.getVolume(), 1f);
 
-        this.source.setVolume(0f);
-        Assertions.assertEquals(this.source.getVolume(), 0f);
+        source.setVolume(0f);
+        Assertions.assertEquals(source.getVolume(), 0f);
 
-        this.source.setVolume(2f);
-        Assertions.assertEquals(this.source.getVolume(), 1f);
+        source.setVolume(2f);
+        Assertions.assertEquals(source.getVolume(), 1f);
 
-        this.source.setVolume(-1f);
-        Assertions.assertEquals(this.source.getVolume(), 0f);
+        source.setVolume(-1f);
+        Assertions.assertEquals(source.getVolume(), 0f);
 
-        this.source.setVolume(0.5f);
-        Assertions.assertEquals(this.source.getVolume(), 0.5f);
+        source.setVolume(0.5f);
+        Assertions.assertEquals(source.getVolume(), 0.5f);
 
-        this.source.setVolume(0.133333333333333333f);
-        Assertions.assertEquals(this.source.getVolume(), 0.133333333333333333f);
+        source.setVolume(0.133333333333333333f);
+        Assertions.assertEquals(source.getVolume(), 0.133333333333333333f);
 
-        this.source.setVolume(1f);
-        Assertions.assertEquals(this.source.getVolume(), 1f);
+        source.setVolume(1f);
+        Assertions.assertEquals(source.getVolume(), 1f);
     }
 
 
     @Test
     public void testRelative() {
-        Assertions.assertEquals(this.source.isRelative(), false);
-        this.source.setRelative(true);
-        Assertions.assertEquals(this.source.isRelative(), true);
-        this.source.setRelative(false);
-        Assertions.assertEquals(this.source.isRelative(), false);
+        Assertions.assertEquals(source.isRelative(), false);
+        source.setRelative(true);
+        Assertions.assertEquals(source.isRelative(), true);
+        source.setRelative(false);
+        Assertions.assertEquals(source.isRelative(), false);
     }
 
 
     @Test
     public void testPitch() {
-        Assertions.assertEquals(this.source.getPitch(), 1f);
-        this.source.setPitch(0f);
-        Assertions.assertEquals(this.source.getPitch(), 0f);
+        Assertions.assertEquals(source.getPitch(), 1f);
+        source.setPitch(0f);
+        Assertions.assertEquals(source.getPitch(), 0f);
 
-        this.source.setPitch(2f);
-        Assertions.assertEquals(this.source.getPitch(), 2f);
+        source.setPitch(2f);
+        Assertions.assertEquals(source.getPitch(), 2f);
 
-        this.source.setPitch(3f);
-        Assertions.assertEquals(this.source.getPitch(), 3f);
+        source.setPitch(3f);
+        Assertions.assertEquals(source.getPitch(), 3f);
 
-        this.source.setPitch(-1f);
-        Assertions.assertEquals(this.source.getPitch(), 0f);
+        source.setPitch(-1f);
+        Assertions.assertEquals(source.getPitch(), 0f);
 
-        this.source.setPitch(0.5f);
-        Assertions.assertEquals(this.source.getPitch(), 0.5f);
+        source.setPitch(0.5f);
+        Assertions.assertEquals(source.getPitch(), 0.5f);
 
-        this.source.setPitch(0.533333333333333333f);
-        Assertions.assertEquals(this.source.getPitch(), 0.533333333333333333f);
+        source.setPitch(0.533333333333333333f);
+        Assertions.assertEquals(source.getPitch(), 0.533333333333333333f);
 
-        this.source.setPitch(1f);
-        Assertions.assertEquals(this.source.getPitch(), 1f);
+        source.setPitch(1f);
+        Assertions.assertEquals(source.getPitch(), 1f);
     }
 
 
     @Test
     public void testFilter() {
-        Assertions.assertEquals(this.source.hasFilter(), false);
-        this.source.setFilter(0f, 0.5f);
-        Assertions.assertEquals(this.source.hasFilter(), true);
-        this.source.setFilter(1f, 1f);
-        Assertions.assertEquals(this.source.hasFilter(), false);
+        Assertions.assertEquals(source.hasFilter(), false);
+        source.setFilter(0f, 0.5f);
+        Assertions.assertEquals(source.hasFilter(), true);
+        source.setFilter(1f, 1f);
+        Assertions.assertEquals(source.hasFilter(), false);
     }
 
 
     @AfterAll
     public void cleanup() {
-        this.source.free();
-        this.sound.dispose();
-        this.audio.dispose();
+        source.free();
+        sound.dispose();
+        audio.dispose();
     }
 
 }

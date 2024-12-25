@@ -121,17 +121,17 @@ public class Echo extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_ECHO);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DELAY, this.delay);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_LRDELAY, this.lrDelay);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DAMPING, this.damping);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_FEEDBACK, this.feedback);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_SPREAD, this.spread);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DELAY, delay);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_LRDELAY, lrDelay);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DAMPING, damping);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_FEEDBACK, feedback);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_SPREAD, spread);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.damping, this.delay, this.feedback, this.lrDelay, this.spread);
+        return Objects.hash(damping, delay, feedback, lrDelay, spread);
     }
 
 
@@ -147,18 +147,15 @@ public class Echo extends SoundEffectData {
             return false;
         }
         final Echo other = (Echo) obj;
-        return Float.floatToIntBits(this.damping) == Float.floatToIntBits(other.damping)
-                && Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay)
-                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback)
-                && Float.floatToIntBits(this.lrDelay) == Float.floatToIntBits(other.lrDelay)
-                && Float.floatToIntBits(this.spread) == Float.floatToIntBits(other.spread);
+        return Float.floatToIntBits(damping) == Float.floatToIntBits(other.damping) && Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay)
+                && Float.floatToIntBits(feedback) == Float.floatToIntBits(other.feedback)
+                && Float.floatToIntBits(lrDelay) == Float.floatToIntBits(other.lrDelay) && Float.floatToIntBits(spread) == Float.floatToIntBits(other.spread);
     }
 
 
     @Override
     public String toString() {
-        return "Echo [delay=" + this.delay + ", lrDelay=" + this.lrDelay + ", damping=" + this.damping + ", feedback=" + this.feedback + ", spread="
-                + this.spread + "]";
+        return "Echo [delay=" + delay + ", lrDelay=" + lrDelay + ", damping=" + damping + ", feedback=" + feedback + ", spread=" + spread + "]";
     }
 
 }

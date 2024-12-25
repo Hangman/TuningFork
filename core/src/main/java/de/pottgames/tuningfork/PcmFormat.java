@@ -54,22 +54,22 @@ public enum PcmFormat {
 
 
     public int getAlId() {
-        return this.alId;
+        return alId;
     }
 
 
     public int getChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     public int getBitsPerSample() {
-        return this.bitsPerSample;
+        return bitsPerSample;
     }
 
 
     public PcmDataType getDataType() {
-        return this.dataType;
+        return dataType;
     }
 
 

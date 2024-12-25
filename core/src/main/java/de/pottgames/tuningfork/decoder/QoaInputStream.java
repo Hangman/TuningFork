@@ -56,11 +56,11 @@ public class QoaInputStream implements AudioStream {
      * @param forStreaming true if this will be used for streaming
      */
     public QoaInputStream(FileHandle file, boolean forStreaming) {
-        this.stream = file.read();
+        stream = file.read();
         this.file = file;
-        this.logger = Audio.get().getLogger();
-        this.setup(forStreaming);
-        this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
+        logger = Audio.get().getLogger();
+        setup(forStreaming);
+        duration = (float) totalSamplesPerChannel() / getSampleRate();
     }
 
 
@@ -84,17 +84,17 @@ public class QoaInputStream implements AudioStream {
      */
     public QoaInputStream(InputStream stream, boolean forStreaming) {
         this.stream = stream;
-        this.file = null;
-        this.logger = Audio.get().getLogger();
-        this.setup(forStreaming);
-        this.duration = (float) this.totalSamplesPerChannel() / this.getSampleRate();
+        file = null;
+        logger = Audio.get().getLogger();
+        setup(forStreaming);
+        duration = (float) totalSamplesPerChannel() / getSampleRate();
     }
 
 
     private void setup(boolean forStreaming) {
         final byte[] header = new byte[8];
         try {
-            if (Util.readAll(this.stream, header, header.length) < 8) {
+            if (Util.readAll(stream, header, header.length) < 8) {
                 this.throwRuntimeError("Not a valid QOA file, header too short");
             }
         } catch (final IOException e) {
@@ -108,7 +108,7 @@ public class QoaInputStream implements AudioStream {
             this.throwRuntimeError("Invalid static QOA file, streamed QOA isn't supported by TuningFork");
         }
         try {
-            this.decoder = new QoaDecoder(this.stream, totalSamples);
+            decoder = new QoaDecoder(stream, totalSamples);
         } catch (final IOException | TuningForkException e) {
             this.throwRuntimeError("Error creating QOA decoder", e);
         }
@@ -118,7 +118,7 @@ public class QoaInputStream implements AudioStream {
     @Override
     public int read(byte[] bytes) {
         try {
-            return this.decoder.read(bytes);
+            return decoder.read(bytes);
         } catch (final IOException | TuningForkException e) {
             throw new TuningForkRuntimeException(e);
         }
@@ -127,46 +127,46 @@ public class QoaInputStream implements AudioStream {
 
     @Override
     public float getDuration() {
-        return this.duration;
+        return duration;
     }
 
 
     @Override
     public AudioStream reset() {
-        if (this.file == null) {
+        if (file == null) {
             this.throwRuntimeError("This AudioStream doesn't support resetting.");
         }
         StreamUtils.closeQuietly(this);
-        return new QoaInputStream(this.file);
+        return new QoaInputStream(file);
     }
 
 
     public long totalSamplesPerChannel() {
-        return this.decoder.outputTotalSamplesPerChannel();
+        return decoder.outputTotalSamplesPerChannel();
     }
 
 
     @Override
     public int getChannels() {
-        return this.decoder.outputChannels();
+        return decoder.outputChannels();
     }
 
 
     @Override
     public int getSampleRate() {
-        return this.decoder.outputSampleRate();
+        return decoder.outputSampleRate();
     }
 
 
     @Override
     public int getBitsPerSample() {
-        return this.decoder.outputBitsPerSample();
+        return decoder.outputBitsPerSample();
     }
 
 
     @Override
     public PcmDataType getPcmDataType() {
-        return this.decoder.outputPcmDataType();
+        return decoder.outputPcmDataType();
     }
 
 
@@ -177,31 +177,31 @@ public class QoaInputStream implements AudioStream {
 
     private void throwRuntimeError(String message, Exception e) {
         if (e == null) {
-            throw new TuningForkRuntimeException(message + ": " + this.file.toString());
+            throw new TuningForkRuntimeException(message + ": " + file.toString());
         }
-        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + this.file.toString(), e);
+        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + file.toString(), e);
     }
 
 
     @Override
     public boolean isClosed() {
-        return this.closed;
+        return closed;
     }
 
 
     @Override
     public void close() throws IOException {
         try {
-            if (this.decoder != null) {
-                this.decoder.close();
+            if (decoder != null) {
+                decoder.close();
             } else {
-                this.stream.close();
+                stream.close();
             }
         } catch (final IOException e) {
             // ignore but log it
-            this.logger.error(this.getClass(), "QoaInputStream didn't close successfully: " + e.getMessage());
+            logger.error(this.getClass(), "QoaInputStream didn't close successfully: " + e.getMessage());
         } finally {
-            this.closed = true;
+            closed = true;
         }
     }
 

@@ -32,15 +32,15 @@ public class ImaAdpcmRsDecoder implements WavDecoder {
     public void setup(InputStream stream, long streamLength) {
         this.streamLength = streamLength;
         this.stream = stream;
-        long numberOfBlocks = streamLength / this.blockSize;
-        if (streamLength % this.blockSize > 0) {
+        long numberOfBlocks = streamLength / blockSize;
+        if (streamLength % blockSize > 0) {
             numberOfBlocks++;
         }
-        final long blockBytes = numberOfBlocks * 4L * this.channels;
-        this.totalOutputSamplesPerChannel = (streamLength * 2L - blockBytes * 2L) / this.channels;
+        final long blockBytes = numberOfBlocks * 4L * channels;
+        totalOutputSamplesPerChannel = (streamLength * 2L - blockBytes * 2L) / channels;
 
         try {
-            this.decode();
+            decode();
         } catch (final IOException e) {
             throw new TuningForkRuntimeException("Error decoding IMA ADPCM data", e);
         }
@@ -49,22 +49,22 @@ public class ImaAdpcmRsDecoder implements WavDecoder {
 
     private void decode() throws IOException {
         final ImaAdpcmRs nativeDecoder = new ImaAdpcmRs();
-        final byte[] data = new byte[(int) this.streamLength];
-        Util.readAll(this.stream, data, data.length);
-        this.audioData = nativeDecoder.decode(data, this.blockSize, this.channels == 2);
-        this.bytesRemaining = this.audioData.length;
-        this.readIndex = 0;
+        final byte[] data = new byte[(int) streamLength];
+        Util.readAll(stream, data, data.length);
+        audioData = nativeDecoder.decode(data, blockSize, channels == 2);
+        bytesRemaining = audioData.length;
+        readIndex = 0;
     }
 
 
     @Override
     public int read(byte[] output) throws IOException {
-        final int copiedBytes = (int) Math.min(this.bytesRemaining, output.length);
+        final int copiedBytes = (int) Math.min(bytesRemaining, output.length);
         if (copiedBytes <= 0) {
             return -1;
         }
-        System.arraycopy(this.audioData, this.readIndex, output, 0, copiedBytes);
-        this.bytesRemaining -= copiedBytes;
+        System.arraycopy(audioData, readIndex, output, 0, copiedBytes);
+        bytesRemaining -= copiedBytes;
         return copiedBytes;
     }
 
@@ -83,19 +83,19 @@ public class ImaAdpcmRsDecoder implements WavDecoder {
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
@@ -107,13 +107,13 @@ public class ImaAdpcmRsDecoder implements WavDecoder {
 
     @Override
     public long bytesRemaining() {
-        return this.bytesRemaining;
+        return bytesRemaining;
     }
 
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 }

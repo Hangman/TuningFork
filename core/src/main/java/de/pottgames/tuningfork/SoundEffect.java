@@ -45,22 +45,22 @@ public class SoundEffect implements Disposable {
      * @see <a href="https://github.com/Hangman/TuningFork/wiki/Sound-Effects">The wiki entry</a>
      */
     public SoundEffect(SoundEffectData data) {
-        this.logger = Audio.get().getLogger();
-        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+        logger = Audio.get().getLogger();
+        errorLogger = new ErrorLogger(this.getClass(), logger);
 
         // CREATE AUX SLOT
-        this.auxSlotId = EXTEfx.alGenAuxiliaryEffectSlots();
-        this.setEnvironmental(false);
+        auxSlotId = EXTEfx.alGenAuxiliaryEffectSlots();
+        setEnvironmental(false);
 
         // CREATE EFFECT
-        this.effectId = EXTEfx.alGenEffects();
-        data.apply(this.effectId);
+        effectId = EXTEfx.alGenEffects();
+        data.apply(effectId);
 
         // SET EFFECT TO AUX SLOT
-        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, this.effectId);
+        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
 
-        if (!this.errorLogger.checkLogError("Failed to create the SoundEffect")) {
-            this.logger.debug(this.getClass(), "SoundEffect successfully created");
+        if (!errorLogger.checkLogError("Failed to create the SoundEffect")) {
+            logger.debug(this.getClass(), "SoundEffect successfully created");
         }
     }
 
@@ -74,11 +74,11 @@ public class SoundEffect implements Disposable {
      */
     public void updateEffect(SoundEffectData data) {
         // AL wants us to do it this way: detach effect from aux slot, re-attach altered effect to aux slot
-        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, EXTEfx.AL_EFFECT_NULL);
-        data.apply(this.effectId);
-        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, this.effectId);
+        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, EXTEfx.AL_EFFECT_NULL);
+        data.apply(effectId);
+        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
 
-        this.errorLogger.checkLogError("Failed to update SoundEffect");
+        errorLogger.checkLogError("Failed to update SoundEffect");
     }
 
 
@@ -89,10 +89,10 @@ public class SoundEffect implements Disposable {
      * @param value whether this effect should be environmental or "pure"
      */
     public void setEnvironmental(boolean value) {
-        EXTEfx.alAuxiliaryEffectSloti(this.auxSlotId, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, value ? AL10.AL_TRUE : AL10.AL_FALSE);
+        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, value ? AL10.AL_TRUE : AL10.AL_FALSE);
 
-        if (!this.errorLogger.checkLogError("Something went wrong")) {
-            this.logger.trace(this.getClass(), "SoundEffect set to environmental");
+        if (!errorLogger.checkLogError("Something went wrong")) {
+            logger.trace(this.getClass(), "SoundEffect set to environmental");
         }
     }
 
@@ -103,7 +103,7 @@ public class SoundEffect implements Disposable {
      * @return true if attached, false otherwise
      */
     public boolean isAttached() {
-        return !this.attachedSources.isEmpty();
+        return !attachedSources.isEmpty();
     }
 
 
@@ -115,26 +115,26 @@ public class SoundEffect implements Disposable {
      * @return true if the effect is attached to at least one source
      */
     public boolean getAttachedSources(Array<SoundSource> saveToList) {
-        if (this.attachedSources.isEmpty()) {
+        if (attachedSources.isEmpty()) {
             return false;
         }
-        saveToList.addAll(this.attachedSources);
+        saveToList.addAll(attachedSources);
         return true;
     }
 
 
     int getAuxSlotId() {
-        return this.auxSlotId;
+        return auxSlotId;
     }
 
 
     void addSource(SoundSource source) {
-        this.attachedSources.add(source);
+        attachedSources.add(source);
     }
 
 
     void removeSource(SoundSource source) {
-        this.attachedSources.removeValue(source, true);
+        attachedSources.removeValue(source, true);
     }
 
 
@@ -143,15 +143,15 @@ public class SoundEffect implements Disposable {
      */
     @Override
     public void dispose() {
-        EXTEfx.alDeleteEffects(this.effectId);
-        for (final SoundSource source : this.attachedSources) {
+        EXTEfx.alDeleteEffects(effectId);
+        for (final SoundSource source : attachedSources) {
             source.onEffectDisposal(this);
         }
-        this.attachedSources.clear();
-        EXTEfx.alDeleteAuxiliaryEffectSlots(this.auxSlotId);
+        attachedSources.clear();
+        EXTEfx.alDeleteAuxiliaryEffectSlots(auxSlotId);
 
-        if (!this.errorLogger.checkLogError("Something went wrong")) {
-            this.logger.trace(this.getClass(), "SoundEffect successfully disposed");
+        if (!errorLogger.checkLogError("Something went wrong")) {
+            logger.trace(this.getClass(), "SoundEffect successfully disposed");
         }
     }
 

@@ -77,12 +77,12 @@ public enum ALExtension {
 
 
     String getAlSpecifier() {
-        return this.alSpecifier;
+        return alSpecifier;
     }
 
 
     boolean isAlc() {
-        return this.alc;
+        return alc;
     }
 
 }

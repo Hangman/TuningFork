@@ -65,22 +65,22 @@ public class SoundListener {
 
 
     public SoundListener setOrientation(Camera camera) {
-        this.tempVector.set(camera.direction);
-        this.tempVector.crs(camera.up);
-        this.tempVector.crs(camera.direction);
-        this.setOrientation(camera.direction, this.tempVector);
+        tempVector.set(camera.direction);
+        tempVector.crs(camera.up);
+        tempVector.crs(camera.direction);
+        this.setOrientation(camera.direction, tempVector);
         return this;
     }
 
 
     public SoundListener setOrientation(Vector3 at, Vector3 up) {
-        this.orientation[0] = at.x;
-        this.orientation[1] = at.y;
-        this.orientation[2] = at.z;
-        this.orientation[3] = up.x;
-        this.orientation[4] = up.y;
-        this.orientation[5] = up.z;
-        AL10.alListenerfv(AL10.AL_ORIENTATION, this.orientation);
+        orientation[0] = at.x;
+        orientation[1] = at.y;
+        orientation[2] = at.z;
+        orientation[3] = up.x;
+        orientation[4] = up.y;
+        orientation[5] = up.z;
+        AL10.alListenerfv(AL10.AL_ORIENTATION, orientation);
         return this;
     }
 

@@ -30,7 +30,7 @@ public class ThemePlayListProvider implements PlayListProvider {
 
 
     public ThemePlayListProvider() {
-        this.logger = Audio.get().getLogger();
+        logger = Audio.get().getLogger();
     }
 
 
@@ -42,8 +42,8 @@ public class ThemePlayListProvider implements PlayListProvider {
      * @return the ThemePlayListProvider for chaining
      */
     public ThemePlayListProvider setTheme(int theme) {
-        if (this.lists.get(theme) == null) {
-            this.logger.warn(this.getClass(), "There is no corresponding playlist for the selected theme: " + theme);
+        if (lists.get(theme) == null) {
+            logger.warn(this.getClass(), "There is no corresponding playlist for the selected theme: " + theme);
         }
         this.theme = theme;
         return this;
@@ -56,7 +56,7 @@ public class ThemePlayListProvider implements PlayListProvider {
      * @return the theme
      */
     public int getTheme() {
-        return this.theme;
+        return theme;
     }
 
 
@@ -69,7 +69,7 @@ public class ThemePlayListProvider implements PlayListProvider {
      * @return the ThemePlayListProvider for chaining
      */
     public ThemePlayListProvider add(PlayList list, int theme) {
-        this.lists.put(theme, list);
+        lists.put(theme, list);
         return this;
     }
 
@@ -82,27 +82,27 @@ public class ThemePlayListProvider implements PlayListProvider {
      * @return the ThemePlayListProvider for chaining
      */
     public ThemePlayListProvider remove(int theme) {
-        this.lists.remove(theme);
+        lists.remove(theme);
         return this;
     }
 
 
     @Override
     public PlayList next() {
-        return this.lists.get(this.theme);
+        return lists.get(theme);
     }
 
 
     @Override
     public boolean hasNext() {
-        final PlayList list = this.lists.get(this.theme);
+        final PlayList list = lists.get(theme);
         return list != null;
     }
 
 
     @Override
     public String toString() {
-        return "ThemePlayListProvider [lists=" + this.lists + ", theme=" + this.theme + "]";
+        return "ThemePlayListProvider [lists=" + lists + ", theme=" + theme + "]";
     }
 
 }

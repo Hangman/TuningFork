@@ -34,7 +34,7 @@ public class Aiff8BitDecoder implements AiffDecoder {
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.inputBytesRemaining = streamLength;
+        inputBytesRemaining = streamLength;
     }
 
 
@@ -42,25 +42,25 @@ public class Aiff8BitDecoder implements AiffDecoder {
     public int read(byte[] output) throws IOException {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
 
-        if (this.inputBytesRemaining <= 0) {
+        if (inputBytesRemaining <= 0) {
             return -1;
         }
 
         int writeOffset = 0;
 
         while (writeOffset < output.length) {
-            if (this.bufferOffset >= this.bufferLength) {
-                this.bufferLength = this.fillBuffer();
-                if (this.bufferLength <= 0) {
+            if (bufferOffset >= bufferLength) {
+                bufferLength = fillBuffer();
+                if (bufferLength <= 0) {
                     return writeOffset == 0 ? -1 : writeOffset;
                 }
             }
 
-            while (this.bufferOffset < this.bufferLength && writeOffset < output.length) {
-                final byte byte1 = this.buffer[this.bufferOffset++];
+            while (bufferOffset < bufferLength && writeOffset < output.length) {
+                final byte byte1 = buffer[bufferOffset++];
                 output[writeOffset++] = (byte) (byte1 + 128);
-                this.inputBytesRemaining -= 1;
-                if (this.inputBytesRemaining <= 0) {
+                inputBytesRemaining -= 1;
+                if (inputBytesRemaining <= 0) {
                     return writeOffset;
                 }
             }
@@ -71,14 +71,14 @@ public class Aiff8BitDecoder implements AiffDecoder {
 
 
     private int fillBuffer() throws IOException {
-        this.bufferOffset = 0;
-        return this.stream.read(this.buffer, 0, this.buffer.length);
+        bufferOffset = 0;
+        return stream.read(buffer, 0, buffer.length);
     }
 
 
     @Override
     public int inputBitsPerSample() {
-        return this.bitsPerSample;
+        return bitsPerSample;
     }
 
 
@@ -96,7 +96,7 @@ public class Aiff8BitDecoder implements AiffDecoder {
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 }

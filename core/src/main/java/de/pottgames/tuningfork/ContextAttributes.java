@@ -9,18 +9,18 @@ public class ContextAttributes {
 
 
     public ContextAttributes(int[] attributes) {
-        this.buffer = BufferUtils.newIntBuffer(attributes.length + 1);
+        buffer = BufferUtils.newIntBuffer(attributes.length + 1);
         for (final int value : attributes) {
-            this.buffer.put(value);
+            buffer.put(value);
         }
-        this.buffer.put(0);
-        this.buffer.flip();
+        buffer.put(0);
+        buffer.flip();
     }
 
 
     public IntBuffer getBuffer() {
-        this.buffer.rewind();
-        return this.buffer;
+        buffer.rewind();
+        return buffer;
     }
 
 }

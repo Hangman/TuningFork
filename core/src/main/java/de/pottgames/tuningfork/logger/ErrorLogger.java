@@ -45,7 +45,7 @@ public class ErrorLogger {
     public boolean checkLogAlcError(long deviceHandle, String message) {
         final int alcError = ALC10.alcGetError(deviceHandle);
         if (alcError != ALC10.ALC_NO_ERROR) {
-            this.logger.error(this.clazz, message + " - " + ErrorLogger.alcErrorToString(alcError));
+            logger.error(clazz, message + " - " + ErrorLogger.alcErrorToString(alcError));
             return true;
         }
 
@@ -56,7 +56,7 @@ public class ErrorLogger {
     public boolean checkLogError(String message) {
         final int alError = AL10.alGetError();
         if (alError != AL10.AL_NO_ERROR) {
-            this.logger.error(this.clazz, message + " - " + ErrorLogger.alErrorToString(alError));
+            logger.error(clazz, message + " - " + ErrorLogger.alErrorToString(alError));
             return true;
         }
 

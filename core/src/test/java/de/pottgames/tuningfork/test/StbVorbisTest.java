@@ -16,20 +16,20 @@ public class StbVorbisTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
-        this.sound = OggLoader.loadNonPacked("src/test/resources/numbers2.ogg");
-        this.sound2 = OggLoader.load(Gdx.files.internal("numbers2.ogg"));
-        System.out.println("Sound duration: " + this.sound.getDuration() + "s");
-        System.out.println("Sound2 duration: " + this.sound.getDuration() + "s");
+        sound = OggLoader.loadNonPacked("src/test/resources/numbers2.ogg");
+        sound2 = OggLoader.load(Gdx.files.internal("numbers2.ogg"));
+        System.out.println("Sound duration: " + sound.getDuration() + "s");
+        System.out.println("Sound2 duration: " + sound.getDuration() + "s");
 
-        this.sound.play();
+        sound.play();
         try {
             Thread.sleep(100);
         } catch (final InterruptedException e) {
             e.printStackTrace();
         }
-        this.sound2.play();
+        sound2.play();
     }
 
 
@@ -41,9 +41,9 @@ public class StbVorbisTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.sound2.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        sound2.dispose();
+        audio.dispose();
     }
 
 

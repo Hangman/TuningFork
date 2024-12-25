@@ -38,15 +38,15 @@ public class PlaybackPositionBufferedSourceTest extends ApplicationAdapter imple
         // before we can do anything, we need to initialize our Audio instance
         final AudioConfig config = new AudioConfig();
         config.setLogger(new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR));
-        this.audio = Audio.init(config);
+        audio = Audio.init(config);
 
         // load a sound
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // play the sound
-        this.soundSource = this.audio.obtainSource(this.sound);
-        this.soundSource.setLooping(true);
-        this.soundSource.play();
+        soundSource = audio.obtainSource(sound);
+        soundSource.setLooping(true);
+        soundSource.play();
     }
 
 
@@ -54,23 +54,23 @@ public class PlaybackPositionBufferedSourceTest extends ApplicationAdapter imple
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         final float seconds = Rng.get(-20f, 20f);
         System.out.println("setting position to: " + seconds);
-        this.soundSource.setPlaybackPosition(seconds);
+        soundSource.setPlaybackPosition(seconds);
         return true;
     }
 
 
     @Override
     public void render() {
-        System.out.println("playback position: " + this.soundSource.getPlaybackPosition());
+        System.out.println("playback position: " + soundSource.getPlaybackPosition());
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

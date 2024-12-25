@@ -32,18 +32,18 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
-        this.sound = SoundLoader.load(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
-        final SoundSource source = this.audio.obtainSource(this.sound);
+        sound = SoundLoader.load(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
+        final SoundSource source = audio.obtainSource(sound);
 
         // set source pitch to change the speed
         final float pitch = 1.2f;
         source.setPitch(pitch);
 
         // apply pitch correction
-        this.effect = new SoundEffect(new PitchShifter().correctPitch(pitch));
-        source.attachEffect(this.effect);
+        effect = new SoundEffect(new PitchShifter().correctPitch(pitch));
+        source.attachEffect(effect);
 
         // in order to only hear the pitch corrected sound, we must silence the original sound with a filter
         source.setFilter(0f, 0f);
@@ -60,11 +60,11 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.effect.dispose();
-        this.sound.dispose();
+        effect.dispose();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

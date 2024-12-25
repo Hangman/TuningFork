@@ -106,22 +106,22 @@ public enum DistanceAttenuationModel {
 
 
     int getAlId() {
-        return this.alId;
+        return alId;
     }
 
 
     float getAttenuationFactor() {
-        return this.attenuationFactor;
+        return attenuationFactor;
     }
 
 
     float getAttenuationMinDistance() {
-        return this.attenuationMinDistance;
+        return attenuationMinDistance;
     }
 
 
     float getAttenuationMaxDistance() {
-        return this.attenuationMaxDistance;
+        return attenuationMaxDistance;
     }
 
 }

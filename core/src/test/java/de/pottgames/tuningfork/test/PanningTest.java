@@ -31,32 +31,32 @@ public class PanningTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.sound = SoundLoader.load(Gdx.files.internal("rhythm.wav"));
-        this.soundDuration = this.sound.getDuration() * 1000f;
+        audio = Audio.init();
+        sound = SoundLoader.load(Gdx.files.internal("rhythm.wav"));
+        soundDuration = sound.getDuration() * 1000f;
     }
 
 
     @Override
     public void render() {
-        if (System.currentTimeMillis() > this.soundPlayStartTime + (long) this.soundDuration) {
-            this.left = !this.left;
-            this.playSound(this.left ? -1f : 1f);
-            System.out.println(this.left ? "left" : "right");
+        if (System.currentTimeMillis() > soundPlayStartTime + (long) soundDuration) {
+            left = !left;
+            playSound(left ? -1f : 1f);
+            System.out.println(left ? "left" : "right");
         }
     }
 
 
     private void playSound(float pan) {
-        this.sound.play(1f, 1f, pan);
-        this.soundPlayStartTime = System.currentTimeMillis();
+        sound.play(1f, 1f, pan);
+        soundPlayStartTime = System.currentTimeMillis();
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

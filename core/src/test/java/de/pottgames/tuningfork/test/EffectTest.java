@@ -36,28 +36,28 @@ public class EffectTest extends ApplicationAdapter {
     @Override
     public void create() {
         // before we can do anything, we need to initialize our Audio instance
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         // load a sound
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // obtain sound source
-        this.soundSource = this.audio.obtainSource(this.sound);
-        this.soundSource.setLooping(true);
-        this.soundSource.play();
+        soundSource = audio.obtainSource(sound);
+        soundSource.setLooping(true);
+        soundSource.play();
 
         // create effects
-        this.effect1 = new SoundEffect(EaxReverb.domeSaintPauls());
+        effect1 = new SoundEffect(EaxReverb.domeSaintPauls());
         final Flanger flanger = new Flanger();
         flanger.rate = 7f;
-        this.effect2 = new SoundEffect(flanger);
+        effect2 = new SoundEffect(flanger);
 
         // attach the effects to the source
-        this.soundSource.attachEffect(this.effect1);
-        this.soundSource.attachEffect(this.effect2);
+        soundSource.attachEffect(effect1);
+        soundSource.attachEffect(effect2);
 
         // [optional] mute the original output if you want
-        this.soundSource.setFilter(0f, 0f);
+        soundSource.setFilter(0f, 0f);
     }
 
 
@@ -69,13 +69,13 @@ public class EffectTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.effect1.dispose();
-        this.effect2.dispose();
-        this.soundSource.free();
-        this.sound.dispose();
+        effect1.dispose();
+        effect2.dispose();
+        soundSource.free();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

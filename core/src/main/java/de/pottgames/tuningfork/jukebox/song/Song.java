@@ -79,7 +79,7 @@ public class Song {
      * @return the source
      */
     public SongSource getSource() {
-        return this.source;
+        return source;
     }
 
 
@@ -89,7 +89,7 @@ public class Song {
      * @return the settings
      */
     public SongSettings getSettings() {
-        return this.settings;
+        return settings;
     }
 
 
@@ -99,13 +99,13 @@ public class Song {
      * @return the meta data
      */
     public SongMeta getMeta() {
-        return this.metaData;
+        return metaData;
     }
 
 
     @Override
     public String toString() {
-        return "Song [source=" + this.source + ", settings=" + this.settings + ", metaData=" + this.metaData + "]";
+        return "Song [source=" + source + ", settings=" + settings + ", metaData=" + metaData + "]";
     }
 
 }

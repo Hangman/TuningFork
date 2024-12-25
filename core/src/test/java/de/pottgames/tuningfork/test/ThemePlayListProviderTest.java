@@ -35,35 +35,35 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         // LOAD SOUNDS
-        this.rhythm1 = new StreamedSoundSource(Gdx.files.internal("rhythm.wav"));
-        this.rhythm2 = SoundLoader.load(Gdx.files.internal("rhythm2.flac"));
-        this.rhythm3 = new StreamedSoundSource(Gdx.files.internal("rhythm3.flac"));
-        this.rhythm4 = SoundLoader.load(Gdx.files.internal("rhythm4.flac"));
-        this.rhythm5 = new StreamedSoundSource(Gdx.files.internal("short.flac"));
+        rhythm1 = new StreamedSoundSource(Gdx.files.internal("rhythm.wav"));
+        rhythm2 = SoundLoader.load(Gdx.files.internal("rhythm2.flac"));
+        rhythm3 = new StreamedSoundSource(Gdx.files.internal("rhythm3.flac"));
+        rhythm4 = SoundLoader.load(Gdx.files.internal("rhythm4.flac"));
+        rhythm5 = new StreamedSoundSource(Gdx.files.internal("short.flac"));
 
         // OBTAIN BUFFERED SOUND SOURCES
-        this.rhythm2Source = this.audio.obtainSource(this.rhythm2);
-        this.rhythm4Source = this.audio.obtainSource(this.rhythm4);
+        rhythm2Source = audio.obtainSource(rhythm2);
+        rhythm4Source = audio.obtainSource(rhythm4);
 
         // OPTIONAL: SET RELATIVE
         // if you want to play music globally and not in 3D space, make sure to only provide relative sources
-        this.rhythm1.setRelative(true);
-        this.rhythm3.setRelative(true);
-        this.rhythm5.setRelative(true);
-        this.rhythm2Source.setRelative(true);
-        this.rhythm4Source.setRelative(true);
-        this.rhythm5.setRelative(true);
+        rhythm1.setRelative(true);
+        rhythm3.setRelative(true);
+        rhythm5.setRelative(true);
+        rhythm2Source.setRelative(true);
+        rhythm4Source.setRelative(true);
+        rhythm5.setRelative(true);
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
-        final Song song1 = new Song(this.rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
-        final Song song2 = new Song(this.rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
-        final Song song3 = new Song(this.rhythm3, settings, new SongMeta().setTitle("rhythm3"));
-        final Song song4 = new Song(this.rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));
-        final Song song5 = new Song(this.rhythm5, settings, new SongMeta().setTitle("rhythm5"));
+        final Song song1 = new Song(rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
+        final Song song2 = new Song(rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
+        final Song song3 = new Song(rhythm3, settings, new SongMeta().setTitle("rhythm3"));
+        final Song song4 = new Song(rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));
+        final Song song5 = new Song(rhythm5, settings, new SongMeta().setTitle("rhythm5"));
 
         // CREATE PLAYLIST 1
         final PlayList playList = new PlayList() {
@@ -89,49 +89,49 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
         playList2.setLooping(true);
 
         // CREATE PLAYLIST PROVIDER
-        this.provider = new ThemePlayListProvider();
-        this.provider.add(playList, 0);
-        this.provider.add(playList2, 1);
-        this.provider.setTheme(0);
+        provider = new ThemePlayListProvider();
+        provider.add(playList, 0);
+        provider.add(playList2, 1);
+        provider.setTheme(0);
 
-        this.jukeBox = new JukeBox(this.provider);
-        this.jukeBox.addObserver(this);
-        this.jukeBox.play();
+        jukeBox = new JukeBox(provider);
+        jukeBox.addObserver(this);
+        jukeBox.play();
     }
 
 
     @Override
     public void render() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            this.jukeBox.play();
+            jukeBox.play();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            this.jukeBox.pause();
+            jukeBox.pause();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            this.jukeBox.stop();
+            jukeBox.stop();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
-            this.jukeBox.softStop(Interpolation.linear, 1.5f);
+            jukeBox.softStop(Interpolation.linear, 1.5f);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            this.provider.setTheme(1 - this.provider.getTheme()); // toggle theme
-            this.jukeBox.softStopAndResume(Interpolation.linear, 2f);
+            provider.setTheme(1 - provider.getTheme()); // toggle theme
+            jukeBox.softStopAndResume(Interpolation.linear, 2f);
         }
 
-        this.jukeBox.update();
+        jukeBox.update();
     }
 
 
     @Override
     public void dispose() {
-        this.jukeBox.clear();
-        this.rhythm1.dispose();
-        this.rhythm2.dispose();
-        this.rhythm3.dispose();
-        this.rhythm4.dispose();
-        this.rhythm5.dispose();
-        this.audio.dispose();
+        jukeBox.clear();
+        rhythm1.dispose();
+        rhythm2.dispose();
+        rhythm3.dispose();
+        rhythm4.dispose();
+        rhythm5.dispose();
+        audio.dispose();
     }
 
 

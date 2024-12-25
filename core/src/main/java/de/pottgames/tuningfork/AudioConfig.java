@@ -90,19 +90,19 @@ public class AudioConfig {
      */
     public AudioConfig(AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources, int idleTasks,
             Virtualization virtualization, TuningForkLogger logger) {
-        this.setDeviceConfig(deviceConfig);
-        this.setDistanceAttenuationModel(distanceAttenuationModel);
-        this.setSimultaneousSources(simultaneousSources);
-        this.setIdleTasks(idleTasks);
-        this.setLogger(logger);
-        this.setVirtualization(virtualization);
-        this.setSpatialization(Spatialization.ON);
-        this.setWavDecoderProvider(new DefaultWavDecoderProvider());
+        setDeviceConfig(deviceConfig);
+        setDistanceAttenuationModel(distanceAttenuationModel);
+        setSimultaneousSources(simultaneousSources);
+        setIdleTasks(idleTasks);
+        setLogger(logger);
+        setVirtualization(virtualization);
+        setSpatialization(Spatialization.ON);
+        setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
 
     public AudioDeviceConfig getDeviceConfig() {
-        return this.deviceConfig;
+        return deviceConfig;
     }
 
 
@@ -123,7 +123,7 @@ public class AudioConfig {
 
 
     public DistanceAttenuationModel getDistanceAttenuationModel() {
-        return this.distanceAttenuationModel;
+        return distanceAttenuationModel;
     }
 
 
@@ -144,7 +144,7 @@ public class AudioConfig {
 
 
     public int getSimultaneousSources() {
-        return this.simultaneousSources;
+        return simultaneousSources;
     }
 
 
@@ -165,7 +165,7 @@ public class AudioConfig {
 
 
     public int getIdleTasks() {
-        return this.idleTasks;
+        return idleTasks;
     }
 
 
@@ -186,7 +186,7 @@ public class AudioConfig {
 
 
     public Spatialization getSpatialization() {
-        return this.spatialization;
+        return spatialization;
     }
 
 
@@ -205,7 +205,7 @@ public class AudioConfig {
 
 
     public AssetManager getAssetManager() {
-        return this.assetManager;
+        return assetManager;
     }
 
 
@@ -225,7 +225,7 @@ public class AudioConfig {
 
 
     public Virtualization getVirtualization() {
-        return this.virtualization;
+        return virtualization;
     }
 
 
@@ -252,7 +252,7 @@ public class AudioConfig {
      * @return this
      */
     public boolean useNativeDecoders() {
-        return this.useNativeDecoders;
+        return useNativeDecoders;
     }
 
 
@@ -264,13 +264,13 @@ public class AudioConfig {
      * @return this
      */
     public AudioConfig setUseNativeDecoders(boolean value) {
-        this.useNativeDecoders = value;
+        useNativeDecoders = value;
         return this;
     }
 
 
     public TuningForkLogger getLogger() {
-        return this.logger;
+        return logger;
     }
 
 
@@ -292,7 +292,7 @@ public class AudioConfig {
 
 
     public WavDecoderProvider getResamplerProvider() {
-        return this.wavDecoderProvider;
+        return wavDecoderProvider;
     }
 
 
@@ -305,7 +305,7 @@ public class AudioConfig {
      */
     public AudioConfig setWavDecoderProvider(WavDecoderProvider decoderProvider) {
         Objects.requireNonNull(decoderProvider);
-        this.wavDecoderProvider = decoderProvider;
+        wavDecoderProvider = decoderProvider;
         return this;
     }
 
@@ -337,7 +337,7 @@ public class AudioConfig {
 
 
         int getAlId() {
-            return this.alId;
+            return alId;
         }
 
 
@@ -395,7 +395,7 @@ public class AudioConfig {
 
 
         int getAlId() {
-            return this.alId;
+            return alId;
         }
 
 

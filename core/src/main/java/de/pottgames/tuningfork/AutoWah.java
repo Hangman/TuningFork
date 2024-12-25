@@ -105,16 +105,16 @@ public class AutoWah extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_AUTOWAH);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_ATTACK_TIME, this.attackTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RELEASE_TIME, this.releaseTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RESONANCE, this.resonance);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_PEAK_GAIN, this.peakGain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_ATTACK_TIME, attackTime);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RELEASE_TIME, releaseTime);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RESONANCE, resonance);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_PEAK_GAIN, peakGain);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.attackTime, this.peakGain, this.releaseTime, this.resonance);
+        return Objects.hash(attackTime, peakGain, releaseTime, resonance);
     }
 
 
@@ -130,17 +130,16 @@ public class AutoWah extends SoundEffectData {
             return false;
         }
         final AutoWah other = (AutoWah) obj;
-        return Float.floatToIntBits(this.attackTime) == Float.floatToIntBits(other.attackTime)
-                && Float.floatToIntBits(this.peakGain) == Float.floatToIntBits(other.peakGain)
-                && Float.floatToIntBits(this.releaseTime) == Float.floatToIntBits(other.releaseTime)
-                && Float.floatToIntBits(this.resonance) == Float.floatToIntBits(other.resonance);
+        return Float.floatToIntBits(attackTime) == Float.floatToIntBits(other.attackTime)
+                && Float.floatToIntBits(peakGain) == Float.floatToIntBits(other.peakGain)
+                && Float.floatToIntBits(releaseTime) == Float.floatToIntBits(other.releaseTime)
+                && Float.floatToIntBits(resonance) == Float.floatToIntBits(other.resonance);
     }
 
 
     @Override
     public String toString() {
-        return "AutoWah [attackTime=" + this.attackTime + ", releaseTime=" + this.releaseTime + ", resonance=" + this.resonance + ", peakGain=" + this.peakGain
-                + "]";
+        return "AutoWah [attackTime=" + attackTime + ", releaseTime=" + releaseTime + ", resonance=" + resonance + ", peakGain=" + peakGain + "]";
     }
 
 }

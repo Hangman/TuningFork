@@ -42,14 +42,14 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
 
 
     private void reset() {
-        this.asset = null;
+        asset = null;
     }
 
 
     @SuppressWarnings("rawtypes")
     @Override
     public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
-        return this.dependencies;
+        return dependencies;
     }
 
 
@@ -71,22 +71,22 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
         }
         switch (type) {
             case FLAC:
-                this.asset = reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);
+                asset = reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);
                 break;
             case OGG:
-                this.asset = reverse ? OggLoader.loadReverse(file) : OggLoader.load(file);
+                asset = reverse ? OggLoader.loadReverse(file) : OggLoader.load(file);
                 break;
             case WAV:
-                this.asset = reverse ? WaveLoader.loadReverse(file) : WaveLoader.load(file);
+                asset = reverse ? WaveLoader.loadReverse(file) : WaveLoader.load(file);
                 break;
             case MP3:
-                this.asset = reverse ? Mp3Loader.loadReverse(file) : Mp3Loader.load(file);
+                asset = reverse ? Mp3Loader.loadReverse(file) : Mp3Loader.load(file);
                 break;
             case AIFF:
-                this.asset = reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
+                asset = reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
                 break;
             case QOA:
-                this.asset = reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
+                asset = reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
                 break;
         }
     }
@@ -94,8 +94,8 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
 
     @Override
     public SoundBuffer loadSync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
-        final SoundBuffer result = this.asset;
-        this.reset();
+        final SoundBuffer result = asset;
+        reset();
         return result;
     }
 

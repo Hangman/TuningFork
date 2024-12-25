@@ -52,15 +52,15 @@ public class FrequencyShifter extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FREQUENCY_SHIFTER);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_FREQUENCY, this.frequency);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION, this.leftDirection);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION, this.rightDirection);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_FREQUENCY, frequency);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION, leftDirection);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION, rightDirection);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.frequency, this.leftDirection, this.rightDirection);
+        return Objects.hash(frequency, leftDirection, rightDirection);
     }
 
 
@@ -76,14 +76,14 @@ public class FrequencyShifter extends SoundEffectData {
             return false;
         }
         final FrequencyShifter other = (FrequencyShifter) obj;
-        return Float.floatToIntBits(this.frequency) == Float.floatToIntBits(other.frequency) && this.leftDirection == other.leftDirection
-                && this.rightDirection == other.rightDirection;
+        return Float.floatToIntBits(frequency) == Float.floatToIntBits(other.frequency) && leftDirection == other.leftDirection
+                && rightDirection == other.rightDirection;
     }
 
 
     @Override
     public String toString() {
-        return "FrequencyShifter [frequency=" + this.frequency + ", leftDirection=" + this.leftDirection + ", rightDirection=" + this.rightDirection + "]";
+        return "FrequencyShifter [frequency=" + frequency + ", leftDirection=" + leftDirection + ", rightDirection=" + rightDirection + "]";
     }
 
 }

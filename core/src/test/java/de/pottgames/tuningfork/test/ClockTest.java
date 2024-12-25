@@ -28,24 +28,24 @@ public class ClockTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
-        this.sound.play();
+        audio = Audio.init();
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound.play();
     }
 
 
     @Override
     public void render() {
-        System.out.println("clock time: " + this.audio.getDevice().getClockTime());
-        System.out.println("latency: " + this.audio.getDevice().getLatency());
+        System.out.println("clock time: " + audio.getDevice().getClockTime());
+        System.out.println("latency: " + audio.getDevice().getLatency());
         System.out.println();
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

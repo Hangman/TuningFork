@@ -27,28 +27,28 @@ public class ImaAdpcmDecoder implements WavDecoder {
     public ImaAdpcmDecoder(int blockSize, int channels, int sampleRate) {
         assert channels == 1 || channels == 2;
         this.channels = channels;
-        this.stereo = channels == 2;
+        stereo = channels == 2;
         this.blockSize = blockSize;
         this.sampleRate = sampleRate;
-        this.outputSamples = new byte[blockSize * 4 - 4 * channels];
-        this.prediction[0] = new Prediction();
-        this.prediction[1] = new Prediction();
+        outputSamples = new byte[blockSize * 4 - 4 * channels];
+        prediction[0] = new Prediction();
+        prediction[1] = new Prediction();
     }
 
 
     @Override
     public void setup(InputStream stream, long streamLength) {
-        this.bytesRemaining = streamLength;
-        this.stream = new BufferedInputStream(stream, this.blockSize * 2);
+        bytesRemaining = streamLength;
+        this.stream = new BufferedInputStream(stream, blockSize * 2);
 
         // CALC TOTAL SAMPLES
-        long numberOfBlocks = streamLength / this.blockSize;
-        if (streamLength % this.blockSize > 0) {
+        long numberOfBlocks = streamLength / blockSize;
+        if (streamLength % blockSize > 0) {
             numberOfBlocks++;
         }
-        final long blockBytes = numberOfBlocks * 4L * this.channels;
-        this.totalOutputSamplesPerChannel = (streamLength * 2L - blockBytes * 2L) / this.channels;
-        this.outputBytesRemaining = this.totalOutputSamplesPerChannel * this.channels * 2;
+        final long blockBytes = numberOfBlocks * 4L * channels;
+        totalOutputSamplesPerChannel = (streamLength * 2L - blockBytes * 2L) / channels;
+        outputBytesRemaining = totalOutputSamplesPerChannel * channels * 2;
     }
 
 
@@ -56,17 +56,17 @@ public class ImaAdpcmDecoder implements WavDecoder {
     public int read(byte[] output) throws IOException {
         for (int i = 0; i < output.length; i++) {
             // DECODE NEXT BLOCK IF NECESSARY
-            if (this.outputSamplePosition >= this.outputSampleSize) {
-                if (this.decodeNextBlock() == ImaAdpcmDecoder.END_OF_STREAM) {
+            if (outputSamplePosition >= outputSampleSize) {
+                if (decodeNextBlock() == ImaAdpcmDecoder.END_OF_STREAM) {
                     return i > 0 ? i : -1;
                 }
             }
 
             // COPY OUTPUT BYTE
-            output[i] = this.outputSamples[this.outputSamplePosition++];
+            output[i] = outputSamples[outputSamplePosition++];
         }
 
-        this.outputBytesRemaining -= output.length;
+        outputBytesRemaining -= output.length;
 
         return output.length;
     }
@@ -76,49 +76,49 @@ public class ImaAdpcmDecoder implements WavDecoder {
         int preambleBytes = 0;
 
         // READ LEFT CHANNEL PREAMBLE
-        this.prediction[0].predictor = (short) (this.readByte() | this.readByte() << 8);
-        this.prediction[0].stepIndex = MathUtils.clamp(this.readByte(), 0, 88);
-        this.prediction[0].step = Prediction.STEP_TABLE[this.prediction[0].stepIndex];
-        final int skipValue = this.readByte();
+        prediction[0].predictor = (short) (readByte() | readByte() << 8);
+        prediction[0].stepIndex = MathUtils.clamp(readByte(), 0, 88);
+        prediction[0].step = Prediction.STEP_TABLE[prediction[0].stepIndex];
+        final int skipValue = readByte();
         if (skipValue < 0) {
             return ImaAdpcmDecoder.END_OF_STREAM;
         }
         preambleBytes += 4;
 
         // READ RIGHT CHANNEL PREAMBLE
-        if (this.stereo) {
-            this.prediction[1].predictor = (short) (this.readByte() | this.readByte() << 8);
-            this.prediction[1].stepIndex = MathUtils.clamp(this.readByte(), 0, 88);
-            this.prediction[1].step = Prediction.STEP_TABLE[this.prediction[1].stepIndex];
-            final int skipValue2 = this.readByte();
-            if (skipValue2 < 0 || this.bytesRemaining < 0) {
+        if (stereo) {
+            prediction[1].predictor = (short) (readByte() | readByte() << 8);
+            prediction[1].stepIndex = MathUtils.clamp(readByte(), 0, 88);
+            prediction[1].step = Prediction.STEP_TABLE[prediction[1].stepIndex];
+            final int skipValue2 = readByte();
+            if (skipValue2 < 0 || bytesRemaining < 0) {
                 return ImaAdpcmDecoder.END_OF_STREAM;
             }
             preambleBytes += 4;
         }
 
         // DECODE BLOCK
-        this.outputSamplePosition = 0;
+        outputSamplePosition = 0;
         int outputSamples = 0;
         int byteChannelCounter = 0;
         int predictionIndex = 0;
         int outputSamplesIndexLeft = 0;
         int outputSamplesIndexRight = 2;
-        final int outputSampleStep = this.stereo ? 3 : 1;
-        for (int i = 0; i < this.blockSize - preambleBytes; i++) {
+        final int outputSampleStep = stereo ? 3 : 1;
+        for (int i = 0; i < blockSize - preambleBytes; i++) {
 
             // READ INPUT BYTE
-            final int inputByte = this.readByte();
-            if (inputByte < 0 || this.bytesRemaining < 0) {
-                this.outputSampleSize = outputSamples * 2;
+            final int inputByte = readByte();
+            if (inputByte < 0 || bytesRemaining < 0) {
+                outputSampleSize = outputSamples * 2;
                 return ImaAdpcmDecoder.END_OF_STREAM;
             }
 
             // DECODE
             final int nibble1 = inputByte & 0b1111;
             final int nibble2 = inputByte >>> 4;
-            final int sample1 = this.decodeNibble(nibble1, this.prediction[predictionIndex]);
-            final int sample2 = this.decodeNibble(nibble2, this.prediction[predictionIndex]);
+            final int sample1 = decodeNibble(nibble1, prediction[predictionIndex]);
+            final int sample2 = decodeNibble(nibble2, prediction[predictionIndex]);
             final byte outputSample1Byte1 = (byte) sample1;
             final byte outputSample1Byte2 = (byte) (sample1 >>> 8);
             final byte outputSample2Byte1 = (byte) sample2;
@@ -147,7 +147,7 @@ public class ImaAdpcmDecoder implements WavDecoder {
             outputSamples += 2;
 
             // SETUP PREDICTION FOR NEXT BYTE
-            if (this.stereo) {
+            if (stereo) {
                 byteChannelCounter += 1;
                 if (byteChannelCounter >= 4) {
                     byteChannelCounter = 0;
@@ -157,8 +157,8 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
         }
 
-        this.outputSampleSize = outputSamples * 2;
-        return this.outputSampleSize;
+        outputSampleSize = outputSamples * 2;
+        return outputSampleSize;
     }
 
 
@@ -193,8 +193,8 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
 
     private int readByte() throws IOException {
-        this.bytesRemaining -= 1;
-        return this.stream.read();
+        bytesRemaining -= 1;
+        return stream.read();
     }
 
 
@@ -212,19 +212,19 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
@@ -236,13 +236,13 @@ public class ImaAdpcmDecoder implements WavDecoder {
 
     @Override
     public long bytesRemaining() {
-        return this.outputBytesRemaining;
+        return outputBytesRemaining;
     }
 
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 

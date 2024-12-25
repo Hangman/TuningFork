@@ -48,12 +48,12 @@ public class CaptureDevice implements Disposable {
         } else {
             this.logger = logger;
         }
-        this.errorLogger = new ErrorLogger(this.getClass(), logger);
-        this.alDeviceHandle = handle;
+        errorLogger = new ErrorLogger(this.getClass(), logger);
+        alDeviceHandle = handle;
         this.format = format;
         this.frequency = frequency;
         this.bufferSize = bufferSize;
-        this.alDeviceName = ALC10.alcGetString(handle, ALC11.ALC_CAPTURE_DEVICE_SPECIFIER);
+        alDeviceName = ALC10.alcGetString(handle, ALC11.ALC_CAPTURE_DEVICE_SPECIFIER);
     }
 
 
@@ -61,9 +61,9 @@ public class CaptureDevice implements Disposable {
      * Starts the capture. If there were previously recorded samples, they will be overwritten by this method.
      */
     public void startCapture() {
-        ALC11.alcCaptureStart(this.alDeviceHandle);
-        if (!this.errorLogger.checkLogAlcError(this.alDeviceHandle, "failed to start capturing")) {
-            this.logger.trace(this.getClass(), "capturing started");
+        ALC11.alcCaptureStart(alDeviceHandle);
+        if (!errorLogger.checkLogAlcError(alDeviceHandle, "failed to start capturing")) {
+            logger.trace(this.getClass(), "capturing started");
         }
     }
 
@@ -74,7 +74,7 @@ public class CaptureDevice implements Disposable {
      * @return number of samples
      */
     public int capturedSamples() {
-        return ALC10.alcGetInteger(this.alDeviceHandle, ALC11.ALC_CAPTURE_SAMPLES);
+        return ALC10.alcGetInteger(alDeviceHandle, ALC11.ALC_CAPTURE_SAMPLES);
     }
 
 
@@ -85,7 +85,7 @@ public class CaptureDevice implements Disposable {
      * @param samples number of samples to fetch
      */
     public void fetch8BitSamples(ByteBuffer buffer, int samples) {
-        ALC11.alcCaptureSamples(this.alDeviceHandle, buffer, samples);
+        ALC11.alcCaptureSamples(alDeviceHandle, buffer, samples);
     }
 
 
@@ -96,7 +96,7 @@ public class CaptureDevice implements Disposable {
      * @param samples number of samples to fetch
      */
     public void fetch16BitSamples(short[] buffer, int samples) {
-        ALC11.alcCaptureSamples(this.alDeviceHandle, buffer, samples);
+        ALC11.alcCaptureSamples(alDeviceHandle, buffer, samples);
     }
 
 
@@ -107,7 +107,7 @@ public class CaptureDevice implements Disposable {
      * @param samples number of samples to fetch
      */
     public void fetch16BitSamples(ShortBuffer buffer, int samples) {
-        ALC11.alcCaptureSamples(this.alDeviceHandle, buffer, samples);
+        ALC11.alcCaptureSamples(alDeviceHandle, buffer, samples);
     }
 
 
@@ -115,9 +115,9 @@ public class CaptureDevice implements Disposable {
      * Stops the capture.
      */
     public void stopCapture() {
-        ALC11.alcCaptureStop(this.alDeviceHandle);
-        if (!this.errorLogger.checkLogAlcError(this.alDeviceHandle, "failed to stop capturing")) {
-            this.logger.trace(this.getClass(), "capturing stopped");
+        ALC11.alcCaptureStop(alDeviceHandle);
+        if (!errorLogger.checkLogAlcError(alDeviceHandle, "failed to stop capturing")) {
+            logger.trace(this.getClass(), "capturing stopped");
         }
     }
 
@@ -128,7 +128,7 @@ public class CaptureDevice implements Disposable {
      * @return the device name
      */
     public String getDeviceName() {
-        return this.alDeviceName;
+        return alDeviceName;
     }
 
 
@@ -138,7 +138,7 @@ public class CaptureDevice implements Disposable {
      * @return the format
      */
     public PcmFormat getPcmFormat() {
-        return this.format;
+        return format;
     }
 
 
@@ -148,7 +148,7 @@ public class CaptureDevice implements Disposable {
      * @return the frequency
      */
     public int getFrequency() {
-        return this.frequency;
+        return frequency;
     }
 
 
@@ -158,14 +158,14 @@ public class CaptureDevice implements Disposable {
      * @return the buffer size
      */
     public int getBufferSize() {
-        return this.bufferSize;
+        return bufferSize;
     }
 
 
     @Override
     public void dispose() {
-        if (!ALC11.alcCaptureCloseDevice(this.alDeviceHandle)) {
-            this.logger.error(this.getClass(), "Failed to dispose the CaptureDevice");
+        if (!ALC11.alcCaptureCloseDevice(alDeviceHandle)) {
+            logger.error(this.getClass(), "Failed to dispose the CaptureDevice");
         }
     }
 
@@ -210,8 +210,8 @@ public class CaptureDevice implements Disposable {
     public static CaptureDevice open(CaptureConfig config) {
         CaptureDevice captureDevice = null;
 
-        final long deviceHandle = ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(), config.getPcmFormat().getAlId(),
-                config.getBufferSize());
+        final long deviceHandle =
+                ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(), config.getPcmFormat().getAlId(), config.getBufferSize());
         if (deviceHandle != 0L) {
             captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(), config.getBufferSize(), config.getLogger());
         }

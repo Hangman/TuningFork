@@ -29,14 +29,14 @@ public class EightBitTest extends ApplicationAdapter {
     @Override
     public void create() {
         // before we can do anything, we need to initialize our Audio instance
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         // load a sound
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_stereo.wav"));
-        System.out.println("Sound duration: " + this.sound.getDuration() + "s");
+        sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_stereo.wav"));
+        System.out.println("Sound duration: " + sound.getDuration() + "s");
 
         // play the sound
-        this.sound.play();
+        sound.play();
     }
 
 
@@ -48,10 +48,10 @@ public class EightBitTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

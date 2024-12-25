@@ -33,21 +33,21 @@ public class MsAdpcmWavStereoTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.sound = WaveLoader.load(Gdx.files.internal(MsAdpcmWavStereoTest.SOUND_PATH));
-        this.bufferedSource = this.audio.obtainSource(this.sound);
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(MsAdpcmWavStereoTest.SOUND_PATH));
-        this.bufferedSource.setLooping(true);
-        this.streamedSource.setLooping(true);
-        this.bufferedSource.play();
+        audio = Audio.init();
+        sound = WaveLoader.load(Gdx.files.internal(MsAdpcmWavStereoTest.SOUND_PATH));
+        bufferedSource = audio.obtainSource(sound);
+        streamedSource = new StreamedSoundSource(Gdx.files.internal(MsAdpcmWavStereoTest.SOUND_PATH));
+        bufferedSource.setLooping(true);
+        streamedSource.setLooping(true);
+        bufferedSource.play();
         try {
             Thread.sleep(50);
         } catch (final InterruptedException e) {
             // ignore
         }
-        this.streamedSource.play();
-        System.out.println("buffered duration: " + this.sound.getDuration() + "s");
-        System.out.println("streamed duration: " + this.streamedSource.getDuration() + "s");
+        streamedSource.play();
+        System.out.println("buffered duration: " + sound.getDuration() + "s");
+        System.out.println("streamed duration: " + streamedSource.getDuration() + "s");
     }
 
 
@@ -59,8 +59,8 @@ public class MsAdpcmWavStereoTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

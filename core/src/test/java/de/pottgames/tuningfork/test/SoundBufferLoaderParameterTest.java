@@ -36,48 +36,48 @@ public class SoundBufferLoaderParameterTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.assetManager = new AssetManager();
+        audio = Audio.init();
+        assetManager = new AssetManager();
         final FileHandleResolver resolver = new InternalFileHandleResolver();
-        this.assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
+        assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
 
         // queue fordward playback asset for loading as usual
-        this.assetManager.load("numbers.wav", SoundBuffer.class);
+        assetManager.load("numbers.wav", SoundBuffer.class);
 
         // queue reverse playback asset for loading
         // it's the same file so we need to trick the AssetManager into thinking it's a different file
         final SoundBufferLoaderParameter parameter = new SoundBufferLoaderParameter();
         parameter.reverse = true;
         parameter.file = Gdx.files.internal("numbers.wav");
-        this.assetManager.load("numerinos_wavus", SoundBuffer.class, parameter);
+        assetManager.load("numerinos_wavus", SoundBuffer.class, parameter);
 
         // we don't load asynchronously because it's just a test
-        this.assetManager.finishLoading();
+        assetManager.finishLoading();
 
         // fetch assets
-        this.sound = this.assetManager.get("numbers.wav", SoundBuffer.class);
-        this.soundReverse = this.assetManager.get("numerinos_wavus", SoundBuffer.class);
+        sound = assetManager.get("numbers.wav", SoundBuffer.class);
+        soundReverse = assetManager.get("numerinos_wavus", SoundBuffer.class);
 
-        this.source = this.audio.obtainSource(this.sound);
-        this.source.play();
+        source = audio.obtainSource(sound);
+        source.play();
     }
 
 
     @Override
     public void render() {
-        if (!this.source.isPlaying()) {
-            final SoundBuffer playedSound = this.source.getBuffer();
-            this.source.free();
-            this.source = this.audio.obtainSource(playedSound == this.sound ? this.soundReverse : this.sound);
-            this.source.play();
+        if (!source.isPlaying()) {
+            final SoundBuffer playedSound = source.getBuffer();
+            source.free();
+            source = audio.obtainSource(playedSound == sound ? soundReverse : sound);
+            source.play();
         }
     }
 
 
     @Override
     public void dispose() {
-        this.assetManager.dispose();
-        this.audio.dispose();
+        assetManager.dispose();
+        audio.dispose();
     }
 
 

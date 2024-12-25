@@ -36,7 +36,7 @@ public class SoundLoaderUnitTest {
     @BeforeAll
     public void setup() {
         Gdx.files = new Lwjgl3Files(); // hack setup gdx because we only need Gdx.files in order to run properly
-        this.audio = Audio.init(new AudioConfig().setLogger(new ConsoleLogger(LogLevel.INFO_WARN_ERROR)));
+        audio = Audio.init(new AudioConfig().setLogger(new ConsoleLogger(LogLevel.INFO_WARN_ERROR)));
     }
 
 
@@ -82,7 +82,7 @@ public class SoundLoaderUnitTest {
 
     @AfterAll
     public void cleanup() {
-        this.audio.dispose();
+        audio.dispose();
     }
 
 }

@@ -100,12 +100,12 @@ public class SongSettings {
      */
     public float fadeVolume(FadeType type, float alpha) {
         if (type == FadeType.IN) {
-            return MathUtils.clamp(this.fadeInCurve.apply(alpha) * this.volume, 0f, 1f);
+            return MathUtils.clamp(fadeInCurve.apply(alpha) * volume, 0f, 1f);
         }
         if (type == FadeType.OUT) {
-            return MathUtils.clamp(this.fadeOutCurve.apply(alpha) * this.volume, 0f, 1f);
+            return MathUtils.clamp(fadeOutCurve.apply(alpha) * volume, 0f, 1f);
         }
-        return this.volume;
+        return volume;
     }
 
 
@@ -115,7 +115,7 @@ public class SongSettings {
      * @return fade-in duration in seconds
      */
     public float getFadeInDuration() {
-        return this.fadeInDuration;
+        return fadeInDuration;
     }
 
 
@@ -125,7 +125,7 @@ public class SongSettings {
      * @return fade-out duration in seconds
      */
     public float getFadeOutDuration() {
-        return this.fadeOutDuration;
+        return fadeOutDuration;
     }
 
 
@@ -135,7 +135,7 @@ public class SongSettings {
      * @return fade-in curve
      */
     public Interpolation getFadeInCurve() {
-        return this.fadeInCurve;
+        return fadeInCurve;
     }
 
 
@@ -145,7 +145,7 @@ public class SongSettings {
      * @return fade-out curve
      */
     public Interpolation getFadeOutCurve() {
-        return this.fadeOutCurve;
+        return fadeOutCurve;
     }
 
 
@@ -155,7 +155,7 @@ public class SongSettings {
      * @return volume, ranging from 0-1
      */
     public float getVolume() {
-        return this.volume;
+        return volume;
     }
 
 
@@ -182,7 +182,7 @@ public class SongSettings {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.fadeInCurve, this.fadeInDuration, this.fadeOutCurve, this.fadeOutDuration, this.volume);
+        return Objects.hash(fadeInCurve, fadeInDuration, fadeOutCurve, fadeOutDuration, volume);
     }
 
 
@@ -198,17 +198,16 @@ public class SongSettings {
             return false;
         }
         final SongSettings other = (SongSettings) obj;
-        return Objects.equals(this.fadeInCurve, other.fadeInCurve) && Float.floatToIntBits(this.fadeInDuration) == Float.floatToIntBits(other.fadeInDuration)
-                && Objects.equals(this.fadeOutCurve, other.fadeOutCurve)
-                && Float.floatToIntBits(this.fadeOutDuration) == Float.floatToIntBits(other.fadeOutDuration)
-                && Float.floatToIntBits(this.volume) == Float.floatToIntBits(other.volume);
+        return Objects.equals(fadeInCurve, other.fadeInCurve) && Float.floatToIntBits(fadeInDuration) == Float.floatToIntBits(other.fadeInDuration)
+                && Objects.equals(fadeOutCurve, other.fadeOutCurve) && Float.floatToIntBits(fadeOutDuration) == Float.floatToIntBits(other.fadeOutDuration)
+                && Float.floatToIntBits(volume) == Float.floatToIntBits(other.volume);
     }
 
 
     @Override
     public String toString() {
-        return "SongSettings [fadeInDuration=" + this.fadeInDuration + ", fadeOutDuration=" + this.fadeOutDuration + ", fadeInCurve=" + this.fadeInCurve
-                + ", fadeOutCurve=" + this.fadeOutCurve + ", volume=" + this.volume + "]";
+        return "SongSettings [fadeInDuration=" + fadeInDuration + ", fadeOutDuration=" + fadeOutDuration + ", fadeInCurve=" + fadeInCurve + ", fadeOutCurve="
+                + fadeOutCurve + ", volume=" + volume + "]";
     }
 
 }

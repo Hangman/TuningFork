@@ -118,18 +118,18 @@ public class Chorus extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_CHORUS);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_WAVEFORM, this.waveForm);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_PHASE, this.phase);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_RATE, this.rate);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DEPTH, this.depth);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_FEEDBACK, this.feedback);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DELAY, this.delay);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_WAVEFORM, waveForm);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_PHASE, phase);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_RATE, rate);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DEPTH, depth);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_FEEDBACK, feedback);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DELAY, delay);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.delay, this.depth, this.feedback, this.phase, this.rate, this.waveForm);
+        return Objects.hash(delay, depth, feedback, phase, rate, waveForm);
     }
 
 
@@ -145,16 +145,16 @@ public class Chorus extends SoundEffectData {
             return false;
         }
         final Chorus other = (Chorus) obj;
-        return Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(this.depth) == Float.floatToIntBits(other.depth)
-                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback) && this.phase == other.phase
-                && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate) && this.waveForm == other.waveForm;
+        return Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(depth) == Float.floatToIntBits(other.depth)
+                && Float.floatToIntBits(feedback) == Float.floatToIntBits(other.feedback) && phase == other.phase
+                && Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) && waveForm == other.waveForm;
     }
 
 
     @Override
     public String toString() {
-        return "Chorus [waveForm=" + this.waveForm + ", phase=" + this.phase + ", rate=" + this.rate + ", depth=" + this.depth + ", feedback=" + this.feedback
-                + ", delay=" + this.delay + "]";
+        return "Chorus [waveForm=" + waveForm + ", phase=" + phase + ", rate=" + rate + ", depth=" + depth + ", feedback=" + feedback + ", delay=" + delay
+                + "]";
     }
 
 }

@@ -72,7 +72,7 @@ public class SongMeta {
      * @return the artist
      */
     public String getArtist() {
-        return this.artist;
+        return artist;
     }
 
 
@@ -82,7 +82,7 @@ public class SongMeta {
      * @return the title
      */
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
 
@@ -92,7 +92,7 @@ public class SongMeta {
      * @return the album
      */
     public String getAlbum() {
-        return this.album;
+        return album;
     }
 
 
@@ -105,10 +105,10 @@ public class SongMeta {
      * @return the SongMeta for chaining
      */
     public SongMeta addAttribute(Object key, Object value) {
-        if (this.attributes == null) {
-            this.attributes = new ObjectMap<>();
+        if (attributes == null) {
+            attributes = new ObjectMap<>();
         }
-        this.attributes.put(key, value);
+        attributes.put(key, value);
         return this;
     }
 
@@ -121,16 +121,16 @@ public class SongMeta {
      * @return value
      */
     public Object getAttribute(Object key) {
-        if (this.attributes == null) {
+        if (attributes == null) {
             return null;
         }
-        return this.attributes.get(key);
+        return attributes.get(key);
     }
 
 
     @Override
     public String toString() {
-        return "SongMeta [artist=" + this.artist + ", title=" + this.title + ", album=" + this.album + ", attributes=" + this.attributes + "]";
+        return "SongMeta [artist=" + artist + ", title=" + title + ", album=" + album + ", attributes=" + attributes + "]";
     }
 
 }

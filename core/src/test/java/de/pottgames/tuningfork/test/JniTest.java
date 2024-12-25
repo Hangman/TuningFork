@@ -16,22 +16,22 @@ public class JniTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         // load via java decoder
         final long javaStartTime = System.nanoTime();
-        this.sound = WaveLoader.load(Gdx.files.internal("ima_adpcm_stereo.wav"), true);
+        sound = WaveLoader.load(Gdx.files.internal("ima_adpcm_stereo.wav"), true);
         final long javaEndTime = System.nanoTime();
-        this.sound.dispose();
+        sound.dispose();
         System.out.println("java decoder load time: " + (javaEndTime - javaStartTime) / 1000 / 1000 + " ms");
 
         // load via rust decoder
         final long rustStartTime = System.nanoTime();
-        this.sound = WaveLoader.load(Gdx.files.internal("ima_adpcm_stereo.wav"), false);
+        sound = WaveLoader.load(Gdx.files.internal("ima_adpcm_stereo.wav"), false);
         final long rustEndTime = System.nanoTime();
         System.out.println("rust decoder load time: " + (rustEndTime - rustStartTime) / 1000 / 1000 + " ms");
 
-        this.sound.play();
+        sound.play();
     }
 
 
@@ -43,8 +43,8 @@ public class JniTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

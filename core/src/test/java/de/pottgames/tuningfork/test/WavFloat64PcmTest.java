@@ -32,21 +32,21 @@ public class WavFloat64PcmTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.sound = WaveLoader.load(Gdx.files.internal(WavFloat64PcmTest.SOUND_PATH));
-        final SoundSource bufferedSource = this.audio.obtainSource(this.sound);
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(WavFloat64PcmTest.SOUND_PATH));
+        audio = Audio.init();
+        sound = WaveLoader.load(Gdx.files.internal(WavFloat64PcmTest.SOUND_PATH));
+        final SoundSource bufferedSource = audio.obtainSource(sound);
+        streamedSource = new StreamedSoundSource(Gdx.files.internal(WavFloat64PcmTest.SOUND_PATH));
         bufferedSource.setLooping(true);
-        this.streamedSource.setLooping(true);
+        streamedSource.setLooping(true);
         bufferedSource.play();
         try {
             Thread.sleep(200);
         } catch (final InterruptedException e) {
             // ignore
         }
-        this.streamedSource.play();
-        System.out.println("buffered duration: " + this.sound.getDuration() + "s");
-        System.out.println("streamed duration: " + this.streamedSource.getDuration() + "s");
+        streamedSource.play();
+        System.out.println("buffered duration: " + sound.getDuration() + "s");
+        System.out.println("streamed duration: " + streamedSource.getDuration() + "s");
     }
 
 
@@ -58,11 +58,11 @@ public class WavFloat64PcmTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.streamedSource.dispose();
+        sound.dispose();
+        streamedSource.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

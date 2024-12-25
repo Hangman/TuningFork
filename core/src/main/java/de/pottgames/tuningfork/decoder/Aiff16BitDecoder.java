@@ -34,7 +34,7 @@ public class Aiff16BitDecoder implements AiffDecoder {
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.inputBytesRemaining = streamLength;
+        inputBytesRemaining = streamLength;
     }
 
 
@@ -42,27 +42,27 @@ public class Aiff16BitDecoder implements AiffDecoder {
     public int read(byte[] output) throws IOException {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
 
-        if (this.inputBytesRemaining <= 0) {
+        if (inputBytesRemaining <= 0) {
             return -1;
         }
 
         int writeOffset = 0;
 
         while (writeOffset < output.length) {
-            if (this.bufferOffset >= this.bufferLength - 1) {
-                this.bufferLength = this.fillBuffer();
-                if (this.bufferLength < 2) {
+            if (bufferOffset >= bufferLength - 1) {
+                bufferLength = fillBuffer();
+                if (bufferLength < 2) {
                     return writeOffset == 0 ? -1 : writeOffset;
                 }
             }
 
-            while (this.bufferOffset + 1 < this.bufferLength && writeOffset < output.length - 1) {
-                final byte byte1 = this.buffer[this.bufferOffset++];
-                final byte byte2 = this.buffer[this.bufferOffset++];
+            while (bufferOffset + 1 < bufferLength && writeOffset < output.length - 1) {
+                final byte byte1 = buffer[bufferOffset++];
+                final byte byte2 = buffer[bufferOffset++];
                 output[writeOffset++] = byte2;
                 output[writeOffset++] = byte1;
-                this.inputBytesRemaining -= 2;
-                if (this.inputBytesRemaining <= 0) {
+                inputBytesRemaining -= 2;
+                if (inputBytesRemaining <= 0) {
                     return writeOffset;
                 }
             }
@@ -73,14 +73,14 @@ public class Aiff16BitDecoder implements AiffDecoder {
 
 
     private int fillBuffer() throws IOException {
-        this.bufferOffset = 0;
-        return this.stream.read(this.buffer, 0, this.buffer.length);
+        bufferOffset = 0;
+        return stream.read(buffer, 0, buffer.length);
     }
 
 
     @Override
     public int inputBitsPerSample() {
-        return this.bitsPerSample;
+        return bitsPerSample;
     }
 
 
@@ -98,7 +98,7 @@ public class Aiff16BitDecoder implements AiffDecoder {
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 }

@@ -42,14 +42,14 @@ public class ReadableSoundBufferLoader extends AsynchronousAssetLoader<ReadableS
 
 
     private void reset() {
-        this.asset = null;
+        asset = null;
     }
 
 
     @SuppressWarnings("rawtypes")
     @Override
     public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, ReadableSoundBufferLoaderParameter parameter) {
-        return this.dependencies;
+        return dependencies;
     }
 
 
@@ -71,22 +71,22 @@ public class ReadableSoundBufferLoader extends AsynchronousAssetLoader<ReadableS
         }
         switch (type) {
             case FLAC:
-                this.asset = reverse ? FlacLoader.loadReadableReverse(file) : FlacLoader.loadReadable(file);
+                asset = reverse ? FlacLoader.loadReadableReverse(file) : FlacLoader.loadReadable(file);
                 break;
             case OGG:
-                this.asset = reverse ? OggLoader.loadReadableReverse(file) : OggLoader.loadReadable(file);
+                asset = reverse ? OggLoader.loadReadableReverse(file) : OggLoader.loadReadable(file);
                 break;
             case WAV:
-                this.asset = reverse ? WaveLoader.loadReadableReverse(file) : WaveLoader.loadReadable(file);
+                asset = reverse ? WaveLoader.loadReadableReverse(file) : WaveLoader.loadReadable(file);
                 break;
             case MP3:
-                this.asset = reverse ? Mp3Loader.loadReadableReverse(file) : Mp3Loader.loadReadable(file);
+                asset = reverse ? Mp3Loader.loadReadableReverse(file) : Mp3Loader.loadReadable(file);
                 break;
             case AIFF:
-                this.asset = reverse ? AiffLoader.loadReadableReverse(file) : AiffLoader.loadReadable(file);
+                asset = reverse ? AiffLoader.loadReadableReverse(file) : AiffLoader.loadReadable(file);
                 break;
             case QOA:
-                this.asset = reverse ? QoaLoader.loadReadableReverse(file) : QoaLoader.loadReadable(file);
+                asset = reverse ? QoaLoader.loadReadableReverse(file) : QoaLoader.loadReadable(file);
                 break;
         }
     }
@@ -94,8 +94,8 @@ public class ReadableSoundBufferLoader extends AsynchronousAssetLoader<ReadableS
 
     @Override
     public ReadableSoundBuffer loadSync(AssetManager manager, String fileName, FileHandle file, ReadableSoundBufferLoaderParameter parameter) {
-        final ReadableSoundBuffer result = this.asset;
-        this.reset();
+        final ReadableSoundBuffer result = asset;
+        reset();
         return result;
     }
 

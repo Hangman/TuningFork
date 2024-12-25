@@ -37,22 +37,22 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
     @Override
     public void create() {
         Gdx.input.setInputProcessor(this);
-        this.audio = Audio.init();
-        final AudioDevice device = this.audio.getDevice();
+        audio = Audio.init();
+        final AudioDevice device = audio.getDevice();
         System.out.println("default resampler: " + device.getDefaultResampler());
-        this.resamplers = device.getAvailableResamplers();
-        for (int i = 0; i < this.resamplers.size; i++) {
-            System.out.println("Press " + i + " to set the " + this.resamplers.get(i) + " resampler");
+        resamplers = device.getAvailableResamplers();
+        for (int i = 0; i < resamplers.size; i++) {
+            System.out.println("Press " + i + " to set the " + resamplers.get(i) + " resampler");
         }
         System.out.println("Press A to play the BufferedSoundSource");
         System.out.println("Press B to play the StreamedSoundSource");
 
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
-        this.streamedSource.setLooping(true);
+        streamedSource = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
+        streamedSource.setLooping(true);
 
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
-        this.soundSource = this.audio.obtainSource(this.sound);
-        this.soundSource.setLooping(true);
+        sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
+        soundSource = audio.obtainSource(sound);
+        soundSource.setLooping(true);
     }
 
 
@@ -67,12 +67,12 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
         int resamplerIndex = -1;
         switch (keycode) {
             case Input.Keys.A:
-                this.soundSource.play();
-                this.streamedSource.stop();
+                soundSource.play();
+                streamedSource.stop();
                 break;
             case Input.Keys.B:
-                this.soundSource.stop();
-                this.streamedSource.play();
+                soundSource.stop();
+                streamedSource.play();
                 break;
             case Input.Keys.NUM_0:
             case Input.Keys.NUMPAD_0:
@@ -118,9 +118,9 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
                 return false;
         }
 
-        if (resamplerIndex >= 0 && resamplerIndex < this.resamplers.size) {
-            final String resampler = this.resamplers.get(resamplerIndex);
-            this.audio.setDefaultResampler(resampler);
+        if (resamplerIndex >= 0 && resamplerIndex < resamplers.size) {
+            final String resampler = resamplers.get(resamplerIndex);
+            audio.setDefaultResampler(resampler);
             System.out.println("resampler set to: " + resampler);
         }
 
@@ -130,8 +130,8 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

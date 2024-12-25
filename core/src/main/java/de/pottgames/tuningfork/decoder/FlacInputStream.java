@@ -57,10 +57,10 @@ public class FlacInputStream implements AudioStream {
      * @param stream the input stream
      */
     public FlacInputStream(InputStream stream) {
-        this.fileHandle = null;
+        fileHandle = null;
         try {
-            this.decoder = new FlacDecoder(stream);
-            while (this.decoder.readAndHandleMetadataBlock() != null) {
+            decoder = new FlacDecoder(stream);
+            while (decoder.readAndHandleMetadataBlock() != null) {
                 // read all meta data blocks
             }
         } catch (final IOException e) {
@@ -68,7 +68,7 @@ public class FlacInputStream implements AudioStream {
             throw new TuningForkRuntimeException(e);
         }
 
-        this.initialize();
+        initialize();
     }
 
 
@@ -78,10 +78,10 @@ public class FlacInputStream implements AudioStream {
      * @param file the file handle
      */
     public FlacInputStream(FileHandle file) {
-        this.fileHandle = file;
+        fileHandle = file;
         try {
-            this.decoder = new FlacDecoder(file.read());
-            while (this.decoder.readAndHandleMetadataBlock() != null) {
+            decoder = new FlacDecoder(file.read());
+            while (decoder.readAndHandleMetadataBlock() != null) {
                 // read all meta data blocks
             }
         } catch (final IOException e) {
@@ -89,77 +89,77 @@ public class FlacInputStream implements AudioStream {
             throw new TuningForkRuntimeException(e);
         }
 
-        this.initialize();
+        initialize();
     }
 
 
     private void initialize() {
-        if (this.decoder.streamInfo == null) {
+        if (decoder.streamInfo == null) {
             throw new TuningForkRuntimeException("Missing StreamInfo in flac file.");
         }
-        final int numChannels = this.decoder.streamInfo.numChannels;
+        final int numChannels = decoder.streamInfo.numChannels;
         if (!PcmFormat.isSupportedChannelCount(numChannels)) {
             throw new TuningForkRuntimeException("Unsupported number of channels in flac file. Must be 1, 2, 4, 6, 7 or 8 but is: " + numChannels);
         }
-        final int bitsPerSample = this.decoder.streamInfo.sampleDepth;
+        final int bitsPerSample = decoder.streamInfo.sampleDepth;
         if (bitsPerSample != 8 && bitsPerSample != 16) {
             throw new TuningForkRuntimeException("Unsupported bits per sample in flac file, only 8 and 16 Bit is supported.");
         }
-        if (this.decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * numChannels) {
+        if (decoder.streamInfo.maxBlockSize > StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * numChannels) {
             throw new TuningForkRuntimeException(
                     "Flac file exceeds maximum supported block size by TuningFork which is: " + StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL + " per channel");
         }
 
-        this.sampleBuffer = new int[this.decoder.streamInfo.numChannels][65536];
-        this.bytesPerSample = this.decoder.streamInfo.sampleDepth / 8;
+        sampleBuffer = new int[decoder.streamInfo.numChannels][65536];
+        bytesPerSample = decoder.streamInfo.sampleDepth / 8;
 
-        this.readBlock();
+        readBlock();
 
-        this.duration = (float) this.totalSamples() / this.getSampleRate();
+        duration = (float) totalSamples() / getSampleRate();
     }
 
 
     @Override
     public float getDuration() {
-        return this.duration;
+        return duration;
     }
 
 
     @Override
     public AudioStream reset() {
-        if (this.fileHandle == null) {
+        if (fileHandle == null) {
             throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
         }
         StreamUtils.closeQuietly(this);
-        return new FlacInputStream(this.fileHandle);
+        return new FlacInputStream(fileHandle);
     }
 
 
     @Override
     public int read(byte[] bytes) {
-        if (this.sampleBufferBlockSize == 0) {
+        if (sampleBufferBlockSize == 0) {
             return -1;
         }
 
         int availableBytes = bytes.length;
         int bytesIndex = 0;
 
-        while (availableBytes >= this.sampleBufferBlockSize * this.decoder.streamInfo.numChannels * this.bytesPerSample) {
-            for (int i = 0; i < this.sampleBufferBlockSize; i++) {
-                for (int channelIndex = 0; channelIndex < this.decoder.streamInfo.numChannels; channelIndex++) {
-                    int sample = this.sampleBuffer[channelIndex][i];
-                    if (this.bytesPerSample == 1) {
+        while (availableBytes >= sampleBufferBlockSize * decoder.streamInfo.numChannels * bytesPerSample) {
+            for (int i = 0; i < sampleBufferBlockSize; i++) {
+                for (int channelIndex = 0; channelIndex < decoder.streamInfo.numChannels; channelIndex++) {
+                    int sample = sampleBuffer[channelIndex][i];
+                    if (bytesPerSample == 1) {
                         sample += 128; // because OpenAL expects an unsigned byte
                     }
-                    for (int j = 0; j < this.bytesPerSample; j++, bytesIndex++) {
+                    for (int j = 0; j < bytesPerSample; j++, bytesIndex++) {
                         bytes[bytesIndex] = (byte) (sample >>> (j << 3));
                     }
                 }
             }
 
-            availableBytes -= this.sampleBufferBlockSize * this.decoder.streamInfo.numChannels * this.bytesPerSample;
-            this.readBlock();
-            if (this.sampleBufferBlockSize == 0) {
+            availableBytes -= sampleBufferBlockSize * decoder.streamInfo.numChannels * bytesPerSample;
+            readBlock();
+            if (sampleBufferBlockSize == 0) {
                 break;
             }
         }
@@ -170,7 +170,7 @@ public class FlacInputStream implements AudioStream {
 
     private void readBlock() {
         try {
-            this.sampleBufferBlockSize = this.decoder.readAudioBlock(this.sampleBuffer, 0);
+            sampleBufferBlockSize = decoder.readAudioBlock(sampleBuffer, 0);
         } catch (final IOException e) {
             throw new TuningForkRuntimeException(e);
         }
@@ -178,30 +178,30 @@ public class FlacInputStream implements AudioStream {
 
 
     public long totalSamples() {
-        return this.decoder.streamInfo.numSamples;
+        return decoder.streamInfo.numSamples;
     }
 
 
     @Override
     public int getChannels() {
-        return this.decoder.streamInfo.numChannels;
+        return decoder.streamInfo.numChannels;
     }
 
 
     @Override
     public int getSampleRate() {
-        return this.decoder.streamInfo.sampleRate;
+        return decoder.streamInfo.sampleRate;
     }
 
 
     @Override
     public int getBitsPerSample() {
-        return this.decoder.streamInfo.sampleDepth;
+        return decoder.streamInfo.sampleDepth;
     }
 
 
     public int getBytesPerSample() {
-        return this.bytesPerSample;
+        return bytesPerSample;
     }
 
 
@@ -213,16 +213,16 @@ public class FlacInputStream implements AudioStream {
 
     @Override
     public boolean isClosed() {
-        return this.closed;
+        return closed;
     }
 
 
     @Override
     public void close() throws IOException {
         try {
-            this.decoder.close();
+            decoder.close();
         } finally {
-            this.closed = true;
+            closed = true;
         }
     }
 

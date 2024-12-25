@@ -28,24 +28,24 @@ public class Mp3InputStream implements AudioStream {
 
 
     public Mp3InputStream(FileHandle file) {
-        this.init(file);
+        init(file);
     }
 
 
     protected void init(FileHandle file) {
         this.file = file;
-        this.bitstream = new Bitstream(file.read());
-        this.decoder = new MP3Decoder();
+        bitstream = new Bitstream(file.read());
+        decoder = new MP3Decoder();
         try {
-            final Header header = this.bitstream.readFrame();
+            final Header header = bitstream.readFrame();
             if (header == null) {
                 throw new TuningForkRuntimeException("Empty MP3");
             }
-            this.channels = header.mode() == Header.SINGLE_CHANNEL ? 1 : 2;
-            this.duration = header.total_ms((int) file.length()) / 1000f;
-            this.outputBuffer = new OutputBuffer(this.channels, false);
-            this.decoder.setOutputBuffer(this.outputBuffer);
-            this.sampleRate = header.getSampleRate();
+            channels = header.mode() == Header.SINGLE_CHANNEL ? 1 : 2;
+            duration = header.total_ms((int) file.length()) / 1000f;
+            outputBuffer = new OutputBuffer(channels, false);
+            decoder.setOutputBuffer(outputBuffer);
+            sampleRate = header.getSampleRate();
         } catch (final BitstreamException e) {
             throw new TuningForkRuntimeException("error while preloading mp3", e);
         }
@@ -58,24 +58,24 @@ public class Mp3InputStream implements AudioStream {
             int totalLength = 0;
             final int minRequiredLength = bytes.length - OutputBuffer.BUFFERSIZE * 2;
             while (totalLength <= minRequiredLength) {
-                final Header header = this.bitstream.readFrame();
+                final Header header = bitstream.readFrame();
                 if (header == null) {
                     break;
                 }
                 try {
-                    this.decoder.decodeFrame(header, this.bitstream);
+                    decoder.decodeFrame(header, bitstream);
                 } catch (final Exception ignored) {
                     // JLayer's decoder throws ArrayIndexOutOfBoundsException sometimes?!
                 }
-                this.bitstream.closeFrame();
+                bitstream.closeFrame();
 
-                final int length = this.outputBuffer.reset();
-                System.arraycopy(this.outputBuffer.getBuffer(), 0, bytes, totalLength, length);
+                final int length = outputBuffer.reset();
+                System.arraycopy(outputBuffer.getBuffer(), 0, bytes, totalLength, length);
                 totalLength += length;
             }
             return totalLength;
         } catch (final Throwable ex) {
-            this.reset();
+            reset();
             throw new TuningForkRuntimeException("Error reading audio data.", ex);
         }
     }
@@ -83,27 +83,27 @@ public class Mp3InputStream implements AudioStream {
 
     @Override
     public float getDuration() {
-        return this.duration;
+        return duration;
     }
 
 
     @Override
     public AudioStream reset() {
-        this.close();
-        this.init(this.file);
+        close();
+        init(file);
         return this;
     }
 
 
     @Override
     public int getChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int getSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
@@ -121,22 +121,22 @@ public class Mp3InputStream implements AudioStream {
 
     @Override
     public void close() {
-        if (!this.closed) {
-            this.outputBuffer = null;
-            this.decoder = null;
+        if (!closed) {
+            outputBuffer = null;
+            decoder = null;
             try {
-                this.bitstream.close();
+                bitstream.close();
             } catch (final BitstreamException e) {
                 // ignore
             }
-            this.bitstream = null;
+            bitstream = null;
         }
     }
 
 
     @Override
     public boolean isClosed() {
-        return this.closed;
+        return closed;
     }
 
 }

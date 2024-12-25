@@ -32,42 +32,42 @@ public class UpdateSoundEffectTest extends ApplicationAdapter {
     private SoundEffect effect;
     private long        tick = System.currentTimeMillis();
 
-    private SoundEffectData[] effectData      = { AutoWah.funkyBeats(), Chorus.chore(), new Compressor(), Distortion.rattle(), EaxReverb.auditorium(),
-            Echo.farAway(), new Equalizer(), Flanger.robotMetallic(), new FrequencyShifter(), PitchShifter.chipmunk(), new Reverb(), RingModulator.tremolo(),
-            new VocalMorpher() };
-    private int               effectDataIndex = this.effectData.length;
+    private SoundEffectData[] effectData      =
+            { AutoWah.funkyBeats(), Chorus.chore(), new Compressor(), Distortion.rattle(), EaxReverb.auditorium(), Echo.farAway(), new Equalizer(),
+                    Flanger.robotMetallic(), new FrequencyShifter(), PitchShifter.chipmunk(), new Reverb(), RingModulator.tremolo(), new VocalMorpher() };
+    private int               effectDataIndex = effectData.length;
 
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
-        this.source = this.audio.obtainSource(this.sound);
-        this.source.setFilter(0f, 0f);
-        this.source.setLooping(true);
-        this.source.play();
+        audio = Audio.init();
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        source = audio.obtainSource(sound);
+        source.setFilter(0f, 0f);
+        source.setLooping(true);
+        source.play();
 
-        this.effect = new SoundEffect(this.getNextEffectData());
-        this.source.attachEffect(this.effect);
+        effect = new SoundEffect(getNextEffectData());
+        source.attachEffect(effect);
     }
 
 
     @Override
     public void render() {
-        if (this.tick + 2000 < System.currentTimeMillis()) {
-            this.tick = System.currentTimeMillis();
-            final SoundEffectData data = this.getNextEffectData();
-            this.effect.updateEffect(data);
+        if (tick + 2000 < System.currentTimeMillis()) {
+            tick = System.currentTimeMillis();
+            final SoundEffectData data = getNextEffectData();
+            effect.updateEffect(data);
         }
     }
 
 
     private SoundEffectData getNextEffectData() {
-        this.effectDataIndex++;
-        if (this.effectDataIndex >= this.effectData.length) {
-            this.effectDataIndex = 0;
+        effectDataIndex++;
+        if (effectDataIndex >= effectData.length) {
+            effectDataIndex = 0;
         }
-        final SoundEffectData data = this.effectData[this.effectDataIndex];
+        final SoundEffectData data = effectData[effectDataIndex];
         System.out.println(data.getClass().toString());
         return data;
     }
@@ -75,9 +75,9 @@ public class UpdateSoundEffectTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.effect.dispose();
-        this.sound.dispose();
-        this.audio.dispose();
+        effect.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

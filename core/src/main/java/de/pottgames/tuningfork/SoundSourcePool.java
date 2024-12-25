@@ -24,26 +24,26 @@ class SoundSourcePool {
 
     SoundSourcePool(int simultaneousSources) {
         for (int i = 0; i < simultaneousSources; i++) {
-            this.sources.add(new BufferedSoundSource());
+            sources.add(new BufferedSoundSource());
         }
     }
 
 
     BufferedSoundSource findFreeSource(AudioSettings defaultSettings) {
         BufferedSoundSource result = null;
-        final int startSourceIndex = this.nextSourceIndex;
+        final int startSourceIndex = nextSourceIndex;
 
         // FIND FREE SOUND SOURCE
         while (result == null) {
-            final BufferedSoundSource candidate = this.sources.get(this.nextSourceIndex);
+            final BufferedSoundSource candidate = sources.get(nextSourceIndex);
             if (!candidate.obtained && !candidate.isPlaying()) {
                 result = candidate;
             }
-            this.nextSourceIndex++;
-            if (this.nextSourceIndex >= this.sources.size) {
-                this.nextSourceIndex = 0;
+            nextSourceIndex++;
+            if (nextSourceIndex >= sources.size) {
+                nextSourceIndex = 0;
             }
-            if (this.nextSourceIndex == startSourceIndex) {
+            if (nextSourceIndex == startSourceIndex) {
                 break;
             }
         }
@@ -51,7 +51,7 @@ class SoundSourcePool {
         // IF NO SOURCE WAS FOUND, CREATE A NEW ONE ON THE FLY
         if (result == null) {
             result = new BufferedSoundSource();
-            this.sources.add(result);
+            sources.add(result);
         }
 
         result.reset(defaultSettings);
@@ -60,7 +60,7 @@ class SoundSourcePool {
 
 
     void resumeAll() {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             if (source.isPaused()) {
                 final boolean obtainedState = source.obtained;
                 source.obtained = true;
@@ -72,7 +72,7 @@ class SoundSourcePool {
 
 
     void pauseAll() {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             if (source.isPlaying()) {
                 final boolean obtainedState = source.obtained;
                 source.obtained = true;
@@ -84,7 +84,7 @@ class SoundSourcePool {
 
 
     void stopAll() {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             final boolean obtainedState = source.obtained;
             source.obtained = true;
             source.stop();
@@ -97,28 +97,28 @@ class SoundSourcePool {
 
 
     void setResamplerByIndex(int index) {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             source.setResamplerByIndex(index);
         }
     }
 
 
     void setVirtualization(Virtualization virtualization) {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             source.setVirtualization(virtualization);
         }
     }
 
 
     void setSpatialization(Spatialization spatialization) {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             source.setSpatialization(spatialization);
         }
     }
 
 
     void onBufferDisposal(SoundBuffer buffer) {
-        for (final BufferedSoundSource source : this.sources) {
+        for (final BufferedSoundSource source : sources) {
             if (source.getBuffer() == buffer) {
                 source.obtained = true;
                 source.stop();
@@ -130,8 +130,8 @@ class SoundSourcePool {
 
 
     void dispose() {
-        this.sources.forEach(BufferedSoundSource::dispose);
-        this.sources.clear();
+        sources.forEach(BufferedSoundSource::dispose);
+        sources.clear();
     }
 
 }

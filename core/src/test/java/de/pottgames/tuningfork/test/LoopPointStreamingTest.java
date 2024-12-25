@@ -16,13 +16,13 @@ public class LoopPointStreamingTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
-        this.source = new StreamedSoundSource(Gdx.files.internal("numbers.wav"));
-        this.source.setLoopPoints(3f, 7f);
-        this.source.setLooping(true);
-        this.source.play();
-        System.out.println("Sound duration: " + this.source.getDuration() + "s");
+        source = new StreamedSoundSource(Gdx.files.internal("numbers.wav"));
+        source.setLoopPoints(3f, 7f);
+        source.setLooping(true);
+        source.play();
+        System.out.println("Sound duration: " + source.getDuration() + "s");
 
     }
 
@@ -30,20 +30,20 @@ public class LoopPointStreamingTest extends ApplicationAdapter {
     @Override
     public void render() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            this.source.setPlaybackPosition(9f);
+            source.setPlaybackPosition(9f);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            this.source.play();
+            source.play();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            this.source.setPlaybackPosition(1f);
+            source.setPlaybackPosition(1f);
         }
-        System.out.println("playback position: " + this.source.getPlaybackPosition() + "s");
+        System.out.println("playback position: " + source.getPlaybackPosition() + "s");
     }
 
 
     @Override
     public void dispose() {
-        this.source.dispose();
-        this.audio.dispose();
+        source.dispose();
+        audio.dispose();
     }
 
 

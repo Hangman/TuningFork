@@ -20,32 +20,32 @@ public class AlEvent {
 
 
     public int getEventType() {
-        return this.eventType;
+        return eventType;
     }
 
 
     public int getObject() {
-        return this.object;
+        return object;
     }
 
 
     public int getParam() {
-        return this.param;
+        return param;
     }
 
 
     public int getLength() {
-        return this.length;
+        return length;
     }
 
 
     public long getMessage() {
-        return this.message;
+        return message;
     }
 
 
     public long getUserParam() {
-        return this.userParam;
+        return userParam;
     }
 
 }

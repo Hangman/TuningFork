@@ -80,17 +80,17 @@ public class Distortion extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_DISTORTION);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EDGE, this.edge);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_GAIN, this.gain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_LOWPASS_CUTOFF, this.lowpassCutoff);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQCENTER, this.eqCenter);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQBANDWIDTH, this.eqBandwidth);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EDGE, edge);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_GAIN, gain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_LOWPASS_CUTOFF, lowpassCutoff);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQCENTER, eqCenter);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQBANDWIDTH, eqBandwidth);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.edge, this.eqBandwidth, this.eqCenter, this.gain, this.lowpassCutoff);
+        return Objects.hash(edge, eqBandwidth, eqCenter, gain, lowpassCutoff);
     }
 
 
@@ -106,18 +106,16 @@ public class Distortion extends SoundEffectData {
             return false;
         }
         final Distortion other = (Distortion) obj;
-        return Float.floatToIntBits(this.edge) == Float.floatToIntBits(other.edge)
-                && Float.floatToIntBits(this.eqBandwidth) == Float.floatToIntBits(other.eqBandwidth)
-                && Float.floatToIntBits(this.eqCenter) == Float.floatToIntBits(other.eqCenter)
-                && Float.floatToIntBits(this.gain) == Float.floatToIntBits(other.gain)
-                && Float.floatToIntBits(this.lowpassCutoff) == Float.floatToIntBits(other.lowpassCutoff);
+        return Float.floatToIntBits(edge) == Float.floatToIntBits(other.edge) && Float.floatToIntBits(eqBandwidth) == Float.floatToIntBits(other.eqBandwidth)
+                && Float.floatToIntBits(eqCenter) == Float.floatToIntBits(other.eqCenter) && Float.floatToIntBits(gain) == Float.floatToIntBits(other.gain)
+                && Float.floatToIntBits(lowpassCutoff) == Float.floatToIntBits(other.lowpassCutoff);
     }
 
 
     @Override
     public String toString() {
-        return "Distortion [edge=" + this.edge + ", gain=" + this.gain + ", lowpassCutoff=" + this.lowpassCutoff + ", eqCenter=" + this.eqCenter
-                + ", eqBandwidth=" + this.eqBandwidth + "]";
+        return "Distortion [edge=" + edge + ", gain=" + gain + ", lowpassCutoff=" + lowpassCutoff + ", eqCenter=" + eqCenter + ", eqBandwidth=" + eqBandwidth
+                + "]";
     }
 
 }

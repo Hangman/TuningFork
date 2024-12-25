@@ -3573,44 +3573,43 @@ public class EaxReverb extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DENSITY, this.density);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DIFFUSION, this.diffusion);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAIN, this.gain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAINHF, this.gainHf);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAINLF, this.gainLf);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_TIME, this.decayTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_HFRATIO, this.decayHfRatio);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_LFRATIO, this.decayLfRatio);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, this.reflectionsGain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_DELAY, this.reflectionsDelay);
-        this.reflectionsPanData[0] = this.reflectionsPan.x;
-        this.reflectionsPanData[1] = this.reflectionsPan.y;
-        this.reflectionsPanData[2] = this.reflectionsPan.z;
-        EXTEfx.alEffectfv(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN, this.reflectionsPanData);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, this.lateReverbGain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY, this.lateReverbDelay);
-        this.lateReverbPanData[0] = this.lateReverbPan.x;
-        this.lateReverbPanData[1] = this.lateReverbPan.y;
-        this.lateReverbPanData[2] = this.lateReverbPan.z;
-        EXTEfx.alEffectfv(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN, this.lateReverbPanData);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ECHO_TIME, this.echoTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ECHO_DEPTH, this.echoDepth);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_MODULATION_TIME, this.modulationTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_MODULATION_DEPTH, this.modulationDepth);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, this.airAbsorptionGainHf);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_HFREFERENCE, this.hfReference);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LFREFERENCE, this.lfReference);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, this.roomRolloffFactor);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EAXREVERB_DECAY_HFLIMIT, this.decayHfLimit ? AL10.AL_TRUE : AL10.AL_FALSE);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DENSITY, density);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DIFFUSION, diffusion);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAIN, gain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAINHF, gainHf);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAINLF, gainLf);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_TIME, decayTime);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_HFRATIO, decayHfRatio);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_LFRATIO, decayLfRatio);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, reflectionsGain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_DELAY, reflectionsDelay);
+        reflectionsPanData[0] = reflectionsPan.x;
+        reflectionsPanData[1] = reflectionsPan.y;
+        reflectionsPanData[2] = reflectionsPan.z;
+        EXTEfx.alEffectfv(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN, reflectionsPanData);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, lateReverbGain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY, lateReverbDelay);
+        lateReverbPanData[0] = lateReverbPan.x;
+        lateReverbPanData[1] = lateReverbPan.y;
+        lateReverbPanData[2] = lateReverbPan.z;
+        EXTEfx.alEffectfv(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN, lateReverbPanData);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ECHO_TIME, echoTime);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ECHO_DEPTH, echoDepth);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_MODULATION_TIME, modulationTime);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_MODULATION_DEPTH, modulationDepth);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, airAbsorptionGainHf);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_HFREFERENCE, hfReference);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LFREFERENCE, lfReference);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, roomRolloffFactor);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_EAXREVERB_DECAY_HFLIMIT, decayHfLimit ? AL10.AL_TRUE : AL10.AL_FALSE);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.airAbsorptionGainHf, this.decayHfLimit, this.decayHfRatio, this.decayLfRatio, this.decayTime, this.density, this.diffusion,
-                this.echoDepth, this.echoTime, this.gain, this.gainHf, this.gainLf, this.hfReference, this.lateReverbDelay, this.lateReverbGain,
-                this.lateReverbPan, this.lfReference, this.modulationDepth, this.modulationTime, this.reflectionsDelay, this.reflectionsGain,
-                this.reflectionsPan, this.roomRolloffFactor);
+        return Objects.hash(airAbsorptionGainHf, decayHfLimit, decayHfRatio, decayLfRatio, decayTime, density, diffusion, echoDepth, echoTime, gain, gainHf,
+                gainLf, hfReference, lateReverbDelay, lateReverbGain, lateReverbPan, lfReference, modulationDepth, modulationTime, reflectionsDelay,
+                reflectionsGain, reflectionsPan, roomRolloffFactor);
     }
 
 
@@ -3626,39 +3625,35 @@ public class EaxReverb extends SoundEffectData {
             return false;
         }
         final EaxReverb other = (EaxReverb) obj;
-        return Float.floatToIntBits(this.airAbsorptionGainHf) == Float.floatToIntBits(other.airAbsorptionGainHf) && this.decayHfLimit == other.decayHfLimit
-                && Float.floatToIntBits(this.decayHfRatio) == Float.floatToIntBits(other.decayHfRatio)
-                && Float.floatToIntBits(this.decayLfRatio) == Float.floatToIntBits(other.decayLfRatio)
-                && Float.floatToIntBits(this.decayTime) == Float.floatToIntBits(other.decayTime)
-                && Float.floatToIntBits(this.density) == Float.floatToIntBits(other.density)
-                && Float.floatToIntBits(this.diffusion) == Float.floatToIntBits(other.diffusion)
-                && Float.floatToIntBits(this.echoDepth) == Float.floatToIntBits(other.echoDepth)
-                && Float.floatToIntBits(this.echoTime) == Float.floatToIntBits(other.echoTime)
-                && Float.floatToIntBits(this.gain) == Float.floatToIntBits(other.gain)
-                && Float.floatToIntBits(this.gainHf) == Float.floatToIntBits(other.gainHf)
-                && Float.floatToIntBits(this.gainLf) == Float.floatToIntBits(other.gainLf)
-                && Float.floatToIntBits(this.hfReference) == Float.floatToIntBits(other.hfReference)
-                && Float.floatToIntBits(this.lateReverbDelay) == Float.floatToIntBits(other.lateReverbDelay)
-                && Float.floatToIntBits(this.lateReverbGain) == Float.floatToIntBits(other.lateReverbGain)
-                && Objects.equals(this.lateReverbPan, other.lateReverbPan) && Float.floatToIntBits(this.lfReference) == Float.floatToIntBits(other.lfReference)
-                && Float.floatToIntBits(this.modulationDepth) == Float.floatToIntBits(other.modulationDepth)
-                && Float.floatToIntBits(this.modulationTime) == Float.floatToIntBits(other.modulationTime)
-                && Float.floatToIntBits(this.reflectionsDelay) == Float.floatToIntBits(other.reflectionsDelay)
-                && Float.floatToIntBits(this.reflectionsGain) == Float.floatToIntBits(other.reflectionsGain)
-                && Objects.equals(this.reflectionsPan, other.reflectionsPan)
-                && Float.floatToIntBits(this.roomRolloffFactor) == Float.floatToIntBits(other.roomRolloffFactor);
+        return Float.floatToIntBits(airAbsorptionGainHf) == Float.floatToIntBits(other.airAbsorptionGainHf) && decayHfLimit == other.decayHfLimit
+                && Float.floatToIntBits(decayHfRatio) == Float.floatToIntBits(other.decayHfRatio)
+                && Float.floatToIntBits(decayLfRatio) == Float.floatToIntBits(other.decayLfRatio)
+                && Float.floatToIntBits(decayTime) == Float.floatToIntBits(other.decayTime)
+                && Float.floatToIntBits(density) == Float.floatToIntBits(other.density)
+                && Float.floatToIntBits(diffusion) == Float.floatToIntBits(other.diffusion)
+                && Float.floatToIntBits(echoDepth) == Float.floatToIntBits(other.echoDepth)
+                && Float.floatToIntBits(echoTime) == Float.floatToIntBits(other.echoTime) && Float.floatToIntBits(gain) == Float.floatToIntBits(other.gain)
+                && Float.floatToIntBits(gainHf) == Float.floatToIntBits(other.gainHf) && Float.floatToIntBits(gainLf) == Float.floatToIntBits(other.gainLf)
+                && Float.floatToIntBits(hfReference) == Float.floatToIntBits(other.hfReference)
+                && Float.floatToIntBits(lateReverbDelay) == Float.floatToIntBits(other.lateReverbDelay)
+                && Float.floatToIntBits(lateReverbGain) == Float.floatToIntBits(other.lateReverbGain) && Objects.equals(lateReverbPan, other.lateReverbPan)
+                && Float.floatToIntBits(lfReference) == Float.floatToIntBits(other.lfReference)
+                && Float.floatToIntBits(modulationDepth) == Float.floatToIntBits(other.modulationDepth)
+                && Float.floatToIntBits(modulationTime) == Float.floatToIntBits(other.modulationTime)
+                && Float.floatToIntBits(reflectionsDelay) == Float.floatToIntBits(other.reflectionsDelay)
+                && Float.floatToIntBits(reflectionsGain) == Float.floatToIntBits(other.reflectionsGain) && Objects.equals(reflectionsPan, other.reflectionsPan)
+                && Float.floatToIntBits(roomRolloffFactor) == Float.floatToIntBits(other.roomRolloffFactor);
     }
 
 
     @Override
     public String toString() {
-        return "EaxReverb [density=" + this.density + ", diffusion=" + this.diffusion + ", gain=" + this.gain + ", gainHf=" + this.gainHf + ", gainLf="
-                + this.gainLf + ", decayTime=" + this.decayTime + ", decayHfRatio=" + this.decayHfRatio + ", decayLfRatio=" + this.decayLfRatio
-                + ", reflectionsGain=" + this.reflectionsGain + ", reflectionsDelay=" + this.reflectionsDelay + ", reflectionsPan=" + this.reflectionsPan
-                + ", lateReverbGain=" + this.lateReverbGain + ", lateReverbDelay=" + this.lateReverbDelay + ", lateReverbPan=" + this.lateReverbPan
-                + ", echoTime=" + this.echoTime + ", echoDepth=" + this.echoDepth + ", modulationTime=" + this.modulationTime + ", modulationDepth="
-                + this.modulationDepth + ", airAbsorptionGainHf=" + this.airAbsorptionGainHf + ", hfReference=" + this.hfReference + ", lfReference="
-                + this.lfReference + ", roomRolloffFactor=" + this.roomRolloffFactor + ", decayHfLimit=" + this.decayHfLimit + "]";
+        return "EaxReverb [density=" + density + ", diffusion=" + diffusion + ", gain=" + gain + ", gainHf=" + gainHf + ", gainLf=" + gainLf + ", decayTime="
+                + decayTime + ", decayHfRatio=" + decayHfRatio + ", decayLfRatio=" + decayLfRatio + ", reflectionsGain=" + reflectionsGain
+                + ", reflectionsDelay=" + reflectionsDelay + ", reflectionsPan=" + reflectionsPan + ", lateReverbGain=" + lateReverbGain + ", lateReverbDelay="
+                + lateReverbDelay + ", lateReverbPan=" + lateReverbPan + ", echoTime=" + echoTime + ", echoDepth=" + echoDepth + ", modulationTime="
+                + modulationTime + ", modulationDepth=" + modulationDepth + ", airAbsorptionGainHf=" + airAbsorptionGainHf + ", hfReference=" + hfReference
+                + ", lfReference=" + lfReference + ", roomRolloffFactor=" + roomRolloffFactor + ", decayHfLimit=" + decayHfLimit + "]";
     }
 
 }

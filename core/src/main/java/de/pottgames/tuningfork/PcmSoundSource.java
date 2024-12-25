@@ -51,16 +51,16 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      */
     public PcmSoundSource(int sampleRate, PcmFormat pcmFormat) {
         final Audio audio = Audio.get();
-        this.logger = audio.getLogger();
-        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+        logger = audio.getLogger();
+        errorLogger = new ErrorLogger(this.getClass(), logger);
 
         this.sampleRate = sampleRate;
-        this.formatAlId = pcmFormat.getAlId();
-        this.tempBuffer = BufferUtils.createByteBuffer(PcmSoundSource.BUFFER_SIZE);
-        this.tempFloatBuffer = BufferUtils.createFloatBuffer(PcmSoundSource.BUFFER_SIZE);
+        formatAlId = pcmFormat.getAlId();
+        tempBuffer = BufferUtils.createByteBuffer(PcmSoundSource.BUFFER_SIZE);
+        tempFloatBuffer = BufferUtils.createFloatBuffer(PcmSoundSource.BUFFER_SIZE);
 
         for (int i = 0; i < PcmSoundSource.INITIAL_BUFFER_COUNT; i++) {
-            this.freeBufferIds.add(AL10.alGenBuffers());
+            freeBufferIds.add(AL10.alGenBuffers());
         }
 
         audio.registerManagedSource(this);
@@ -82,15 +82,15 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param length the length of the pcm data that should be read
      */
     public void queueSamples(byte[] pcm, int offset, int length) {
-        this.unqueueProcessedBuffers();
+        unqueueProcessedBuffers();
 
         while (length > 0) {
-            final int alBufferId = this.getFreeBufferId();
+            final int alBufferId = getFreeBufferId();
             final int writtenLength = Math.min(PcmSoundSource.BUFFER_SIZE, length);
-            this.tempBuffer.clear();
-            this.tempBuffer.put(pcm, offset, writtenLength).flip();
-            AL10.alBufferData(alBufferId, this.formatAlId, this.tempBuffer, this.sampleRate);
-            AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+            tempBuffer.clear();
+            tempBuffer.put(pcm, offset, writtenLength).flip();
+            AL10.alBufferData(alBufferId, formatAlId, tempBuffer, sampleRate);
+            AL10.alSourceQueueBuffers(sourceId, alBufferId);
             length -= writtenLength;
             offset += writtenLength;
         }
@@ -110,15 +110,15 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param length the length of the pcm data that should be read
      */
     public void queueSamples(float[] pcm, int offset, int length) {
-        this.unqueueProcessedBuffers();
+        unqueueProcessedBuffers();
 
         while (length > 0) {
-            final int alBufferId = this.getFreeBufferId();
+            final int alBufferId = getFreeBufferId();
             final int writtenLength = Math.min(PcmSoundSource.BUFFER_SIZE, length);
-            this.tempFloatBuffer.clear();
-            this.tempFloatBuffer.put(pcm, offset, writtenLength).flip();
-            AL10.alBufferData(alBufferId, this.formatAlId, this.tempFloatBuffer, this.sampleRate);
-            AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+            tempFloatBuffer.clear();
+            tempFloatBuffer.put(pcm, offset, writtenLength).flip();
+            AL10.alBufferData(alBufferId, formatAlId, tempFloatBuffer, sampleRate);
+            AL10.alSourceQueueBuffers(sourceId, alBufferId);
             length -= writtenLength;
             offset += writtenLength;
         }
@@ -138,10 +138,10 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param pcm in native order
      */
     public void queueSamples(ByteBuffer pcm) {
-        this.unqueueProcessedBuffers();
-        final int alBufferId = this.getFreeBufferId();
-        AL10.alBufferData(alBufferId, this.formatAlId, pcm, this.sampleRate);
-        AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+        unqueueProcessedBuffers();
+        final int alBufferId = getFreeBufferId();
+        AL10.alBufferData(alBufferId, formatAlId, pcm, sampleRate);
+        AL10.alSourceQueueBuffers(sourceId, alBufferId);
     }
 
 
@@ -158,10 +158,10 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param pcm in native order
      */
     public void queueSamples(ShortBuffer pcm) {
-        this.unqueueProcessedBuffers();
-        final int alBufferId = this.getFreeBufferId();
-        AL10.alBufferData(alBufferId, this.formatAlId, pcm, this.sampleRate);
-        AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+        unqueueProcessedBuffers();
+        final int alBufferId = getFreeBufferId();
+        AL10.alBufferData(alBufferId, formatAlId, pcm, sampleRate);
+        AL10.alSourceQueueBuffers(sourceId, alBufferId);
     }
 
 
@@ -176,18 +176,18 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @param pcm in native order
      */
     public void queueSamples(FloatBuffer pcm) {
-        this.unqueueProcessedBuffers();
-        final int alBufferId = this.getFreeBufferId();
-        AL10.alBufferData(alBufferId, this.formatAlId, pcm, this.sampleRate);
-        AL10.alSourceQueueBuffers(this.sourceId, alBufferId);
+        unqueueProcessedBuffers();
+        final int alBufferId = getFreeBufferId();
+        AL10.alBufferData(alBufferId, formatAlId, pcm, sampleRate);
+        AL10.alSourceQueueBuffers(sourceId, alBufferId);
     }
 
 
     private int getFreeBufferId() {
-        if (this.freeBufferIds.isEmpty()) {
+        if (freeBufferIds.isEmpty()) {
             return AL10.alGenBuffers();
         }
-        return this.freeBufferIds.pop();
+        return freeBufferIds.pop();
     }
 
 
@@ -195,9 +195,9 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * Unqueues processed buffers. This is called automatically on each call to any of the queueSamples methods, so you never <b>have</b> to call it manually.
      */
     public void unqueueProcessedBuffers() {
-        final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
+        final int processedBuffers = AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_PROCESSED);
         for (int i = 0; i < processedBuffers; i++) {
-            this.freeBufferIds.add(AL10.alSourceUnqueueBuffers(this.sourceId));
+            freeBufferIds.add(AL10.alSourceUnqueueBuffers(sourceId));
         }
     }
 
@@ -209,8 +209,8 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      * @return the number of buffers queued
      */
     public int queuedBuffers() {
-        this.unqueueProcessedBuffers();
-        return AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_QUEUED);
+        unqueueProcessedBuffers();
+        return AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_QUEUED);
     }
 
 
@@ -219,21 +219,21 @@ public class PcmSoundSource extends SoundSource implements Disposable {
      */
     @Override
     public void dispose() {
-        this.stop();
+        stop();
 
-        final int processedBuffers = AL10.alGetSourcei(this.sourceId, AL10.AL_BUFFERS_PROCESSED);
+        final int processedBuffers = AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_PROCESSED);
         for (int i = 0; i < processedBuffers; i++) {
-            this.freeBufferIds.add(AL10.alSourceUnqueueBuffers(this.sourceId));
+            freeBufferIds.add(AL10.alSourceUnqueueBuffers(sourceId));
         }
 
-        for (int i = 0; i < this.freeBufferIds.size; i++) {
-            AL10.alDeleteBuffers(this.freeBufferIds.get(i));
+        for (int i = 0; i < freeBufferIds.size; i++) {
+            AL10.alDeleteBuffers(freeBufferIds.get(i));
         }
 
         final Audio audio = Audio.get();
         audio.removeManagedSource(this);
 
-        this.errorLogger.checkLogError("Failed to dispose the SoundSource");
+        errorLogger.checkLogError("Failed to dispose the SoundSource");
         super.dispose();
     }
 

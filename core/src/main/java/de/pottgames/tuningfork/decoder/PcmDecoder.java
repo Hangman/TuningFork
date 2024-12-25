@@ -27,68 +27,68 @@ public class PcmDecoder implements WavDecoder {
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.bytesRemaining = streamLength;
-        this.totalOutputSamplesPerChannel = this.bytesRemaining / (this.bitsPerSample / 8L) / this.channels;
+        bytesRemaining = streamLength;
+        totalOutputSamplesPerChannel = bytesRemaining / (bitsPerSample / 8L) / channels;
     }
 
 
     @Override
     public int read(byte[] output) throws IOException {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
-        if (this.bytesRemaining <= 0) {
+        if (bytesRemaining <= 0) {
             return -1;
         }
-        final int bytesRead = Util.readAll(this.stream, output, (int) Math.min(this.bytesRemaining, output.length));
-        this.bytesRemaining -= bytesRead;
+        final int bytesRead = Util.readAll(stream, output, (int) Math.min(bytesRemaining, output.length));
+        bytesRemaining -= bytesRead;
         return bytesRead;
     }
 
 
     @Override
     public int inputBitsPerSample() {
-        return this.bitsPerSample;
+        return bitsPerSample;
     }
 
 
     @Override
     public int outputBitsPerSample() {
-        return this.bitsPerSample;
+        return bitsPerSample;
     }
 
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
     @Override
     public PcmDataType outputPcmDataType() {
-        return this.pcmDataType;
+        return pcmDataType;
     }
 
 
     @Override
     public long bytesRemaining() {
-        return this.bytesRemaining;
+        return bytesRemaining;
     }
 
 
     @Override
     public void close() throws IOException, NullPointerException {
-        this.stream.close();
+        stream.close();
     }
 
 }

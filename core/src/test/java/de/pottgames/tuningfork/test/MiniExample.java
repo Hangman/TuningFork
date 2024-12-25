@@ -29,13 +29,13 @@ public class MiniExample extends ApplicationAdapter {
     @Override
     public void create() {
         // before we can do anything, we need to initialize our Audio instance
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         // load a sound
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
-        System.out.println("Sound duration: " + this.sound.getDuration() + "s");
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        System.out.println("Sound duration: " + sound.getDuration() + "s");
 
-        this.sound.play();
+        sound.play();
     }
 
 
@@ -47,10 +47,10 @@ public class MiniExample extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

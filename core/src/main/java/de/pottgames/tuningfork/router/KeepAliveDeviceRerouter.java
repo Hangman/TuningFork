@@ -34,7 +34,7 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
     public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
         this.device = device;
         this.attributes = attributes;
-        this.setup = true;
+        setup = true;
     }
 
 
@@ -52,17 +52,17 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
 
     @Override
     public void start() {
-        this.started = true;
+        started = true;
     }
 
 
     @Override
     public void onDisconnect() {
-        if (!this.setup || !this.started) {
+        if (!setup || !started) {
             return;
         }
 
-        if (!SOFTReopenDevice.alcReopenDeviceSOFT(this.device, (String) null, this.attributes.getBuffer())) {
+        if (!SOFTReopenDevice.alcReopenDeviceSOFT(device, (String) null, attributes.getBuffer())) {
             final TuningForkLogger logger = Audio.get().getLogger();
             if (logger != null) {
                 logger.error(this.getClass(), "Failed to reopen audio device");
@@ -73,7 +73,7 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
 
     @Override
     public void dispose() {
-        this.started = false;
+        started = false;
     }
 
 }

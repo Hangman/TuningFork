@@ -128,12 +128,12 @@ public enum WavAudioFormat {
 
 
     public int getRegNumber() {
-        return this.regNumber;
+        return regNumber;
     }
 
 
     public String getWFormatTagId() {
-        return this.wFormatTagId;
+        return wFormatTagId;
     }
 
 

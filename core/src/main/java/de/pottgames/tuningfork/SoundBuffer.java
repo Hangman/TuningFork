@@ -82,17 +82,17 @@ public class SoundBuffer implements Disposable {
      * @param blockAlign the block alignment (currently only used for MS ADPCM data)
      */
     public SoundBuffer(ShortBuffer pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
-        this.audio = Audio.get();
-        this.logger = this.audio.getLogger();
-        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+        audio = Audio.get();
+        logger = audio.getLogger();
+        errorLogger = new ErrorLogger(this.getClass(), logger);
 
-        this.pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
-        if (this.pcmFormat == null) {
+        pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
+        if (pcmFormat == null) {
             throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
         }
-        this.bufferId = this.generateBufferAndUpload(pcm, blockAlign, sampleRate);
-        this.samplesPerChannel = this.fetchSamplesPerChannel();
-        this.duration = this.fetchDuration();
+        bufferId = generateBufferAndUpload(pcm, blockAlign, sampleRate);
+        samplesPerChannel = fetchSamplesPerChannel();
+        duration = fetchDuration();
     }
 
 
@@ -112,9 +112,9 @@ public class SoundBuffer implements Disposable {
      * @param blockAlign the block alignment (currently only used for MS ADPCM data)
      */
     public SoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
-        this.audio = Audio.get();
-        this.logger = this.audio.getLogger();
-        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
+        audio = Audio.get();
+        logger = audio.getLogger();
+        errorLogger = new ErrorLogger(this.getClass(), logger);
 
         // PCM ARRAY TO TEMP BUFFER
         final ByteBuffer buffer = ByteBuffer.allocateDirect(pcm.length);
@@ -122,14 +122,14 @@ public class SoundBuffer implements Disposable {
         buffer.put(pcm);
         buffer.flip();
 
-        this.pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
-        if (this.pcmFormat == null) {
+        pcmFormat = PcmFormat.determineFormat(channels, bitsPerSample, pcmDataType);
+        if (pcmFormat == null) {
             throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + bitsPerSample);
         }
-        this.bufferId = this.generateBufferAndUpload(buffer.asShortBuffer(), blockAlign, sampleRate);
-        this.samplesPerChannel = this.fetchSamplesPerChannel();
+        bufferId = generateBufferAndUpload(buffer.asShortBuffer(), blockAlign, sampleRate);
+        samplesPerChannel = fetchSamplesPerChannel();
 
-        this.duration = this.fetchDuration();
+        duration = fetchDuration();
     }
 
 
@@ -138,10 +138,10 @@ public class SoundBuffer implements Disposable {
         if (blockAlign > 0) {
             AL11.alBufferi(bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
         }
-        AL10.alBufferData(bufferId, this.pcmFormat.getAlId(), pcm, sampleRate);
+        AL10.alBufferData(bufferId, pcmFormat.getAlId(), pcm, sampleRate);
 
-        if (!this.errorLogger.checkLogError("Failed to create the SoundBuffer")) {
-            this.logger.debug(this.getClass(), "SoundBuffer successfully created");
+        if (!errorLogger.checkLogError("Failed to create the SoundBuffer")) {
+            logger.debug(this.getClass(), "SoundBuffer successfully created");
         }
 
         return bufferId;
@@ -149,12 +149,12 @@ public class SoundBuffer implements Disposable {
 
 
     protected int fetchSamplesPerChannel() {
-        return AL10.alGetBufferi(this.bufferId, SOFTBufferLengthQuery.AL_SAMPLE_LENGTH_SOFT);
+        return AL10.alGetBufferi(bufferId, SOFTBufferLengthQuery.AL_SAMPLE_LENGTH_SOFT);
     }
 
 
     protected float fetchDuration() {
-        return AL10.alGetBufferf(this.bufferId, SOFTBufferLengthQuery.AL_SEC_LENGTH_SOFT);
+        return AL10.alGetBufferf(bufferId, SOFTBufferLengthQuery.AL_SEC_LENGTH_SOFT);
     }
 
 
@@ -181,19 +181,19 @@ public class SoundBuffer implements Disposable {
             throw new TuningForkRuntimeException("Invalid loop points: start and end must not be < 0");
         }
 
-        int startSample = (int) (start / this.duration * this.samplesPerChannel);
-        startSample = MathUtils.clamp(startSample, 0, this.samplesPerChannel - 1);
-        int endSample = (int) (end / this.duration * this.samplesPerChannel);
-        endSample = MathUtils.clamp(endSample, 1, this.samplesPerChannel);
+        int startSample = (int) (start / duration * samplesPerChannel);
+        startSample = MathUtils.clamp(startSample, 0, samplesPerChannel - 1);
+        int endSample = (int) (end / duration * samplesPerChannel);
+        endSample = MathUtils.clamp(endSample, 1, samplesPerChannel);
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer params = stack.mallocInt(2);
             params.put(0, startSample);
             params.put(1, endSample);
-            AL11.alBufferiv(this.bufferId, SOFTLoopPoints.AL_LOOP_POINTS_SOFT, params);
+            AL11.alBufferiv(bufferId, SOFTLoopPoints.AL_LOOP_POINTS_SOFT, params);
         }
 
-        this.errorLogger.checkLogError("Error setting loop points on the buffer");
+        errorLogger.checkLogError("Error setting loop points on the buffer");
     }
 
 
@@ -214,15 +214,15 @@ public class SoundBuffer implements Disposable {
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer params = stack.mallocInt(2);
-            AL11.alGetBufferiv(this.bufferId, SOFTLoopPoints.AL_LOOP_POINTS_SOFT, params);
+            AL11.alGetBufferiv(bufferId, SOFTLoopPoints.AL_LOOP_POINTS_SOFT, params);
             startSample = params.get(0);
             endSample = params.get(1);
         }
 
-        this.loopPointCache[0] = (float) startSample / this.samplesPerChannel * this.duration;
-        this.loopPointCache[1] = (float) endSample / this.samplesPerChannel * this.duration;
+        loopPointCache[0] = (float) startSample / samplesPerChannel * duration;
+        loopPointCache[1] = (float) endSample / samplesPerChannel * duration;
 
-        return this.loopPointCache;
+        return loopPointCache;
     }
 
 
@@ -230,7 +230,7 @@ public class SoundBuffer implements Disposable {
      * Plays the sound.
      */
     public void play() {
-        this.audio.play(this);
+        audio.play(this);
     }
 
 
@@ -242,10 +242,10 @@ public class SoundBuffer implements Disposable {
      */
     public void playAtTime(long time) {
         if (time < 0) {
-            this.logger.error(this.getClass(), "Invalid time parameter on playAtTime(): " + time);
+            logger.error(this.getClass(), "Invalid time parameter on playAtTime(): " + time);
             return;
         }
-        this.audio.playAtTime(this, time);
+        audio.playAtTime(this, time);
     }
 
 
@@ -255,7 +255,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play(SoundEffect effect) {
-        this.audio.play(this, effect);
+        audio.play(this, effect);
     }
 
 
@@ -265,7 +265,7 @@ public class SoundBuffer implements Disposable {
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
     public void play(float volume) {
-        this.audio.play(this, volume);
+        audio.play(this, volume);
     }
 
 
@@ -276,7 +276,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play(float volume, SoundEffect effect) {
-        this.audio.play(this, volume, effect);
+        audio.play(this, volume, effect);
     }
 
 
@@ -287,7 +287,7 @@ public class SoundBuffer implements Disposable {
      * @param pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)
      */
     public void play(float volume, float pitch) {
-        this.audio.play(this, volume, pitch);
+        audio.play(this, volume, pitch);
     }
 
 
@@ -300,7 +300,7 @@ public class SoundBuffer implements Disposable {
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void play(float volume, float pitch, float lowFreqVolume, float highFreqVolume) {
-        this.audio.play(this, volume, pitch, lowFreqVolume, highFreqVolume);
+        audio.play(this, volume, pitch, lowFreqVolume, highFreqVolume);
     }
 
 
@@ -312,7 +312,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play(float volume, float pitch, SoundEffect effect) {
-        this.audio.play(this, volume, pitch, effect);
+        audio.play(this, volume, pitch, effect);
     }
 
 
@@ -324,7 +324,7 @@ public class SoundBuffer implements Disposable {
      * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      */
     public void play(float volume, float pitch, float pan) {
-        this.audio.play(this, volume, pitch, pan);
+        audio.play(this, volume, pitch, pan);
     }
 
 
@@ -337,7 +337,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play(float volume, float pitch, float pan, SoundEffect effect) {
-        this.audio.play(this, volume, pitch, pan, effect);
+        audio.play(this, volume, pitch, pan, effect);
     }
 
 
@@ -347,7 +347,7 @@ public class SoundBuffer implements Disposable {
      * @param position the position in 3D space
      */
     public void play3D(Vector3 position) {
-        this.audio.play3D(this, position);
+        audio.play3D(this, position);
     }
 
 
@@ -359,7 +359,7 @@ public class SoundBuffer implements Disposable {
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void play3D(Vector3 position, float lowFreqVolume, float highFreqVolume) {
-        this.audio.play3D(this, position, lowFreqVolume, highFreqVolume);
+        audio.play3D(this, position, lowFreqVolume, highFreqVolume);
     }
 
 
@@ -370,7 +370,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play3D(Vector3 position, SoundEffect effect) {
-        this.audio.play3D(this, position, effect);
+        audio.play3D(this, position, effect);
     }
 
 
@@ -383,7 +383,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play3D(Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
-        this.audio.play3D(this, position, lowFreqVolume, highFreqVolume, effect);
+        audio.play3D(this, position, lowFreqVolume, highFreqVolume, effect);
     }
 
 
@@ -394,7 +394,7 @@ public class SoundBuffer implements Disposable {
      * @param position the position in 3D space
      */
     public void play3D(float volume, Vector3 position) {
-        this.audio.play3D(this, volume, position);
+        audio.play3D(this, volume, position);
     }
 
 
@@ -407,7 +407,7 @@ public class SoundBuffer implements Disposable {
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void play3D(float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
-        this.audio.play3D(this, volume, position, lowFreqVolume, highFreqVolume);
+        audio.play3D(this, volume, position, lowFreqVolume, highFreqVolume);
     }
 
 
@@ -419,7 +419,7 @@ public class SoundBuffer implements Disposable {
      * @param effect the sound effect
      */
     public void play3D(float volume, Vector3 position, SoundEffect effect) {
-        this.audio.play3D(this, volume, position, effect);
+        audio.play3D(this, volume, position, effect);
     }
 
 
@@ -431,7 +431,7 @@ public class SoundBuffer implements Disposable {
      * @param position the position in 3D space
      */
     public void play3D(float volume, float pitch, Vector3 position) {
-        this.audio.play3D(this, volume, pitch, position);
+        audio.play3D(this, volume, pitch, position);
     }
 
 
@@ -444,12 +444,12 @@ public class SoundBuffer implements Disposable {
      * @param effect the effect
      */
     public void play3D(float volume, float pitch, Vector3 position, SoundEffect effect) {
-        this.audio.play3D(this, volume, pitch, position, effect);
+        audio.play3D(this, volume, pitch, position, effect);
     }
 
 
     int getBufferId() {
-        return this.bufferId;
+        return bufferId;
     }
 
 
@@ -459,7 +459,7 @@ public class SoundBuffer implements Disposable {
      * @return the PcmFormat
      */
     public PcmFormat getPcmFormat() {
-        return this.pcmFormat;
+        return pcmFormat;
     }
 
 
@@ -469,16 +469,16 @@ public class SoundBuffer implements Disposable {
      * @return the playback duration in seconds.
      */
     public float getDuration() {
-        return this.duration;
+        return duration;
     }
 
 
     @Override
     public void dispose() {
         Audio.get().onBufferDisposal(this);
-        AL10.alDeleteBuffers(this.bufferId);
-        if (!this.errorLogger.checkLogError("Failed to dispose the SoundBuffer")) {
-            this.logger.debug(this.getClass(), "SoundBuffer successfully disposed");
+        AL10.alDeleteBuffers(bufferId);
+        if (!errorLogger.checkLogError("Failed to dispose the SoundBuffer")) {
+            logger.debug(this.getClass(), "SoundBuffer successfully disposed");
         }
     }
 

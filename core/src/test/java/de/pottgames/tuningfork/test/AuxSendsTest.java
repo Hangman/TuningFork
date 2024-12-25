@@ -47,12 +47,12 @@ public class AuxSendsTest extends ApplicationAdapter {
         deviceConfig.setEffectSlots(3);
 
         // INIT
-        this.audio = Audio.init(config);
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
-        System.out.println("available effect slots: " + this.audio.getDevice().getNumberOfEffectSlots());
+        audio = Audio.init(config);
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        System.out.println("available effect slots: " + audio.getDevice().getNumberOfEffectSlots());
 
         // PLAY
-        final SoundSource source = this.audio.obtainSource(this.sound);
+        final SoundSource source = audio.obtainSource(sound);
         source.setLooping(true);
         source.setFilter(0f, 0f);
         source.attachEffect(new SoundEffect(new PitchShifter())); // this effect should be kicked out because we configured only 3 effect slots
@@ -71,8 +71,8 @@ public class AuxSendsTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

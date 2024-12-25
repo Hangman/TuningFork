@@ -18,17 +18,17 @@ public class SoundLoaderAudioStreamTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
         final AudioStream stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
-        this.sound = SoundLoader.load(stream);
-        this.sound.play();
+        sound = SoundLoader.load(stream);
+        sound.play();
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

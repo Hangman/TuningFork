@@ -42,7 +42,7 @@ public class ReadableSoundBuffer extends SoundBuffer {
      */
     public ReadableSoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
         super(pcm, channels, sampleRate, bitsPerSample, pcmDataType);
-        this.bufferCopy = pcm;
+        bufferCopy = pcm;
     }
 
 
@@ -67,7 +67,7 @@ public class ReadableSoundBuffer extends SoundBuffer {
         while (pcm.hasRemaining()) {
             byteBuffer.putShort(pcm.get());
         }
-        this.bufferCopy = byteBuffer.array();
+        bufferCopy = byteBuffer.array();
     }
 
 
@@ -88,7 +88,7 @@ public class ReadableSoundBuffer extends SoundBuffer {
      */
     public ReadableSoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
         super(pcm, channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
-        this.bufferCopy = pcm;
+        bufferCopy = pcm;
     }
 
 
@@ -99,7 +99,7 @@ public class ReadableSoundBuffer extends SoundBuffer {
      * @return a copy of the audio data
      */
     public byte[] getAudioData() {
-        return this.bufferCopy;
+        return bufferCopy;
     }
 
 }

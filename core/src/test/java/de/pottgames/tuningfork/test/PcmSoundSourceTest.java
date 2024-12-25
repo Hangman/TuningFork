@@ -37,22 +37,22 @@ public class PcmSoundSourceTest extends ApplicationAdapter {
     @Override
     public void create() {
         final AudioConfig config = new AudioConfig().setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
-        this.audio = Audio.init(config);
-        this.stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
-        final PcmFormat format = PcmFormat.determineFormat(this.stream.getChannels(), this.stream.getBitsPerSample(), this.stream.getPcmDataType());
+        audio = Audio.init(config);
+        stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
+        final PcmFormat format = PcmFormat.determineFormat(stream.getChannels(), stream.getBitsPerSample(), stream.getPcmDataType());
         assert format != null;
-        this.pcmSource = new PcmSoundSource(this.stream.getSampleRate(), format);
+        pcmSource = new PcmSoundSource(stream.getSampleRate(), format);
     }
 
 
     @Override
     public void render() {
-        if (System.currentTimeMillis() > this.lastPcmPush + 500) {
-            this.lastPcmPush = System.currentTimeMillis();
-            final int readData = this.stream.read(this.pcm);
+        if (System.currentTimeMillis() > lastPcmPush + 500) {
+            lastPcmPush = System.currentTimeMillis();
+            final int readData = stream.read(pcm);
             if (readData != -1) {
-                this.pcmSource.queueSamples(this.pcm, 0, readData);
-                this.pcmSource.play();
+                pcmSource.queueSamples(pcm, 0, readData);
+                pcmSource.play();
             }
         }
     }
@@ -60,8 +60,8 @@ public class PcmSoundSourceTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.pcmSource.dispose();
-        this.audio.dispose();
+        pcmSource.dispose();
+        audio.dispose();
     }
 
 

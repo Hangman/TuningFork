@@ -70,18 +70,18 @@ public class VocalMorpher extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_VOCAL_MORPHER);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA, this.phonemea);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB, this.phonemeb);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA_COARSE_TUNING, this.phonemeaCoarseTuning);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB_COARSE_TUNING, this.phonemebCoarseTuning);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_WAVEFORM, this.waveform);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_VOCMORPHER_RATE, this.rate);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA, phonemea);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB, phonemeb);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA_COARSE_TUNING, phonemeaCoarseTuning);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB_COARSE_TUNING, phonemebCoarseTuning);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_WAVEFORM, waveform);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_VOCMORPHER_RATE, rate);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.phonemea, this.phonemeaCoarseTuning, this.phonemeb, this.phonemebCoarseTuning, this.rate, this.waveform);
+        return Objects.hash(phonemea, phonemeaCoarseTuning, phonemeb, phonemebCoarseTuning, rate, waveform);
     }
 
 
@@ -97,16 +97,16 @@ public class VocalMorpher extends SoundEffectData {
             return false;
         }
         final VocalMorpher other = (VocalMorpher) obj;
-        return this.phonemea == other.phonemea && this.phonemeaCoarseTuning == other.phonemeaCoarseTuning && this.phonemeb == other.phonemeb
-                && this.phonemebCoarseTuning == other.phonemebCoarseTuning && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate)
-                && this.waveform == other.waveform;
+        return phonemea == other.phonemea && phonemeaCoarseTuning == other.phonemeaCoarseTuning && phonemeb == other.phonemeb
+                && phonemebCoarseTuning == other.phonemebCoarseTuning && Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate)
+                && waveform == other.waveform;
     }
 
 
     @Override
     public String toString() {
-        return "VocalMorpher [phonemea=" + this.phonemea + ", phonemeb=" + this.phonemeb + ", phonemeaCoarseTuning=" + this.phonemeaCoarseTuning
-                + ", phonemebCoarseTuning=" + this.phonemebCoarseTuning + ", waveform=" + this.waveform + ", rate=" + this.rate + "]";
+        return "VocalMorpher [phonemea=" + phonemea + ", phonemeb=" + phonemeb + ", phonemeaCoarseTuning=" + phonemeaCoarseTuning + ", phonemebCoarseTuning="
+                + phonemebCoarseTuning + ", waveform=" + waveform + ", rate=" + rate + "]";
     }
 
 }

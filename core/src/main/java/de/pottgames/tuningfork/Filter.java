@@ -39,23 +39,23 @@ class Filter {
      * @param volumeHf volume of the high frequencies, range: 0 - 1
      */
     Filter(float volumeLf, float volumeHf) {
-        this.logger = Audio.get().getLogger();
-        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
-        this.errorLogger.dismissError();
+        logger = Audio.get().getLogger();
+        errorLogger = new ErrorLogger(this.getClass(), logger);
+        errorLogger.dismissError();
 
-        this.id = EXTEfx.alGenFilters();
-        EXTEfx.alFilteri(this.id, EXTEfx.AL_FILTER_TYPE, EXTEfx.AL_FILTER_BANDPASS);
-        if (!this.errorLogger.checkLogError("Failed to create filter")) {
-            this.logger.debug(this.getClass(), "Successfully created filter.");
+        id = EXTEfx.alGenFilters();
+        EXTEfx.alFilteri(id, EXTEfx.AL_FILTER_TYPE, EXTEfx.AL_FILTER_BANDPASS);
+        if (!errorLogger.checkLogError("Failed to create filter")) {
+            logger.debug(this.getClass(), "Successfully created filter.");
         }
-        EXTEfx.alFilterf(this.id, EXTEfx.AL_BANDPASS_GAIN, 1f);
-        this.setLowFrequencyVolume(volumeLf);
-        this.setHighFrequencyVolume(volumeHf);
+        EXTEfx.alFilterf(id, EXTEfx.AL_BANDPASS_GAIN, 1f);
+        setLowFrequencyVolume(volumeLf);
+        setHighFrequencyVolume(volumeHf);
     }
 
 
     int getId() {
-        return this.id;
+        return id;
     }
 
 
@@ -66,7 +66,7 @@ class Filter {
      */
     void setLowFrequencyVolume(float volume) {
         volume = MathUtils.clamp(volume, 0f, 1f);
-        EXTEfx.alFilterf(this.id, EXTEfx.AL_BANDPASS_GAINLF, volume);
+        EXTEfx.alFilterf(id, EXTEfx.AL_BANDPASS_GAINLF, volume);
     }
 
 
@@ -77,15 +77,15 @@ class Filter {
      */
     void setHighFrequencyVolume(float volume) {
         volume = MathUtils.clamp(volume, 0f, 1f);
-        EXTEfx.alFilterf(this.id, EXTEfx.AL_BANDPASS_GAINHF, volume);
+        EXTEfx.alFilterf(id, EXTEfx.AL_BANDPASS_GAINHF, volume);
     }
 
 
     void dispose() {
-        this.errorLogger.dismissError();
-        EXTEfx.alDeleteFilters(this.id);
-        if (!this.errorLogger.checkLogError("Failed to dispose filter")) {
-            this.logger.debug(this.getClass(), "Filter disposed.");
+        errorLogger.dismissError();
+        EXTEfx.alDeleteFilters(id);
+        if (!errorLogger.checkLogError("Failed to dispose filter")) {
+            logger.debug(this.getClass(), "Filter disposed.");
         }
     }
 

@@ -44,7 +44,7 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         InputStream wavStream = null;
         InputStream flacStream = null;
@@ -62,40 +62,40 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
             System.exit(1);
         }
 
-        this.wav = WaveLoader.load(wavStream);
-        this.flac = FlacLoader.load(flacStream);
-        this.ogg = OggLoader.load(oggStream);
-        this.aiff = AiffLoader.load(aiffStream);
-        this.mp3 = Mp3Loader.load(mp3Stream);
+        wav = WaveLoader.load(wavStream);
+        flac = FlacLoader.load(flacStream);
+        ogg = OggLoader.load(oggStream);
+        aiff = AiffLoader.load(aiffStream);
+        mp3 = Mp3Loader.load(mp3Stream);
     }
 
 
     @Override
     public void render() {
-        if (System.currentTimeMillis() > this.startTime + (long) this.duration) {
+        if (System.currentTimeMillis() > startTime + (long) duration) {
             SoundBuffer toPlay;
-            if (this.playing == this.wav) {
-                toPlay = this.flac;
+            if (playing == wav) {
+                toPlay = flac;
                 System.out.println("flac");
-            } else if (this.playing == this.flac) {
-                toPlay = this.ogg;
+            } else if (playing == flac) {
+                toPlay = ogg;
                 System.out.println("ogg");
-            } else if (this.playing == this.ogg) {
-                toPlay = this.aiff;
+            } else if (playing == ogg) {
+                toPlay = aiff;
                 System.out.println("aiff");
-            } else if (this.playing == this.aiff) {
-                toPlay = this.mp3;
+            } else if (playing == aiff) {
+                toPlay = mp3;
                 System.out.println("mp3");
-            } else if (this.playing == this.mp3) {
-                toPlay = this.wav;
+            } else if (playing == mp3) {
+                toPlay = wav;
                 System.out.println("wav");
             } else {
-                toPlay = this.wav;
+                toPlay = wav;
                 System.out.println("wav");
             }
-            this.playing = toPlay;
-            this.startTime = System.currentTimeMillis();
-            this.duration = toPlay.getDuration() * 1000f;
+            playing = toPlay;
+            startTime = System.currentTimeMillis();
+            duration = toPlay.getDuration() * 1000f;
             toPlay.play();
         }
     }
@@ -103,13 +103,13 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.wav.dispose();
-        this.flac.dispose();
-        this.ogg.dispose();
-        this.aiff.dispose();
-        this.mp3.dispose();
+        wav.dispose();
+        flac.dispose();
+        ogg.dispose();
+        aiff.dispose();
+        mp3.dispose();
 
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

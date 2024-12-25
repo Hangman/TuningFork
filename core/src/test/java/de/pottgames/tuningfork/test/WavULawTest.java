@@ -34,37 +34,37 @@ public class WavULawTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.sound = WaveLoader.load(Gdx.files.internal(WavULawTest.FILE_PATH));
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal(WavULawTest.FILE_PATH));
-        this.bufferedSource = this.audio.obtainSource(this.sound);
-        System.out.println("Sound duration (streamed): " + this.streamedSource.getDuration() + "s");
-        System.out.println("Sound duration (buffered): " + this.sound.getDuration() + "s");
+        audio = Audio.init();
+        sound = WaveLoader.load(Gdx.files.internal(WavULawTest.FILE_PATH));
+        streamedSource = new StreamedSoundSource(Gdx.files.internal(WavULawTest.FILE_PATH));
+        bufferedSource = audio.obtainSource(sound);
+        System.out.println("Sound duration (streamed): " + streamedSource.getDuration() + "s");
+        System.out.println("Sound duration (buffered): " + sound.getDuration() + "s");
 
-        this.activeSource = this.bufferedSource;
+        activeSource = bufferedSource;
     }
 
 
     @Override
     public void render() {
-        if (!this.activeSource.isPlaying()) {
-            if (this.activeSource == this.bufferedSource) {
-                this.activeSource = this.streamedSource;
+        if (!activeSource.isPlaying()) {
+            if (activeSource == bufferedSource) {
+                activeSource = streamedSource;
                 System.out.println("streamed sound playing");
             } else {
-                this.activeSource = this.bufferedSource;
+                activeSource = bufferedSource;
                 System.out.println("buffered sound playing");
             }
 
-            this.activeSource.play();
+            activeSource.play();
         }
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

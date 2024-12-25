@@ -57,31 +57,31 @@ public class WaveFormTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.camera = new OrthographicCamera();
-        this.viewport = new FitViewport(WaveFormTest.VIEWPORT_WIDTH, WaveFormTest.VIEWPORT_HEIGHT, this.camera);
-        this.renderer = new ShapeRenderer();
-        this.audio = Audio.init();
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(WaveFormTest.VIEWPORT_WIDTH, WaveFormTest.VIEWPORT_HEIGHT, camera);
+        renderer = new ShapeRenderer();
+        audio = Audio.init();
 
         // Load a ReadableSoundBuffer instead of just a default SoundBuffer.
         // That will allow us to read the audio data later on.
-        this.sound = SoundLoader.loadReadable(Gdx.files.internal(WaveFormTest.TEST_FILES[8]));
+        sound = SoundLoader.loadReadable(Gdx.files.internal(WaveFormTest.TEST_FILES[8]));
 
         // Extract the data we need to create the waveform
-        final PcmFormat format = this.sound.getPcmFormat();
+        final PcmFormat format = sound.getPcmFormat();
         final int channels = format.getChannels();
 
         // Create the waveform of each channel
-        this.waveform = new float[channels][0];
+        waveform = new float[channels][0];
         for (int channel = 0; channel < channels; channel++) {
-            this.waveform[channel] = this.analyzeWaveForm(this.sound.getAudioData(), format, channel + 1);
+            waveform[channel] = analyzeWaveForm(sound.getAudioData(), format, channel + 1);
         }
 
         // Totally optional but often desired: normalizing the wave form
-        this.normalizeWaveForm(this.waveform);
+        normalizeWaveForm(waveform);
 
-        this.soundSource = this.audio.obtainSource(this.sound);
-        this.soundSource.setLooping(true);
-        this.soundSource.play();
+        soundSource = audio.obtainSource(sound);
+        soundSource.setLooping(true);
+        soundSource.play();
     }
 
 
@@ -126,45 +126,45 @@ public class WaveFormTest extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(Color.BLACK);
-        this.renderer.setProjectionMatrix(this.camera.combined);
-        this.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setProjectionMatrix(camera.combined);
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (int channel = 0; channel < this.waveform.length; channel++) {
-            this.renderWaveForm(this.waveform[channel], 50 + channel * WaveFormTest.WAVEFORM_HEIGHT);
+        for (int channel = 0; channel < waveform.length; channel++) {
+            renderWaveForm(waveform[channel], 50 + channel * WaveFormTest.WAVEFORM_HEIGHT);
         }
-        this.renderCursor();
+        renderCursor();
 
-        this.renderer.end();
+        renderer.end();
     }
 
 
     private void renderWaveForm(float[] waveform, float centerY) {
-        this.renderer.setColor(Color.WHITE);
+        renderer.setColor(Color.WHITE);
         for (int i = 0; i < waveform.length; i++) {
             final float height = waveform[i] * WaveFormTest.WAVEFORM_HEIGHT;
-            this.renderer.rect(i, centerY - height / 2f, 1f, height);
+            renderer.rect(i, centerY - height / 2f, 1f, height);
         }
     }
 
 
     private void renderCursor() {
-        this.renderer.setColor(Color.RED);
-        final float progress = this.soundSource.getPlaybackPosition() / this.sound.getDuration();
-        this.renderer.rect(progress * WaveFormTest.VIEWPORT_WIDTH - WaveFormTest.CURSOR_WIDTH_HALF, 0f, WaveFormTest.CURSOR_WIDTH,
-                WaveFormTest.WAVEFORM_HEIGHT * this.waveform.length);
+        renderer.setColor(Color.RED);
+        final float progress = soundSource.getPlaybackPosition() / sound.getDuration();
+        renderer.rect(progress * WaveFormTest.VIEWPORT_WIDTH - WaveFormTest.CURSOR_WIDTH_HALF, 0f, WaveFormTest.CURSOR_WIDTH,
+                WaveFormTest.WAVEFORM_HEIGHT * waveform.length);
     }
 
 
     @Override
     public void resize(int width, int height) {
-        this.viewport.update(width, height, true);
+        viewport.update(width, height, true);
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

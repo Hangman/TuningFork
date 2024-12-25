@@ -49,25 +49,25 @@ public abstract class SoundSource {
 
     protected SoundSource() {
         final Audio audio = Audio.get();
-        this.logger = audio.getLogger();
-        this.errorLogger = new ErrorLogger(this.getClass(), this.logger);
-        this.effects = new SoundEffect[audio.getDevice().getNumberOfEffectSlots()];
+        logger = audio.getLogger();
+        errorLogger = new ErrorLogger(this.getClass(), logger);
+        effects = new SoundEffect[audio.getDevice().getNumberOfEffectSlots()];
 
-        this.sourceId = AL10.alGenSources();
-        AL10.alSourcef(this.sourceId, EXTEfx.AL_AIR_ABSORPTION_FACTOR, 1f);
+        sourceId = AL10.alGenSources();
+        AL10.alSourcef(sourceId, EXTEfx.AL_AIR_ABSORPTION_FACTOR, 1f);
 
-        if (!this.errorLogger.checkLogError("Failed to create the SoundSource")) {
-            this.logger.trace(this.getClass(), "SoundSource successfully created");
+        if (!errorLogger.checkLogError("Failed to create the SoundSource")) {
+            logger.trace(this.getClass(), "SoundSource successfully created");
         }
 
         // SET DEFAULTS
         final AudioSettings defaultSettings = audio.getDefaultAudioSettings();
-        this.setAttenuationFactor(defaultSettings.getAttenuationFactor());
-        this.setAttenuationMinDistance(defaultSettings.getMinAttenuationDistance());
-        this.setAttenuationMaxDistance(defaultSettings.getMaxAttenuationDistance());
-        this.setVirtualization(defaultSettings.getVirtualization());
-        this.setSpatialization(defaultSettings.getSpatialization());
-        this.setResamplerByIndex(defaultSettings.getResamplerIndex());
+        setAttenuationFactor(defaultSettings.getAttenuationFactor());
+        setAttenuationMinDistance(defaultSettings.getMinAttenuationDistance());
+        setAttenuationMaxDistance(defaultSettings.getMaxAttenuationDistance());
+        setVirtualization(defaultSettings.getVirtualization());
+        setSpatialization(defaultSettings.getSpatialization());
+        setResamplerByIndex(defaultSettings.getResamplerIndex());
     }
 
 
@@ -77,7 +77,7 @@ public abstract class SoundSource {
      * @param volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume. (default 1)
      */
     public void setVolume(float volume) {
-        AL10.alSourcef(this.sourceId, AL10.AL_GAIN, MathUtils.clamp(volume, 0f, 1f));
+        AL10.alSourcef(sourceId, AL10.AL_GAIN, MathUtils.clamp(volume, 0f, 1f));
     }
 
 
@@ -87,7 +87,7 @@ public abstract class SoundSource {
      * @return volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume
      */
     public float getVolume() {
-        return AL10.alGetSourcef(this.sourceId, AL10.AL_GAIN);
+        return AL10.alGetSourcef(sourceId, AL10.AL_GAIN);
     }
 
 
@@ -101,7 +101,7 @@ public abstract class SoundSource {
         if (pitch < 0f) {
             pitch = 0f;
         }
-        AL10.alSourcef(this.sourceId, AL10.AL_PITCH, pitch);
+        AL10.alSourcef(sourceId, AL10.AL_PITCH, pitch);
     }
 
 
@@ -111,7 +111,7 @@ public abstract class SoundSource {
      * @return pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster
      */
     public float getPitch() {
-        return AL10.alGetSourcef(this.sourceId, AL10.AL_PITCH);
+        return AL10.alGetSourcef(sourceId, AL10.AL_PITCH);
     }
 
 
@@ -119,8 +119,8 @@ public abstract class SoundSource {
      * Starts the playback of this sound source.
      */
     public void play() {
-        if (!this.isPlaying()) {
-            AL10.alSourcePlay(this.sourceId);
+        if (!isPlaying()) {
+            AL10.alSourcePlay(sourceId);
         }
     }
 
@@ -133,7 +133,7 @@ public abstract class SoundSource {
      * @param relative true = relative, false = absolute
      */
     public void setRelative(boolean relative) {
-        AL10.alSourcei(this.sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
+        AL10.alSourcei(sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
     }
 
 
@@ -143,7 +143,7 @@ public abstract class SoundSource {
      * @return relative
      */
     public boolean isRelative() {
-        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_RELATIVE) == AL10.AL_TRUE;
+        return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_RELATIVE) == AL10.AL_TRUE;
     }
 
 
@@ -165,8 +165,8 @@ public abstract class SoundSource {
      * @param z z
      */
     public void setPosition(float x, float y, float z) {
-        this.position.set(this.position);
-        AL10.alSource3f(this.sourceId, AL10.AL_POSITION, x, y, z);
+        position.set(position);
+        AL10.alSource3f(sourceId, AL10.AL_POSITION, x, y, z);
     }
 
 
@@ -178,7 +178,7 @@ public abstract class SoundSource {
      * @return returns the saveTo parameter vector that contains the result
      */
     public Vector3 getPosition(Vector3 saveTo) {
-        return saveTo.set(this.position);
+        return saveTo.set(position);
     }
 
 
@@ -191,7 +191,7 @@ public abstract class SoundSource {
      */
     public void setRadius(float radius) {
         radius = MathUtils.clamp(radius, 0f, Float.MAX_VALUE);
-        AL10.alSourcef(this.sourceId, EXTSourceRadius.AL_SOURCE_RADIUS, radius);
+        AL10.alSourcef(sourceId, EXTSourceRadius.AL_SOURCE_RADIUS, radius);
     }
 
 
@@ -201,7 +201,7 @@ public abstract class SoundSource {
      * @return the radius
      */
     public float getRadius() {
-        return AL10.alGetSourcef(this.sourceId, EXTSourceRadius.AL_SOURCE_RADIUS);
+        return AL10.alGetSourcef(sourceId, EXTSourceRadius.AL_SOURCE_RADIUS);
     }
 
 
@@ -227,7 +227,7 @@ public abstract class SoundSource {
      * @param z the speed on the z-axis
      */
     public void setSpeed(float x, float y, float z) {
-        AL10.alSource3f(this.sourceId, AL10.AL_VELOCITY, x, y, z);
+        AL10.alSource3f(sourceId, AL10.AL_VELOCITY, x, y, z);
     }
 
 
@@ -242,12 +242,12 @@ public abstract class SoundSource {
      * @param outOfConeVolume the volume of the sound source when outside of the cone
      */
     public void makeDirectional(Vector3 direction, float coneInnerAngle, float coneOuterAngle, float outOfConeVolume) {
-        this.directional = true;
-        AL10.alSourcef(this.sourceId, AL10.AL_CONE_INNER_ANGLE, coneInnerAngle);
-        AL10.alSourcef(this.sourceId, AL10.AL_CONE_OUTER_ANGLE, coneOuterAngle);
-        AL10.alSourcef(this.sourceId, AL10.AL_CONE_OUTER_GAIN, outOfConeVolume);
-        this.setDirection(direction);
-        this.logger.trace(this.getClass(), "SoundSource successfully set to directional");
+        directional = true;
+        AL10.alSourcef(sourceId, AL10.AL_CONE_INNER_ANGLE, coneInnerAngle);
+        AL10.alSourcef(sourceId, AL10.AL_CONE_OUTER_ANGLE, coneOuterAngle);
+        AL10.alSourcef(sourceId, AL10.AL_CONE_OUTER_GAIN, outOfConeVolume);
+        setDirection(direction);
+        logger.trace(this.getClass(), "SoundSource successfully set to directional");
     }
 
 
@@ -258,8 +258,8 @@ public abstract class SoundSource {
      * @param direction the direction
      */
     public void setDirection(Vector3 direction) {
-        if (this.directional) {
-            AL10.alSource3f(this.sourceId, AL10.AL_DIRECTION, direction.x, direction.y, direction.z);
+        if (directional) {
+            AL10.alSource3f(sourceId, AL10.AL_DIRECTION, direction.x, direction.y, direction.z);
         }
     }
 
@@ -268,9 +268,9 @@ public abstract class SoundSource {
      * Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the source directional earlier.
      */
     public void makeOmniDirectional() {
-        this.directional = false;
-        AL10.alSource3f(this.sourceId, AL10.AL_DIRECTION, 0f, 0f, 0f);
-        this.logger.trace(this.getClass(), "SoundSource successfully set to omnidirectional");
+        directional = false;
+        AL10.alSource3f(sourceId, AL10.AL_DIRECTION, 0f, 0f, 0f);
+        logger.trace(this.getClass(), "SoundSource successfully set to omnidirectional");
     }
 
 
@@ -280,7 +280,7 @@ public abstract class SoundSource {
      * @return directional = true, omni-directional = false
      */
     public boolean isDirectional() {
-        return this.directional;
+        return directional;
     }
 
 
@@ -288,7 +288,7 @@ public abstract class SoundSource {
      * Enables the distance attenuation of this sound source.
      */
     public void enableAttenuation() {
-        AL10.alSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR, this.attenuationFactor);
+        AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, attenuationFactor);
     }
 
 
@@ -296,7 +296,7 @@ public abstract class SoundSource {
      * Disables the distance attenuation of this sound source.
      */
     public void disableAttenuation() {
-        AL10.alSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR, 0f);
+        AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 0f);
     }
 
 
@@ -307,8 +307,8 @@ public abstract class SoundSource {
      * @param rolloff (default depends on the attenuation model)
      */
     public void setAttenuationFactor(float rolloff) {
-        this.attenuationFactor = rolloff;
-        AL10.alSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
+        attenuationFactor = rolloff;
+        AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
     }
 
 
@@ -319,7 +319,7 @@ public abstract class SoundSource {
      * @param minDistance (default depends on the attenuation model)
      */
     public void setAttenuationMinDistance(float minDistance) {
-        AL10.alSourcef(this.sourceId, AL10.AL_REFERENCE_DISTANCE, minDistance);
+        AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, minDistance);
     }
 
 
@@ -330,7 +330,7 @@ public abstract class SoundSource {
      * @param maxDistance (default depends on the attenuation model)
      */
     public void setAttenuationMaxDistance(float maxDistance) {
-        AL10.alSourcef(this.sourceId, AL10.AL_MAX_DISTANCE, maxDistance);
+        AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, maxDistance);
     }
 
 
@@ -340,7 +340,7 @@ public abstract class SoundSource {
      * @return the attenuation factor (default depends on the attenuation model)
      */
     public float getAttenuationFactor() {
-        return AL10.alGetSourcef(this.sourceId, AL10.AL_ROLLOFF_FACTOR);
+        return AL10.alGetSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR);
     }
 
 
@@ -350,7 +350,7 @@ public abstract class SoundSource {
      * @return the attenuation min distance (default depends on the attenuation model)
      */
     public float getAttenuationMinDistance() {
-        return AL10.alGetSourcef(this.sourceId, AL10.AL_REFERENCE_DISTANCE);
+        return AL10.alGetSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE);
     }
 
 
@@ -360,7 +360,7 @@ public abstract class SoundSource {
      * @return the attenuation max distance (default depends on the attenuation model)
      */
     public float getAttenuationMaxDistance() {
-        return AL10.alGetSourcef(this.sourceId, AL10.AL_MAX_DISTANCE);
+        return AL10.alGetSourcef(sourceId, AL10.AL_MAX_DISTANCE);
     }
 
 
@@ -381,7 +381,7 @@ public abstract class SoundSource {
      */
     public void setVirtualization(Virtualization virtualization) {
         if (virtualization != null) {
-            AL10.alSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, virtualization.getAlId());
+            AL10.alSourcei(sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, virtualization.getAlId());
         }
     }
 
@@ -392,7 +392,7 @@ public abstract class SoundSource {
      * @return the virtualization mode
      */
     public Virtualization getVirtualization() {
-        final int alId = AL10.alGetSourcei(this.sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT);
+        final int alId = AL10.alGetSourcei(sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT);
         return Virtualization.getByAlId(alId);
     }
 
@@ -404,7 +404,7 @@ public abstract class SoundSource {
      */
     public void setSpatialization(Spatialization spatialization) {
         if (spatialization != null) {
-            AL10.alSourcei(this.sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT, spatialization.getAlId());
+            AL10.alSourcei(sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT, spatialization.getAlId());
         }
     }
 
@@ -415,7 +415,7 @@ public abstract class SoundSource {
      * @return the spatialization mode
      */
     public Spatialization getSpatialization() {
-        final int alId = AL10.alGetSourcei(this.sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT);
+        final int alId = AL10.alGetSourcei(sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT);
         return Spatialization.getByAlId(alId);
     }
 
@@ -426,7 +426,7 @@ public abstract class SoundSource {
      * @param looping true for looped playback
      */
     public void setLooping(boolean looping) {
-        AL10.alSourcei(this.sourceId, AL10.AL_LOOPING, looping ? AL10.AL_TRUE : AL10.AL_FALSE);
+        AL10.alSourcei(sourceId, AL10.AL_LOOPING, looping ? AL10.AL_TRUE : AL10.AL_FALSE);
     }
 
 
@@ -436,7 +436,7 @@ public abstract class SoundSource {
      * @return true when this sound source is playing, false otherwise.
      */
     public boolean isPlaying() {
-        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+        return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
     }
 
 
@@ -446,7 +446,7 @@ public abstract class SoundSource {
      * @return true when this sound source is paused, false otherwise.
      */
     public boolean isPaused() {
-        return AL10.alGetSourcei(this.sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
+        return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
     }
 
 
@@ -454,7 +454,7 @@ public abstract class SoundSource {
      * Pauses the sound playback.
      */
     public void pause() {
-        AL10.alSourcePause(this.sourceId);
+        AL10.alSourcePause(sourceId);
     }
 
 
@@ -462,7 +462,7 @@ public abstract class SoundSource {
      * Stops the sound playback and rewinds it.
      */
     public void stop() {
-        AL10.alSourceRewind(this.sourceId);
+        AL10.alSourceRewind(sourceId);
     }
 
 
@@ -473,14 +473,14 @@ public abstract class SoundSource {
      * @param highFreqVolume range: 0 - 1, 0 means completely silent, 1 means full loudness
      */
     public void setFilter(float lowFreqVolume, float highFreqVolume) {
-        this.directFilter = lowFreqVolume != 1f || highFreqVolume != 1f;
+        directFilter = lowFreqVolume != 1f || highFreqVolume != 1f;
         Filter filter = null;
-        if (this.directFilter) {
+        if (directFilter) {
             filter = Audio.get().publicFilter;
             filter.setLowFrequencyVolume(lowFreqVolume);
             filter.setHighFrequencyVolume(highFreqVolume);
         }
-        AL10.alSourcei(this.sourceId, EXTEfx.AL_DIRECT_FILTER, filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL);
+        AL10.alSourcei(sourceId, EXTEfx.AL_DIRECT_FILTER, filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL);
     }
 
 
@@ -490,7 +490,7 @@ public abstract class SoundSource {
      * @return result
      */
     public boolean hasFilter() {
-        return this.directFilter;
+        return directFilter;
     }
 
 
@@ -525,25 +525,25 @@ public abstract class SoundSource {
      * @return the effect that was kicked out or null otherwise
      */
     public SoundEffect attachEffect(SoundEffect effect, float lowFreqVolume, float highFreqVolume) {
-        if (this.effects.length == 0) {
-            this.logger.error(this.getClass(), "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
+        if (effects.length == 0) {
+            logger.error(this.getClass(), "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
             return null;
         }
 
         SoundEffect result = null;
 
         // CANCEL IF THE EFFECT IS ALREADY ATTACHED TO THIS SOURCE
-        for (final SoundEffect effect2 : this.effects) {
+        for (final SoundEffect effect2 : effects) {
             if (effect2 == effect) {
                 return null;
             }
         }
 
         // REMOVE OLD EFFECT IF ANY
-        if (this.effects[this.nextSoundEffectSendId] != null) {
-            this.effects[this.nextSoundEffectSendId].removeSource(this);
-            result = this.effects[this.nextSoundEffectSendId];
-            this.effects[this.nextSoundEffectSendId] = null;
+        if (effects[nextSoundEffectSendId] != null) {
+            effects[nextSoundEffectSendId].removeSource(this);
+            result = effects[nextSoundEffectSendId];
+            effects[nextSoundEffectSendId] = null;
         }
 
         // ADD EFFECT
@@ -554,14 +554,14 @@ public abstract class SoundSource {
             filter.setHighFrequencyVolume(highFreqVolume);
         }
         final int filterHandle = filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL;
-        AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), this.nextSoundEffectSendId, filterHandle);
-        this.effects[this.nextSoundEffectSendId] = effect;
+        AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), nextSoundEffectSendId, filterHandle);
+        effects[nextSoundEffectSendId] = effect;
         effect.addSource(this);
 
         // SET NEXT SOUND EFFECT SEND ID
-        this.nextSoundEffectSendId++;
-        if (this.nextSoundEffectSendId >= this.effects.length) {
-            this.nextSoundEffectSendId = 0;
+        nextSoundEffectSendId++;
+        if (nextSoundEffectSendId >= effects.length) {
+            nextSoundEffectSendId = 0;
         }
 
         return result;
@@ -576,11 +576,11 @@ public abstract class SoundSource {
      * @return true if the effect was successfully detached, false if the effect isn't attached to this source (anymore)
      */
     public boolean detachEffect(SoundEffect effect) {
-        for (int i = 0; i < this.effects.length; i++) {
-            if (this.effects[i] == effect) {
-                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
-                this.effects[i].removeSource(this);
-                this.effects[i] = null;
+        for (int i = 0; i < effects.length; i++) {
+            if (effects[i] == effect) {
+                AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                effects[i].removeSource(this);
+                effects[i] = null;
                 return true;
             }
         }
@@ -593,21 +593,21 @@ public abstract class SoundSource {
      * Detaches all currently attached sound effects from this sound source.
      */
     public void detachAllEffects() {
-        for (int i = 0; i < this.effects.length; i++) {
-            if (this.effects[i] != null) {
-                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
-                this.effects[i].removeSource(this);
-                this.effects[i] = null;
+        for (int i = 0; i < effects.length; i++) {
+            if (effects[i] != null) {
+                AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                effects[i].removeSource(this);
+                effects[i] = null;
             }
         }
-        this.nextSoundEffectSendId = 0;
+        nextSoundEffectSendId = 0;
     }
 
 
     protected void setResamplerByIndex(int index) {
-        if (index >= 0 && index != this.resamplerIndex) {
-            this.resamplerIndex = index;
-            AL10.alSourcei(this.sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT, index);
+        if (index >= 0 && index != resamplerIndex) {
+            resamplerIndex = index;
+            AL10.alSourcei(sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT, index);
         }
     }
 
@@ -625,7 +625,7 @@ public abstract class SoundSource {
         final AudioDevice device = Audio.get().getDevice();
         final int resamplerIndex = device.getResamplerIndexByName(resampler);
         if (resamplerIndex >= 0) {
-            this.setResamplerByIndex(resamplerIndex);
+            setResamplerByIndex(resamplerIndex);
             return true;
         }
 
@@ -640,17 +640,17 @@ public abstract class SoundSource {
      */
     public String getResampler() {
         final AudioDevice device = Audio.get().getDevice();
-        final int resamplerIndex = AL10.alGetSourcei(this.sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT);
+        final int resamplerIndex = AL10.alGetSourcei(sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT);
         return device.getResamplerNameByIndex(resamplerIndex);
     }
 
 
     void onEffectDisposal(SoundEffect effect) {
-        for (int i = 0; i < this.effects.length; i++) {
-            if (this.effects[i] == effect) {
-                AL11.alSource3i(this.sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
-                this.effects[i] = null;
-                this.nextSoundEffectSendId = i;
+        for (int i = 0; i < effects.length; i++) {
+            if (effects[i] == effect) {
+                AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                effects[i] = null;
+                nextSoundEffectSendId = i;
                 break;
             }
         }
@@ -658,10 +658,10 @@ public abstract class SoundSource {
 
 
     protected void dispose() {
-        this.detachAllEffects();
-        AL10.alDeleteSources(this.sourceId);
-        if (!this.errorLogger.checkLogError("Failed to dispose the SoundSource")) {
-            this.logger.debug(this.getClass(), "SoundSource successfully disposed");
+        detachAllEffects();
+        AL10.alDeleteSources(sourceId);
+        if (!errorLogger.checkLogError("Failed to dispose the SoundSource")) {
+            logger.debug(this.getClass(), "SoundSource successfully disposed");
         }
     }
 

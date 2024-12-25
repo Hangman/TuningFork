@@ -18,30 +18,30 @@ public class LoopPointSoundBufferTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
-        this.sound.setLoopPoints(3f, 7f);
-        final float[] loopPoints = this.sound.getLoopPoints();
-        System.out.println("Sound duration: " + this.sound.getDuration() + "s");
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound.setLoopPoints(3f, 7f);
+        final float[] loopPoints = sound.getLoopPoints();
+        System.out.println("Sound duration: " + sound.getDuration() + "s");
         System.out.println("loop points: " + loopPoints[0] + " | " + loopPoints[1]);
 
-        this.source = this.audio.obtainSource(this.sound);
-        this.source.setLooping(true);
-        this.source.play();
+        source = audio.obtainSource(sound);
+        source.setLooping(true);
+        source.play();
     }
 
 
     @Override
     public void render() {
-        System.out.println("playback position: " + this.source.getPlaybackPosition() + "s");
+        System.out.println("playback position: " + source.getPlaybackPosition() + "s");
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

@@ -33,7 +33,7 @@ public class PlayList {
 
 
     public PlayList() {
-        this.logger = Audio.get().getLogger();
+        logger = Audio.get().getLogger();
     }
 
 
@@ -43,7 +43,7 @@ public class PlayList {
      * @param song the song
      */
     public void addSong(Song song) {
-        this.songs.add(song);
+        songs.add(song);
     }
 
 
@@ -53,18 +53,18 @@ public class PlayList {
      * @return the next {@link Song} in the list
      */
     public Song nextSong() {
-        if (this.songs.isEmpty()) {
-            this.logger.warn(this.getClass(), "Requested nextSong on empty PlayList: " + this);
+        if (songs.isEmpty()) {
+            logger.warn(this.getClass(), "Requested nextSong on empty PlayList: " + this);
             return null;
         }
 
-        final Song song = this.songs.get(this.songIndex);
-        this.songIndex++;
-        if (this.songIndex >= this.songs.size) {
-            this.songIndex = 0;
-            this.playedThrough = true;
-            if (this.shuffleAfterPlaytrough) {
-                this.shuffle();
+        final Song song = songs.get(songIndex);
+        songIndex++;
+        if (songIndex >= songs.size) {
+            songIndex = 0;
+            playedThrough = true;
+            if (shuffleAfterPlaytrough) {
+                shuffle();
             }
         }
         return song;
@@ -76,8 +76,8 @@ public class PlayList {
      * afterwards.
      */
     public void reset() {
-        this.songIndex = 0;
-        this.playedThrough = false;
+        songIndex = 0;
+        playedThrough = false;
     }
 
 
@@ -87,7 +87,7 @@ public class PlayList {
      * @return true if all songs have been fetched
      */
     public boolean isPlayedThrough() {
-        return this.playedThrough;
+        return playedThrough;
     }
 
 
@@ -95,7 +95,7 @@ public class PlayList {
      * Shuffles the internal list of {@link Song}s.
      */
     public void shuffle() {
-        this.songs.shuffle();
+        songs.shuffle();
     }
 
 
@@ -105,7 +105,7 @@ public class PlayList {
      * @param value if set to true, the playlist will be shuffled after a complete play through
      */
     public void setShuffleAfterPlaytrough(boolean value) {
-        this.shuffleAfterPlaytrough = value;
+        shuffleAfterPlaytrough = value;
     }
 
 
@@ -125,14 +125,14 @@ public class PlayList {
      * @return true for repeat
      */
     public boolean isLoop() {
-        return this.loop;
+        return loop;
     }
 
 
     @Override
     public String toString() {
-        return "PlayList [songs=" + this.songs + ", songIndex=" + this.songIndex + ", playedThrough=" + this.playedThrough + ", loop=" + this.loop
-                + ", shuffleAfterPlaytrough=" + this.shuffleAfterPlaytrough + "]";
+        return "PlayList [songs=" + songs + ", songIndex=" + songIndex + ", playedThrough=" + playedThrough + ", loop=" + loop + ", shuffleAfterPlaytrough="
+                + shuffleAfterPlaytrough + "]";
     }
 
 }

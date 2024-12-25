@@ -35,13 +35,13 @@ public class Compressor extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_COMPRESSOR);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_COMPRESSOR_ONOFF, this.onOff);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_COMPRESSOR_ONOFF, onOff);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.onOff);
+        return Objects.hash(onOff);
     }
 
 
@@ -57,13 +57,13 @@ public class Compressor extends SoundEffectData {
             return false;
         }
         final Compressor other = (Compressor) obj;
-        return this.onOff == other.onOff;
+        return onOff == other.onOff;
     }
 
 
     @Override
     public String toString() {
-        return "Compressor [onOff=" + this.onOff + "]";
+        return "Compressor [onOff=" + onOff + "]";
     }
 
 }

@@ -47,7 +47,7 @@ enum Note {
 
 
     float getFrequency() {
-        return this.frequency;
+        return frequency;
     }
 
 }

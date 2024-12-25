@@ -38,35 +38,35 @@ public class AsyncLoadTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.assetManager = new AssetManager();
+        assetManager = new AssetManager();
 
         final AudioConfig config = new AudioConfig();
-        config.setAssetManager(this.assetManager);
+        config.setAssetManager(assetManager);
         config.setLogger(new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR));
-        this.audio = Audio.init(config);
+        audio = Audio.init(config);
 
         // If you cannot provide an AssetManager in the AudioConfig, use this:
         // this.audio.registerAssetManagerLoaders(this.assetManager);
 
-        this.assetManager.load(AsyncLoadTest.FILE_1, SoundBuffer.class);
+        assetManager.load(AsyncLoadTest.FILE_1, SoundBuffer.class);
         final ReadableSoundBufferLoaderParameter parameter = new ReadableSoundBufferLoaderParameter();
         parameter.reverse = true;
-        this.assetManager.load(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class, parameter);
+        assetManager.load(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class, parameter);
     }
 
 
     @Override
     public void render() {
-        if (this.assetManager.update(15)) {
-            if (!this.playedSoundBuffer) {
-                final SoundBuffer soundBuffer = this.assetManager.get(AsyncLoadTest.FILE_1, SoundBuffer.class);
-                this.source = this.audio.obtainSource(soundBuffer);
-                this.source.play();
-                this.playedSoundBuffer = true;
-            } else if (this.source != null && !this.source.isPlaying() && !this.playedReadableSoundBuffer) {
-                final ReadableSoundBuffer buffer = this.assetManager.get(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class);
+        if (assetManager.update(15)) {
+            if (!playedSoundBuffer) {
+                final SoundBuffer soundBuffer = assetManager.get(AsyncLoadTest.FILE_1, SoundBuffer.class);
+                source = audio.obtainSource(soundBuffer);
+                source.play();
+                playedSoundBuffer = true;
+            } else if (source != null && !source.isPlaying() && !playedReadableSoundBuffer) {
+                final ReadableSoundBuffer buffer = assetManager.get(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class);
                 buffer.play();
-                this.playedReadableSoundBuffer = true;
+                playedReadableSoundBuffer = true;
             }
 
         }
@@ -75,8 +75,8 @@ public class AsyncLoadTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.assetManager.dispose();
-        this.audio.dispose();
+        assetManager.dispose();
+        audio.dispose();
     }
 
 

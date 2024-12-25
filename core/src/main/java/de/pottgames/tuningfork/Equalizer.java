@@ -88,23 +88,22 @@ public class Equalizer extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EQUALIZER);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_GAIN, this.lowGain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_CUTOFF, this.lowCutoff);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_GAIN, this.mid1Gain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_CENTER, this.mid1Center);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_WIDTH, this.mid1Width);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_GAIN, this.mid2Gain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_CENTER, this.mid2Center);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_WIDTH, this.mid2Width);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_GAIN, this.highGain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_CUTOFF, this.highCutoff);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_GAIN, lowGain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_CUTOFF, lowCutoff);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_GAIN, mid1Gain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_CENTER, mid1Center);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_WIDTH, mid1Width);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_GAIN, mid2Gain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_CENTER, mid2Center);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID2_WIDTH, mid2Width);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_GAIN, highGain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_CUTOFF, highCutoff);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.highCutoff, this.highGain, this.lowCutoff, this.lowGain, this.mid1Center, this.mid1Gain, this.mid1Width, this.mid2Center,
-                this.mid2Gain, this.mid2Width);
+        return Objects.hash(highCutoff, highGain, lowCutoff, lowGain, mid1Center, mid1Gain, mid1Width, mid2Center, mid2Gain, mid2Width);
     }
 
 
@@ -120,24 +119,24 @@ public class Equalizer extends SoundEffectData {
             return false;
         }
         final Equalizer other = (Equalizer) obj;
-        return Float.floatToIntBits(this.highCutoff) == Float.floatToIntBits(other.highCutoff)
-                && Float.floatToIntBits(this.highGain) == Float.floatToIntBits(other.highGain)
-                && Float.floatToIntBits(this.lowCutoff) == Float.floatToIntBits(other.lowCutoff)
-                && Float.floatToIntBits(this.lowGain) == Float.floatToIntBits(other.lowGain)
-                && Float.floatToIntBits(this.mid1Center) == Float.floatToIntBits(other.mid1Center)
-                && Float.floatToIntBits(this.mid1Gain) == Float.floatToIntBits(other.mid1Gain)
-                && Float.floatToIntBits(this.mid1Width) == Float.floatToIntBits(other.mid1Width)
-                && Float.floatToIntBits(this.mid2Center) == Float.floatToIntBits(other.mid2Center)
-                && Float.floatToIntBits(this.mid2Gain) == Float.floatToIntBits(other.mid2Gain)
-                && Float.floatToIntBits(this.mid2Width) == Float.floatToIntBits(other.mid2Width);
+        return Float.floatToIntBits(highCutoff) == Float.floatToIntBits(other.highCutoff)
+                && Float.floatToIntBits(highGain) == Float.floatToIntBits(other.highGain)
+                && Float.floatToIntBits(lowCutoff) == Float.floatToIntBits(other.lowCutoff)
+                && Float.floatToIntBits(lowGain) == Float.floatToIntBits(other.lowGain)
+                && Float.floatToIntBits(mid1Center) == Float.floatToIntBits(other.mid1Center)
+                && Float.floatToIntBits(mid1Gain) == Float.floatToIntBits(other.mid1Gain)
+                && Float.floatToIntBits(mid1Width) == Float.floatToIntBits(other.mid1Width)
+                && Float.floatToIntBits(mid2Center) == Float.floatToIntBits(other.mid2Center)
+                && Float.floatToIntBits(mid2Gain) == Float.floatToIntBits(other.mid2Gain)
+                && Float.floatToIntBits(mid2Width) == Float.floatToIntBits(other.mid2Width);
     }
 
 
     @Override
     public String toString() {
-        return "Equalizer [lowGain=" + this.lowGain + ", lowCutoff=" + this.lowCutoff + ", mid1Gain=" + this.mid1Gain + ", mid1Center=" + this.mid1Center
-                + ", mid1Width=" + this.mid1Width + ", mid2Gain=" + this.mid2Gain + ", mid2Center=" + this.mid2Center + ", mid2Width=" + this.mid2Width
-                + ", highGain=" + this.highGain + ", highCutoff=" + this.highCutoff + "]";
+        return "Equalizer [lowGain=" + lowGain + ", lowCutoff=" + lowCutoff + ", mid1Gain=" + mid1Gain + ", mid1Center=" + mid1Center + ", mid1Width="
+                + mid1Width + ", mid2Gain=" + mid2Gain + ", mid2Center=" + mid2Center + ", mid2Width=" + mid2Width + ", highGain=" + highGain + ", highCutoff="
+                + highCutoff + "]";
     }
 
 }

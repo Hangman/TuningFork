@@ -102,18 +102,18 @@ public class Flanger extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FLANGER);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_WAVEFORM, this.waveform);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_PHASE, this.phase);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_RATE, this.rate);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DEPTH, this.depth);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_FEEDBACK, this.feedback);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DELAY, this.delay);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_WAVEFORM, waveform);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_PHASE, phase);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_RATE, rate);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DEPTH, depth);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_FEEDBACK, feedback);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DELAY, delay);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.delay, this.depth, this.feedback, this.phase, this.rate, this.waveform);
+        return Objects.hash(delay, depth, feedback, phase, rate, waveform);
     }
 
 
@@ -129,16 +129,16 @@ public class Flanger extends SoundEffectData {
             return false;
         }
         final Flanger other = (Flanger) obj;
-        return Float.floatToIntBits(this.delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(this.depth) == Float.floatToIntBits(other.depth)
-                && Float.floatToIntBits(this.feedback) == Float.floatToIntBits(other.feedback) && this.phase == other.phase
-                && Float.floatToIntBits(this.rate) == Float.floatToIntBits(other.rate) && this.waveform == other.waveform;
+        return Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(depth) == Float.floatToIntBits(other.depth)
+                && Float.floatToIntBits(feedback) == Float.floatToIntBits(other.feedback) && phase == other.phase
+                && Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) && waveform == other.waveform;
     }
 
 
     @Override
     public String toString() {
-        return "Flanger [waveform=" + this.waveform + ", phase=" + this.phase + ", rate=" + this.rate + ", depth=" + this.depth + ", feedback=" + this.feedback
-                + ", delay=" + this.delay + "]";
+        return "Flanger [waveform=" + waveform + ", phase=" + phase + ", rate=" + rate + ", depth=" + depth + ", feedback=" + feedback + ", delay=" + delay
+                + "]";
     }
 
 }

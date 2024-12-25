@@ -32,7 +32,7 @@ public class DefaultPlayListProvider implements PlayListProvider {
      * @return the DefaultPlayListProvider for chaining
      */
     public DefaultPlayListProvider add(PlayList list) {
-        this.lists.add(list);
+        lists.add(list);
         return this;
     }
 
@@ -58,26 +58,26 @@ public class DefaultPlayListProvider implements PlayListProvider {
      * @return the DefaultPlayListProvider for chaining
      */
     public DefaultPlayListProvider remove(PlayList list) {
-        this.lists.removeValue(list, false);
+        lists.removeValue(list, false);
         return this;
     }
 
 
     @Override
     public PlayList next() {
-        return this.lists.removeIndex(0);
+        return lists.removeIndex(0);
     }
 
 
     @Override
     public boolean hasNext() {
-        return this.lists.size > 0;
+        return lists.size > 0;
     }
 
 
     @Override
     public String toString() {
-        return "DefaultPlayListProvider [lists=" + this.lists + "]";
+        return "DefaultPlayListProvider [lists=" + lists + "]";
     }
 
 }

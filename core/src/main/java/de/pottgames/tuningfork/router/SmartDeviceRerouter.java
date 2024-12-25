@@ -74,16 +74,16 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
         this.device = device;
         this.attributes = attributes;
-        this.currentDeviceSpecifier = this.fetchCurrentDeviceSpecifier();
-        this.updateDesiredDevice(desiredDeviceSpecifier);
-        this.setup = true;
+        currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
+        updateDesiredDevice(desiredDeviceSpecifier);
+        setup = true;
     }
 
 
     @Override
     public void updateDesiredDevice(String desiredDeviceSpecifier) {
         this.desiredDeviceSpecifier = desiredDeviceSpecifier;
-        this.currentDeviceSpecifier = this.fetchCurrentDeviceSpecifier();
+        currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
     }
 
 
@@ -98,11 +98,11 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
      */
     @Override
     public void start() {
-        if (!this.setup) {
+        if (!setup) {
             throw new TuningForkRuntimeException("SmartDeviceRerouter wasn't set up properly");
         }
 
-        this.active = true;
+        active = true;
         final Thread thread = new Thread(SmartDeviceRerouter.this::loop);
         thread.setName("TuningFork-SmartDeviceRerouter-Thread");
         thread.setDaemon(true);
@@ -112,52 +112,52 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
     @Override
     public void onDisconnect() {
-        if (!this.active) {
+        if (!active) {
             return;
         }
 
-        this.currentDeviceSpecifier = "none";
-        this.tryReopen();
+        currentDeviceSpecifier = "none";
+        tryReopen();
     }
 
 
     private void loop() {
-        while (this.active) {
-            this.tryReopen();
+        while (active) {
+            tryReopen();
             try {
-                Thread.sleep(this.checkInterval);
+                Thread.sleep(checkInterval);
             } catch (final InterruptedException e) {
-                this.dispose();
+                dispose();
             }
         }
     }
 
 
     private synchronized void tryReopen() {
-        if (this.desiredDeviceSpecifier == null) {
-            this.tryReopenOnDefaultDevice();
+        if (desiredDeviceSpecifier == null) {
+            tryReopenOnDefaultDevice();
         } else {
-            this.tryReopenOnDesiredDevice();
+            tryReopenOnDesiredDevice();
         }
     }
 
 
     private void tryReopenOnDesiredDevice() {
-        if (!this.currentDeviceSpecifier.equals(this.desiredDeviceSpecifier)) {
+        if (!currentDeviceSpecifier.equals(desiredDeviceSpecifier)) {
             final List<String> availableDevices = AudioDevice.availableDevices();
-            if (availableDevices != null && availableDevices.contains(this.desiredDeviceSpecifier)) {
-                this.reopen(this.desiredDeviceSpecifier);
+            if (availableDevices != null && availableDevices.contains(desiredDeviceSpecifier)) {
+                reopen(desiredDeviceSpecifier);
             } else {
-                this.tryReopenOnDefaultDevice();
+                tryReopenOnDefaultDevice();
             }
         }
     }
 
 
     private void tryReopenOnDefaultDevice() {
-        final String defaultDeviceSpecifier = this.fetchDefaultDeviceSpecifier();
-        if (!this.currentDeviceSpecifier.equals(defaultDeviceSpecifier)) {
-            this.reopen(defaultDeviceSpecifier);
+        final String defaultDeviceSpecifier = fetchDefaultDeviceSpecifier();
+        if (!currentDeviceSpecifier.equals(defaultDeviceSpecifier)) {
+            reopen(defaultDeviceSpecifier);
         }
     }
 
@@ -168,20 +168,20 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
 
     private String fetchCurrentDeviceSpecifier() {
-        return ALC10.alcGetString(this.device, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+        return ALC10.alcGetString(device, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
     }
 
 
     private void reopen(String deviceSpecifier) {
-        if (SOFTReopenDevice.alcReopenDeviceSOFT(this.device, deviceSpecifier, this.attributes.getBuffer())) {
-            this.currentDeviceSpecifier = this.fetchCurrentDeviceSpecifier();
+        if (SOFTReopenDevice.alcReopenDeviceSOFT(device, deviceSpecifier, attributes.getBuffer())) {
+            currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
         }
     }
 
 
     @Override
     public void dispose() {
-        this.active = false;
+        active = false;
     }
 
 }

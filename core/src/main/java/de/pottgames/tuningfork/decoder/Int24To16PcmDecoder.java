@@ -25,8 +25,8 @@ public class Int24To16PcmDecoder implements WavDecoder {
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.bytesRemaining = streamLength;
-        this.totalOutputSamplesPerChannel = this.bytesRemaining / 3L / this.channels;
+        bytesRemaining = streamLength;
+        totalOutputSamplesPerChannel = bytesRemaining / 3L / channels;
     }
 
 
@@ -35,7 +35,7 @@ public class Int24To16PcmDecoder implements WavDecoder {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
 
         for (int i = 0; i < output.length; i++) {
-            final int outputByte = this.fetchNextOutputByte();
+            final int outputByte = fetchNextOutputByte();
             if (outputByte == Int24To16PcmDecoder.END_OF_STREAM) {
                 return i == 0 ? -1 : i;
             }
@@ -47,23 +47,23 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
 
     private int fetchNextOutputByte() throws IOException {
-        if (this.outputSampleFetchedBytes >= 2) {
-            this.outputSample = this.fetchNextOutputSample();
-            if (this.outputSample == Int24To16PcmDecoder.END_OF_STREAM) {
+        if (outputSampleFetchedBytes >= 2) {
+            outputSample = fetchNextOutputSample();
+            if (outputSample == Int24To16PcmDecoder.END_OF_STREAM) {
                 return Int24To16PcmDecoder.END_OF_STREAM;
             }
-            this.outputSampleFetchedBytes = 0;
+            outputSampleFetchedBytes = 0;
         }
 
-        final int outputByte = this.outputSample >>> this.outputSampleFetchedBytes * 8 & 0xff;
-        this.outputSampleFetchedBytes++;
+        final int outputByte = outputSample >>> outputSampleFetchedBytes * 8 & 0xff;
+        outputSampleFetchedBytes++;
 
         return outputByte;
     }
 
 
     private int fetchNextOutputSample() throws IOException {
-        final int inputSample = this.fetchNextInputSample();
+        final int inputSample = fetchNextInputSample();
         if (inputSample == Int24To16PcmDecoder.END_OF_STREAM) {
             return Int24To16PcmDecoder.END_OF_STREAM;
         }
@@ -73,20 +73,20 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
 
     private int fetchNextInputSample() throws IOException {
-        if (this.bytesRemaining < 3) {
+        if (bytesRemaining < 3) {
             return Int24To16PcmDecoder.END_OF_STREAM;
         }
 
-        final int byte1 = this.stream.read();
-        final int byte2 = this.stream.read();
-        final int byte3 = this.stream.read();
+        final int byte1 = stream.read();
+        final int byte2 = stream.read();
+        final int byte3 = stream.read();
         if (byte3 < 0) {
-            this.bytesRemaining = 0;
+            bytesRemaining = 0;
             return Int24To16PcmDecoder.END_OF_STREAM;
         }
-        this.bytesRemaining -= 3;
-        if (this.bytesRemaining < 0) {
-            this.bytesRemaining = 0;
+        bytesRemaining -= 3;
+        if (bytesRemaining < 0) {
+            bytesRemaining = 0;
         }
 
         return byte1 | byte2 << 8 | byte3 << 16;
@@ -107,19 +107,19 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
@@ -131,13 +131,13 @@ public class Int24To16PcmDecoder implements WavDecoder {
 
     @Override
     public long bytesRemaining() {
-        return (long) (this.bytesRemaining / 3f * 2f);
+        return (long) (bytesRemaining / 3f * 2f);
     }
 
 
     @Override
     public void close() throws IOException, NullPointerException {
-        this.stream.close();
+        stream.close();
     }
 
 }

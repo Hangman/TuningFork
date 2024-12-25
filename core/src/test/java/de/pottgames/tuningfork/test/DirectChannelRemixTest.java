@@ -26,9 +26,9 @@ public class DirectChannelRemixTest extends ApplicationAdapter {
     public void create() {
         final AudioConfig config = new AudioConfig();
         config.setVirtualization(Virtualization.ON);
-        this.audio = Audio.init(config);
-        this.sound = SoundLoader.load(Gdx.files.internal("quadrophonic.ogg"));
-        this.streamedSource = new StreamedSoundSource(Gdx.files.internal("quadrophonic.ogg"));
+        audio = Audio.init(config);
+        sound = SoundLoader.load(Gdx.files.internal("quadrophonic.ogg"));
+        streamedSource = new StreamedSoundSource(Gdx.files.internal("quadrophonic.ogg"));
         System.out.println("Press space to switch through the different virtualization settings.");
     }
 
@@ -36,20 +36,20 @@ public class DirectChannelRemixTest extends ApplicationAdapter {
     @Override
     public void render() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            this.virtualizationIndex++;
-            if (this.virtualizationIndex >= DirectChannelRemixTest.virtualizations.length) {
-                this.virtualizationIndex = 0;
-                this.streamed = !this.streamed;
+            virtualizationIndex++;
+            if (virtualizationIndex >= DirectChannelRemixTest.virtualizations.length) {
+                virtualizationIndex = 0;
+                streamed = !streamed;
             }
-            final Virtualization virtualization = DirectChannelRemixTest.virtualizations[this.virtualizationIndex];
+            final Virtualization virtualization = DirectChannelRemixTest.virtualizations[virtualizationIndex];
             System.out.println("virtualization: " + virtualization);
-            this.audio.setDefaultVirtualization(virtualization);
-            if (this.streamed) {
+            audio.setDefaultVirtualization(virtualization);
+            if (streamed) {
                 System.out.println("playing via StreamedSoundSource");
-                this.streamedSource.play();
+                streamedSource.play();
             } else {
                 System.out.println("playing via SoundBuffer");
-                this.sound.play();
+                sound.play();
             }
         }
     }
@@ -57,8 +57,8 @@ public class DirectChannelRemixTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

@@ -28,7 +28,7 @@ public class Aiff64BitFloatDecoder implements AiffDecoder {
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.inputBytesRemaining = streamLength;
+        inputBytesRemaining = streamLength;
     }
 
 
@@ -36,29 +36,29 @@ public class Aiff64BitFloatDecoder implements AiffDecoder {
     public int read(byte[] output) throws IOException {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
 
-        if (this.inputBytesRemaining <= 0) {
+        if (inputBytesRemaining <= 0) {
             return -1;
         }
 
         int writeOffset = 0;
 
         while (writeOffset < output.length) {
-            if (this.bufferOffset >= this.bufferLength - 7) {
-                this.bufferLength = this.fillBuffer();
-                if (this.bufferLength < 8) {
+            if (bufferOffset >= bufferLength - 7) {
+                bufferLength = fillBuffer();
+                if (bufferLength < 8) {
                     return writeOffset == 0 ? -1 : writeOffset;
                 }
             }
 
-            while (this.bufferOffset + 7 < this.bufferLength && writeOffset < output.length - 7) {
-                final byte byte1 = this.buffer[this.bufferOffset++];
-                final byte byte2 = this.buffer[this.bufferOffset++];
-                final byte byte3 = this.buffer[this.bufferOffset++];
-                final byte byte4 = this.buffer[this.bufferOffset++];
-                final byte byte5 = this.buffer[this.bufferOffset++];
-                final byte byte6 = this.buffer[this.bufferOffset++];
-                final byte byte7 = this.buffer[this.bufferOffset++];
-                final byte byte8 = this.buffer[this.bufferOffset++];
+            while (bufferOffset + 7 < bufferLength && writeOffset < output.length - 7) {
+                final byte byte1 = buffer[bufferOffset++];
+                final byte byte2 = buffer[bufferOffset++];
+                final byte byte3 = buffer[bufferOffset++];
+                final byte byte4 = buffer[bufferOffset++];
+                final byte byte5 = buffer[bufferOffset++];
+                final byte byte6 = buffer[bufferOffset++];
+                final byte byte7 = buffer[bufferOffset++];
+                final byte byte8 = buffer[bufferOffset++];
                 output[writeOffset++] = byte8;
                 output[writeOffset++] = byte7;
                 output[writeOffset++] = byte6;
@@ -67,8 +67,8 @@ public class Aiff64BitFloatDecoder implements AiffDecoder {
                 output[writeOffset++] = byte3;
                 output[writeOffset++] = byte2;
                 output[writeOffset++] = byte1;
-                this.inputBytesRemaining -= 8;
-                if (this.inputBytesRemaining <= 0) {
+                inputBytesRemaining -= 8;
+                if (inputBytesRemaining <= 0) {
                     return writeOffset;
                 }
             }
@@ -79,8 +79,8 @@ public class Aiff64BitFloatDecoder implements AiffDecoder {
 
 
     private int fillBuffer() throws IOException {
-        this.bufferOffset = 0;
-        return this.stream.read(this.buffer, 0, this.buffer.length);
+        bufferOffset = 0;
+        return stream.read(buffer, 0, buffer.length);
     }
 
 
@@ -104,7 +104,7 @@ public class Aiff64BitFloatDecoder implements AiffDecoder {
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 }

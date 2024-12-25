@@ -22,7 +22,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
 
     public ConsoleLogger(LogLevel logLevel) {
-        this.setLogLevel(logLevel);
+        setLogLevel(logLevel);
     }
 
 
@@ -39,12 +39,12 @@ public class ConsoleLogger implements TuningForkLogger {
 
 
         public int getValue() {
-            return this.value;
+            return value;
         }
 
 
         boolean allowedToLog(LogLevel logLevel) {
-            return this.value >= logLevel.value;
+            return value >= logLevel.value;
         }
 
     }
@@ -61,7 +61,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
     @Override
     public void error(Class<?> clazz, String message) {
-        if (this.logLevel.allowedToLog(LogLevel.ERROR)) {
+        if (logLevel.allowedToLog(LogLevel.ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
@@ -69,7 +69,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
     @Override
     public void warn(Class<?> clazz, String message) {
-        if (this.logLevel.allowedToLog(LogLevel.WARN_ERROR)) {
+        if (logLevel.allowedToLog(LogLevel.WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
@@ -77,7 +77,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
     @Override
     public void info(Class<?> clazz, String message) {
-        if (this.logLevel.allowedToLog(LogLevel.INFO_WARN_ERROR)) {
+        if (logLevel.allowedToLog(LogLevel.INFO_WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
@@ -85,7 +85,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
     @Override
     public void debug(Class<?> clazz, String message) {
-        if (this.logLevel.allowedToLog(LogLevel.DEBUG_INFO_WARN_ERROR)) {
+        if (logLevel.allowedToLog(LogLevel.DEBUG_INFO_WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
@@ -93,7 +93,7 @@ public class ConsoleLogger implements TuningForkLogger {
 
     @Override
     public void trace(Class<?> clazz, String message) {
-        if (this.logLevel.allowedToLog(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR)) {
+        if (logLevel.allowedToLog(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }

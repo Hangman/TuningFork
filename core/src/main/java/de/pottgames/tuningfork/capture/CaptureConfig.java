@@ -33,11 +33,11 @@ public class CaptureConfig {
      * Creates a new {@link CaptureConfig} with default settings.
      */
     public CaptureConfig() {
-        this.pcmFormat = PcmFormat.MONO_16_BIT;
-        this.frequency = 44100;
-        this.bufferSize = 4096 * 10;
-        this.deviceSpecifier = null;
-        this.logger = new GdxLogger();
+        pcmFormat = PcmFormat.MONO_16_BIT;
+        frequency = 44100;
+        bufferSize = 4096 * 10;
+        deviceSpecifier = null;
+        logger = new GdxLogger();
     }
 
 
@@ -65,7 +65,7 @@ public class CaptureConfig {
      * @return the pcm format
      */
     public PcmFormat getPcmFormat() {
-        return this.pcmFormat;
+        return pcmFormat;
     }
 
 
@@ -75,7 +75,7 @@ public class CaptureConfig {
      * @return the frequency
      */
     public int getFrequency() {
-        return this.frequency;
+        return frequency;
     }
 
 
@@ -85,7 +85,7 @@ public class CaptureConfig {
      * @return the buffer size
      */
     public int getBufferSize() {
-        return this.bufferSize;
+        return bufferSize;
     }
 
 
@@ -95,7 +95,7 @@ public class CaptureConfig {
      * @return the device specifier
      */
     public String getDeviceSpecifier() {
-        return this.deviceSpecifier;
+        return deviceSpecifier;
     }
 
 
@@ -105,7 +105,7 @@ public class CaptureConfig {
      * @return the logger
      */
     public TuningForkLogger getLogger() {
-        return this.logger;
+        return logger;
     }
 
 

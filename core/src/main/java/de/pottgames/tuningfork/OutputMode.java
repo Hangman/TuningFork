@@ -64,7 +64,7 @@ public enum OutputMode {
 
 
     int getAlId() {
-        return this.alId;
+        return alId;
     }
 
 

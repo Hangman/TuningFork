@@ -73,11 +73,11 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
         audioDeviceConfig.setDeviceSpecifier(deviceList.get(number));
         audioDeviceConfig.setRerouter(new SmartDeviceRerouter());
-        this.audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
+        audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
 
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
-        final SoundSource source = this.audio.obtainSource(this.sound);
+        final SoundSource source = audio.obtainSource(sound);
         source.setLooping(true);
         source.play();
     }
@@ -91,10 +91,10 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

@@ -85,9 +85,9 @@ public class PitchShifter extends SoundEffectData {
         pitch = MathUtils.clamp(pitch, 0.5f, 2f);
 
         final float semitones = (float) (12d / Math.log(2d) * Math.log(1d / pitch));
-        this.coarseTune = Math.round(semitones);
-        final float rest = semitones - this.coarseTune;
-        this.fineTune = Math.round(rest * 100f);
+        coarseTune = Math.round(semitones);
+        final float rest = semitones - coarseTune;
+        fineTune = Math.round(rest * 100f);
 
         return this;
     }
@@ -96,14 +96,14 @@ public class PitchShifter extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_PITCH_SHIFTER);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_COARSE_TUNE, this.coarseTune);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_FINE_TUNE, this.fineTune);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_COARSE_TUNE, coarseTune);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_FINE_TUNE, fineTune);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.coarseTune, this.fineTune);
+        return Objects.hash(coarseTune, fineTune);
     }
 
 
@@ -119,13 +119,13 @@ public class PitchShifter extends SoundEffectData {
             return false;
         }
         final PitchShifter other = (PitchShifter) obj;
-        return this.coarseTune == other.coarseTune && this.fineTune == other.fineTune;
+        return coarseTune == other.coarseTune && fineTune == other.fineTune;
     }
 
 
     @Override
     public String toString() {
-        return "PitchShifter [coarseTune=" + this.coarseTune + ", fineTune=" + this.fineTune + "]";
+        return "PitchShifter [coarseTune=" + coarseTune + ", fineTune=" + fineTune + "]";
     }
 
 }

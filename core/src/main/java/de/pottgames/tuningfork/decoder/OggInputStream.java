@@ -21,7 +21,6 @@ package de.pottgames.tuningfork.decoder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -101,15 +100,15 @@ public class OggInputStream implements AudioStream {
     /**
      * The comment read from the OGG file
      */
-    private final Comment  comment     = new Comment();            // struct that stores all the bitstream user comments
+    private final Comment  comment     = new Comment();       // struct that stores all the bitstream user comments
     /**
      * The Vorbis DSP stat eused to decode the OGG
      */
-    private final DspState dspState    = new DspState();           // central working state for the packet->PCM decoder
+    private final DspState dspState    = new DspState();      // central working state for the packet->PCM decoder
     /**
      * The OGG block we're currently working with to convert PCM
      */
-    private final Block    vorbisBlock = new Block(this.dspState); // local working space for packet->PCM decode
+    private final Block    vorbisBlock = new Block(dspState); // local working space for packet->PCM decode
 
     /**
      * Temporary scratch buffer
@@ -155,15 +154,15 @@ public class OggInputStream implements AudioStream {
      * @param previousStream may be null
      */
     public OggInputStream(FileHandle file, OggInputStream previousStream) {
-        this.logger = Audio.get().getLogger();
+        logger = Audio.get().getLogger();
 
         if (previousStream != null) {
-            this.convbuffer = previousStream.convbuffer;
-            this.pcmBuffer = previousStream.pcmBuffer;
-            this.duration = previousStream.duration;
+            convbuffer = previousStream.convbuffer;
+            pcmBuffer = previousStream.pcmBuffer;
+            duration = previousStream.duration;
         } else {
-            this.convbuffer = new byte[this.convsize];
-            this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
+            convbuffer = new byte[convsize];
+            pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
 
             float duration = -1f;
             final FileType fileType = file.type();
@@ -172,26 +171,26 @@ public class OggInputStream implements AudioStream {
                     final VorbisFile vorbisFile = new VorbisFile(file.file().getAbsolutePath());
                     duration = vorbisFile.time_total(-1);
                 } catch (final Throwable e) {
-                    this.logger.warn(this.getClass(), "Couldn't measure the duration: " + e.getMessage());
+                    logger.warn(this.getClass(), "Couldn't measure the duration: " + e.getMessage());
                 }
             } else {
                 final StringBuilder builder = new StringBuilder();
                 builder.append("Can't measure the duration of: ");
                 builder.append(file.path());
                 builder.append(" - solution: use Gdx.files.absolute() and exclude it from being packed in the jar on " + "distribution");
-                this.logger.warn(this.getClass(), builder.toString());
+                logger.warn(this.getClass(), builder.toString());
             }
             this.duration = duration;
         }
 
-        this.input = file.read();
+        input = file.read();
         try {
-            this.total = this.input.available();
+            total = input.available();
         } catch (final IOException ex) {
             throw new TuningForkRuntimeException(ex);
         }
 
-        this.init();
+        init();
 
         this.file = file;
 
@@ -205,39 +204,39 @@ public class OggInputStream implements AudioStream {
      * @param stream the input stream
      */
     public OggInputStream(InputStream stream) {
-        this.logger = Audio.get().getLogger();
+        logger = Audio.get().getLogger();
 
-        this.convbuffer = new byte[this.convsize];
-        this.pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
+        convbuffer = new byte[convsize];
+        pcmBuffer = BufferUtils.createByteBuffer(4096 * 500);
 
-        this.input = stream;
+        input = stream;
         try {
-            this.total = this.input.available();
+            total = input.available();
         } catch (final IOException ex) {
             throw new TuningForkRuntimeException(ex);
         }
 
-        this.init();
+        init();
 
-        this.file = null;
+        file = null;
 
-        this.duration = -1f;
+        duration = -1f;
     }
 
 
     @Override
     public AudioStream reset() {
-        if (this.file == null) {
+        if (file == null) {
             throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
         }
-        this.close();
-        return new OggInputStream(this.file, this);
+        close();
+        return new OggInputStream(file, this);
     }
 
 
     @Override
     public float getDuration() {
-        return this.duration;
+        return duration;
     }
 
 
@@ -247,19 +246,19 @@ public class OggInputStream implements AudioStream {
      * @return The number of the bytes on the stream
      */
     public int getLength() {
-        return this.total;
+        return total;
     }
 
 
     @Override
     public int getChannels() {
-        return this.oggInfo.channels;
+        return oggInfo.channels;
     }
 
 
     @Override
     public int getSampleRate() {
-        return this.oggInfo.rate;
+        return oggInfo.rate;
     }
 
 
@@ -273,8 +272,8 @@ public class OggInputStream implements AudioStream {
      * Initialise the streams and thread involved in the streaming of OGG data
      */
     private void init() {
-        this.initVorbis();
-        this.readPCM();
+        initVorbis();
+        readPCM();
     }
 
 
@@ -282,7 +281,7 @@ public class OggInputStream implements AudioStream {
      * Initialise the vorbis decoding
      */
     private void initVorbis() {
-        this.syncState.init();
+        syncState.init();
     }
 
 
@@ -298,28 +297,28 @@ public class OggInputStream implements AudioStream {
         // serialno.
 
         // submit a 4k block to libvorbis' Ogg layer
-        int index = this.syncState.buffer(OggInputStream.BUFFER_SIZE);
+        int index = syncState.buffer(OggInputStream.BUFFER_SIZE);
         if (index == -1) {
             return false;
         }
 
-        this.buffer = this.syncState.data;
-        if (this.buffer == null) {
-            this.endOfStream = true;
+        buffer = syncState.data;
+        if (buffer == null) {
+            endOfStream = true;
             return false;
         }
 
         try {
-            this.bytes = this.input.read(this.buffer, index, OggInputStream.BUFFER_SIZE);
+            bytes = input.read(buffer, index, OggInputStream.BUFFER_SIZE);
         } catch (final Exception e) {
             throw new TuningForkRuntimeException("Failure reading Vorbis.", e);
         }
-        this.syncState.wrote(this.bytes);
+        syncState.wrote(bytes);
 
         // Get the first page.
-        if (this.syncState.pageout(this.page) != 1) {
+        if (syncState.pageout(page) != 1) {
             // have we simply run out of data? If so, we're done.
-            if (this.bytes < OggInputStream.BUFFER_SIZE) {
+            if (bytes < OggInputStream.BUFFER_SIZE) {
                 return false;
             }
 
@@ -329,7 +328,7 @@ public class OggInputStream implements AudioStream {
 
         // Get the serial number and set up the rest of decode.
         // serialno first; use it to set up a logical stream
-        this.streamState.init(this.page.serialno());
+        streamState.init(page.serialno());
 
         // extract the initial header from the first page and verify that the
         // Ogg bitstream is in fact Vorbis data
@@ -339,19 +338,19 @@ public class OggInputStream implements AudioStream {
         // header is an easy way to identify a Vorbis bitstream and it's
         // useful to see that functionality seperated out.
 
-        this.oggInfo.init();
-        this.comment.init();
-        if (this.streamState.pagein(this.page) < 0) {
+        oggInfo.init();
+        comment.init();
+        if (streamState.pagein(page) < 0) {
             // error; stream version mismatch perhaps
             throw new TuningForkRuntimeException("Error reading first page of Ogg bitstream.");
         }
 
-        if (this.streamState.packetout(this.packet) != 1) {
+        if (streamState.packetout(packet) != 1) {
             // no page? must not be vorbis
             throw new TuningForkRuntimeException("Error reading initial header packet.");
         }
 
-        if (this.oggInfo.synthesis_headerin(this.comment, this.packet) < 0) {
+        if (oggInfo.synthesis_headerin(comment, packet) < 0) {
             // error case; not a vorbis header
             throw new TuningForkRuntimeException("Ogg bitstream does not contain Vorbis audio data.");
         }
@@ -369,7 +368,7 @@ public class OggInputStream implements AudioStream {
         int i = 0;
         while (i < 2) {
             while (i < 2) {
-                int result = this.syncState.pageout(this.page);
+                int result = syncState.pageout(page);
                 if (result == 0) {
                     break; // Need more data
                     // Don't complain about missing or corrupt data yet. We'll
@@ -377,11 +376,11 @@ public class OggInputStream implements AudioStream {
                 }
 
                 if (result == 1) {
-                    this.streamState.pagein(this.page); // we can ignore any errors here
+                    streamState.pagein(page); // we can ignore any errors here
                     // as they'll also become apparent
                     // at packetout
                     while (i < 2) {
-                        result = this.streamState.packetout(this.packet);
+                        result = streamState.packetout(packet);
                         if (result == 0) {
                             break;
                         }
@@ -391,34 +390,34 @@ public class OggInputStream implements AudioStream {
                             throw new TuningForkRuntimeException("Corrupt secondary header.");
                         }
 
-                        this.oggInfo.synthesis_headerin(this.comment, this.packet);
+                        oggInfo.synthesis_headerin(comment, packet);
                         i++;
                     }
                 }
             }
             // no harm in not checking before adding more
-            index = this.syncState.buffer(OggInputStream.BUFFER_SIZE);
+            index = syncState.buffer(OggInputStream.BUFFER_SIZE);
             if (index == -1) {
                 return false;
             }
-            this.buffer = this.syncState.data;
+            buffer = syncState.data;
             try {
-                this.bytes = this.input.read(this.buffer, index, OggInputStream.BUFFER_SIZE);
+                bytes = input.read(buffer, index, OggInputStream.BUFFER_SIZE);
             } catch (final Exception e) {
                 throw new TuningForkRuntimeException("Failed to read Vorbis.", e);
             }
-            if (this.bytes == 0 && i < 2) {
+            if (bytes == 0 && i < 2) {
                 throw new TuningForkRuntimeException("End of file before finding all Vorbis headers.");
             }
-            this.syncState.wrote(this.bytes);
+            syncState.wrote(bytes);
         }
 
-        this.convsize = OggInputStream.BUFFER_SIZE / this.oggInfo.channels;
+        convsize = OggInputStream.BUFFER_SIZE / oggInfo.channels;
 
         // OK, got and parsed all three headers. Initialize the Vorbis
         // packet->PCM decoder.
-        this.dspState.synthesis_init(this.oggInfo); // central decode state
-        this.vorbisBlock.init(this.dspState); // local state for most of the decode
+        dspState.synthesis_init(oggInfo); // central decode state
+        vorbisBlock.init(dspState); // local state for most of the decode
         // so multiple block decodes can
         // proceed in parallel. We could init
         // multiple vorbis_block structures
@@ -435,36 +434,36 @@ public class OggInputStream implements AudioStream {
         boolean wrote = false;
 
         while (true) { // we repeat if the bitstream is chained
-            if (this.endOfBitStream) {
-                if (!this.getPageAndPacket()) {
+            if (endOfBitStream) {
+                if (!getPageAndPacket()) {
                     break;
                 }
-                this.endOfBitStream = false;
+                endOfBitStream = false;
             }
 
-            if (!this.inited) {
-                this.inited = true;
+            if (!inited) {
+                inited = true;
                 return;
             }
 
             final float[][][] _pcm = new float[1][][];
-            final int[] _index = new int[this.oggInfo.channels];
+            final int[] _index = new int[oggInfo.channels];
             // The rest is just a straight decode loop until end of stream
-            while (!this.endOfBitStream) {
-                while (!this.endOfBitStream) {
-                    int result = this.syncState.pageout(this.page);
+            while (!endOfBitStream) {
+                while (!endOfBitStream) {
+                    int result = syncState.pageout(page);
 
                     if (result == 0) {
                         break; // need more data
                     }
 
                     if (result == -1) { // missing or corrupt data at this page position
-                        this.logger.error(this.getClass(), "Error reading OGG: Corrupt or missing data in bitstream.");
+                        logger.error(this.getClass(), "Error reading OGG: Corrupt or missing data in bitstream.");
                     } else {
-                        this.streamState.pagein(this.page); // can safely ignore errors at
+                        streamState.pagein(page); // can safely ignore errors at
                         // this point
                         while (true) {
-                            result = this.streamState.packetout(this.packet);
+                            result = streamState.packetout(packet);
 
                             if (result == 0) {
                                 break; // need more data
@@ -474,8 +473,8 @@ public class OggInputStream implements AudioStream {
                             } else {
                                 // we have a packet. Decode it
                                 int samples;
-                                if (this.vorbisBlock.synthesis(this.packet) == 0) { // test for success!
-                                    this.dspState.synthesis_blockin(this.vorbisBlock);
+                                if (vorbisBlock.synthesis(packet) == 0) { // test for success!
+                                    dspState.synthesis_blockin(vorbisBlock);
                                 }
 
                                 // **pcm is a multichannel float vector. In stereo, for
@@ -483,14 +482,14 @@ public class OggInputStream implements AudioStream {
                                 // the size of each channel. Convert the float values
                                 // (-1.<=range<=1.) to whatever PCM format and write it out
 
-                                while ((samples = this.dspState.synthesis_pcmout(_pcm, _index)) > 0) {
+                                while ((samples = dspState.synthesis_pcmout(_pcm, _index)) > 0) {
                                     final float[][] pcm = _pcm[0];
                                     // boolean clipflag = false;
-                                    final int bout = samples < this.convsize ? samples : this.convsize;
+                                    final int bout = samples < convsize ? samples : convsize;
 
                                     // convert floats to 16 bit signed ints (host order) and
                                     // interleave
-                                    for (int i = 0; i < this.oggInfo.channels; i++) {
+                                    for (int i = 0; i < oggInfo.channels; i++) {
                                         int ptr = i * 2;
                                         // int ptr=i;
                                         final int mono = _index[i];
@@ -507,101 +506,101 @@ public class OggInputStream implements AudioStream {
                                                 val = val | 0x8000;
                                             }
 
-                                            if (this.bigEndian) {
-                                                this.convbuffer[ptr] = (byte) (val >>> 8);
-                                                this.convbuffer[ptr + 1] = (byte) val;
+                                            if (bigEndian) {
+                                                convbuffer[ptr] = (byte) (val >>> 8);
+                                                convbuffer[ptr + 1] = (byte) val;
                                             } else {
-                                                this.convbuffer[ptr] = (byte) val;
-                                                this.convbuffer[ptr + 1] = (byte) (val >>> 8);
+                                                convbuffer[ptr] = (byte) val;
+                                                convbuffer[ptr + 1] = (byte) (val >>> 8);
                                             }
-                                            ptr += 2 * this.oggInfo.channels;
+                                            ptr += 2 * oggInfo.channels;
                                         }
                                     }
 
-                                    final int bytesToWrite = 2 * this.oggInfo.channels * bout;
-                                    if (bytesToWrite > this.pcmBuffer.remaining()) {
+                                    final int bytesToWrite = 2 * oggInfo.channels * bout;
+                                    if (bytesToWrite > pcmBuffer.remaining()) {
                                         throw new TuningForkRuntimeException(
-                                                "Ogg block too big to be buffered: " + bytesToWrite + " :: " + this.pcmBuffer.remaining());
+                                                "Ogg block too big to be buffered: " + bytesToWrite + " :: " + pcmBuffer.remaining());
                                     }
-                                    this.pcmBuffer.put(this.convbuffer, 0, bytesToWrite);
+                                    pcmBuffer.put(convbuffer, 0, bytesToWrite);
 
                                     wrote = true;
-                                    this.dspState.synthesis_read(bout); // tell libvorbis how
+                                    dspState.synthesis_read(bout); // tell libvorbis how
                                     // many samples we
                                     // actually consumed
                                 }
                             }
                         }
-                        if (this.page.eos() != 0) {
-                            this.endOfBitStream = true;
+                        if (page.eos() != 0) {
+                            endOfBitStream = true;
                         }
 
-                        if (!this.endOfBitStream && wrote) {
+                        if (!endOfBitStream && wrote) {
                             return;
                         }
                     }
                 }
 
-                if (!this.endOfBitStream) {
-                    this.bytes = 0;
-                    final int index = this.syncState.buffer(OggInputStream.BUFFER_SIZE);
+                if (!endOfBitStream) {
+                    bytes = 0;
+                    final int index = syncState.buffer(OggInputStream.BUFFER_SIZE);
                     if (index >= 0) {
-                        this.buffer = this.syncState.data;
+                        buffer = syncState.data;
                         try {
-                            this.bytes = this.input.read(this.buffer, index, OggInputStream.BUFFER_SIZE);
+                            bytes = input.read(buffer, index, OggInputStream.BUFFER_SIZE);
                         } catch (final Exception e) {
                             throw new TuningForkRuntimeException("Error during Vorbis decoding.", e);
                         }
                     } else {
-                        this.bytes = 0;
+                        bytes = 0;
                     }
-                    this.syncState.wrote(this.bytes);
-                    if (this.bytes == 0) {
-                        this.endOfBitStream = true;
+                    syncState.wrote(bytes);
+                    if (bytes == 0) {
+                        endOfBitStream = true;
                     }
                 }
             }
 
             // clean up this logical bitstream; before exit we see if we're
             // followed by another [chained]
-            this.streamState.clear();
+            streamState.clear();
 
             // ogg_page and ogg_packet structs always point to storage in
             // libvorbis. They're never freed or manipulated directly
 
-            this.vorbisBlock.clear();
-            this.dspState.clear();
-            this.oggInfo.clear(); // must be called last
+            vorbisBlock.clear();
+            dspState.clear();
+            oggInfo.clear(); // must be called last
         }
 
         // OK, clean up the framer
-        this.syncState.clear();
-        this.endOfStream = true;
+        syncState.clear();
+        endOfStream = true;
     }
 
 
     public int read() {
-        if (this.readIndex >= this.pcmBuffer.position()) {
-            ((Buffer) this.pcmBuffer).clear();
-            this.readPCM();
-            this.readIndex = 0;
+        if (readIndex >= pcmBuffer.position()) {
+            pcmBuffer.clear();
+            readPCM();
+            readIndex = 0;
         }
-        if (this.readIndex >= this.pcmBuffer.position()) {
+        if (readIndex >= pcmBuffer.position()) {
             return -1;
         }
 
-        int value = this.pcmBuffer.get(this.readIndex);
+        int value = pcmBuffer.get(readIndex);
         if (value < 0) {
             value = 256 + value;
         }
-        this.readIndex++;
+        readIndex++;
 
         return value;
     }
 
 
     public boolean atEnd() {
-        return this.endOfStream && this.readIndex >= this.pcmBuffer.position();
+        return endOfStream && readIndex >= pcmBuffer.position();
     }
 
 
@@ -635,14 +634,14 @@ public class OggInputStream implements AudioStream {
 
     @Override
     public void close() {
-        StreamUtils.closeQuietly(this.input);
-        this.closed = true;
+        StreamUtils.closeQuietly(input);
+        closed = true;
     }
 
 
     @Override
     public boolean isClosed() {
-        return this.closed;
+        return closed;
     }
 
 }

@@ -38,41 +38,41 @@ public class FilterTest extends ApplicationAdapter {
         // before we can do anything, we need to initialize our Audio instance
         final AudioConfig config = new AudioConfig();
         config.setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
-        this.audio = Audio.init(config);
+        audio = Audio.init(config);
 
         // load a sound
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // obtain sound source
-        this.soundSource = this.audio.obtainSource(this.sound);
+        soundSource = audio.obtainSource(sound);
 
         // create filters
         // no effect
-        this.filters[0][0] = 1f;
-        this.filters[0][1] = 1f;
+        filters[0][0] = 1f;
+        filters[0][1] = 1f;
 
         // only high frequencies
-        this.filters[1][0] = 0.01f;
-        this.filters[1][1] = 1f;
+        filters[1][0] = 0.01f;
+        filters[1][1] = 1f;
 
         // only low frequencies
-        this.filters[2][0] = 1f;
-        this.filters[2][1] = 0.01f;
+        filters[2][0] = 1f;
+        filters[2][1] = 0.01f;
     }
 
 
     @Override
     public void render() {
-        if (!this.soundSource.isPlaying()) {
-            System.out.println("filter: " + this.filterIndex);
-            System.out.println("using low freq: " + this.filters[this.filterIndex][0]);
-            System.out.println("using low freq: " + this.filters[this.filterIndex][1]);
+        if (!soundSource.isPlaying()) {
+            System.out.println("filter: " + filterIndex);
+            System.out.println("using low freq: " + filters[filterIndex][0]);
+            System.out.println("using low freq: " + filters[filterIndex][1]);
             System.out.println();
-            this.soundSource.setFilter(this.filters[this.filterIndex][0], this.filters[this.filterIndex][1]);
-            this.soundSource.play();
-            this.filterIndex++;
-            if (this.filterIndex >= this.filters.length) {
-                this.filterIndex = 0;
+            soundSource.setFilter(filters[filterIndex][0], filters[filterIndex][1]);
+            soundSource.play();
+            filterIndex++;
+            if (filterIndex >= filters.length) {
+                filterIndex = 0;
             }
         }
     }
@@ -80,11 +80,11 @@ public class FilterTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.soundSource.free();
-        this.sound.dispose();
+        soundSource.free();
+        sound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

@@ -25,8 +25,8 @@ public class Int32To16PcmDecoder implements WavDecoder {
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
-        this.bytesRemaining = streamLength;
-        this.totalOutputSamplesPerChannel = this.bytesRemaining / 4L / this.channels;
+        bytesRemaining = streamLength;
+        totalOutputSamplesPerChannel = bytesRemaining / 4L / channels;
     }
 
 
@@ -35,7 +35,7 @@ public class Int32To16PcmDecoder implements WavDecoder {
         // we don't check if the decoder has been set up properly because this method is crucial for performance
 
         for (int i = 0; i < output.length; i++) {
-            final long outputByte = this.fetchNextOutputByte();
+            final long outputByte = fetchNextOutputByte();
             if (outputByte == Int32To16PcmDecoder.END_OF_STREAM) {
                 return i == 0 ? -1 : i;
             }
@@ -47,23 +47,23 @@ public class Int32To16PcmDecoder implements WavDecoder {
 
 
     private long fetchNextOutputByte() throws IOException {
-        if (this.outputSampleFetchedBytes >= 2) {
-            this.outputSample = this.fetchNextOutputSample();
-            if (this.outputSample == Int32To16PcmDecoder.END_OF_STREAM) {
+        if (outputSampleFetchedBytes >= 2) {
+            outputSample = fetchNextOutputSample();
+            if (outputSample == Int32To16PcmDecoder.END_OF_STREAM) {
                 return Int32To16PcmDecoder.END_OF_STREAM;
             }
-            this.outputSampleFetchedBytes = 0;
+            outputSampleFetchedBytes = 0;
         }
 
-        final long outputByte = this.outputSample >>> this.outputSampleFetchedBytes * 8 & 0xffL;
-        this.outputSampleFetchedBytes++;
+        final long outputByte = outputSample >>> outputSampleFetchedBytes * 8 & 0xffL;
+        outputSampleFetchedBytes++;
 
         return outputByte;
     }
 
 
     private long fetchNextOutputSample() throws IOException {
-        final long inputSample = this.fetchNextInputSample();
+        final long inputSample = fetchNextInputSample();
         if (inputSample == Int32To16PcmDecoder.END_OF_STREAM) {
             return Int32To16PcmDecoder.END_OF_STREAM;
         }
@@ -73,21 +73,21 @@ public class Int32To16PcmDecoder implements WavDecoder {
 
 
     private long fetchNextInputSample() throws IOException {
-        if (this.bytesRemaining < 3) {
+        if (bytesRemaining < 3) {
             return Int32To16PcmDecoder.END_OF_STREAM;
         }
 
-        final int byte1 = this.stream.read();
-        final int byte2 = this.stream.read();
-        final int byte3 = this.stream.read();
-        final int byte4 = this.stream.read();
+        final int byte1 = stream.read();
+        final int byte2 = stream.read();
+        final int byte3 = stream.read();
+        final int byte4 = stream.read();
         if (byte4 < 0) {
-            this.bytesRemaining = 0;
+            bytesRemaining = 0;
             return Int32To16PcmDecoder.END_OF_STREAM;
         }
-        this.bytesRemaining -= 4;
-        if (this.bytesRemaining < 0) {
-            this.bytesRemaining = 0;
+        bytesRemaining -= 4;
+        if (bytesRemaining < 0) {
+            bytesRemaining = 0;
         }
 
         return byte1 | (long) byte2 << 8 | (long) byte3 << 16 | (long) byte4 << 24;
@@ -108,19 +108,19 @@ public class Int32To16PcmDecoder implements WavDecoder {
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
@@ -132,13 +132,13 @@ public class Int32To16PcmDecoder implements WavDecoder {
 
     @Override
     public long bytesRemaining() {
-        return this.bytesRemaining / 2L;
+        return bytesRemaining / 2L;
     }
 
 
     @Override
     public void close() throws IOException {
-        this.stream.close();
+        stream.close();
     }
 
 }

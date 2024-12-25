@@ -18,23 +18,23 @@ public class PlayStartDelayTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
+        audio = Audio.init();
 
-        final long currentTime = this.audio.getDevice().getClockTime();
+        final long currentTime = audio.getDevice().getClockTime();
 
         // load a sound
-        this.sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
+        sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
         // play via fire & forget but delayed
         final long startTime = currentTime + PlayStartDelayTest.milliToNano(1000L);
-        this.sound.playAtTime(-5L);
+        sound.playAtTime(-5L);
         System.out.println("The error is expected. If no error is logged, this test failed.");
-        this.sound.playAtTime(startTime);
+        sound.playAtTime(startTime);
 
         // play via source right after
-        this.source = this.audio.obtainSource(this.sound);
-        this.source.playAtTime(startTime + PlayStartDelayTest.milliToNano((long) (this.source.getDuration() * 1000)));
-        this.source.play(); // this should have no effect
+        source = audio.obtainSource(sound);
+        source.playAtTime(startTime + PlayStartDelayTest.milliToNano((long) (source.getDuration() * 1000)));
+        source.play(); // this should have no effect
 
         System.out.println("The test will finish after counting to ten twice.");
     }
@@ -42,7 +42,7 @@ public class PlayStartDelayTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        if (!this.source.isPlaying()) {
+        if (!source.isPlaying()) {
             System.out.println("Test finished");
             System.exit(0);
         }
@@ -56,8 +56,8 @@ public class PlayStartDelayTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        audio.dispose();
     }
 
 

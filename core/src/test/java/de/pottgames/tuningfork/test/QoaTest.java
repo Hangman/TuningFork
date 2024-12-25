@@ -26,40 +26,40 @@ public class QoaTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.assetManager = new AssetManager();
-        this.assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(new InternalFileHandleResolver()));
+        audio = Audio.init();
+        assetManager = new AssetManager();
+        assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(new InternalFileHandleResolver()));
 
         // SoundBuffer
-        this.sound = SoundLoader.load(Gdx.files.internal(QoaTest.SOUND_FILE_PATH1));
-        System.out.println("SoundBuffer duration: " + this.sound.getDuration() + "s");
-        this.sound.play();
+        sound = SoundLoader.load(Gdx.files.internal(QoaTest.SOUND_FILE_PATH1));
+        System.out.println("SoundBuffer duration: " + sound.getDuration() + "s");
+        sound.play();
 
         // StreamedSoundSource
-        this.streamedSound = new StreamedSoundSource(Gdx.files.internal(QoaTest.SOUND_FILE_PATH2));
-        System.out.println("Streamed sound duration: " + this.streamedSound.getDuration() + "s");
-        this.streamedSound.play();
+        streamedSound = new StreamedSoundSource(Gdx.files.internal(QoaTest.SOUND_FILE_PATH2));
+        System.out.println("Streamed sound duration: " + streamedSound.getDuration() + "s");
+        streamedSound.play();
 
         // Async loading
-        this.assetManager.load(QoaTest.SOUND_FILE_PATH3, SoundBuffer.class);
+        assetManager.load(QoaTest.SOUND_FILE_PATH3, SoundBuffer.class);
     }
 
 
     @Override
     public void render() {
-        if (this.asyncSound == null && this.assetManager.update()) {
-            this.asyncSound = this.assetManager.get(QoaTest.SOUND_FILE_PATH3, SoundBuffer.class);
-            System.out.println("Async SoundBuffer duration: " + this.asyncSound.getDuration() + "s");
-            this.asyncSound.play();
+        if (asyncSound == null && assetManager.update()) {
+            asyncSound = assetManager.get(QoaTest.SOUND_FILE_PATH3, SoundBuffer.class);
+            System.out.println("Async SoundBuffer duration: " + asyncSound.getDuration() + "s");
+            asyncSound.play();
         }
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.streamedSound.dispose();
-        this.audio.dispose();
+        sound.dispose();
+        streamedSound.dispose();
+        audio.dispose();
     }
 
 

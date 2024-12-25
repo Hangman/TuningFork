@@ -17,23 +17,23 @@ public class WavFmtChunk {
 
     public WavFmtChunk(int[] data) {
         this.data = data;
-        this.length = data.length;
+        length = data.length;
 
-        this.wFormatTag = data[0] | data[1] << 8;
-        this.nChannels = data[2] | data[3] << 8;
-        this.nSamplesPerSec = data[4] | (long) data[5] << 8L | (long) data[6] << 16L | (long) data[7] << 24L;
-        this.nAvgBytesPerSec = data[8] | (long) data[9] << 8L | (long) data[10] << 16L | (long) data[11] << 24L;
-        this.nBlockAlign = data[12] | data[13] << 8;
-        this.wBitsPerSample = data[14] | data[15] << 8;
+        wFormatTag = data[0] | data[1] << 8;
+        nChannels = data[2] | data[3] << 8;
+        nSamplesPerSec = data[4] | (long) data[5] << 8L | (long) data[6] << 16L | (long) data[7] << 24L;
+        nAvgBytesPerSec = data[8] | (long) data[9] << 8L | (long) data[10] << 16L | (long) data[11] << 24L;
+        nBlockAlign = data[12] | data[13] << 8;
+        wBitsPerSample = data[14] | data[15] << 8;
 
         if (data.length > 16) {
-            this.cbSize = data[16] | data[17] << 8;
+            cbSize = data[16] | data[17] << 8;
             if (data.length > 18) {
-                this.wValidBitsPerSample = data[18] | data[19] << 8;
+                wValidBitsPerSample = data[18] | data[19] << 8;
                 if (data.length > 20) {
-                    this.dwChannelMask = data[20] | data[21] << 8 | data[22] << 16 | data[23] << 24;
+                    dwChannelMask = data[20] | data[21] << 8 | data[22] << 16 | data[23] << 24;
                     if (data.length > 24) {
-                        this.subFormatDataCode = data[24] | data[25] << 8;
+                        subFormatDataCode = data[24] | data[25] << 8;
 
                         // The remaining 14 bytes contain a fixed string,
                         // \x00\x00\x00\x00\x10\x00\x80\x00\x00\xAA\x00\x38\x9B\x71. Encoders don't seem to
@@ -52,7 +52,7 @@ public class WavFmtChunk {
      * @return cbSize or -1 if the field is not present
      */
     public int getCbSize() {
-        return this.cbSize;
+        return cbSize;
     }
 
 
@@ -62,7 +62,7 @@ public class WavFmtChunk {
      * @return wValidBitsPerSample or -1 if the field is not present
      */
     public int getwValidBitsPerSample() {
-        return this.wValidBitsPerSample;
+        return wValidBitsPerSample;
     }
 
 
@@ -72,7 +72,7 @@ public class WavFmtChunk {
      * @return dwChannelMask or -1 if the field is not present
      */
     public int getDwChannelMask() {
-        return this.dwChannelMask;
+        return dwChannelMask;
     }
 
 
@@ -82,7 +82,7 @@ public class WavFmtChunk {
      * @return subFormatDataCode or -1 if the field is not present
      */
     public int getSubFormatDataCode() {
-        return this.subFormatDataCode;
+        return subFormatDataCode;
     }
 
 
@@ -92,7 +92,7 @@ public class WavFmtChunk {
      * @return wFormatTag
      */
     public int getwFormatTag() {
-        return this.wFormatTag;
+        return wFormatTag;
     }
 
 
@@ -102,7 +102,7 @@ public class WavFmtChunk {
      * @return nChannels
      */
     public int getnChannels() {
-        return this.nChannels;
+        return nChannels;
     }
 
 
@@ -112,7 +112,7 @@ public class WavFmtChunk {
      * @return nSamplesPerSec
      */
     public long getnSamplesPerSec() {
-        return this.nSamplesPerSec;
+        return nSamplesPerSec;
     }
 
 
@@ -122,7 +122,7 @@ public class WavFmtChunk {
      * @return nAvgBytesPerSec
      */
     public long getnAvgBytesPerSec() {
-        return this.nAvgBytesPerSec;
+        return nAvgBytesPerSec;
     }
 
 
@@ -132,7 +132,7 @@ public class WavFmtChunk {
      * @return nBlockAlign
      */
     public int getnBlockAlign() {
-        return this.nBlockAlign;
+        return nBlockAlign;
     }
 
 
@@ -142,7 +142,7 @@ public class WavFmtChunk {
      * @return wBitsPerSample
      */
     public int getwBitsPerSample() {
-        return this.wBitsPerSample;
+        return wBitsPerSample;
     }
 
 
@@ -154,7 +154,7 @@ public class WavFmtChunk {
      * @return an int containing the byte of the original data
      */
     public int getRaw(int index) {
-        return this.data[index];
+        return data[index];
     }
 
 }

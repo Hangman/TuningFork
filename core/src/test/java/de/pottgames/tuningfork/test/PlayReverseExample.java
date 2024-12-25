@@ -38,46 +38,46 @@ public class PlayReverseExample extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.setupAssetManager();
+        audio = Audio.init();
+        setupAssetManager();
 
         // normal loading
-        this.sound = SoundLoader.loadReverse(Gdx.files.internal("numbers.wav"));
+        sound = SoundLoader.loadReverse(Gdx.files.internal("numbers.wav"));
 
         // async loading via AssetManager
         final SoundBufferLoaderParameter parameter = new SoundBufferLoaderParameter();
         parameter.reverse = true;
-        this.assetManager.load("carnivalrides.ogg", SoundBuffer.class, parameter);
+        assetManager.load("carnivalrides.ogg", SoundBuffer.class, parameter);
 
-        this.source = this.audio.obtainSource(this.sound);
-        this.source.play();
+        source = audio.obtainSource(sound);
+        source.play();
     }
 
 
     public void setupAssetManager() {
-        this.assetManager = new AssetManager();
+        assetManager = new AssetManager();
         final FileHandleResolver resolver = new InternalFileHandleResolver();
-        this.assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
+        assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
     }
 
 
     @Override
     public void render() {
-        if (!this.jobDone && this.assetManager.update() && !this.source.isPlaying()) {
-            this.asyncLoadedSound = this.assetManager.get("carnivalrides.ogg");
-            this.asyncLoadedSound.play();
-            this.jobDone = true;
+        if (!jobDone && assetManager.update() && !source.isPlaying()) {
+            asyncLoadedSound = assetManager.get("carnivalrides.ogg");
+            asyncLoadedSound.play();
+            jobDone = true;
         }
     }
 
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        if (this.asyncLoadedSound != null) {
-            this.asyncLoadedSound.dispose();
+        sound.dispose();
+        if (asyncLoadedSound != null) {
+            asyncLoadedSound.dispose();
         }
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

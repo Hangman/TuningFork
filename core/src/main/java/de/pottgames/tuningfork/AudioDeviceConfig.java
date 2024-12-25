@@ -49,7 +49,7 @@ public class AudioDeviceConfig {
 
 
     public String getDeviceSpecifier() {
-        return this.deviceSpecifier;
+        return deviceSpecifier;
     }
 
 
@@ -67,7 +67,7 @@ public class AudioDeviceConfig {
 
 
     public boolean isEnableOutputLimiter() {
-        return this.enableOutputLimiter;
+        return enableOutputLimiter;
     }
 
 
@@ -85,7 +85,7 @@ public class AudioDeviceConfig {
 
 
     public int getEffectSlots() {
-        return this.effectSlots;
+        return effectSlots;
     }
 
 
@@ -105,7 +105,7 @@ public class AudioDeviceConfig {
 
 
     public AudioDeviceRerouter getRerouter() {
-        return this.rerouter;
+        return rerouter;
     }
 
 
@@ -125,7 +125,7 @@ public class AudioDeviceConfig {
 
 
     public OutputMode getOutputMode() {
-        return this.outputMode;
+        return outputMode;
     }
 
 
@@ -144,7 +144,7 @@ public class AudioDeviceConfig {
         if (mode == null) {
             mode = OutputMode.ANY;
         }
-        this.outputMode = mode;
+        outputMode = mode;
         return this;
     }
 

@@ -35,23 +35,23 @@ public class FlacTest extends ApplicationAdapter {
     @Override
     public void create() {
         // before we can do anything, we need to initialize our Audio instance
-        this.audio = Audio.init();
+        audio = Audio.init();
 
         // load and play SoundBuffer
-        this.sound = FlacLoader.load(Gdx.files.internal("numbers_8bit_mono.flac"));
-        System.out.println("Sound duration: " + this.sound.getDuration() + "s");
-        this.sound.play();
+        sound = FlacLoader.load(Gdx.files.internal("numbers_8bit_mono.flac"));
+        System.out.println("Sound duration: " + sound.getDuration() + "s");
+        sound.play();
 
         // load and play StreamedSoundSource delayed
-        this.streamedSound = new StreamedSoundSource(Gdx.files.internal("numbers_16bit_stereo.flac"));
-        System.out.println("Streamed sound duration: " + this.streamedSound.getDuration() + "s");
-        this.streamedSound.setLooping(true);
+        streamedSound = new StreamedSoundSource(Gdx.files.internal("numbers_16bit_stereo.flac"));
+        System.out.println("Streamed sound duration: " + streamedSound.getDuration() + "s");
+        streamedSound.setLooping(true);
         try {
             Thread.sleep(100);
         } catch (final InterruptedException e) {
             e.printStackTrace();
         }
-        this.streamedSound.play();
+        streamedSound.play();
     }
 
 
@@ -63,11 +63,11 @@ public class FlacTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.sound.dispose();
-        this.streamedSound.dispose();
+        sound.dispose();
+        streamedSound.dispose();
 
         // always dispose Audio last
-        this.audio.dispose();
+        audio.dispose();
     }
 
 

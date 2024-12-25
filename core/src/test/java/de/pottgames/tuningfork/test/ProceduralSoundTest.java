@@ -40,67 +40,67 @@ public class ProceduralSoundTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.pcmSource = new PcmSoundSource(ProceduralSoundTest.SAMPLE_RATE, PcmFormat.FLOAT_MONO_32_BIT);
-        this.pcmSource.setVolume(0.5f);
-        this.song = SongGenerator.createImperialMarch();
-        this.queueNextNote();
-        this.pcmSource.play();
+        audio = Audio.init();
+        pcmSource = new PcmSoundSource(ProceduralSoundTest.SAMPLE_RATE, PcmFormat.FLOAT_MONO_32_BIT);
+        pcmSource.setVolume(0.5f);
+        song = SongGenerator.createImperialMarch();
+        queueNextNote();
+        pcmSource.play();
     }
 
 
     @Override
     public void render() {
         // this isn't necessary, just to demonstrate how to check for an underflow
-        if (!this.pcmSource.isPlaying()) {
+        if (!pcmSource.isPlaying()) {
             System.out.println("pcm underflow, resuming playback");
         }
 
         // we're playing a song on repeat, so we want to make sure there's always some samples in the queue (prevent
         // underflow)
-        final int queuedBuffers = this.pcmSource.queuedBuffers();
+        final int queuedBuffers = pcmSource.queuedBuffers();
         for (int i = 0; i < 3 - queuedBuffers; i++) {
-            this.queueNextNote();
+            queueNextNote();
 
             // this is best practice:
             // if an underflow happened for some reason, the source is in stopped-state and won't continue playing
             // without this call
-            this.pcmSource.play();
+            pcmSource.play();
         }
     }
 
 
     private void queueNextNote() {
         // fetch the next note from the song
-        final SongNote songNote = this.song[this.noteIndex];
+        final SongNote songNote = song[noteIndex];
 
         // sample count for this note
         final int sampleCount = (int) (ProceduralSoundTest.SAMPLES_PER_BEAT * songNote.durationFactor);
 
         // fill the array with samples
         if (songNote.note == Note.SILENCE) {
-            Arrays.fill(this.pcm, 0f);
+            Arrays.fill(pcm, 0f);
         } else {
             switch (ProceduralSoundTest.WAVEFORM) {
                 case SINE:
-                    this.createSineTonePcm(songNote.note, this.pcm, sampleCount);
+                    createSineTonePcm(songNote.note, pcm, sampleCount);
                     break;
                 case SQUARE:
-                    this.createSquareTonePcm(songNote.note, this.pcm, sampleCount);
+                    createSquareTonePcm(songNote.note, pcm, sampleCount);
                     break;
             }
 
             // to prevent audio cracks, apply some fading at the beginning and the end
-            this.fadeInAndOut(this.pcm, sampleCount);
+            fadeInAndOut(pcm, sampleCount);
         }
 
         // finally queue the samples on the source
-        this.pcmSource.queueSamples(this.pcm, 0, sampleCount);
+        pcmSource.queueSamples(pcm, 0, sampleCount);
 
         // and prepare for the next call to this method
-        this.noteIndex++;
-        if (this.noteIndex >= this.song.length) {
-            this.noteIndex = 0;
+        noteIndex++;
+        if (noteIndex >= song.length) {
+            noteIndex = 0;
         }
     }
 
@@ -160,8 +160,8 @@ public class ProceduralSoundTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.pcmSource.dispose();
-        this.audio.dispose();
+        pcmSource.dispose();
+        audio.dispose();
     }
 
 

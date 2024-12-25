@@ -21,7 +21,7 @@ public class DefaultWavDecoderProvider implements WavDecoderProvider {
 
         switch (inputBitsPerSample) {
             case 4:
-                return this.getAdpcmDecoder(audioFormat, channels, blockAlign, sampleRate, forStreaming);
+                return getAdpcmDecoder(audioFormat, channels, blockAlign, sampleRate, forStreaming);
             case 8:
                 if (audioFormat == WavAudioFormat.WAVE_FORMAT_PCM.getRegNumber()) {
                     return new PcmDecoder(inputBitsPerSample, channels, sampleRate, PcmDataType.INTEGER);

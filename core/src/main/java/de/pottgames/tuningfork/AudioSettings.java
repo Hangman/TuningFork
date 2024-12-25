@@ -25,32 +25,32 @@ class AudioSettings {
 
 
     public float getMinAttenuationDistance() {
-        return this.minAttenuationDistance;
+        return minAttenuationDistance;
     }
 
 
     public float getMaxAttenuationDistance() {
-        return this.maxAttenuationDistance;
+        return maxAttenuationDistance;
     }
 
 
     public float getAttenuationFactor() {
-        return this.attenuationFactor;
+        return attenuationFactor;
     }
 
 
     public Virtualization getVirtualization() {
-        return this.virtualization;
+        return virtualization;
     }
 
 
     public Spatialization getSpatialization() {
-        return this.spatialization;
+        return spatialization;
     }
 
 
     public int getResamplerIndex() {
-        return this.resamplerIndex;
+        return resamplerIndex;
     }
 
 

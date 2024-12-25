@@ -45,28 +45,27 @@ public class LawDecoder implements WavDecoder, AiffDecoder {
 
     @Override
     public void setup(InputStream stream, long streamLength) {
-        this.bytesRemaining = streamLength;
-        this.totalOutputSamplesPerChannel = streamLength / this.channels;
+        bytesRemaining = streamLength;
+        totalOutputSamplesPerChannel = streamLength / channels;
 
         // INPUT STREAM
-        final AudioFormat.Encoding inputEncoding = this.encoding == Encoding.U_LAW ? AudioFormat.Encoding.ULAW : AudioFormat.Encoding.ALAW;
-        final AudioFormat inputFormat = new AudioFormat(inputEncoding, this.sampleRate, 8, this.channels, this.channels, this.sampleRate, this.bigEndian);
-        this.inputStream = new AudioInputStream(stream, inputFormat, this.totalOutputSamplesPerChannel);
+        final AudioFormat.Encoding inputEncoding = encoding == Encoding.U_LAW ? AudioFormat.Encoding.ULAW : AudioFormat.Encoding.ALAW;
+        final AudioFormat inputFormat = new AudioFormat(inputEncoding, sampleRate, 8, channels, channels, sampleRate, bigEndian);
+        inputStream = new AudioInputStream(stream, inputFormat, totalOutputSamplesPerChannel);
 
         // OUTPUT STREAM
-        final AudioFormat outputFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, this.sampleRate, 16, this.channels, this.channels * 2,
-                this.sampleRate, false);
-        this.outputStream = AudioSystem.getAudioInputStream(outputFormat, this.inputStream);
+        final AudioFormat outputFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, 16, channels, channels * 2, sampleRate, false);
+        outputStream = AudioSystem.getAudioInputStream(outputFormat, inputStream);
     }
 
 
     @Override
     public int read(byte[] output) throws IOException {
-        final int read = this.outputStream.read(output);
+        final int read = outputStream.read(output);
         if (read <= 0) {
-            this.bytesRemaining = -1;
+            bytesRemaining = -1;
         } else {
-            this.bytesRemaining = MathUtils.clamp(this.bytesRemaining - read, -1, Long.MAX_VALUE);
+            bytesRemaining = MathUtils.clamp(bytesRemaining - read, -1, Long.MAX_VALUE);
         }
         return read;
     }
@@ -86,19 +85,19 @@ public class LawDecoder implements WavDecoder, AiffDecoder {
 
     @Override
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     @Override
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     @Override
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
@@ -110,13 +109,13 @@ public class LawDecoder implements WavDecoder, AiffDecoder {
 
     @Override
     public long bytesRemaining() {
-        return this.bytesRemaining * 2;
+        return bytesRemaining * 2;
     }
 
 
     @Override
     public void close() throws IOException {
-        this.inputStream.close();
+        inputStream.close();
     }
 
 

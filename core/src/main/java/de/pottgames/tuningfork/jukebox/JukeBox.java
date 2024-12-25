@@ -69,48 +69,48 @@ public class JukeBox {
      * Updates the JukeBox. This method should be called every frame.
      */
     public void update() {
-        if (this.stopped) {
-            this.handleEvents();
+        if (stopped) {
+            handleEvents();
             return;
         }
 
         SongSource source = null;
         SongSettings settings = null;
-        if (this.currentSong != null) {
-            source = this.currentSong.getSource();
-            settings = this.currentSong.getSettings();
+        if (currentSong != null) {
+            source = currentSong.getSource();
+            settings = currentSong.getSettings();
         }
 
         if (source != null && source.isPlaying()) {
-            final float fadeVolume = this.determineFadeVolume(source, settings);
-            if (this.softStop) {
-                this.softStopFade(source);
+            final float fadeVolume = determineFadeVolume(source, settings);
+            if (softStop) {
+                softStopFade(source);
             } else {
-                source.setVolume(fadeVolume * this.volume);
+                source.setVolume(fadeVolume * volume);
             }
         } else {
-            this.resetSoftStop(true);
-            if (this.currentSong != null) {
-                this.pushEvent(JukeBoxEventType.SONG_END, this.currentSong);
+            resetSoftStop(true);
+            if (currentSong != null) {
+                this.pushEvent(JukeBoxEventType.SONG_END, currentSong);
             }
-            this.nextSong();
+            nextSong();
         }
 
-        this.handleEvents();
+        handleEvents();
     }
 
 
     protected void softStopFade(SongSource source) {
-        final float secondsSinceSoftStop = (System.currentTimeMillis() - this.softStopStartTime) / 1000f;
-        final float alpha = secondsSinceSoftStop / this.softStopFadeDuration;
+        final float secondsSinceSoftStop = (System.currentTimeMillis() - softStopStartTime) / 1000f;
+        final float alpha = secondsSinceSoftStop / softStopFadeDuration;
         if (alpha < 1f) {
-            final float softFadeVolume = (1f - this.softStopFadeCurve.apply(alpha)) * this.softStopFadeStartVolume;
-            source.setVolume(softFadeVolume * this.volume);
+            final float softFadeVolume = (1f - softStopFadeCurve.apply(alpha)) * softStopFadeStartVolume;
+            source.setVolume(softFadeVolume * volume);
         } else {
-            this.stop();
-            if (this.softStopResume) {
-                this.currentPlayList = null;
-                this.play();
+            stop();
+            if (softStopResume) {
+                currentPlayList = null;
+                play();
             }
         }
     }
@@ -118,8 +118,8 @@ public class JukeBox {
 
     protected float determineFadeVolume(SongSource source, SongSettings settings) {
         final float playbackPos = source.getPlaybackPosition();
-        final float fadeIn = this.fadeIn(source, settings, playbackPos);
-        final float fadeOut = this.fadeOut(source, settings, playbackPos, source.getDuration());
+        final float fadeIn = fadeIn(source, settings, playbackPos);
+        final float fadeOut = fadeOut(source, settings, playbackPos, source.getDuration());
 
         if (fadeIn >= 0f) {
             return fadeIn;
@@ -177,7 +177,7 @@ public class JukeBox {
      * @return the master volume in the range of 0.0 - 1.0 with 0 being silent and 1 being the maximum volume
      */
     public float getVolume() {
-        return this.volume;
+        return volume;
     }
 
 
@@ -185,10 +185,10 @@ public class JukeBox {
      * Starts playback.
      */
     public void play() {
-        this.stopped = false;
+        stopped = false;
         this.pushEvent(JukeBoxEventType.JUKEBOX_START);
-        if (this.currentSong != null) {
-            this.currentSong.getSource().play();
+        if (currentSong != null) {
+            currentSong.getSource().play();
         }
     }
 
@@ -197,10 +197,10 @@ public class JukeBox {
      * Pauses playback. Calling {@link #play()} will resume playback.
      */
     public void pause() {
-        this.stopped = true;
+        stopped = true;
         this.pushEvent(JukeBoxEventType.JUKEBOX_PAUSE);
-        if (this.currentSong != null) {
-            this.currentSong.getSource().pause();
+        if (currentSong != null) {
+            currentSong.getSource().pause();
         }
     }
 
@@ -209,27 +209,27 @@ public class JukeBox {
      * Stops playback and resets the current {@link PlayList} if applicable.
      */
     public void stop() {
-        if (!this.stopped) {
+        if (!stopped) {
             this.pushEvent(JukeBoxEventType.JUKEBOX_END);
         }
-        if (this.currentSong != null) {
-            this.currentSong.getSource().stop();
-            this.pushEvent(JukeBoxEventType.SONG_END, this.currentSong);
+        if (currentSong != null) {
+            currentSong.getSource().stop();
+            this.pushEvent(JukeBoxEventType.SONG_END, currentSong);
         }
-        if (this.currentPlayList != null) {
-            this.currentPlayList.reset();
+        if (currentPlayList != null) {
+            currentPlayList.reset();
         }
-        this.currentSong = null;
-        this.stopped = true;
-        this.resetSoftStop(false);
+        currentSong = null;
+        stopped = true;
+        resetSoftStop(false);
     }
 
 
     protected void resetSoftStop(boolean clearResume) {
-        this.softStop = false;
-        this.softStopFadeCurve = null;
+        softStop = false;
+        softStopFadeCurve = null;
         if (clearResume) {
-            this.softStopResume = false;
+            softStopResume = false;
         }
     }
 
@@ -249,30 +249,30 @@ public class JukeBox {
      * @return false if a soft stop couldn't be performed and it is stopped right away
      */
     public boolean softStop(Interpolation fadeOutCurve, float fadeOutDuration) {
-        if (this.stopped || this.currentSong == null || fadeOutCurve == null || fadeOutDuration <= 0f) {
-            this.stop();
+        if (stopped || currentSong == null || fadeOutCurve == null || fadeOutDuration <= 0f) {
+            stop();
             return false;
         }
 
-        final SongSource source = this.currentSong.getSource();
-        final SongSettings settings = this.currentSong.getSettings();
+        final SongSource source = currentSong.getSource();
+        final SongSettings settings = currentSong.getSettings();
         final float duration = source.getDuration();
         final float position = source.getPlaybackPosition();
 
         if (duration <= 0f) {
-            this.stop();
+            stop();
             return false;
         }
 
-        this.softStop = true;
-        this.softStopResume = false;
-        this.softStopStartTime = System.currentTimeMillis();
-        this.softStopFadeDuration = fadeOutDuration;
-        this.softStopFadeCurve = fadeOutCurve;
+        softStop = true;
+        softStopResume = false;
+        softStopStartTime = System.currentTimeMillis();
+        softStopFadeDuration = fadeOutDuration;
+        softStopFadeCurve = fadeOutCurve;
         if (duration - position < fadeOutDuration) {
-            this.softStopFadeDuration = duration - position;
+            softStopFadeDuration = duration - position;
         }
-        this.softStopFadeStartVolume = this.determineFadeVolume(source, settings);
+        softStopFadeStartVolume = determineFadeVolume(source, settings);
 
         return true;
     }
@@ -292,13 +292,13 @@ public class JukeBox {
      * @param fadeOutDuration the fade-out duration in seconds
      */
     public void softStopAndResume(Interpolation fadeOutCurve, float fadeOutDuration) {
-        final boolean softStopResult = this.softStop(fadeOutCurve, fadeOutDuration);
+        final boolean softStopResult = softStop(fadeOutCurve, fadeOutDuration);
         if (!softStopResult) {
-            this.currentPlayList = null;
-            this.play();
+            currentPlayList = null;
+            play();
             return;
         }
-        this.softStopResume = true;
+        softStopResume = true;
     }
 
 
@@ -306,17 +306,17 @@ public class JukeBox {
      * Immediately stops playback, removes all observers and sets the {@link JukeBox} into a stopped state.
      */
     public void clear() {
-        this.stopped = true;
-        if (this.currentSong != null) {
-            this.currentSong.getSource().stop();
+        stopped = true;
+        if (currentSong != null) {
+            currentSong.getSource().stop();
         }
-        this.currentPlayList = null;
-        this.currentSong = null;
-        this.observer.clear();
-        for (final JukeBoxEvent event : this.eventHistory) {
-            this.eventPool.free(event);
+        currentPlayList = null;
+        currentSong = null;
+        observer.clear();
+        for (final JukeBoxEvent event : eventHistory) {
+            eventPool.free(event);
         }
-        this.eventHistory.clear();
+        eventHistory.clear();
     }
 
 
@@ -326,7 +326,7 @@ public class JukeBox {
      * @return the song
      */
     public Song getCurrentSong() {
-        return this.currentSong;
+        return currentSong;
     }
 
 
@@ -336,52 +336,52 @@ public class JukeBox {
      * @return true if playing
      */
     public boolean isPlaying() {
-        return !this.stopped;
+        return !stopped;
     }
 
 
     protected void nextSong() {
-        this.currentSong = null;
-        if (this.currentPlayList == null) {
-            if (this.playListProvider.hasNext()) {
-                this.currentPlayList = this.playListProvider.next();
+        currentSong = null;
+        if (currentPlayList == null) {
+            if (playListProvider.hasNext()) {
+                currentPlayList = playListProvider.next();
             }
-            if (this.currentPlayList != null) {
-                this.pushEvent(JukeBoxEventType.PLAYLIST_START, this.currentPlayList);
+            if (currentPlayList != null) {
+                this.pushEvent(JukeBoxEventType.PLAYLIST_START, currentPlayList);
             }
         }
 
         // SET TO NEXT PLAYLIST OR LOOP CURRENT PLAYLIST
-        if (this.currentPlayList != null && this.currentPlayList.isPlayedThrough()) {
-            if (!this.playListProvider.hasNext() && this.currentPlayList.isLoop()) {
-                this.currentPlayList.reset();
+        if (currentPlayList != null && currentPlayList.isPlayedThrough()) {
+            if (!playListProvider.hasNext() && currentPlayList.isLoop()) {
+                currentPlayList.reset();
             } else {
-                final PlayList lastPlayList = this.currentPlayList;
-                this.currentPlayList = this.playListProvider.hasNext() ? this.playListProvider.next() : null;
-                if (this.currentPlayList == null) {
+                final PlayList lastPlayList = currentPlayList;
+                currentPlayList = playListProvider.hasNext() ? playListProvider.next() : null;
+                if (currentPlayList == null) {
                     this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
                     this.pushEvent(JukeBoxEventType.JUKEBOX_END);
-                    this.stopped = true;
+                    stopped = true;
                     return;
                 }
                 this.pushEvent(JukeBoxEventType.PLAYLIST_END, lastPlayList);
-                this.pushEvent(JukeBoxEventType.PLAYLIST_START, this.currentPlayList);
+                this.pushEvent(JukeBoxEventType.PLAYLIST_START, currentPlayList);
             }
         }
 
         // REQUEST NEXT SONG
-        if (this.currentPlayList != null) {
-            this.currentSong = this.currentPlayList.nextSong();
+        if (currentPlayList != null) {
+            currentSong = currentPlayList.nextSong();
         }
 
         // PLAY NEXT SONG AND APPLY FADING
-        if (this.currentSong != null) {
-            final SongSource source = this.currentSong.getSource();
-            this.fadeIn(source, this.currentSong.getSettings(), 0f);
-            this.currentSong.getSource().play();
-            this.pushEvent(JukeBoxEventType.SONG_START, this.currentSong);
+        if (currentSong != null) {
+            final SongSource source = currentSong.getSource();
+            fadeIn(source, currentSong.getSettings(), 0f);
+            currentSong.getSource().play();
+            this.pushEvent(JukeBoxEventType.SONG_START, currentSong);
         } else {
-            this.stopped = true;
+            stopped = true;
             this.pushEvent(JukeBoxEventType.JUKEBOX_END);
         }
     }
@@ -408,9 +408,9 @@ public class JukeBox {
 
 
     protected void pushEvent(JukeBoxEventType type) {
-        final JukeBoxEvent event = this.eventPool.obtain();
+        final JukeBoxEvent event = eventPool.obtain();
         event.setType(type);
-        this.eventHistory.add(event);
+        eventHistory.add(event);
     }
 
 
@@ -418,56 +418,56 @@ public class JukeBox {
         if (song == null) {
             throw new RuntimeException("song is null");
         }
-        final JukeBoxEvent event = this.eventPool.obtain();
+        final JukeBoxEvent event = eventPool.obtain();
         event.setType(type);
         event.setSong(song);
-        this.eventHistory.add(event);
+        eventHistory.add(event);
     }
 
 
     protected void pushEvent(JukeBoxEventType type, PlayList playList) {
-        final JukeBoxEvent event = this.eventPool.obtain();
+        final JukeBoxEvent event = eventPool.obtain();
         event.setType(type);
         event.setPlayList(playList);
-        this.eventHistory.add(event);
+        eventHistory.add(event);
     }
 
 
     protected void handleEvents() {
-        for (final JukeBoxEvent event : this.eventHistory) {
+        for (final JukeBoxEvent event : eventHistory) {
             switch (event.getType()) {
                 case JUKEBOX_END:
-                    this.notifyJukeBoxEnd();
+                    notifyJukeBoxEnd();
                     break;
                 case JUKEBOX_PAUSE:
-                    this.notifyJukeBoxPause();
+                    notifyJukeBoxPause();
                     break;
                 case JUKEBOX_START:
-                    this.notifyJukeBoxStart();
+                    notifyJukeBoxStart();
                     break;
                 case PLAYLIST_END:
-                    this.notifyPlayListEnd(event.getPlayList());
+                    notifyPlayListEnd(event.getPlayList());
                     break;
                 case PLAYLIST_START:
-                    this.notifyPlayListStart(event.getPlayList());
+                    notifyPlayListStart(event.getPlayList());
                     break;
                 case SONG_END:
-                    this.notifySongEnd(event.getSong());
+                    notifySongEnd(event.getSong());
                     break;
                 case SONG_START:
-                    this.notifySongStart(event.getSong());
+                    notifySongStart(event.getSong());
                     break;
                 case NONE:
                     break;
             }
-            this.eventPool.free(event);
+            eventPool.free(event);
         }
-        this.eventHistory.clear();
+        eventHistory.clear();
     }
 
 
     protected void notifySongStart(Song song) {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onSongStart(song);
         }
@@ -475,7 +475,7 @@ public class JukeBox {
 
 
     protected void notifySongEnd(Song song) {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onSongEnd(song);
         }
@@ -483,7 +483,7 @@ public class JukeBox {
 
 
     protected void notifyPlayListStart(PlayList playList) {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onPlayListStart(playList);
         }
@@ -491,7 +491,7 @@ public class JukeBox {
 
 
     protected void notifyPlayListEnd(PlayList playList) {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onPlayListEnd(playList);
         }
@@ -499,7 +499,7 @@ public class JukeBox {
 
 
     protected void notifyJukeBoxEnd() {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onJukeBoxEnd();
         }
@@ -507,7 +507,7 @@ public class JukeBox {
 
 
     protected void notifyJukeBoxStart() {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onJukeBoxStart();
         }
@@ -515,7 +515,7 @@ public class JukeBox {
 
 
     protected void notifyJukeBoxPause() {
-        for (int i = 0; i < this.observer.size; i++) {
+        for (int i = 0; i < observer.size; i++) {
             final JukeBoxObserver observer = this.observer.get(i);
             observer.onJukeBoxPause();
         }

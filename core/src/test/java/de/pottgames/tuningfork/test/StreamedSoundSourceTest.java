@@ -28,35 +28,35 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.audio = Audio.init();
-        this.source = new StreamedSoundSource(Gdx.files.absolute("src/test/resources/numbers.wav"));
-        System.out.println("Sound duration: " + this.source.getDuration() + "s");
-        this.source.setLooping(true);
-        this.source.play();
+        audio = Audio.init();
+        source = new StreamedSoundSource(Gdx.files.absolute("src/test/resources/numbers.wav"));
+        System.out.println("Sound duration: " + source.getDuration() + "s");
+        source.setLooping(true);
+        source.play();
     }
 
 
     @Override
     public void render() {
-        final float pos = this.source.getPlaybackPosition();
+        final float pos = source.getPlaybackPosition();
         System.out.println("current playback position: " + pos + "s");
 
         // PRESS SPACE TO SKIP TO 5s
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            this.source.setPlaybackPosition(5f);
+            source.setPlaybackPosition(5f);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            if (this.source.isPlaying()) {
-                this.source.pause();
+            if (source.isPlaying()) {
+                source.pause();
             } else {
-                this.source.play();
+                source.play();
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            if (this.source.isPlaying()) {
-                this.source.stop();
+            if (source.isPlaying()) {
+                source.stop();
             } else {
-                this.source.play();
+                source.play();
             }
         }
     }
@@ -64,8 +64,8 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        this.source.dispose();
-        this.audio.dispose();
+        source.dispose();
+        audio.dispose();
     }
 
 

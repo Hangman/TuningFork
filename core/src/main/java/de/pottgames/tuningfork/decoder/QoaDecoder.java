@@ -34,8 +34,8 @@ public class QoaDecoder {
     private final int        sampleRate;
     private FrameHeader      currentFrameHeader = new FrameHeader();
     private byte[]           rawFrameData       = null;
-    private final LmsState[] lmsStates          = { new LmsState(), new LmsState(), new LmsState(), new LmsState(), new LmsState(), new LmsState(),
-            new LmsState(), new LmsState() };
+    private final LmsState[] lmsStates          =
+            { new LmsState(), new LmsState(), new LmsState(), new LmsState(), new LmsState(), new LmsState(), new LmsState(), new LmsState() };
     private short[]          buffer;
     private int              bufferCursor       = 0;
     private int              bufferLength       = 0;
@@ -43,12 +43,12 @@ public class QoaDecoder {
 
     public QoaDecoder(InputStream stream, long samplesPerChannel) throws IOException, TuningForkException {
         this.stream = stream;
-        this.totalOutputSamplesPerChannel = samplesPerChannel;
+        totalOutputSamplesPerChannel = samplesPerChannel;
 
         // decode first frame to know channels & sample rate
-        this.decodeFrame(true);
-        this.channels = this.currentFrameHeader.channels();
-        this.sampleRate = this.currentFrameHeader.sampleRate();
+        decodeFrame(true);
+        channels = currentFrameHeader.channels();
+        sampleRate = currentFrameHeader.sampleRate();
     }
 
 
@@ -56,17 +56,17 @@ public class QoaDecoder {
         boolean nextSample = false;
         int writtenBytes = 0;
         for (int i = 0; i < output.length; i++) {
-            if (this.bufferCursor >= this.bufferLength) {
-                this.decodeFrame(false);
-                if (this.bufferLength <= 0) {
+            if (bufferCursor >= bufferLength) {
+                decodeFrame(false);
+                if (bufferLength <= 0) {
                     return writtenBytes;
                 }
             }
 
             if (nextSample) {
-                output[i] = (byte) (this.buffer[this.bufferCursor++] >>> 8 & 0xFF);
+                output[i] = (byte) (buffer[bufferCursor++] >>> 8 & 0xFF);
             } else {
-                output[i] = (byte) (this.buffer[this.bufferCursor] & 0xFF);
+                output[i] = (byte) (buffer[bufferCursor] & 0xFF);
             }
             nextSample = !nextSample;
             writtenBytes++;
@@ -77,11 +77,11 @@ public class QoaDecoder {
 
 
     private void decodeFrame(boolean firstFrame) throws IOException, TuningForkException {
-        this.bufferCursor = 0;
-        Util.readAll(this.stream, this.currentFrameHeader.data, 8);
-        final int channels = this.currentFrameHeader.channels();
-        final int samples = this.currentFrameHeader.samplesPerChannel();
-        final int frameSize = this.currentFrameHeader.frameSize();
+        bufferCursor = 0;
+        Util.readAll(stream, currentFrameHeader.data, 8);
+        final int channels = currentFrameHeader.channels();
+        final int samples = currentFrameHeader.samplesPerChannel();
+        final int frameSize = currentFrameHeader.frameSize();
 
         // Here it would be nice to check whether this frame still has the same sample rate and number of channels,
         // but we are optimizing for performance, not data validity.
@@ -90,31 +90,31 @@ public class QoaDecoder {
         final int numSlices = sliceDataSize / 8;
         final int totalSamples = numSlices * 20;
 
-        final int dataSize = this.currentFrameHeader.frameSize() - 8;
+        final int dataSize = currentFrameHeader.frameSize() - 8;
         if (firstFrame) {
             // 16 bytes lms * 8 channels max + 8 bytes per slice * 256 slices max * 8 channels max
-            this.rawFrameData = new byte[16 * channels + 8 * 256 * channels];
-            this.buffer = new short[256 * 20 * channels];
+            rawFrameData = new byte[16 * channels + 8 * 256 * channels];
+            buffer = new short[256 * 20 * channels];
         }
 
-        Util.readAll(this.stream, this.rawFrameData, dataSize);
+        Util.readAll(stream, rawFrameData, dataSize);
 
         int cursor = 0;
         for (int channel = 0; channel < channels; channel++) {
-            this.lmsStates[channel].history[0] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].history[1] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].history[2] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].history[3] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].weights[0] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].weights[1] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].weights[2] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
-            this.lmsStates[channel].weights[3] = (short) ((this.rawFrameData[cursor++] & 0xFF) << 8 | this.rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].history[0] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].history[1] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].history[2] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].history[3] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].weights[0] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].weights[1] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].weights[2] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
+            lmsStates[channel].weights[3] = (short) ((rawFrameData[cursor++] & 0xFF) << 8 | rawFrameData[cursor++] & 0xFF);
         }
 
         for (int sampleIndex = 0; sampleIndex < samples; sampleIndex += 20) {
             final int sliceStartBase = sampleIndex * channels;
             for (int channel = 0; channel < channels; channel++) {
-                long slice = Util.longOfBigEndianBytes(this.rawFrameData, cursor);
+                long slice = Util.longOfBigEndianBytes(rawFrameData, cursor);
                 cursor += 8;
 
                 final int scaleFactor = (int) (slice >> 60 & 0xF);
@@ -122,7 +122,7 @@ public class QoaDecoder {
                 final int sliceEnd = Util.limit(sampleIndex + 20, samples) * channels + channel;
 
                 for (int si = sliceStart; si < sliceEnd; si += channels) {
-                    final int predicted = this.lmsStates[channel].predict();
+                    final int predicted = lmsStates[channel].predict();
                     final int quantizedResidual = (int) (slice >> 57 & 0x7);
                     final int residual = QoaDecoder.DEQUANT_LUT[scaleFactor][quantizedResidual];
                     final int unclamped_sample = predicted + residual;
@@ -141,14 +141,14 @@ public class QoaDecoder {
                     }
 
                     final short decodedSample = (short) clampedSample;
-                    this.lmsStates[channel].update(decodedSample, residual);
-                    this.buffer[si] = decodedSample;
+                    lmsStates[channel].update(decodedSample, residual);
+                    buffer[si] = decodedSample;
                     slice <<= 3;
                 }
             }
         }
 
-        this.bufferLength = totalSamples;
+        bufferLength = totalSamples;
     }
 
 
@@ -158,17 +158,17 @@ public class QoaDecoder {
 
 
     public int outputChannels() {
-        return this.channels;
+        return channels;
     }
 
 
     public int outputSampleRate() {
-        return this.sampleRate;
+        return sampleRate;
     }
 
 
     public long outputTotalSamplesPerChannel() {
-        return this.totalOutputSamplesPerChannel;
+        return totalOutputSamplesPerChannel;
     }
 
 
@@ -178,7 +178,7 @@ public class QoaDecoder {
 
 
     public void close() throws IOException, NullPointerException {
-        this.stream.close();
+        stream.close();
     }
 
 
@@ -189,25 +189,25 @@ public class QoaDecoder {
 
         private int predict() {
             int prediction = 0;
-            prediction += this.weights[0] * this.history[0];
-            prediction += this.weights[1] * this.history[1];
-            prediction += this.weights[2] * this.history[2];
-            prediction += this.weights[3] * this.history[3];
+            prediction += weights[0] * history[0];
+            prediction += weights[1] * history[1];
+            prediction += weights[2] * history[2];
+            prediction += weights[3] * history[3];
             return prediction >> 13;
         }
 
 
         private void update(short sample, int residual) {
             final int delta = residual >> 4;
-            this.weights[0] += (short) (this.history[0] < 0 ? -delta : delta);
-            this.weights[1] += (short) (this.history[1] < 0 ? -delta : delta);
-            this.weights[2] += (short) (this.history[2] < 0 ? -delta : delta);
-            this.weights[3] += (short) (this.history[3] < 0 ? -delta : delta);
+            weights[0] += (short) (history[0] < 0 ? -delta : delta);
+            weights[1] += (short) (history[1] < 0 ? -delta : delta);
+            weights[2] += (short) (history[2] < 0 ? -delta : delta);
+            weights[3] += (short) (history[3] < 0 ? -delta : delta);
 
-            this.history[0] = this.history[1];
-            this.history[1] = this.history[2];
-            this.history[2] = this.history[3];
-            this.history[3] = sample;
+            history[0] = history[1];
+            history[1] = history[2];
+            history[2] = history[3];
+            history[3] = sample;
         }
     }
 
@@ -217,22 +217,22 @@ public class QoaDecoder {
 
 
         private int channels() {
-            return this.data[0] & 0xFF;
+            return data[0] & 0xFF;
         }
 
 
         private int sampleRate() {
-            return (this.data[1] & 0xFF) << 16 | (this.data[2] & 0xFF) << 8 | this.data[3] & 0xFF;
+            return (data[1] & 0xFF) << 16 | (data[2] & 0xFF) << 8 | data[3] & 0xFF;
         }
 
 
         private int samplesPerChannel() {
-            return (this.data[4] & 0xFF) << 8 | this.data[5] & 0xFF;
+            return (data[4] & 0xFF) << 8 | data[5] & 0xFF;
         }
 
 
         private int frameSize() {
-            return (this.data[6] & 0xFF) << 8 | this.data[7] & 0xFF;
+            return (data[6] & 0xFF) << 8 | data[7] & 0xFF;
         }
     }
 

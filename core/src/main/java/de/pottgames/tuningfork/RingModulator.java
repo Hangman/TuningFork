@@ -77,15 +77,15 @@ public class RingModulator extends SoundEffectData {
     @Override
     protected void apply(int effectId) {
         EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_RING_MODULATOR);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_FREQUENCY, this.frequency);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_HIGHPASS_CUTOFF, this.highpassCutoff);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_RING_MODULATOR_WAVEFORM, this.waveform);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_FREQUENCY, frequency);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_HIGHPASS_CUTOFF, highpassCutoff);
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_RING_MODULATOR_WAVEFORM, waveform);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.frequency, this.highpassCutoff, this.waveform);
+        return Objects.hash(frequency, highpassCutoff, waveform);
     }
 
 
@@ -101,14 +101,14 @@ public class RingModulator extends SoundEffectData {
             return false;
         }
         final RingModulator other = (RingModulator) obj;
-        return Float.floatToIntBits(this.frequency) == Float.floatToIntBits(other.frequency)
-                && Float.floatToIntBits(this.highpassCutoff) == Float.floatToIntBits(other.highpassCutoff) && this.waveform == other.waveform;
+        return Float.floatToIntBits(frequency) == Float.floatToIntBits(other.frequency)
+                && Float.floatToIntBits(highpassCutoff) == Float.floatToIntBits(other.highpassCutoff) && waveform == other.waveform;
     }
 
 
     @Override
     public String toString() {
-        return "RingModulator [frequency=" + this.frequency + ", highpassCutoff=" + this.highpassCutoff + ", waveform=" + this.waveform + "]";
+        return "RingModulator [frequency=" + frequency + ", highpassCutoff=" + highpassCutoff + ", waveform=" + waveform + "]";
     }
 
 }
