@@ -83,6 +83,10 @@ public class Audio implements Disposable {
      * @return the initialized Audio instance or null on failure
      */
     public static Audio init(AudioConfig config) {
+        if (Audio.instance != null) {
+            throw new IllegalStateException("Audio has already been initialized. Please call dispose() before initializing again.");
+        }
+
         AudioDevice device;
         Audio audio = null;
         try {
@@ -107,6 +111,10 @@ public class Audio implements Disposable {
      * @throws UnsupportedAudioDeviceException is thrown when the desired device couldn't be found or isn't a valid device
      */
     public static Audio initSafe(AudioConfig config) throws OpenDeviceException, UnsupportedAudioDeviceException {
+        if (Audio.instance != null) {
+            throw new IllegalStateException("Audio has already been initialized. Please call dispose() before initializing again.");
+        }
+
         final AudioDevice device = new AudioDevice(config.getDeviceConfig(), config.getLogger());
         return new Audio(device, config);
     }
