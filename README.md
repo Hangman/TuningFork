@@ -68,7 +68,7 @@ Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.
 scripts.
 | Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :--- |
-| 1.12.1 - 1.13.1 | 4.4.0 |
+| 1.12.1 - 1.13.5 | 4.4.0 |
 | 1.12.0 | 4.1.0 |
 | 1.9.12 - 1.11.0 | 3.3.0 |
 | 1.9.11 | 2.0.1 |
