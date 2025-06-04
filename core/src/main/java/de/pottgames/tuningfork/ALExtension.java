@@ -27,6 +27,7 @@ public enum ALExtension {
     ALC_SOFT_OUTPUT_MODE("ALC_SOFT_output_mode", true),
     ALC_SOFT_PAUSE_DEVICE("ALC_SOFT_pause_device", true),
     ALC_SOFT_REOPEN_DEVICE("ALC_SOFT_reopen_device", true),
+    ALC_SOFT_SYSTEM_EVENTS("ALC_SOFT_system_events", true),
     AL_EXT_ALAW("AL_EXT_ALAW", false),
     AL_EXT_BFORMAT("AL_EXT_BFORMAT", false),
     AL_EXT_DOUBLE("AL_EXT_DOUBLE", false),
