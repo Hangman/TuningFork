@@ -165,7 +165,7 @@ public abstract class SoundSource {
      * @param z z
      */
     public void setPosition(float x, float y, float z) {
-        position.set(position);
+        position.set(x, y, z);
         AL10.alSource3f(sourceId, AL10.AL_POSITION, x, y, z);
     }
 
