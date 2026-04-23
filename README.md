@@ -59,7 +59,7 @@ only):
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 ```groovy
-implementation 'com.github.Hangman:TuningFork:4.4.0'
+implementation 'com.github.Hangman:TuningFork:4.4.1'
 ```
 
 ### Compatibility
@@ -68,7 +68,7 @@ Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.
 scripts.
 | Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :--- |
-| 1.12.1 - 1.14.0 | 4.4.0 |
+| 1.12.1 - 1.14.0 | 4.4.1 |
 | 1.12.0 | 4.1.0 |
 | 1.9.12 - 1.11.0 | 3.3.0 |
 | 1.9.11 | 2.0.1 |
