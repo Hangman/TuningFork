@@ -59,7 +59,7 @@ only):
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 ```groovy
-implementation 'com.github.Hangman:TuningFork:4.4.0'
+implementation 'com.github.Hangman:TuningFork:4.4.1'
 ```
 
 ### Compatibility
