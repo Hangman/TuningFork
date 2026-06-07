@@ -12,6 +12,12 @@
 
 package de.pottgames.tuningfork;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.StreamUtils;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.decoder.OggInputStream;
+import de.pottgames.tuningfork.decoder.util.Util;
+import de.pottgames.tuningfork.misc.PcmUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -19,18 +25,10 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryStack;
-
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.StreamUtils;
-
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-import de.pottgames.tuningfork.decoder.OggInputStream;
-import de.pottgames.tuningfork.decoder.util.Util;
-import de.pottgames.tuningfork.misc.PcmUtil;
+import org.lwjgl.system.libc.LibCStdlib;
 
 public abstract class OggLoader {
 
@@ -45,7 +43,6 @@ public abstract class OggLoader {
         return OggLoader.loadNonPacked(file.getAbsolutePath());
     }
 
-
     /**
      * Loads an ogg into a {@link ReadableSoundBuffer}.
      *
@@ -56,7 +53,6 @@ public abstract class OggLoader {
     public static ReadableSoundBuffer loadReadable(File file) {
         return OggLoader.loadNonPackedReadable(file.getAbsolutePath());
     }
-
 
     /**
      * Loads an ogg into a {@link SoundBuffer}.
@@ -73,7 +69,6 @@ public abstract class OggLoader {
         return OggLoader.load(fileHandle.read());
     }
 
-
     /**
      * Loads an ogg into a {@link ReadableSoundBuffer}.
      *
@@ -89,7 +84,6 @@ public abstract class OggLoader {
         return OggLoader.loadReadable(fileHandle.read());
     }
 
-
     /**
      * Loads an ogg into a {@link SoundBuffer}. <b>Referenced file must not be packed into a jar. Be careful with this as packaging files into the jar is
      * libGDXs default behavior on distribution.</b>
@@ -104,16 +98,30 @@ public abstract class OggLoader {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer channelsBuffer = stack.mallocInt(1);
             final IntBuffer sampleRateBuffer = stack.mallocInt(1);
-            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_filename(path, channelsBuffer, sampleRateBuffer);
-            final int channels = channelsBuffer.get(0);
-            final int sampleRate = sampleRateBuffer.get(0);
+            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_filename(
+                path,
+                channelsBuffer,
+                sampleRateBuffer
+            );
+            try {
+                final int channels = channelsBuffer.get(0);
+                final int sampleRate = sampleRateBuffer.get(0);
 
-            soundBuffer = new SoundBuffer(pcm, channels, sampleRate, 16, PcmDataType.INTEGER, -1);
+                soundBuffer = new SoundBuffer(
+                    pcm,
+                    channels,
+                    sampleRate,
+                    16,
+                    PcmDataType.INTEGER,
+                    -1
+                );
+            } finally {
+                LibCStdlib.free(pcm);
+            }
         }
 
         return soundBuffer;
     }
-
 
     /**
      * Loads an ogg into a {@link ReadableSoundBuffer}. <b>Referenced file must not be packed into a jar. Be careful with this as packaging files into the jar
@@ -129,16 +137,30 @@ public abstract class OggLoader {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer channelsBuffer = stack.mallocInt(1);
             final IntBuffer sampleRateBuffer = stack.mallocInt(1);
-            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_filename(path, channelsBuffer, sampleRateBuffer);
-            final int channels = channelsBuffer.get(0);
-            final int sampleRate = sampleRateBuffer.get(0);
+            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_filename(
+                path,
+                channelsBuffer,
+                sampleRateBuffer
+            );
+            try {
+                final int channels = channelsBuffer.get(0);
+                final int sampleRate = sampleRateBuffer.get(0);
 
-            soundBuffer = new ReadableSoundBuffer(pcm, channels, sampleRate, 16, PcmDataType.INTEGER, -1);
+                soundBuffer = new ReadableSoundBuffer(
+                    pcm,
+                    channels,
+                    sampleRate,
+                    16,
+                    PcmDataType.INTEGER,
+                    -1
+                );
+            } finally {
+                LibCStdlib.free(pcm);
+            }
         }
 
         return soundBuffer;
     }
-
 
     /**
      * Loads an ogg into a {@link SoundBuffer} and closes the InputStream afterward.
@@ -155,7 +177,9 @@ public abstract class OggLoader {
             throw new TuningForkRuntimeException(e);
         }
         StreamUtils.closeQuietly(stream);
-        final ByteBuffer originalData = BufferUtils.createByteBuffer(streamData.length);
+        final ByteBuffer originalData = BufferUtils.createByteBuffer(
+            streamData.length
+        );
         originalData.put(streamData);
         originalData.flip();
 
@@ -164,16 +188,30 @@ public abstract class OggLoader {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer channelsBuffer = stack.mallocInt(1);
             final IntBuffer sampleRateBuffer = stack.mallocInt(1);
-            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_memory(originalData, channelsBuffer, sampleRateBuffer);
-            final int channels = channelsBuffer.get(0);
-            final int sampleRate = sampleRateBuffer.get(0);
+            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_memory(
+                originalData,
+                channelsBuffer,
+                sampleRateBuffer
+            );
+            try {
+                final int channels = channelsBuffer.get(0);
+                final int sampleRate = sampleRateBuffer.get(0);
 
-            soundBuffer = new SoundBuffer(pcm, channels, sampleRate, 16, PcmDataType.INTEGER, -1);
+                soundBuffer = new SoundBuffer(
+                    pcm,
+                    channels,
+                    sampleRate,
+                    16,
+                    PcmDataType.INTEGER,
+                    -1
+                );
+            } finally {
+                LibCStdlib.free(pcm);
+            }
         }
 
         return soundBuffer;
     }
-
 
     /**
      * Loads an ogg into a {@link SoundBuffer} and closes the InputStream afterward.
@@ -190,7 +228,9 @@ public abstract class OggLoader {
             throw new TuningForkRuntimeException(e);
         }
         StreamUtils.closeQuietly(stream);
-        final ByteBuffer originalData = BufferUtils.createByteBuffer(streamData.length);
+        final ByteBuffer originalData = BufferUtils.createByteBuffer(
+            streamData.length
+        );
         originalData.put(streamData);
         originalData.flip();
 
@@ -199,16 +239,30 @@ public abstract class OggLoader {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer channelsBuffer = stack.mallocInt(1);
             final IntBuffer sampleRateBuffer = stack.mallocInt(1);
-            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_memory(originalData, channelsBuffer, sampleRateBuffer);
-            final int channels = channelsBuffer.get(0);
-            final int sampleRate = sampleRateBuffer.get(0);
+            final ShortBuffer pcm = STBVorbis.stb_vorbis_decode_memory(
+                originalData,
+                channelsBuffer,
+                sampleRateBuffer
+            );
+            try {
+                final int channels = channelsBuffer.get(0);
+                final int sampleRate = sampleRateBuffer.get(0);
 
-            soundBuffer = new ReadableSoundBuffer(pcm, channels, sampleRate, 16, PcmDataType.INTEGER, -1);
+                soundBuffer = new ReadableSoundBuffer(
+                    pcm,
+                    channels,
+                    sampleRate,
+                    16,
+                    PcmDataType.INTEGER,
+                    -1
+                );
+            } finally {
+                LibCStdlib.free(pcm);
+            }
         }
 
         return soundBuffer;
     }
-
 
     /**
      * Loads a {@link SoundBuffer} from a {@link OggInputStream}.
@@ -220,7 +274,9 @@ public abstract class OggLoader {
     public static SoundBuffer load(OggInputStream input) {
         SoundBuffer result = null;
         try {
-            final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
+            final ByteArrayOutputStream output = new ByteArrayOutputStream(
+                4096
+            );
             final byte[] buffer = new byte[2048];
             while (!input.atEnd()) {
                 final int length = input.read(buffer);
@@ -229,14 +285,19 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            result = new SoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            result = new SoundBuffer(
+                output.toByteArray(),
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 
     /**
      * Loads a {@link ReadableSoundBuffer} from a {@link OggInputStream}.
@@ -248,7 +309,9 @@ public abstract class OggLoader {
     public static ReadableSoundBuffer loadReadable(OggInputStream input) {
         ReadableSoundBuffer result = null;
         try {
-            final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
+            final ByteArrayOutputStream output = new ByteArrayOutputStream(
+                4096
+            );
             final byte[] buffer = new byte[2048];
             while (!input.atEnd()) {
                 final int length = input.read(buffer);
@@ -257,15 +320,19 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            result = new ReadableSoundBuffer(output.toByteArray(), input.getChannels(), input.getSampleRate(), input.getBitsPerSample(),
-                    input.getPcmDataType());
+            result = new ReadableSoundBuffer(
+                output.toByteArray(),
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 
     /**
      * Loads an ogg file in reverse into a {@link SoundBuffer}.
@@ -278,7 +345,9 @@ public abstract class OggLoader {
         final OggInputStream input = new OggInputStream(fileHandle.read());
         SoundBuffer result = null;
         try {
-            final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
+            final ByteArrayOutputStream output = new ByteArrayOutputStream(
+                4096
+            );
             final byte[] buffer = new byte[2048];
             while (!input.atEnd()) {
                 final int length = input.read(buffer);
@@ -287,15 +356,23 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            final byte[] reversedPcm = PcmUtil.reverseAudio(output.toByteArray(), input.getBitsPerSample() / 8);
-            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            final byte[] reversedPcm = PcmUtil.reverseAudio(
+                output.toByteArray(),
+                input.getBitsPerSample() / 8
+            );
+            result = new SoundBuffer(
+                reversedPcm,
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 
     /**
      * Loads an ogg file in reverse into a {@link ReadableSoundBuffer}.
@@ -304,11 +381,15 @@ public abstract class OggLoader {
      *
      * @return the SoundBuffer
      */
-    public static ReadableSoundBuffer loadReadableReverse(FileHandle fileHandle) {
+    public static ReadableSoundBuffer loadReadableReverse(
+        FileHandle fileHandle
+    ) {
         final OggInputStream input = new OggInputStream(fileHandle.read());
         ReadableSoundBuffer result = null;
         try {
-            final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
+            final ByteArrayOutputStream output = new ByteArrayOutputStream(
+                4096
+            );
             final byte[] buffer = new byte[2048];
             while (!input.atEnd()) {
                 final int length = input.read(buffer);
@@ -317,13 +398,21 @@ public abstract class OggLoader {
                 }
                 output.write(buffer, 0, length);
             }
-            final byte[] reversedPcm = PcmUtil.reverseAudio(output.toByteArray(), input.getBitsPerSample() / 8);
-            result = new ReadableSoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            final byte[] reversedPcm = PcmUtil.reverseAudio(
+                output.toByteArray(),
+                input.getBitsPerSample() / 8
+            );
+            result = new ReadableSoundBuffer(
+                reversedPcm,
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 }
