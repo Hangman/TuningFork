@@ -6,7 +6,7 @@ val junitJupiterPlatformLauncherVersion: String by project
 val flacLibraryJavaVersion: String by project
 
 buildscript {
-    project.version = "4.4.2"
+    project.version = "4.4.3"
     project.group = "de.pottgames"
 }
 
