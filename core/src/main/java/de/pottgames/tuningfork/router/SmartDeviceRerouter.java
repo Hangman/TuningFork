@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.openal.SOFTSystemEventProcI;
+import org.lwjgl.openal.SOFTSystemEvents;
 import org.lwjgl.openal.SOFTReopenDevice;
 import org.lwjgl.system.MemoryUtil;
 
@@ -25,8 +27,9 @@ import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.misc.Objects;
 
 /**
- * The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still exists and whether it is the optimal
- * connection. If not, it tries to establish a connection with the following prioritization:<br>
+ * The SmartDeviceRerouter tries to keep the connection to the optimal audio device alive. When the ALC_SOFT_system_events extension is available,
+ * callbacks are used to react to device changes. Otherwise, a background thread checks every 1.5 seconds (configurable) whether the connection still
+ * exists and whether it is the optimal connection. If not, it tries to establish a connection with the following prioritization:<br>
  * <ul>
  * <li>desired device</li>
  * <li>current default device</li>
@@ -45,6 +48,8 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     private final long checkInterval;
 
     private volatile boolean           active                 = false;
+    private volatile boolean           useSystemEvents        = false;
+    private SOFTSystemEventProcI       systemEventProc        = null;
     private long                       device;
     private volatile ContextAttributes attributes;
     private volatile String            desiredDeviceSpecifier = null;
@@ -76,6 +81,16 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         this.attributes = attributes;
         currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
         updateDesiredDevice(desiredDeviceSpecifier);
+        useSystemEvents = ALC10.alcIsExtensionPresent(device, "ALC_SOFT_system_events");
+        if (useSystemEvents) {
+            SOFTSystemEvents.alcEventControlSOFT(new int[] {
+                    SOFTSystemEvents.ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT,
+                    SOFTSystemEvents.ALC_EVENT_TYPE_DEVICE_ADDED_SOFT,
+                    SOFTSystemEvents.ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT }, true);
+
+            systemEventProc = (eventType, deviceType, eventDevice, length, message, userParam) -> onSystemEvent(eventType);
+            SOFTSystemEvents.alcEventCallbackSOFT(systemEventProc, MemoryUtil.NULL);
+        }
         setup = true;
     }
 
@@ -103,10 +118,12 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         }
 
         active = true;
-        final Thread thread = new Thread(SmartDeviceRerouter.this::loop);
-        thread.setName("TuningFork-SmartDeviceRerouter-Thread");
-        thread.setDaemon(true);
-        thread.start();
+        if (!useSystemEvents) {
+            final Thread thread = new Thread(SmartDeviceRerouter.this::loop);
+            thread.setName("TuningFork-SmartDeviceRerouter-Thread");
+            thread.setDaemon(true);
+            thread.start();
+        }
     }
 
 
@@ -129,6 +146,22 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
             } catch (final InterruptedException e) {
                 dispose();
             }
+        }
+    }
+
+    private void onSystemEvent(int eventType) {
+        if (!active) {
+            return;
+        }
+
+        switch (eventType) {
+            case SOFTSystemEvents.ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT:
+            case SOFTSystemEvents.ALC_EVENT_TYPE_DEVICE_ADDED_SOFT:
+            case SOFTSystemEvents.ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT:
+                tryReopen();
+                break;
+            default:
+                break;
         }
     }
 
@@ -182,6 +215,13 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     @Override
     public void dispose() {
         active = false;
+        if (useSystemEvents) {
+            SOFTSystemEvents.alcEventCallbackSOFT(null, MemoryUtil.NULL);
+            SOFTSystemEvents.alcEventControlSOFT(new int[] {
+                    SOFTSystemEvents.ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT,
+                    SOFTSystemEvents.ALC_EVENT_TYPE_DEVICE_ADDED_SOFT,
+                    SOFTSystemEvents.ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT }, false);
+        }
     }
 
 }
