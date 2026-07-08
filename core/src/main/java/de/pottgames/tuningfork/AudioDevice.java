@@ -28,6 +28,7 @@ import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTDeviceClock;
+import org.lwjgl.openal.SOFTEventProcI;
 import org.lwjgl.openal.SOFTEvents;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
@@ -204,10 +205,11 @@ public class AudioDevice {
         setDeviceRerouter(config.getRerouter());
         AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
         SOFTEvents.alEventControlSOFT(new int[] { SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT }, true);
-        SOFTEvents.alEventCallbackSOFT((eventType, object, param, length, message, userParam) -> {
+        SOFTEventProcI eventCallback = (eventType, object, param, length, message, userParam) -> {
             final AlEvent event = new AlEvent(eventType, object, param, length, message, userParam);
             AudioDevice.this.onAlEvent(event);
-        }, (ByteBuffer) null);
+        };
+        SOFTEvents.nalEventCallbackSOFT(eventCallback.address(), 0L);
 
         // LOG ERRORS
         errorLogger.checkLogAlcError(deviceHandle, "There was at least one ALC error upon audio device initialization");

@@ -1,4 +1,5 @@
 val gdxVersion: String by project
+val lwjglVersion: String by project
 val jmhInstanceVersion: String by project
 val jmhPluginVersion: String by project
 val junitJupiterVersion: String by project
@@ -31,6 +32,11 @@ repositories {
 dependencies {
     // compileOnly is kinda hacky but probably (afaik) the best solution we can get
     compileOnly("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
+
+    // Explicit lwjgl 3.4.1 for compile-time (overrides transitive 3.3.3 from gdx-backend-lwjgl3)
+    compileOnly("org.lwjgl:lwjgl:${lwjglVersion}")
+    compileOnly("org.lwjgl:lwjgl-openal:${lwjglVersion}")
+    compileOnly("org.lwjgl:lwjgl-stb:${lwjglVersion}")
 
     implementation("com.github.Hangman:FLAC-library-Java:${flacLibraryJavaVersion}")
 
