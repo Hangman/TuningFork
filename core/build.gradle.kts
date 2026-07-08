@@ -30,10 +30,10 @@ repositories {
 }
 
 dependencies {
-    // compileOnly is kinda hacky but probably (afaik) the best solution we can get
+    // compileOnly is not hacky and afaik the best solution we can get
     compileOnly("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
 
-    // Explicit lwjgl 3.4.1 for compile-time (overrides transitive 3.3.3 from gdx-backend-lwjgl3)
+    // Explicit lwjgl version for testing (overrides transitive version from gdx-backend-lwjgl3)
     compileOnly("org.lwjgl:lwjgl:${lwjglVersion}")
     compileOnly("org.lwjgl:lwjgl-openal:${lwjglVersion}")
     compileOnly("org.lwjgl:lwjgl-stb:${lwjglVersion}")
