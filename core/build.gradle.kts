@@ -42,6 +42,12 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
     testImplementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
+
+    // Explicit lwjgl version for testing (overrides transitive version from gdx-backend-lwjgl3)
+    testImplementation("org.lwjgl:lwjgl:${lwjglVersion}")
+    testImplementation("org.lwjgl:lwjgl-openal:${lwjglVersion}")
+    testImplementation("org.lwjgl:lwjgl-stb:${lwjglVersion}")
+
     testImplementation("com.badlogicgames.gdx:gdx-platform:${gdxVersion}:natives-desktop")
     testImplementation("com.badlogicgames.gdx:gdx:${gdxVersion}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:${junitJupiterPlatformLauncherVersion}")
