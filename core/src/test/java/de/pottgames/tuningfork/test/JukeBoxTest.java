@@ -18,7 +18,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.Interpolation;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -33,16 +32,16 @@ import de.pottgames.tuningfork.jukebox.song.SongMeta;
 import de.pottgames.tuningfork.jukebox.song.SongSettings;
 
 public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
-    private Audio               audio;
+
+    private Audio audio;
     private StreamedSoundSource rhythm1;
-    private SoundBuffer         rhythm2;
+    private SoundBuffer rhythm2;
     private BufferedSoundSource rhythm2Source;
     private StreamedSoundSource rhythm3;
-    private SoundBuffer         rhythm4;
+    private SoundBuffer rhythm4;
     private BufferedSoundSource rhythm4Source;
     private StreamedSoundSource rhythm5;
-    private JukeBox             jukeBox;
-
+    private JukeBox jukeBox;
 
     @Override
     public void create() {
@@ -70,11 +69,31 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
-        final Song song1 = new Song(rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
-        final Song song2 = new Song(rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
-        final Song song3 = new Song(rhythm3, settings, new SongMeta().setTitle("rhythm3"));
-        final Song song4 = new Song(rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));
-        final Song song5 = new Song(rhythm5, settings, new SongMeta().setTitle("rhythm5"));
+        final Song song1 = new Song(
+            rhythm1,
+            SongSettings.linear(1f, 0.5f, 1f),
+            new SongMeta().setTitle("rhythm1")
+        );
+        final Song song2 = new Song(
+            rhythm2Source,
+            settings,
+            new SongMeta().setTitle("rhythm2")
+        );
+        final Song song3 = new Song(
+            rhythm3,
+            settings,
+            new SongMeta().setTitle("rhythm3")
+        );
+        final Song song4 = new Song(
+            rhythm4Source,
+            settings,
+            new SongMeta().setTitle("rhythm4")
+        );
+        final Song song5 = new Song(
+            rhythm5,
+            settings,
+            new SongMeta().setTitle("rhythm5")
+        );
 
         // CREATE PLAYLIST 1
         final PlayList playList = new PlayList() {
@@ -100,13 +119,14 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         playList2.setLooping(true);
 
         // CREATE PLAYLIST PROVIDER
-        final DefaultPlayListProvider provider = new DefaultPlayListProvider().add(playList).add(playList2);
+        final DefaultPlayListProvider provider = new DefaultPlayListProvider()
+            .add(playList)
+            .add(playList2);
 
         jukeBox = new JukeBox(provider);
         jukeBox.addObserver(this);
         jukeBox.play();
     }
-
 
     @Override
     public void render() {
@@ -138,7 +158,6 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         jukeBox.update();
     }
 
-
     @Override
     public void dispose() {
         jukeBox.clear();
@@ -152,9 +171,9 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("JukeBoxTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
@@ -162,51 +181,50 @@ public class JukeBoxTest extends ApplicationAdapter implements JukeBoxObserver {
         new Lwjgl3Application(new JukeBoxTest(), config);
     }
 
-
     @Override
     public void onSongStart(Song song) {
-        System.out.println(JukeBoxTest.timeStamp() + " Song started: " + song.getMeta().getTitle());
+        System.out.println(
+            JukeBoxTest.timeStamp() +
+                " Song started: " +
+                song.getMeta().getTitle()
+        );
     }
-
 
     @Override
     public void onSongEnd(Song song) {
-        System.out.println(JukeBoxTest.timeStamp() + " Song ended: " + song.getMeta().getTitle());
+        System.out.println(
+            JukeBoxTest.timeStamp() +
+                " Song ended: " +
+                song.getMeta().getTitle()
+        );
     }
-
 
     @Override
     public void onPlayListStart(PlayList playList) {
         System.out.println(JukeBoxTest.timeStamp() + " PlayList started: ");
     }
 
-
     @Override
     public void onPlayListEnd(PlayList playList) {
         System.out.println(JukeBoxTest.timeStamp() + " PlayList ended: ");
     }
-
 
     @Override
     public void onJukeBoxEnd() {
         System.out.println(JukeBoxTest.timeStamp() + " JukeBox ended");
     }
 
-
     @Override
     public void onJukeBoxStart() {
         System.out.println(JukeBoxTest.timeStamp() + " JukeBox started");
     }
-
 
     @Override
     public void onJukeBoxPause() {
         System.out.println(JukeBoxTest.timeStamp() + " JukeBox paused");
     }
 
-
     private static String timeStamp() {
         return "[" + System.currentTimeMillis() + "]";
     }
-
 }

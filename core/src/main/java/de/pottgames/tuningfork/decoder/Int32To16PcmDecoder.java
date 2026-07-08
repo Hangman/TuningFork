@@ -1,26 +1,24 @@
 package de.pottgames.tuningfork.decoder;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-
 public class Int32To16PcmDecoder implements WavDecoder {
-    private static final long END_OF_STREAM            = Long.MAX_VALUE;
-    protected InputStream     stream;
-    protected long            bytesRemaining;
-    private final int         channels;
-    private final int         sampleRate;
-    private long              outputSample;
-    private long              totalOutputSamplesPerChannel;
-    private int               outputSampleFetchedBytes = 2;
 
+    private static final long END_OF_STREAM = Long.MAX_VALUE;
+    protected InputStream stream;
+    protected long bytesRemaining;
+    private final int channels;
+    private final int sampleRate;
+    private long outputSample;
+    private long totalOutputSamplesPerChannel;
+    private int outputSampleFetchedBytes = 2;
 
     public Int32To16PcmDecoder(int channels, int sampleRate) {
         this.channels = channels;
         this.sampleRate = sampleRate;
     }
-
 
     @Override
     public void setup(InputStream stream, long streamLength) {
@@ -28,7 +26,6 @@ public class Int32To16PcmDecoder implements WavDecoder {
         bytesRemaining = streamLength;
         totalOutputSamplesPerChannel = bytesRemaining / 4L / channels;
     }
-
 
     @Override
     public int read(byte[] output) throws IOException {
@@ -45,7 +42,6 @@ public class Int32To16PcmDecoder implements WavDecoder {
         return output.length;
     }
 
-
     private long fetchNextOutputByte() throws IOException {
         if (outputSampleFetchedBytes >= 2) {
             outputSample = fetchNextOutputSample();
@@ -55,12 +51,12 @@ public class Int32To16PcmDecoder implements WavDecoder {
             outputSampleFetchedBytes = 0;
         }
 
-        final long outputByte = outputSample >>> outputSampleFetchedBytes * 8 & 0xffL;
+        final long outputByte =
+            (outputSample >>> (outputSampleFetchedBytes * 8)) & 0xffL;
         outputSampleFetchedBytes++;
 
         return outputByte;
     }
-
 
     private long fetchNextOutputSample() throws IOException {
         final long inputSample = fetchNextInputSample();
@@ -70,7 +66,6 @@ public class Int32To16PcmDecoder implements WavDecoder {
 
         return inputSample >>> 16;
     }
-
 
     private long fetchNextInputSample() throws IOException {
         if (bytesRemaining < 3) {
@@ -90,55 +85,51 @@ public class Int32To16PcmDecoder implements WavDecoder {
             bytesRemaining = 0;
         }
 
-        return byte1 | (long) byte2 << 8 | (long) byte3 << 16 | (long) byte4 << 24;
+        return (
+            byte1 |
+            ((long) byte2 << 8) |
+            ((long) byte3 << 16) |
+            ((long) byte4 << 24)
+        );
     }
-
 
     @Override
     public int inputBitsPerSample() {
         return 32;
     }
 
-
     @Override
     public int outputBitsPerSample() {
         return 16;
     }
-
 
     @Override
     public int outputChannels() {
         return channels;
     }
 
-
     @Override
     public int outputSampleRate() {
         return sampleRate;
     }
-
 
     @Override
     public long outputTotalSamplesPerChannel() {
         return totalOutputSamplesPerChannel;
     }
 
-
     @Override
     public PcmDataType outputPcmDataType() {
         return PcmDataType.INTEGER;
     }
-
 
     @Override
     public long bytesRemaining() {
         return bytesRemaining / 2L;
     }
 
-
     @Override
     public void close() throws IOException {
         stream.close();
     }
-
 }

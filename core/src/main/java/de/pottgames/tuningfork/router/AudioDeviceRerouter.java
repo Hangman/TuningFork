@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork.router;
 
 import com.badlogic.gdx.utils.Disposable;
-
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.AudioDeviceConfig;
 import de.pottgames.tuningfork.ContextAttributes;
@@ -25,7 +24,6 @@ import de.pottgames.tuningfork.ContextAttributes;
  * @author Matthias
  */
 public interface AudioDeviceRerouter extends Disposable {
-
     /**
      * This method is called before {@link #start() run}.
      *
@@ -33,8 +31,11 @@ public interface AudioDeviceRerouter extends Disposable {
      * @param desiredDeviceSpecifier the device specifier that was specified in {@link AudioDeviceConfig#setDeviceSpecifier(String)}
      * @param attributes the context attributes
      */
-    void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes);
-
+    void setup(
+        long device,
+        String desiredDeviceSpecifier,
+        ContextAttributes attributes
+    );
 
     /**
      * This method gets called when the user changes the device at runtime via {@link AudioDevice#switchToDevice(String)}.
@@ -43,7 +44,6 @@ public interface AudioDeviceRerouter extends Disposable {
      */
     void updateDesiredDevice(String desiredDeviceSpecifier);
 
-
     /**
      * This method gets called whenever the OpenAL context attributes change.
      *
@@ -51,17 +51,14 @@ public interface AudioDeviceRerouter extends Disposable {
      */
     void updateContextAttributes(ContextAttributes attributes);
 
-
     /**
      * Gets called right after {@link #setup(long, String, ContextAttributes) setup} and should start a background thread which is then responsible for
      * rerouting.
      */
     void start();
 
-
     /**
      * Gets called when a disconnect to the audio device is detected.
      */
     void onDisconnect();
-
 }

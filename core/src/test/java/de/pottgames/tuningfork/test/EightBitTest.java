@@ -16,15 +16,14 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundLoader;
 
 public class EightBitTest extends ApplicationAdapter {
-    private Audio       audio;
-    private SoundBuffer sound;
 
+    private Audio audio;
+    private SoundBuffer sound;
 
     @Override
     public void create() {
@@ -39,12 +38,10 @@ public class EightBitTest extends ApplicationAdapter {
         sound.play();
     }
 
-
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -54,14 +51,13 @@ public class EightBitTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("8-Bit Test");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new EightBitTest(), config);
     }
-
 }

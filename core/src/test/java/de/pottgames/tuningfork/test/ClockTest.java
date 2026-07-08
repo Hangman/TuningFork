@@ -16,15 +16,14 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundLoader;
 
 public class ClockTest extends ApplicationAdapter {
-    private Audio       audio;
-    private SoundBuffer sound;
 
+    private Audio audio;
+    private SoundBuffer sound;
 
     @Override
     public void create() {
@@ -33,7 +32,6 @@ public class ClockTest extends ApplicationAdapter {
         sound.play();
     }
 
-
     @Override
     public void render() {
         System.out.println("clock time: " + audio.getDevice().getClockTime());
@@ -41,21 +39,19 @@ public class ClockTest extends ApplicationAdapter {
         System.out.println();
     }
 
-
     @Override
     public void dispose() {
         sound.dispose();
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("ClockTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new ClockTest(), config);
     }
-
 }

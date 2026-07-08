@@ -20,34 +20,37 @@ import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.MockLogger;
-import org.openjdk.jmh.annotations.*;
-
 import java.io.File;
+import org.openjdk.jmh.annotations.*;
 
 @State(Scope.Thread)
 public class LoadImaAdpcmWav {
-    private Audio       audio;
-    private SoundBuffer soundBuffer;
 
+    private Audio audio;
+    private SoundBuffer soundBuffer;
 
     @Benchmark
     public void loadJava() {
-        this.soundBuffer = WaveLoader.load(new File("src/jmh/resources/bench_ima_adpcm.wav"), true);
+        this.soundBuffer = WaveLoader.load(
+            new File("src/jmh/resources/bench_ima_adpcm.wav"),
+            true
+        );
     }
-
 
     @Benchmark
     public void loadNative() {
-        this.soundBuffer = WaveLoader.load(new File("src/jmh/resources/bench_ima_adpcm.wav"), false);
+        this.soundBuffer = WaveLoader.load(
+            new File("src/jmh/resources/bench_ima_adpcm.wav"),
+            false
+        );
     }
-
 
     @Benchmark
     public void loadNativeFast() {
-        this.soundBuffer =
-                WaveLoader.loadFastImaAdpcm(new File("src/jmh/resources/bench_ima_adpcm.wav").getAbsolutePath());
+        this.soundBuffer = WaveLoader.loadFastImaAdpcm(
+            new File("src/jmh/resources/bench_ima_adpcm.wav").getAbsolutePath()
+        );
     }
-
 
     @Setup(Level.Iteration)
     public void setup() {
@@ -57,11 +60,9 @@ public class LoadImaAdpcmWav {
         this.audio = Audio.init(config);
     }
 
-
     @TearDown(Level.Iteration)
     public void teardown() {
         this.soundBuffer.dispose();
         this.audio.dispose();
     }
-
 }

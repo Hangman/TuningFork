@@ -12,16 +12,10 @@
 
 package de.pottgames.tuningfork.test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDevice;
@@ -33,12 +27,15 @@ import de.pottgames.tuningfork.SoundSource;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 import de.pottgames.tuningfork.router.SmartDeviceRerouter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 public class SmartDeviceRerouterTest extends ApplicationAdapter {
 
-    private Audio       audio;
+    private Audio audio;
     private SoundBuffer sound;
-
 
     @Override
     public void create() {
@@ -57,7 +54,9 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
         });
 
         // READ USER INPUT
-        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(
+            new InputStreamReader(System.in)
+        );
         System.out.print("Enter device number: ");
         int number = 0;
         try {
@@ -73,7 +72,15 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
         audioDeviceConfig.setDeviceSpecifier(deviceList.get(number));
         audioDeviceConfig.setRerouter(new SmartDeviceRerouter());
-        audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
+        audio = Audio.init(
+            new AudioConfig(
+                audioDeviceConfig,
+                DistanceAttenuationModel.NONE,
+                1,
+                0,
+                logger
+            )
+        );
 
         sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
 
@@ -82,12 +89,10 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
         source.play();
     }
 
-
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -97,14 +102,13 @@ public class SmartDeviceRerouterTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("SmartDeviceRerouterTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new SmartDeviceRerouterTest(), config);
     }
-
 }

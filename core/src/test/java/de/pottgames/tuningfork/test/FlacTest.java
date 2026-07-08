@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.FlacLoader;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -27,10 +26,10 @@ import de.pottgames.tuningfork.StreamedSoundSource;
  *
  */
 public class FlacTest extends ApplicationAdapter {
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private StreamedSoundSource streamedSound;
 
+    private Audio audio;
+    private SoundBuffer sound;
+    private StreamedSoundSource streamedSound;
 
     @Override
     public void create() {
@@ -43,8 +42,12 @@ public class FlacTest extends ApplicationAdapter {
         sound.play();
 
         // load and play StreamedSoundSource delayed
-        streamedSound = new StreamedSoundSource(Gdx.files.internal("numbers_16bit_stereo.flac"));
-        System.out.println("Streamed sound duration: " + streamedSound.getDuration() + "s");
+        streamedSound = new StreamedSoundSource(
+            Gdx.files.internal("numbers_16bit_stereo.flac")
+        );
+        System.out.println(
+            "Streamed sound duration: " + streamedSound.getDuration() + "s"
+        );
         streamedSound.setLooping(true);
         try {
             Thread.sleep(100);
@@ -54,12 +57,10 @@ public class FlacTest extends ApplicationAdapter {
         streamedSound.play();
     }
 
-
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -70,14 +71,13 @@ public class FlacTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("FlacTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new FlacTest(), config);
     }
-
 }

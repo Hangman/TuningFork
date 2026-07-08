@@ -12,15 +12,8 @@
 
 package de.pottgames.tuningfork.test.unit;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
@@ -28,23 +21,31 @@ import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SoundSourceUnitTest {
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private BufferedSoundSource source;
 
+    private Audio audio;
+    private SoundBuffer sound;
+    private BufferedSoundSource source;
 
     @BeforeAll
     public void setup() {
         Gdx.files = new Lwjgl3Files(); // hack setup gdx because we only need Gdx.files in order to run properly
 
-        audio = Audio.init(new AudioConfig().setLogger(new ConsoleLogger(LogLevel.INFO_WARN_ERROR)));
+        audio = Audio.init(
+            new AudioConfig().setLogger(
+                new ConsoleLogger(LogLevel.INFO_WARN_ERROR)
+            )
+        );
         sound = WaveLoader.load(Gdx.files.internal("numbers.wav"));
         source = audio.obtainSource(sound);
     }
-
 
     @Test
     public void testVolume() {
@@ -69,7 +70,6 @@ public class SoundSourceUnitTest {
         Assertions.assertEquals(source.getVolume(), 1f);
     }
 
-
     @Test
     public void testRelative() {
         Assertions.assertEquals(source.isRelative(), false);
@@ -78,7 +78,6 @@ public class SoundSourceUnitTest {
         source.setRelative(false);
         Assertions.assertEquals(source.isRelative(), false);
     }
-
 
     @Test
     public void testPitch() {
@@ -105,7 +104,6 @@ public class SoundSourceUnitTest {
         Assertions.assertEquals(source.getPitch(), 1f);
     }
 
-
     @Test
     public void testFilter() {
         Assertions.assertEquals(source.hasFilter(), false);
@@ -115,12 +113,10 @@ public class SoundSourceUnitTest {
         Assertions.assertEquals(source.hasFilter(), false);
     }
 
-
     @AfterAll
     public void cleanup() {
         source.free();
         sound.dispose();
         audio.dispose();
     }
-
 }

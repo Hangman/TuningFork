@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -24,6 +23,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class Echo extends SoundEffectData {
+
     /**
      * Range: 0.0 - 0.207, Default: 0.1<br>
      * This property controls the delay between the original sound and the first ‘tap’, or echo instance. Subsequently, the value for Echo Delay is used to
@@ -59,7 +59,6 @@ public class Echo extends SoundEffectData {
      */
     public float spread = -1.0f;
 
-
     public static Echo veryFarAway() {
         final Echo result = new Echo();
         result.delay = 0.207f;
@@ -69,7 +68,6 @@ public class Echo extends SoundEffectData {
         result.spread = 0f;
         return result;
     }
-
 
     public static Echo farAway() {
         final Echo result = new Echo();
@@ -81,7 +79,6 @@ public class Echo extends SoundEffectData {
         return result;
     }
 
-
     public static Echo pingPongLeft() {
         final Echo result = new Echo();
         result.delay = 0.05f;
@@ -92,20 +89,17 @@ public class Echo extends SoundEffectData {
         return result;
     }
 
-
     public static Echo pingPongRight() {
         final Echo result = Echo.pingPongLeft();
         result.spread = -1f;
         return result;
     }
 
-
     public static Echo pingPongCenter() {
         final Echo result = Echo.pingPongLeft();
         result.spread = 0f;
         return result;
     }
-
 
     public static Echo doppelganger() {
         final Echo result = new Echo();
@@ -117,10 +111,13 @@ public class Echo extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_ECHO);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_ECHO
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DELAY, delay);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_LRDELAY, lrDelay);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_DAMPING, damping);
@@ -128,12 +125,10 @@ public class Echo extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_ECHO_SPREAD, spread);
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(damping, delay, feedback, lrDelay, spread);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -147,15 +142,32 @@ public class Echo extends SoundEffectData {
             return false;
         }
         final Echo other = (Echo) obj;
-        return Float.floatToIntBits(damping) == Float.floatToIntBits(other.damping) && Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay)
-                && Float.floatToIntBits(feedback) == Float.floatToIntBits(other.feedback)
-                && Float.floatToIntBits(lrDelay) == Float.floatToIntBits(other.lrDelay) && Float.floatToIntBits(spread) == Float.floatToIntBits(other.spread);
+        return (
+            Float.floatToIntBits(damping) ==
+                Float.floatToIntBits(other.damping) &&
+            Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) &&
+            Float.floatToIntBits(feedback) ==
+                Float.floatToIntBits(other.feedback) &&
+            Float.floatToIntBits(lrDelay) ==
+                Float.floatToIntBits(other.lrDelay) &&
+            Float.floatToIntBits(spread) == Float.floatToIntBits(other.spread)
+        );
     }
-
 
     @Override
     public String toString() {
-        return "Echo [delay=" + delay + ", lrDelay=" + lrDelay + ", damping=" + damping + ", feedback=" + feedback + ", spread=" + spread + "]";
+        return (
+            "Echo [delay=" +
+            delay +
+            ", lrDelay=" +
+            lrDelay +
+            ", damping=" +
+            damping +
+            ", feedback=" +
+            feedback +
+            ", spread=" +
+            spread +
+            "]"
+        );
     }
-
 }

@@ -12,10 +12,9 @@
 
 package de.pottgames.tuningfork;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
-
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 
 /**
  * A {@link SoundBuffer} that keeps a copy of the audio data that can be read.
@@ -23,8 +22,8 @@ import de.pottgames.tuningfork.PcmFormat.PcmDataType;
  * @author Matthias
  */
 public class ReadableSoundBuffer extends SoundBuffer {
-    private final byte[] bufferCopy;
 
+    private final byte[] bufferCopy;
 
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
@@ -40,11 +39,16 @@ public class ReadableSoundBuffer extends SoundBuffer {
      * @param bitsPerSample number of bits per sample
      * @param pcmDataType the pcm data type
      */
-    public ReadableSoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType) {
+    public ReadableSoundBuffer(
+        byte[] pcm,
+        int channels,
+        int sampleRate,
+        int bitsPerSample,
+        PcmDataType pcmDataType
+    ) {
         super(pcm, channels, sampleRate, bitsPerSample, pcmDataType);
         bufferCopy = pcm;
     }
-
 
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
@@ -60,8 +64,22 @@ public class ReadableSoundBuffer extends SoundBuffer {
      * @param pcmDataType the pcm data type
      * @param blockAlign the block alignment (currently only used for MS ADPCM data)
      */
-    public ReadableSoundBuffer(ShortBuffer pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
-        super(pcm, channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
+    public ReadableSoundBuffer(
+        ShortBuffer pcm,
+        int channels,
+        int sampleRate,
+        int bitsPerSample,
+        PcmDataType pcmDataType,
+        int blockAlign
+    ) {
+        super(
+            pcm,
+            channels,
+            sampleRate,
+            bitsPerSample,
+            pcmDataType,
+            blockAlign
+        );
         pcm.rewind();
         final ByteBuffer byteBuffer = ByteBuffer.allocate(pcm.remaining() * 2);
         while (pcm.hasRemaining()) {
@@ -69,7 +87,6 @@ public class ReadableSoundBuffer extends SoundBuffer {
         }
         bufferCopy = byteBuffer.array();
     }
-
 
     /**
      * Creates a SoundBuffer with the given pcm data.<br>
@@ -86,11 +103,24 @@ public class ReadableSoundBuffer extends SoundBuffer {
      * @param pcmDataType the pcm data type
      * @param blockAlign the block alignment (currently only used for MS ADPCM data)
      */
-    public ReadableSoundBuffer(byte[] pcm, int channels, int sampleRate, int bitsPerSample, PcmDataType pcmDataType, int blockAlign) {
-        super(pcm, channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
+    public ReadableSoundBuffer(
+        byte[] pcm,
+        int channels,
+        int sampleRate,
+        int bitsPerSample,
+        PcmDataType pcmDataType,
+        int blockAlign
+    ) {
+        super(
+            pcm,
+            channels,
+            sampleRate,
+            bitsPerSample,
+            pcmDataType,
+            blockAlign
+        );
         bufferCopy = pcm;
     }
-
 
     /**
      * Returns a copy of the audio data (no allocation involved here) used in this SoundBuffer. Writing to it has no effect to the actual data used.<br>
@@ -101,5 +131,4 @@ public class ReadableSoundBuffer extends SoundBuffer {
     public byte[] getAudioData() {
         return bufferCopy;
     }
-
 }

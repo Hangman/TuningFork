@@ -37,17 +37,13 @@ enum Note {
     H4(493.88f),
     SILENCE(1f);
 
-
     private final float frequency;
-
 
     Note(float frequency) {
         this.frequency = frequency;
     }
 
-
     float getFrequency() {
         return frequency;
     }
-
 }

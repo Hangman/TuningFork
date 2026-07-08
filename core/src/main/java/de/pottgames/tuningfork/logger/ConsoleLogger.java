@@ -13,42 +13,39 @@
 package de.pottgames.tuningfork.logger;
 
 public class ConsoleLogger implements TuningForkLogger {
-    private LogLevel logLevel = LogLevel.WARN_ERROR;
 
+    private LogLevel logLevel = LogLevel.WARN_ERROR;
 
     public ConsoleLogger() {
         // provide default constructor
     }
 
-
     public ConsoleLogger(LogLevel logLevel) {
         setLogLevel(logLevel);
     }
 
-
     public enum LogLevel {
-        TRACE_DEBUG_INFO_WARN_ERROR(5), DEBUG_INFO_WARN_ERROR(4), INFO_WARN_ERROR(3), WARN_ERROR(2), ERROR(1), OFF(0);
-
+        TRACE_DEBUG_INFO_WARN_ERROR(5),
+        DEBUG_INFO_WARN_ERROR(4),
+        INFO_WARN_ERROR(3),
+        WARN_ERROR(2),
+        ERROR(1),
+        OFF(0);
 
         private final int value;
-
 
         LogLevel(int value) {
             this.value = value;
         }
 
-
         public int getValue() {
             return value;
         }
 
-
         boolean allowedToLog(LogLevel logLevel) {
             return value >= logLevel.value;
         }
-
     }
-
 
     public void setLogLevel(LogLevel logLevel) {
         if (logLevel != null) {
@@ -58,14 +55,12 @@ public class ConsoleLogger implements TuningForkLogger {
         }
     }
 
-
     @Override
     public void error(Class<?> clazz, String message) {
         if (logLevel.allowedToLog(LogLevel.ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
-
 
     @Override
     public void warn(Class<?> clazz, String message) {
@@ -74,14 +69,12 @@ public class ConsoleLogger implements TuningForkLogger {
         }
     }
 
-
     @Override
     public void info(Class<?> clazz, String message) {
         if (logLevel.allowedToLog(LogLevel.INFO_WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
-
 
     @Override
     public void debug(Class<?> clazz, String message) {
@@ -90,12 +83,10 @@ public class ConsoleLogger implements TuningForkLogger {
         }
     }
 
-
     @Override
     public void trace(Class<?> clazz, String message) {
         if (logLevel.allowedToLog(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR)) {
             System.out.println(clazz.getName() + ": " + message);
         }
     }
-
 }

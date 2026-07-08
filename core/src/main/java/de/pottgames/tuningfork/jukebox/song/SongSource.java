@@ -22,9 +22,7 @@ import de.pottgames.tuningfork.SoundSource;
  */
 public abstract class SongSource extends SoundSource {
 
-    protected SongSource() {
-    }
-
+    protected SongSource() {}
 
     /**
      * Returns the duration in seconds. Might return -1 if the duration is not available.
@@ -33,12 +31,10 @@ public abstract class SongSource extends SoundSource {
      */
     public abstract float getDuration();
 
-
     /**
      * Returns the playback position in seconds.
      *
      * @return the playback position in seconds
      */
     public abstract float getPlaybackPosition();
-
 }

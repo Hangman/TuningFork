@@ -12,8 +12,6 @@
 
 package de.pottgames.tuningfork;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -21,8 +19,8 @@ import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-
 import de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter;
+import java.io.IOException;
 
 /**
  * This class can be used to load {@link SoundBuffer}s asynchronously. Don't forget to tell your {@link com.badlogic.gdx.assets.AssetManager AssetManager} about
@@ -30,32 +28,42 @@ import de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter;
  *
  * @author Matthias
  */
-public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, SoundBufferLoaderParameter> {
+public class SoundBufferLoader
+    extends AsynchronousAssetLoader<SoundBuffer, SoundBufferLoaderParameter>
+{
+
     @SuppressWarnings("rawtypes")
     private final Array<AssetDescriptor> dependencies = new Array<>();
-    private volatile SoundBuffer         asset;
 
+    private volatile SoundBuffer asset;
 
     public SoundBufferLoader(FileHandleResolver resolver) {
         super(resolver);
     }
 
-
     private void reset() {
         asset = null;
     }
 
-
     @SuppressWarnings("rawtypes")
     @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
+    public Array<AssetDescriptor> getDependencies(
+        String fileName,
+        FileHandle file,
+        SoundBufferLoaderParameter parameter
+    ) {
         return dependencies;
     }
 
-
     @Override
-    public void loadAsync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
-        file = parameter != null && parameter.file != null ? parameter.file : file;
+    public void loadAsync(
+        AssetManager manager,
+        String fileName,
+        FileHandle file,
+        SoundBufferLoaderParameter parameter
+    ) {
+        file =
+            parameter != null && parameter.file != null ? parameter.file : file;
         final boolean reverse = parameter != null && parameter.reverse;
         final String fileExtension = file.extension();
         SoundFileType type = SoundFileType.getByFileEnding(fileExtension);
@@ -67,40 +75,62 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
             }
         }
         if (type == null) {
-            throw new TuningForkRuntimeException("Unsupported file '" + fileExtension + "'. Only ogg, flac, mp3, aiff, wav and qoa files are supported.");
+            throw new TuningForkRuntimeException(
+                "Unsupported file '" +
+                    fileExtension +
+                    "'. Only ogg, flac, mp3, aiff, wav and qoa files are supported."
+            );
         }
         switch (type) {
             case FLAC:
-                asset = reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);
+                asset = reverse
+                    ? FlacLoader.loadReverse(file)
+                    : FlacLoader.load(file);
                 break;
             case OGG:
-                asset = reverse ? OggLoader.loadReverse(file) : OggLoader.load(file);
+                asset = reverse
+                    ? OggLoader.loadReverse(file)
+                    : OggLoader.load(file);
                 break;
             case WAV:
-                asset = reverse ? WaveLoader.loadReverse(file) : WaveLoader.load(file);
+                asset = reverse
+                    ? WaveLoader.loadReverse(file)
+                    : WaveLoader.load(file);
                 break;
             case MP3:
-                asset = reverse ? Mp3Loader.loadReverse(file) : Mp3Loader.load(file);
+                asset = reverse
+                    ? Mp3Loader.loadReverse(file)
+                    : Mp3Loader.load(file);
                 break;
             case AIFF:
-                asset = reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
+                asset = reverse
+                    ? AiffLoader.loadReverse(file)
+                    : AiffLoader.load(file);
                 break;
             case QOA:
-                asset = reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
+                asset = reverse
+                    ? QoaLoader.loadReverse(file)
+                    : QoaLoader.load(file);
                 break;
         }
     }
 
-
     @Override
-    public SoundBuffer loadSync(AssetManager manager, String fileName, FileHandle file, SoundBufferLoaderParameter parameter) {
+    public SoundBuffer loadSync(
+        AssetManager manager,
+        String fileName,
+        FileHandle file,
+        SoundBufferLoaderParameter parameter
+    ) {
         final SoundBuffer result = asset;
         reset();
         return result;
     }
 
+    public static class SoundBufferLoaderParameter
+        extends AssetLoaderParameters<SoundBuffer>
+    {
 
-    public static class SoundBufferLoaderParameter extends AssetLoaderParameters<SoundBuffer> {
         /**
          * Loads the file for reversed playback.
          */
@@ -113,7 +143,5 @@ public class SoundBufferLoader extends AsynchronousAssetLoader<SoundBuffer, Soun
          * This is useful when multiple instances of the same asset need to be loaded with different configurations.
          */
         public FileHandle file;
-
     }
-
 }

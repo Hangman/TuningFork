@@ -12,12 +12,10 @@
 
 package de.pottgames.tuningfork;
 
+import com.badlogic.gdx.math.Vector3;
 import java.util.Objects;
-
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.EXTEfx;
-
-import com.badlogic.gdx.math.Vector3;
 
 /**
  * The EAX Reverb parameter set is a superset of the standard OpenAL Effects Extension environmental reverb effect. Additional parameters allow for:  Closer
@@ -30,6 +28,7 @@ import com.badlogic.gdx.math.Vector3;
  *
  */
 public class EaxReverb extends SoundEffectData {
+
     /**
      * Range: (0.0–1.0), Default: (1.0)<br>
      * Reverb Modal Density controls the coloration of the late reverb.<br>
@@ -148,7 +147,7 @@ public class EaxReverb extends SoundEffectData {
      * reflections become more focused in the direction pointed to by the vector. A magnitude of 1.0 would represent the extreme case, where all reflections
      * come from a single direction.
      */
-    public final Vector3  reflectionsPan     = new Vector3(0f, 0f, 0f);
+    public final Vector3 reflectionsPan = new Vector3(0f, 0f, 0f);
     private final float[] reflectionsPanData = new float[3];
 
     /**
@@ -178,7 +177,7 @@ public class EaxReverb extends SoundEffectData {
      * The direction of this vector controls the global direction of the reverb, while its magnitude controls how focused the reverb are towards this direction.
      * The details under reflectionsPan, above, also apply to Late Reverb Pan.
      */
-    public final Vector3  lateReverbPan     = new Vector3(0f, 0f, 0f);
+    public final Vector3 lateReverbPan = new Vector3(0f, 0f, 0f);
     private final float[] lateReverbPanData = new float[3];
 
     /**
@@ -292,7 +291,6 @@ public class EaxReverb extends SoundEffectData {
      */
     public boolean decayHfLimit = true;
 
-
     public static EaxReverb generic() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -320,7 +318,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb paddedCell() {
         final EaxReverb result = new EaxReverb();
@@ -350,7 +347,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb room() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
@@ -378,7 +374,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb bathroom() {
         final EaxReverb result = new EaxReverb();
@@ -408,7 +403,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb livingRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.9766f;
@@ -436,7 +430,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb stoneRoom() {
         final EaxReverb result = new EaxReverb();
@@ -466,7 +459,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb auditorium() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -494,7 +486,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb concertHall() {
         final EaxReverb result = new EaxReverb();
@@ -524,7 +515,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb cave() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -552,7 +542,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb arena() {
         final EaxReverb result = new EaxReverb();
@@ -582,7 +571,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb hangar() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -610,7 +598,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb carpetedHallway() {
         final EaxReverb result = new EaxReverb();
@@ -640,7 +627,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb hallway() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
@@ -668,7 +654,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb stoneCorridor() {
         final EaxReverb result = new EaxReverb();
@@ -698,7 +683,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb alley() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -726,7 +710,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb forest() {
         final EaxReverb result = new EaxReverb();
@@ -756,7 +739,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb city() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -784,7 +766,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb mountains() {
         final EaxReverb result = new EaxReverb();
@@ -814,7 +795,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb quarry() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -842,7 +822,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb plain() {
         final EaxReverb result = new EaxReverb();
@@ -872,7 +851,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb parkingLot() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -900,7 +878,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb sewerpipe() {
         final EaxReverb result = new EaxReverb();
@@ -930,7 +907,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb underwater() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
@@ -958,7 +934,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb drugged() {
         final EaxReverb result = new EaxReverb();
@@ -988,7 +963,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb dizzy() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
@@ -1016,7 +990,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb psychotic() {
         final EaxReverb result = new EaxReverb();
@@ -1046,7 +1019,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb castleSmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1074,7 +1046,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb castleShortPassage() {
         final EaxReverb result = new EaxReverb();
@@ -1104,7 +1075,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb castleMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1132,7 +1102,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb castleLargeRoom() {
         final EaxReverb result = new EaxReverb();
@@ -1162,7 +1131,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb castleLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1190,7 +1158,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb castleHall() {
         final EaxReverb result = new EaxReverb();
@@ -1220,7 +1187,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb castleCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1248,7 +1214,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb castleCourtyard() {
         final EaxReverb result = new EaxReverb();
@@ -1278,7 +1243,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb castleAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1306,7 +1270,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb factorySmallRoom() {
         final EaxReverb result = new EaxReverb();
@@ -1336,7 +1299,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb factoryShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
@@ -1364,7 +1326,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb factoryMediumRoom() {
         final EaxReverb result = new EaxReverb();
@@ -1394,7 +1355,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb factoryLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
@@ -1422,7 +1382,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb factoryLongPassage() {
         final EaxReverb result = new EaxReverb();
@@ -1452,7 +1411,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb factoryHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
@@ -1480,7 +1438,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb factoryCupboard() {
         final EaxReverb result = new EaxReverb();
@@ -1510,7 +1467,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb factoryCourtyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3071f;
@@ -1538,7 +1494,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb factoryAlcove() {
         final EaxReverb result = new EaxReverb();
@@ -1568,7 +1523,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb icepalaceSmallRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1596,7 +1550,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb icepalaceShortPassage() {
         final EaxReverb result = new EaxReverb();
@@ -1626,7 +1579,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb icepalaceMediumRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1654,7 +1606,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb icepalaceLargeRoom() {
         final EaxReverb result = new EaxReverb();
@@ -1684,7 +1635,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb icepalaceLongPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1712,7 +1662,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb icepalaceHall() {
         final EaxReverb result = new EaxReverb();
@@ -1742,7 +1691,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb icepalaceCupboard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1770,7 +1718,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb icepalaceCourtyard() {
         final EaxReverb result = new EaxReverb();
@@ -1800,7 +1747,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb icepalaceAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -1828,7 +1774,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb spacestationSmallRoom() {
         final EaxReverb result = new EaxReverb();
@@ -1858,7 +1803,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb spaceStationShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2109f;
@@ -1886,7 +1830,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb spaceStationMediumRoom() {
         final EaxReverb result = new EaxReverb();
@@ -1916,7 +1859,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb spaceStationLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
@@ -1944,7 +1886,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb spaceStationLongPassage() {
         final EaxReverb result = new EaxReverb();
@@ -1974,7 +1915,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb spaceStationHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4287f;
@@ -2002,7 +1942,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb spaceStationCupboard() {
         final EaxReverb result = new EaxReverb();
@@ -2032,7 +1971,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb spaceStationAlcove() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2109f;
@@ -2060,7 +1998,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb woodenSmallRoom() {
         final EaxReverb result = new EaxReverb();
@@ -2090,7 +2027,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb woodenShortPassage() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2118,7 +2054,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb woodenMediumRoom() {
         final EaxReverb result = new EaxReverb();
@@ -2148,7 +2083,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb woodenLargeRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2176,7 +2110,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb woodenLongPassage() {
         final EaxReverb result = new EaxReverb();
@@ -2206,7 +2139,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb woodenHall() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2234,7 +2166,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb woodenCupboard() {
         final EaxReverb result = new EaxReverb();
@@ -2264,7 +2195,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb woodenCourtyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2292,7 +2222,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb woodenAlcove() {
         final EaxReverb result = new EaxReverb();
@@ -2322,7 +2251,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb sportEmptystadium() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2350,7 +2278,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb sportSquashCourt() {
         final EaxReverb result = new EaxReverb();
@@ -2380,7 +2307,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb sportSmallSwimmingpool() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2408,7 +2334,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb sportLargeSwimmingpool() {
         final EaxReverb result = new EaxReverb();
@@ -2438,7 +2363,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb sportGymnasium() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2466,7 +2390,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb sportFullStadium() {
         final EaxReverb result = new EaxReverb();
@@ -2496,7 +2419,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb sportStadiumTannoy() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2524,7 +2446,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb prefabWorkshop() {
         final EaxReverb result = new EaxReverb();
@@ -2554,7 +2475,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb prefabSchoolRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.4022f;
@@ -2582,7 +2502,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb prefabPractiseRoom() {
         final EaxReverb result = new EaxReverb();
@@ -2612,7 +2531,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb prefabOuthouse() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2640,7 +2558,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb prefabCaravan() {
         final EaxReverb result = new EaxReverb();
@@ -2670,7 +2587,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb domeTomb() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2698,7 +2614,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb pipeSmall() {
         final EaxReverb result = new EaxReverb();
@@ -2728,7 +2643,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb domeSaintPauls() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2756,7 +2670,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb pipeLongThin() {
         final EaxReverb result = new EaxReverb();
@@ -2786,7 +2699,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb pipeLarge() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2814,7 +2726,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb pipeResonant() {
         final EaxReverb result = new EaxReverb();
@@ -2844,7 +2755,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb outdoorsBackyard() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2872,7 +2782,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb outdoorsRollingPlains() {
         final EaxReverb result = new EaxReverb();
@@ -2902,7 +2811,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb outdoorsDeepCanyon() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2930,7 +2838,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb outdoorsCreek() {
         final EaxReverb result = new EaxReverb();
@@ -2960,7 +2867,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb outdoorsValley() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -2988,7 +2894,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb moodHeaven() {
         final EaxReverb result = new EaxReverb();
@@ -3018,7 +2923,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb moodHell() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3046,7 +2950,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb moodMemory() {
         final EaxReverb result = new EaxReverb();
@@ -3076,7 +2979,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb drivingCommentator() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3104,7 +3006,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb drivingPitGarage() {
         final EaxReverb result = new EaxReverb();
@@ -3134,7 +3035,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb drivingInCarRacer() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.0832f;
@@ -3162,7 +3062,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb drivingInCarSports() {
         final EaxReverb result = new EaxReverb();
@@ -3192,7 +3091,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb drivingInCarLuxury() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.2560f;
@@ -3220,7 +3118,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb drivingFullGrandStand() {
         final EaxReverb result = new EaxReverb();
@@ -3250,7 +3147,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb drivingEmptyGrandStand() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3278,7 +3174,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb drivingTunnel() {
         final EaxReverb result = new EaxReverb();
@@ -3308,7 +3203,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb cityStreets() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3336,7 +3230,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb citySubway() {
         final EaxReverb result = new EaxReverb();
@@ -3366,7 +3259,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb cityMuseum() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3394,7 +3286,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = false;
         return result;
     }
-
 
     public static EaxReverb cityLibrary() {
         final EaxReverb result = new EaxReverb();
@@ -3424,7 +3315,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb cityUnderpass() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3452,7 +3342,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb cityAbandoned() {
         final EaxReverb result = new EaxReverb();
@@ -3482,7 +3371,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb dustyRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 0.3645f;
@@ -3510,7 +3398,6 @@ public class EaxReverb extends SoundEffectData {
         result.decayHfLimit = true;
         return result;
     }
-
 
     public static EaxReverb chapel() {
         final EaxReverb result = new EaxReverb();
@@ -3540,7 +3427,6 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     public static EaxReverb smallWaterRoom() {
         final EaxReverb result = new EaxReverb();
         result.density = 1.0000f;
@@ -3569,49 +3455,132 @@ public class EaxReverb extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_EAXREVERB
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DENSITY, density);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DIFFUSION, diffusion);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAIN, gain);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAINHF, gainHf);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_GAINLF, gainLf);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_TIME, decayTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_HFRATIO, decayHfRatio);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_DECAY_LFRATIO, decayLfRatio);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, reflectionsGain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_DELAY, reflectionsDelay);
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_DECAY_HFRATIO,
+            decayHfRatio
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_DECAY_LFRATIO,
+            decayLfRatio
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN,
+            reflectionsGain
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_REFLECTIONS_DELAY,
+            reflectionsDelay
+        );
         reflectionsPanData[0] = reflectionsPan.x;
         reflectionsPanData[1] = reflectionsPan.y;
         reflectionsPanData[2] = reflectionsPan.z;
-        EXTEfx.alEffectfv(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN, reflectionsPanData);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, lateReverbGain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY, lateReverbDelay);
+        EXTEfx.alEffectfv(
+            effectId,
+            EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN,
+            reflectionsPanData
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN,
+            lateReverbGain
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY,
+            lateReverbDelay
+        );
         lateReverbPanData[0] = lateReverbPan.x;
         lateReverbPanData[1] = lateReverbPan.y;
         lateReverbPanData[2] = lateReverbPan.z;
-        EXTEfx.alEffectfv(effectId, EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN, lateReverbPanData);
+        EXTEfx.alEffectfv(
+            effectId,
+            EXTEfx.AL_EAXREVERB_REFLECTIONS_PAN,
+            lateReverbPanData
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ECHO_TIME, echoTime);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ECHO_DEPTH, echoDepth);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_MODULATION_TIME, modulationTime);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_MODULATION_DEPTH, modulationDepth);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, airAbsorptionGainHf);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_HFREFERENCE, hfReference);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_LFREFERENCE, lfReference);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, roomRolloffFactor);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EAXREVERB_DECAY_HFLIMIT, decayHfLimit ? AL10.AL_TRUE : AL10.AL_FALSE);
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_MODULATION_TIME,
+            modulationTime
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_MODULATION_DEPTH,
+            modulationDepth
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF,
+            airAbsorptionGainHf
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_HFREFERENCE,
+            hfReference
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_LFREFERENCE,
+            lfReference
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR,
+            roomRolloffFactor
+        );
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EAXREVERB_DECAY_HFLIMIT,
+            decayHfLimit ? AL10.AL_TRUE : AL10.AL_FALSE
+        );
     }
-
 
     @Override
     public int hashCode() {
-        return Objects.hash(airAbsorptionGainHf, decayHfLimit, decayHfRatio, decayLfRatio, decayTime, density, diffusion, echoDepth, echoTime, gain, gainHf,
-                gainLf, hfReference, lateReverbDelay, lateReverbGain, lateReverbPan, lfReference, modulationDepth, modulationTime, reflectionsDelay,
-                reflectionsGain, reflectionsPan, roomRolloffFactor);
+        return Objects.hash(
+            airAbsorptionGainHf,
+            decayHfLimit,
+            decayHfRatio,
+            decayLfRatio,
+            decayTime,
+            density,
+            diffusion,
+            echoDepth,
+            echoTime,
+            gain,
+            gainHf,
+            gainLf,
+            hfReference,
+            lateReverbDelay,
+            lateReverbGain,
+            lateReverbPan,
+            lfReference,
+            modulationDepth,
+            modulationTime,
+            reflectionsDelay,
+            reflectionsGain,
+            reflectionsPan,
+            roomRolloffFactor
+        );
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -3625,35 +3594,102 @@ public class EaxReverb extends SoundEffectData {
             return false;
         }
         final EaxReverb other = (EaxReverb) obj;
-        return Float.floatToIntBits(airAbsorptionGainHf) == Float.floatToIntBits(other.airAbsorptionGainHf) && decayHfLimit == other.decayHfLimit
-                && Float.floatToIntBits(decayHfRatio) == Float.floatToIntBits(other.decayHfRatio)
-                && Float.floatToIntBits(decayLfRatio) == Float.floatToIntBits(other.decayLfRatio)
-                && Float.floatToIntBits(decayTime) == Float.floatToIntBits(other.decayTime)
-                && Float.floatToIntBits(density) == Float.floatToIntBits(other.density)
-                && Float.floatToIntBits(diffusion) == Float.floatToIntBits(other.diffusion)
-                && Float.floatToIntBits(echoDepth) == Float.floatToIntBits(other.echoDepth)
-                && Float.floatToIntBits(echoTime) == Float.floatToIntBits(other.echoTime) && Float.floatToIntBits(gain) == Float.floatToIntBits(other.gain)
-                && Float.floatToIntBits(gainHf) == Float.floatToIntBits(other.gainHf) && Float.floatToIntBits(gainLf) == Float.floatToIntBits(other.gainLf)
-                && Float.floatToIntBits(hfReference) == Float.floatToIntBits(other.hfReference)
-                && Float.floatToIntBits(lateReverbDelay) == Float.floatToIntBits(other.lateReverbDelay)
-                && Float.floatToIntBits(lateReverbGain) == Float.floatToIntBits(other.lateReverbGain) && Objects.equals(lateReverbPan, other.lateReverbPan)
-                && Float.floatToIntBits(lfReference) == Float.floatToIntBits(other.lfReference)
-                && Float.floatToIntBits(modulationDepth) == Float.floatToIntBits(other.modulationDepth)
-                && Float.floatToIntBits(modulationTime) == Float.floatToIntBits(other.modulationTime)
-                && Float.floatToIntBits(reflectionsDelay) == Float.floatToIntBits(other.reflectionsDelay)
-                && Float.floatToIntBits(reflectionsGain) == Float.floatToIntBits(other.reflectionsGain) && Objects.equals(reflectionsPan, other.reflectionsPan)
-                && Float.floatToIntBits(roomRolloffFactor) == Float.floatToIntBits(other.roomRolloffFactor);
+        return (
+            Float.floatToIntBits(airAbsorptionGainHf) ==
+                Float.floatToIntBits(other.airAbsorptionGainHf) &&
+            decayHfLimit == other.decayHfLimit &&
+            Float.floatToIntBits(decayHfRatio) ==
+                Float.floatToIntBits(other.decayHfRatio) &&
+            Float.floatToIntBits(decayLfRatio) ==
+                Float.floatToIntBits(other.decayLfRatio) &&
+            Float.floatToIntBits(decayTime) ==
+                Float.floatToIntBits(other.decayTime) &&
+            Float.floatToIntBits(density) ==
+                Float.floatToIntBits(other.density) &&
+            Float.floatToIntBits(diffusion) ==
+                Float.floatToIntBits(other.diffusion) &&
+            Float.floatToIntBits(echoDepth) ==
+                Float.floatToIntBits(other.echoDepth) &&
+            Float.floatToIntBits(echoTime) ==
+                Float.floatToIntBits(other.echoTime) &&
+            Float.floatToIntBits(gain) == Float.floatToIntBits(other.gain) &&
+            Float.floatToIntBits(gainHf) ==
+                Float.floatToIntBits(other.gainHf) &&
+            Float.floatToIntBits(gainLf) ==
+                Float.floatToIntBits(other.gainLf) &&
+            Float.floatToIntBits(hfReference) ==
+                Float.floatToIntBits(other.hfReference) &&
+            Float.floatToIntBits(lateReverbDelay) ==
+                Float.floatToIntBits(other.lateReverbDelay) &&
+            Float.floatToIntBits(lateReverbGain) ==
+                Float.floatToIntBits(other.lateReverbGain) &&
+            Objects.equals(lateReverbPan, other.lateReverbPan) &&
+            Float.floatToIntBits(lfReference) ==
+                Float.floatToIntBits(other.lfReference) &&
+            Float.floatToIntBits(modulationDepth) ==
+                Float.floatToIntBits(other.modulationDepth) &&
+            Float.floatToIntBits(modulationTime) ==
+                Float.floatToIntBits(other.modulationTime) &&
+            Float.floatToIntBits(reflectionsDelay) ==
+                Float.floatToIntBits(other.reflectionsDelay) &&
+            Float.floatToIntBits(reflectionsGain) ==
+                Float.floatToIntBits(other.reflectionsGain) &&
+            Objects.equals(reflectionsPan, other.reflectionsPan) &&
+            Float.floatToIntBits(roomRolloffFactor) ==
+                Float.floatToIntBits(other.roomRolloffFactor)
+        );
     }
-
 
     @Override
     public String toString() {
-        return "EaxReverb [density=" + density + ", diffusion=" + diffusion + ", gain=" + gain + ", gainHf=" + gainHf + ", gainLf=" + gainLf + ", decayTime="
-                + decayTime + ", decayHfRatio=" + decayHfRatio + ", decayLfRatio=" + decayLfRatio + ", reflectionsGain=" + reflectionsGain
-                + ", reflectionsDelay=" + reflectionsDelay + ", reflectionsPan=" + reflectionsPan + ", lateReverbGain=" + lateReverbGain + ", lateReverbDelay="
-                + lateReverbDelay + ", lateReverbPan=" + lateReverbPan + ", echoTime=" + echoTime + ", echoDepth=" + echoDepth + ", modulationTime="
-                + modulationTime + ", modulationDepth=" + modulationDepth + ", airAbsorptionGainHf=" + airAbsorptionGainHf + ", hfReference=" + hfReference
-                + ", lfReference=" + lfReference + ", roomRolloffFactor=" + roomRolloffFactor + ", decayHfLimit=" + decayHfLimit + "]";
+        return (
+            "EaxReverb [density=" +
+            density +
+            ", diffusion=" +
+            diffusion +
+            ", gain=" +
+            gain +
+            ", gainHf=" +
+            gainHf +
+            ", gainLf=" +
+            gainLf +
+            ", decayTime=" +
+            decayTime +
+            ", decayHfRatio=" +
+            decayHfRatio +
+            ", decayLfRatio=" +
+            decayLfRatio +
+            ", reflectionsGain=" +
+            reflectionsGain +
+            ", reflectionsDelay=" +
+            reflectionsDelay +
+            ", reflectionsPan=" +
+            reflectionsPan +
+            ", lateReverbGain=" +
+            lateReverbGain +
+            ", lateReverbDelay=" +
+            lateReverbDelay +
+            ", lateReverbPan=" +
+            lateReverbPan +
+            ", echoTime=" +
+            echoTime +
+            ", echoDepth=" +
+            echoDepth +
+            ", modulationTime=" +
+            modulationTime +
+            ", modulationDepth=" +
+            modulationDepth +
+            ", airAbsorptionGainHf=" +
+            airAbsorptionGainHf +
+            ", hfReference=" +
+            hfReference +
+            ", lfReference=" +
+            lfReference +
+            ", roomRolloffFactor=" +
+            roomRolloffFactor +
+            ", decayHfLimit=" +
+            decayHfLimit +
+            "]"
+        );
     }
-
 }

@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -27,6 +26,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class Distortion extends SoundEffectData {
+
     /**
      * Range: 0.0 - 1.0, Default: 0.2<br>
      * This property controls the shape of the distortion. The higher the value for Edge, the ‘dirtier’ and ‘fuzzier’ the effect.
@@ -57,14 +57,12 @@ public class Distortion extends SoundEffectData {
      */
     public float eqBandwidth = 3600f;
 
-
     public static Distortion rattle() {
         final Distortion result = new Distortion();
         result.edge = 1f;
         result.gain = 1f;
         return result;
     }
-
 
     public static Distortion rumble() {
         final Distortion result = new Distortion();
@@ -76,23 +74,32 @@ public class Distortion extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_DISTORTION);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_DISTORTION
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EDGE, edge);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_GAIN, gain);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_LOWPASS_CUTOFF, lowpassCutoff);
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_DISTORTION_LOWPASS_CUTOFF,
+            lowpassCutoff
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQCENTER, eqCenter);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_DISTORTION_EQBANDWIDTH, eqBandwidth);
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_DISTORTION_EQBANDWIDTH,
+            eqBandwidth
+        );
     }
-
 
     @Override
     public int hashCode() {
         return Objects.hash(edge, eqBandwidth, eqCenter, gain, lowpassCutoff);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -106,16 +113,32 @@ public class Distortion extends SoundEffectData {
             return false;
         }
         final Distortion other = (Distortion) obj;
-        return Float.floatToIntBits(edge) == Float.floatToIntBits(other.edge) && Float.floatToIntBits(eqBandwidth) == Float.floatToIntBits(other.eqBandwidth)
-                && Float.floatToIntBits(eqCenter) == Float.floatToIntBits(other.eqCenter) && Float.floatToIntBits(gain) == Float.floatToIntBits(other.gain)
-                && Float.floatToIntBits(lowpassCutoff) == Float.floatToIntBits(other.lowpassCutoff);
+        return (
+            Float.floatToIntBits(edge) == Float.floatToIntBits(other.edge) &&
+            Float.floatToIntBits(eqBandwidth) ==
+                Float.floatToIntBits(other.eqBandwidth) &&
+            Float.floatToIntBits(eqCenter) ==
+                Float.floatToIntBits(other.eqCenter) &&
+            Float.floatToIntBits(gain) == Float.floatToIntBits(other.gain) &&
+            Float.floatToIntBits(lowpassCutoff) ==
+                Float.floatToIntBits(other.lowpassCutoff)
+        );
     }
-
 
     @Override
     public String toString() {
-        return "Distortion [edge=" + edge + ", gain=" + gain + ", lowpassCutoff=" + lowpassCutoff + ", eqCenter=" + eqCenter + ", eqBandwidth=" + eqBandwidth
-                + "]";
+        return (
+            "Distortion [edge=" +
+            edge +
+            ", gain=" +
+            gain +
+            ", lowpassCutoff=" +
+            lowpassCutoff +
+            ", eqCenter=" +
+            eqCenter +
+            ", eqBandwidth=" +
+            eqBandwidth +
+            "]"
+        );
     }
-
 }

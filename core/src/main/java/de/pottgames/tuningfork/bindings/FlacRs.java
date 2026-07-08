@@ -7,5 +7,4 @@ public class FlacRs {
 
     @ExperimentalFeature
     public static native ImaAdpcmData decodeFlac(byte[] data);
-
 }

@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -26,6 +25,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class AutoWah extends SoundEffectData {
+
     /**
      * Range: 0.0001 - 1.0, Default: 0.06<br>
      * This property controls the time the filtering effect takes to sweep from minimum to maximum center frequency when it is triggered by input signal.
@@ -51,7 +51,6 @@ public class AutoWah extends SoundEffectData {
      */
     public float peakGain = 11.22f;
 
-
     public static AutoWah scrambled() {
         final AutoWah result = new AutoWah();
         result.attackTime = 0.0001f;
@@ -60,7 +59,6 @@ public class AutoWah extends SoundEffectData {
         result.peakGain = 6900f;
         return result;
     }
-
 
     public static AutoWah funkyBeats() {
         final AutoWah result = new AutoWah();
@@ -71,7 +69,6 @@ public class AutoWah extends SoundEffectData {
         return result;
     }
 
-
     public static AutoWah resonantWaves() {
         final AutoWah result = new AutoWah();
         result.attackTime = 0.01f;
@@ -80,7 +77,6 @@ public class AutoWah extends SoundEffectData {
         result.peakGain = 12000f;
         return result;
     }
-
 
     public static AutoWah wahGhosts() {
         final AutoWah result = new AutoWah();
@@ -91,7 +87,6 @@ public class AutoWah extends SoundEffectData {
         return result;
     }
 
-
     public static AutoWah windyNights() {
         final AutoWah result = new AutoWah();
         result.attackTime = 0.12f;
@@ -101,22 +96,23 @@ public class AutoWah extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_AUTOWAH);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_AUTOWAH
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_ATTACK_TIME, attackTime);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RELEASE_TIME, releaseTime);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_RESONANCE, resonance);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_AUTOWAH_PEAK_GAIN, peakGain);
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(attackTime, peakGain, releaseTime, resonance);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -130,16 +126,30 @@ public class AutoWah extends SoundEffectData {
             return false;
         }
         final AutoWah other = (AutoWah) obj;
-        return Float.floatToIntBits(attackTime) == Float.floatToIntBits(other.attackTime)
-                && Float.floatToIntBits(peakGain) == Float.floatToIntBits(other.peakGain)
-                && Float.floatToIntBits(releaseTime) == Float.floatToIntBits(other.releaseTime)
-                && Float.floatToIntBits(resonance) == Float.floatToIntBits(other.resonance);
+        return (
+            Float.floatToIntBits(attackTime) ==
+                Float.floatToIntBits(other.attackTime) &&
+            Float.floatToIntBits(peakGain) ==
+                Float.floatToIntBits(other.peakGain) &&
+            Float.floatToIntBits(releaseTime) ==
+                Float.floatToIntBits(other.releaseTime) &&
+            Float.floatToIntBits(resonance) ==
+                Float.floatToIntBits(other.resonance)
+        );
     }
-
 
     @Override
     public String toString() {
-        return "AutoWah [attackTime=" + attackTime + ", releaseTime=" + releaseTime + ", resonance=" + resonance + ", peakGain=" + peakGain + "]";
+        return (
+            "AutoWah [attackTime=" +
+            attackTime +
+            ", releaseTime=" +
+            releaseTime +
+            ", resonance=" +
+            resonance +
+            ", peakGain=" +
+            peakGain +
+            "]"
+        );
     }
-
 }

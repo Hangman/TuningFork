@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.PcmFormat;
@@ -26,24 +25,29 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class PcmSoundSourceTest extends ApplicationAdapter {
-    private static final int BUFFER_SIZE = 4096 * 10;
-    private Audio            audio;
-    private final byte[]     pcm         = new byte[PcmSoundSourceTest.BUFFER_SIZE];
-    private WavInputStream   stream;
-    private PcmSoundSource   pcmSource;
-    private long             lastPcmPush;
 
+    private static final int BUFFER_SIZE = 4096 * 10;
+    private Audio audio;
+    private final byte[] pcm = new byte[PcmSoundSourceTest.BUFFER_SIZE];
+    private WavInputStream stream;
+    private PcmSoundSource pcmSource;
+    private long lastPcmPush;
 
     @Override
     public void create() {
-        final AudioConfig config = new AudioConfig().setLogger(new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR));
+        final AudioConfig config = new AudioConfig().setLogger(
+            new ConsoleLogger(LogLevel.DEBUG_INFO_WARN_ERROR)
+        );
         audio = Audio.init(config);
         stream = new WavInputStream(Gdx.files.internal("numbers.wav"));
-        final PcmFormat format = PcmFormat.determineFormat(stream.getChannels(), stream.getBitsPerSample(), stream.getPcmDataType());
+        final PcmFormat format = PcmFormat.determineFormat(
+            stream.getChannels(),
+            stream.getBitsPerSample(),
+            stream.getPcmDataType()
+        );
         assert format != null;
         pcmSource = new PcmSoundSource(stream.getSampleRate(), format);
     }
-
 
     @Override
     public void render() {
@@ -57,21 +61,19 @@ public class PcmSoundSourceTest extends ApplicationAdapter {
         }
     }
 
-
     @Override
     public void dispose() {
         pcmSource.dispose();
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("SimplePcmSoundSourceTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new PcmSoundSourceTest(), config);
     }
-
 }

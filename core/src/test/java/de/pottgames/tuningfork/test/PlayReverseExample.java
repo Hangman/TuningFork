@@ -19,7 +19,6 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundBufferLoader;
@@ -28,13 +27,13 @@ import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.SoundSource;
 
 public class PlayReverseExample extends ApplicationAdapter {
-    private boolean      jobDone = false;
-    private AssetManager assetManager;
-    private Audio        audio;
-    private SoundBuffer  sound;
-    private SoundBuffer  asyncLoadedSound;
-    private SoundSource  source;
 
+    private boolean jobDone = false;
+    private AssetManager assetManager;
+    private Audio audio;
+    private SoundBuffer sound;
+    private SoundBuffer asyncLoadedSound;
+    private SoundSource source;
 
     @Override
     public void create() {
@@ -45,7 +44,8 @@ public class PlayReverseExample extends ApplicationAdapter {
         sound = SoundLoader.loadReverse(Gdx.files.internal("numbers.wav"));
 
         // async loading via AssetManager
-        final SoundBufferLoaderParameter parameter = new SoundBufferLoaderParameter();
+        final SoundBufferLoaderParameter parameter =
+            new SoundBufferLoaderParameter();
         parameter.reverse = true;
         assetManager.load("carnivalrides.ogg", SoundBuffer.class, parameter);
 
@@ -53,13 +53,14 @@ public class PlayReverseExample extends ApplicationAdapter {
         source.play();
     }
 
-
     public void setupAssetManager() {
         assetManager = new AssetManager();
         final FileHandleResolver resolver = new InternalFileHandleResolver();
-        assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
+        assetManager.setLoader(
+            SoundBuffer.class,
+            new SoundBufferLoader(resolver)
+        );
     }
-
 
     @Override
     public void render() {
@@ -70,7 +71,6 @@ public class PlayReverseExample extends ApplicationAdapter {
         }
     }
 
-
     @Override
     public void dispose() {
         sound.dispose();
@@ -80,14 +80,13 @@ public class PlayReverseExample extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("PlayReverseExample");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new PlayReverseExample(), config);
     }
-
 }

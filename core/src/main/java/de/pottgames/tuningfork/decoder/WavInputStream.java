@@ -12,17 +12,15 @@
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An {@link AudioStream} implementation to read wav files.
@@ -30,13 +28,13 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class WavInputStream implements AudioStream {
-    private final InputStream      stream;
-    private WavDecoder             decoder;
-    private final TuningForkLogger logger;
-    private final FileHandle       file;
-    private final float            duration;
-    private boolean                closed = false;
 
+    private final InputStream stream;
+    private WavDecoder decoder;
+    private final TuningForkLogger logger;
+    private final FileHandle file;
+    private final float duration;
+    private boolean closed = false;
 
     /**
      * Initializes a {@link WavInputStream} from a {@link FileHandle}.
@@ -46,7 +44,6 @@ public class WavInputStream implements AudioStream {
     public WavInputStream(FileHandle file) {
         this(file, true);
     }
-
 
     /**
      * Initializes a {@link WavInputStream} from a {@link FileHandle}.
@@ -62,7 +59,6 @@ public class WavInputStream implements AudioStream {
         duration = (float) totalSamplesPerChannel() / getSampleRate();
     }
 
-
     /**
      * Initializes a {@link WavInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
      * {@link #WavInputStream(FileHandle)} instead to get the full functionality.
@@ -72,7 +68,6 @@ public class WavInputStream implements AudioStream {
     public WavInputStream(InputStream stream) {
         this(stream, true);
     }
-
 
     /**
      * Initializes a {@link WavInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
@@ -89,14 +84,15 @@ public class WavInputStream implements AudioStream {
         duration = (float) totalSamplesPerChannel() / getSampleRate();
     }
 
-
     private void setup(boolean forStreaming) {
         readRiffChunk();
         final WavFmtChunk fmtChunk = readFmtChunk();
 
         final long bytesRemaining = skipToChunk('d', 'a', 't', 'a');
         if (bytesRemaining < 0L) {
-            this.throwRuntimeError("Not a valid wav file, audio data not found");
+            this.throwRuntimeError(
+                "Not a valid wav file, audio data not found"
+            );
         }
 
         // FIND DECODER
@@ -106,49 +102,78 @@ public class WavInputStream implements AudioStream {
             this.throwRuntimeError("Unsupported wav file format");
         }
         decoder.setup(stream, bytesRemaining);
-        if (PcmFormat.determineFormat(decoder.outputChannels(), decoder.outputBitsPerSample(), decoder.outputPcmDataType()) == null) {
+        if (
+            PcmFormat.determineFormat(
+                decoder.outputChannels(),
+                decoder.outputBitsPerSample(),
+                decoder.outputPcmDataType()
+            ) == null
+        ) {
             this.throwRuntimeError("Unsupported format found in wav file");
         }
     }
 
-
     private void readRiffChunk() {
         try {
             // RIFF LITERAL
-            final boolean riff = stream.read() == 'R' && stream.read() == 'I' && stream.read() == 'F' && stream.read() == 'F';
+            final boolean riff =
+                stream.read() == 'R' &&
+                stream.read() == 'I' &&
+                stream.read() == 'F' &&
+                stream.read() == 'F';
             if (!riff) {
-                this.throwRuntimeError("Not a valid wav file, RIFF header missing");
+                this.throwRuntimeError(
+                    "Not a valid wav file, RIFF header missing"
+                );
             }
 
             // CHUNK SIZE
             final long fileSizeMinus8 = read4Bytes();
             if (fileSizeMinus8 < 0) {
-                this.throwRuntimeError("Invalid wav file, unexpected end of file");
+                this.throwRuntimeError(
+                    "Invalid wav file, unexpected end of file"
+                );
             }
 
             // WAVE LITERAL
-            final boolean wave = stream.read() == 'W' && stream.read() == 'A' && stream.read() == 'V' && stream.read() == 'E';
+            final boolean wave =
+                stream.read() == 'W' &&
+                stream.read() == 'A' &&
+                stream.read() == 'V' &&
+                stream.read() == 'E';
             if (!wave) {
-                this.throwRuntimeError("Not a valid wav file, WAVE literal missing");
+                this.throwRuntimeError(
+                    "Not a valid wav file, WAVE literal missing"
+                );
             }
         } catch (final IOException e) {
-            this.throwRuntimeError("An error occured while reading the wav file", e);
+            this.throwRuntimeError(
+                "An error occured while reading the wav file",
+                e
+            );
         }
     }
-
 
     private WavFmtChunk readFmtChunk() {
         try {
             // FMT LITERAL
-            final boolean fmt = stream.read() == 'f' && stream.read() == 'm' && stream.read() == 't' && stream.read() == ' ';
+            final boolean fmt =
+                stream.read() == 'f' &&
+                stream.read() == 'm' &&
+                stream.read() == 't' &&
+                stream.read() == ' ';
             if (!fmt) {
-                this.throwRuntimeError("Not a valid wav file, FMT  header missing");
+                this.throwRuntimeError(
+                    "Not a valid wav file, FMT  header missing"
+                );
             }
 
             // SUB CHUNK SIZE
             final int chunkSize = (int) read4Bytes();
             if (chunkSize < 0) {
-                this.throwRuntimeError("Invalid wav file, unexpected end of file");
+                this.throwRuntimeError(
+                    "Invalid wav file, unexpected end of file"
+                );
             }
 
             final int[] chunkData = new int[chunkSize];
@@ -158,12 +183,14 @@ public class WavInputStream implements AudioStream {
 
             return new WavFmtChunk(chunkData);
         } catch (final IOException e) {
-            this.throwRuntimeError("An error occured while reading the wav file", e);
+            this.throwRuntimeError(
+                "An error occured while reading the wav file",
+                e
+            );
         }
 
         return null;
     }
-
 
     private long read4Bytes() throws IOException {
         final int byte1 = stream.read();
@@ -173,20 +200,20 @@ public class WavInputStream implements AudioStream {
         if (byte1 < 0 || byte2 < 0 || byte3 < 0 || byte4 < 0) {
             return -1L;
         }
-        return byte1 | byte2 << 8L | byte3 << 16L | (long) byte4 << 24L;
+        return byte1 | (byte2 << 8L) | (byte3 << 16L) | ((long) byte4 << 24L);
     }
-
 
     private void skipBytes(long n) throws IOException {
         while (n > 0) {
             final long skipped = stream.skip(n);
             if (skipped <= 0) {
-                this.throwRuntimeError("An error occured while reading wav file");
+                this.throwRuntimeError(
+                    "An error occured while reading wav file"
+                );
             }
             n -= skipped;
         }
     }
-
 
     private long skipToChunk(char byte1, char byte2, char byte3, char byte4) {
         long chunkSize = -1L;
@@ -202,7 +229,11 @@ public class WavInputStream implements AudioStream {
                 }
 
                 // CHECK IF FOUND
-                final boolean foundChunk = read1 == byte1 && read2 == byte2 && read3 == byte3 && read4 == byte4;
+                final boolean foundChunk =
+                    read1 == byte1 &&
+                    read2 == byte2 &&
+                    read3 == byte3 &&
+                    read4 == byte4;
                 chunkSize = read4Bytes();
                 if (chunkSize < 0) {
                     return -1L;
@@ -215,11 +246,13 @@ public class WavInputStream implements AudioStream {
                 skipBytes(chunkSize);
             }
         } catch (final IOException e) {
-            this.throwRuntimeError("An error occured while reading the wav file", e);
+            this.throwRuntimeError(
+                "An error occured while reading the wav file",
+                e
+            );
         }
         return chunkSize;
     }
-
 
     @Override
     public int read(byte[] bytes) {
@@ -230,87 +263,80 @@ public class WavInputStream implements AudioStream {
         }
     }
 
-
     @Override
     public float getDuration() {
         return duration;
     }
 
-
     @Override
     public AudioStream reset() {
         if (file == null) {
-            throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
+            throw new TuningForkRuntimeException(
+                "This AudioStream doesn't support resetting."
+            );
         }
         StreamUtils.closeQuietly(this);
         return new WavInputStream(file);
     }
 
-
     public long totalSamplesPerChannel() {
         return decoder.outputTotalSamplesPerChannel();
     }
-
 
     @Override
     public int getChannels() {
         return decoder.outputChannels();
     }
 
-
     @Override
     public int getSampleRate() {
         return decoder.outputSampleRate();
     }
-
 
     @Override
     public int getBitsPerSample() {
         return decoder.outputBitsPerSample();
     }
 
-
     @Override
     public PcmDataType getPcmDataType() {
         return decoder.outputPcmDataType();
     }
-
 
     @Override
     public int getBlockAlign() {
         return decoder.blockAlign();
     }
 
-
     @Override
     public int getBlockSize() {
         return decoder.blockSize();
     }
 
-
     public long bytesRemaining() {
         return decoder.bytesRemaining();
     }
-
 
     private void throwRuntimeError(String message) {
         this.throwRuntimeError(message, null);
     }
 
-
     private void throwRuntimeError(String message, Exception e) {
         if (e == null) {
-            throw new TuningForkRuntimeException(message + ": " + file.toString());
+            throw new TuningForkRuntimeException(
+                message + ": " + file.toString()
+            );
         }
-        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + file.toString(), e);
+        throw new TuningForkRuntimeException(
+            message + ". " + e.getMessage() + ": " + file.toString(),
+            e
+        );
     }
-
 
     @Override
     public boolean isClosed() {
         return closed;
     }
-
 
     @Override
     public void close() throws IOException {
@@ -322,10 +348,12 @@ public class WavInputStream implements AudioStream {
             }
         } catch (final IOException e) {
             // ignore but log it
-            logger.error(this.getClass(), "WavInputStream didn't close successfully: " + e.getMessage());
+            logger.error(
+                this.getClass(),
+                "WavInputStream didn't close successfully: " + e.getMessage()
+            );
         } finally {
             closed = true;
         }
     }
-
 }

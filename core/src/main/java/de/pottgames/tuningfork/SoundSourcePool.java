@@ -13,21 +13,19 @@
 package de.pottgames.tuningfork;
 
 import com.badlogic.gdx.utils.Array;
-
 import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 
 class SoundSourcePool {
-    private final Array<BufferedSoundSource> sources         = new Array<>();
-    private int                              nextSourceIndex = 0;
 
+    private final Array<BufferedSoundSource> sources = new Array<>();
+    private int nextSourceIndex = 0;
 
     SoundSourcePool(int simultaneousSources) {
         for (int i = 0; i < simultaneousSources; i++) {
             sources.add(new BufferedSoundSource());
         }
     }
-
 
     BufferedSoundSource findFreeSource(AudioSettings defaultSettings) {
         BufferedSoundSource result = null;
@@ -58,7 +56,6 @@ class SoundSourcePool {
         return result;
     }
 
-
     void resumeAll() {
         for (final BufferedSoundSource source : sources) {
             if (source.isPaused()) {
@@ -70,7 +67,6 @@ class SoundSourcePool {
         }
     }
 
-
     void pauseAll() {
         for (final BufferedSoundSource source : sources) {
             if (source.isPlaying()) {
@@ -81,7 +77,6 @@ class SoundSourcePool {
             }
         }
     }
-
 
     void stopAll() {
         for (final BufferedSoundSource source : sources) {
@@ -95,13 +90,11 @@ class SoundSourcePool {
         }
     }
 
-
     void setResamplerByIndex(int index) {
         for (final BufferedSoundSource source : sources) {
             source.setResamplerByIndex(index);
         }
     }
-
 
     void setVirtualization(Virtualization virtualization) {
         for (final BufferedSoundSource source : sources) {
@@ -109,13 +102,11 @@ class SoundSourcePool {
         }
     }
 
-
     void setSpatialization(Spatialization spatialization) {
         for (final BufferedSoundSource source : sources) {
             source.setSpatialization(spatialization);
         }
     }
-
 
     void onBufferDisposal(SoundBuffer buffer) {
         for (final BufferedSoundSource source : sources) {
@@ -128,10 +119,8 @@ class SoundSourcePool {
         }
     }
 
-
     void dispose() {
         sources.forEach(BufferedSoundSource::dispose);
         sources.clear();
     }
-
 }

@@ -22,12 +22,12 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class CaptureConfig {
-    private PcmFormat        pcmFormat;
-    private int              frequency;
-    private int              bufferSize;
-    private String           deviceSpecifier;
-    private TuningForkLogger logger;
 
+    private PcmFormat pcmFormat;
+    private int frequency;
+    private int bufferSize;
+    private String deviceSpecifier;
+    private TuningForkLogger logger;
 
     /**
      * Creates a new {@link CaptureConfig} with default settings.
@@ -40,7 +40,6 @@ public class CaptureConfig {
         logger = new GdxLogger();
     }
 
-
     /**
      * Creates a new {@link CaptureConfig} with all values specified.
      *
@@ -50,14 +49,19 @@ public class CaptureConfig {
      * @param bufferSize the buffer size
      * @param logger the TuningForkLogger
      */
-    public CaptureConfig(String deviceSpecifier, PcmFormat pcmFormat, int frequency, int bufferSize, TuningForkLogger logger) {
+    public CaptureConfig(
+        String deviceSpecifier,
+        PcmFormat pcmFormat,
+        int frequency,
+        int bufferSize,
+        TuningForkLogger logger
+    ) {
         this.deviceSpecifier = deviceSpecifier;
         this.pcmFormat = pcmFormat;
         this.frequency = frequency;
         this.bufferSize = bufferSize;
         this.logger = logger;
     }
-
 
     /**
      * Returns the configs value for the pcm format.
@@ -68,7 +72,6 @@ public class CaptureConfig {
         return pcmFormat;
     }
 
-
     /**
      * Returns the configs value for the frequency.
      *
@@ -77,7 +80,6 @@ public class CaptureConfig {
     public int getFrequency() {
         return frequency;
     }
-
 
     /**
      * Returns the configs value for the buffer size.
@@ -88,7 +90,6 @@ public class CaptureConfig {
         return bufferSize;
     }
 
-
     /**
      * Returns the configs value for the device specifier.
      *
@@ -98,7 +99,6 @@ public class CaptureConfig {
         return deviceSpecifier;
     }
 
-
     /**
      * Returns the configs value for the logger.
      *
@@ -107,7 +107,6 @@ public class CaptureConfig {
     public TuningForkLogger getLogger() {
         return logger;
     }
-
 
     /**
      * Sets the requested pcm format for the {@link CaptureDevice}.
@@ -121,7 +120,6 @@ public class CaptureConfig {
         return this;
     }
 
-
     /**
      * Sets the requested frequency for the {@link CaptureDevice}. Use common values like 44100, 48000, etc. - other values might not be supported by the
      * driver.
@@ -134,7 +132,6 @@ public class CaptureConfig {
         this.frequency = frequency;
         return this;
     }
-
 
     /**
      * OpenAL uses a ring buffer internally to record audio data. If the buffer is full, it starts to overwrite the existing data. The buffer size defines how
@@ -151,7 +148,6 @@ public class CaptureConfig {
         return this;
     }
 
-
     /**
      * Sets the requested device name specifier. May be null if you want to request the default input device.
      *
@@ -164,7 +160,6 @@ public class CaptureConfig {
         return this;
     }
 
-
     /**
      * Sets the logger to use for the {@link CaptureDevice}. May be null to disable logging.
      *
@@ -176,5 +171,4 @@ public class CaptureConfig {
         this.logger = logger;
         return this;
     }
-
 }

@@ -15,5 +15,4 @@ package de.pottgames.tuningfork;
 public abstract class SoundEffectData {
 
     protected abstract void apply(int effectId);
-
 }

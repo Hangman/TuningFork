@@ -1,12 +1,11 @@
 package de.pottgames.tuningfork;
 
+import com.badlogic.gdx.utils.BufferUtils;
 import java.nio.IntBuffer;
 
-import com.badlogic.gdx.utils.BufferUtils;
-
 public class ContextAttributes {
-    protected final IntBuffer buffer;
 
+    protected final IntBuffer buffer;
 
     public ContextAttributes(int[] attributes) {
         buffer = BufferUtils.newIntBuffer(attributes.length + 1);
@@ -17,10 +16,8 @@ public class ContextAttributes {
         buffer.flip();
     }
 
-
     public IntBuffer getBuffer() {
         buffer.rewind();
         return buffer;
     }
-
 }

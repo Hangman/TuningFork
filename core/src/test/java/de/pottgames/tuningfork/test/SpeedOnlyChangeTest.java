@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PitchShifter;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -25,16 +24,18 @@ import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.SoundSource;
 
 public class SpeedOnlyChangeTest extends ApplicationAdapter {
-    private Audio       audio;
+
+    private Audio audio;
     private SoundBuffer sound;
     private SoundEffect effect;
-
 
     @Override
     public void create() {
         audio = Audio.init();
 
-        sound = SoundLoader.load(Gdx.files.absolute("src/test/resources/carnivalrides.ogg"));
+        sound = SoundLoader.load(
+            Gdx.files.absolute("src/test/resources/carnivalrides.ogg")
+        );
         final SoundSource source = audio.obtainSource(sound);
 
         // set source pitch to change the speed
@@ -51,12 +52,10 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
         source.play();
     }
 
-
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -67,14 +66,13 @@ public class SpeedOnlyChangeTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("SpeedOnlyChangeTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new SpeedOnlyChangeTest(), config);
     }
-
 }

@@ -12,32 +12,32 @@
 
 package de.pottgames.tuningfork.decoder;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.TuningForkRuntimeException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-import de.pottgames.tuningfork.TuningForkRuntimeException;
-
 public class MsAdpcmDecoder implements WavDecoder {
-    private InputStream stream;
-    private long        bytesRemaining;
-    private final int   blockAlign;
-    private final int   blockSize;
-    private final int   channels;
-    private final int   sampleRate;
-    private int         totalSamplesPerChannel;
 
+    private InputStream stream;
+    private long bytesRemaining;
+    private final int blockAlign;
+    private final int blockSize;
+    private final int channels;
+    private final int sampleRate;
+    private int totalSamplesPerChannel;
 
     public MsAdpcmDecoder(int blockSize, int channels, int sampleRate) {
         if (channels < 1 || channels > 2) {
-            throw new TuningForkRuntimeException("Unsupported number of channels: " + channels);
+            throw new TuningForkRuntimeException(
+                "Unsupported number of channels: " + channels
+            );
         }
         this.channels = channels;
         this.sampleRate = sampleRate;
         this.blockSize = blockSize;
         blockAlign = (blockSize / channels - 7) * 2 + 2;
     }
-
 
     @Override
     public void setup(InputStream stream, long streamLength) {
@@ -46,7 +46,6 @@ public class MsAdpcmDecoder implements WavDecoder {
         final int numberOfBlocks = (int) (streamLength / blockSize);
         totalSamplesPerChannel = numberOfBlocks * blockAlign;
     }
-
 
     @Override
     public int read(byte[] output) throws IOException {
@@ -60,7 +59,11 @@ public class MsAdpcmDecoder implements WavDecoder {
         int offset = 0;
 
         while (bytesToRead > 0 && bytesRemaining > 0) {
-            final int bytesRead = stream.read(output, offset, (int) Math.min(bytesToRead, bytesRemaining));
+            final int bytesRead = stream.read(
+                output,
+                offset,
+                (int) Math.min(bytesToRead, bytesRemaining)
+            );
             if (bytesRead == -1) {
                 if (offset > 0) {
                     return offset;
@@ -76,64 +79,53 @@ public class MsAdpcmDecoder implements WavDecoder {
         return offset;
     }
 
-
     @Override
     public int inputBitsPerSample() {
         return 4;
     }
-
 
     @Override
     public int outputBitsPerSample() {
         return 4;
     }
 
-
     @Override
     public int blockAlign() {
         return blockAlign;
     }
-
 
     @Override
     public int blockSize() {
         return blockSize;
     }
 
-
     @Override
     public int outputChannels() {
         return channels;
     }
-
 
     @Override
     public int outputSampleRate() {
         return sampleRate;
     }
 
-
     @Override
     public long outputTotalSamplesPerChannel() {
         return totalSamplesPerChannel;
     }
-
 
     @Override
     public PcmDataType outputPcmDataType() {
         return PcmDataType.MS_ADPCM;
     }
 
-
     @Override
     public long bytesRemaining() {
         return bytesRemaining;
     }
 
-
     @Override
     public void close() throws IOException {
         stream.close();
     }
-
 }

@@ -23,10 +23,10 @@ import de.pottgames.tuningfork.jukebox.playlist.PlayList;
  * @author Matthias
  */
 public class Song {
-    private final SongSource   source;
-    private final SongSettings settings;
-    private final SongMeta     metaData;
 
+    private final SongSource source;
+    private final SongSettings settings;
+    private final SongMeta metaData;
 
     /**
      * Creates a new Song with default settings. See {@link SongSettings#DEFAULT} for details.
@@ -37,7 +37,6 @@ public class Song {
         this(source, null);
     }
 
-
     /**
      * Creates a new Song with the given settings.
      *
@@ -47,7 +46,6 @@ public class Song {
     public Song(SongSource source, SongSettings settings) {
         this(source, settings, null);
     }
-
 
     /**
      * Creates a new Song with the given settings and meta-data.
@@ -65,13 +63,15 @@ public class Song {
 
         if (settings == null) {
             this.settings = SongSettings.DEFAULT;
-        } else if (this.source.getDuration() < settings.getFadeInDuration() + settings.getFadeOutDuration()) {
+        } else if (
+            this.source.getDuration() <
+            settings.getFadeInDuration() + settings.getFadeOutDuration()
+        ) {
             this.settings = SongSettings.noFade(settings.getVolume());
         } else {
             this.settings = settings;
         }
     }
-
 
     /**
      * Returns the {@link SongSource}.
@@ -82,7 +82,6 @@ public class Song {
         return source;
     }
 
-
     /**
      * Returns the {@link SongSettings}.
      *
@@ -91,7 +90,6 @@ public class Song {
     public SongSettings getSettings() {
         return settings;
     }
-
 
     /**
      * Returns the {@link SongMeta}.
@@ -102,10 +100,16 @@ public class Song {
         return metaData;
     }
 
-
     @Override
     public String toString() {
-        return "Song [source=" + source + ", settings=" + settings + ", metaData=" + metaData + "]";
+        return (
+            "Song [source=" +
+            source +
+            ", settings=" +
+            settings +
+            ", metaData=" +
+            metaData +
+            "]"
+        );
     }
-
 }

@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -24,6 +23,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class Equalizer extends SoundEffectData {
+
     /**
      * Range: 0.126 - 7.943, Default: 1.0<br>
      * This property controls amount of cut or boost on the low frequency range.
@@ -84,10 +84,13 @@ public class Equalizer extends SoundEffectData {
      */
     public float highCutoff = 6000f;
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EQUALIZER);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_EQUALIZER
+        );
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_GAIN, lowGain);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_LOW_CUTOFF, lowCutoff);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_MID1_GAIN, mid1Gain);
@@ -100,12 +103,21 @@ public class Equalizer extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_EQUALIZER_HIGH_CUTOFF, highCutoff);
     }
 
-
     @Override
     public int hashCode() {
-        return Objects.hash(highCutoff, highGain, lowCutoff, lowGain, mid1Center, mid1Gain, mid1Width, mid2Center, mid2Gain, mid2Width);
+        return Objects.hash(
+            highCutoff,
+            highGain,
+            lowCutoff,
+            lowGain,
+            mid1Center,
+            mid1Gain,
+            mid1Width,
+            mid2Center,
+            mid2Gain,
+            mid2Width
+        );
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -119,24 +131,54 @@ public class Equalizer extends SoundEffectData {
             return false;
         }
         final Equalizer other = (Equalizer) obj;
-        return Float.floatToIntBits(highCutoff) == Float.floatToIntBits(other.highCutoff)
-                && Float.floatToIntBits(highGain) == Float.floatToIntBits(other.highGain)
-                && Float.floatToIntBits(lowCutoff) == Float.floatToIntBits(other.lowCutoff)
-                && Float.floatToIntBits(lowGain) == Float.floatToIntBits(other.lowGain)
-                && Float.floatToIntBits(mid1Center) == Float.floatToIntBits(other.mid1Center)
-                && Float.floatToIntBits(mid1Gain) == Float.floatToIntBits(other.mid1Gain)
-                && Float.floatToIntBits(mid1Width) == Float.floatToIntBits(other.mid1Width)
-                && Float.floatToIntBits(mid2Center) == Float.floatToIntBits(other.mid2Center)
-                && Float.floatToIntBits(mid2Gain) == Float.floatToIntBits(other.mid2Gain)
-                && Float.floatToIntBits(mid2Width) == Float.floatToIntBits(other.mid2Width);
+        return (
+            Float.floatToIntBits(highCutoff) ==
+                Float.floatToIntBits(other.highCutoff) &&
+            Float.floatToIntBits(highGain) ==
+                Float.floatToIntBits(other.highGain) &&
+            Float.floatToIntBits(lowCutoff) ==
+                Float.floatToIntBits(other.lowCutoff) &&
+            Float.floatToIntBits(lowGain) ==
+                Float.floatToIntBits(other.lowGain) &&
+            Float.floatToIntBits(mid1Center) ==
+                Float.floatToIntBits(other.mid1Center) &&
+            Float.floatToIntBits(mid1Gain) ==
+                Float.floatToIntBits(other.mid1Gain) &&
+            Float.floatToIntBits(mid1Width) ==
+                Float.floatToIntBits(other.mid1Width) &&
+            Float.floatToIntBits(mid2Center) ==
+                Float.floatToIntBits(other.mid2Center) &&
+            Float.floatToIntBits(mid2Gain) ==
+                Float.floatToIntBits(other.mid2Gain) &&
+            Float.floatToIntBits(mid2Width) ==
+                Float.floatToIntBits(other.mid2Width)
+        );
     }
-
 
     @Override
     public String toString() {
-        return "Equalizer [lowGain=" + lowGain + ", lowCutoff=" + lowCutoff + ", mid1Gain=" + mid1Gain + ", mid1Center=" + mid1Center + ", mid1Width="
-                + mid1Width + ", mid2Gain=" + mid2Gain + ", mid2Center=" + mid2Center + ", mid2Width=" + mid2Width + ", highGain=" + highGain + ", highCutoff="
-                + highCutoff + "]";
+        return (
+            "Equalizer [lowGain=" +
+            lowGain +
+            ", lowCutoff=" +
+            lowCutoff +
+            ", mid1Gain=" +
+            mid1Gain +
+            ", mid1Center=" +
+            mid1Center +
+            ", mid1Width=" +
+            mid1Width +
+            ", mid2Gain=" +
+            mid2Gain +
+            ", mid2Center=" +
+            mid2Center +
+            ", mid2Width=" +
+            mid2Width +
+            ", highGain=" +
+            highGain +
+            ", highCutoff=" +
+            highCutoff +
+            "]"
+        );
     }
-
 }

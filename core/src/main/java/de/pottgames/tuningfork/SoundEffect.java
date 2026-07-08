@@ -12,14 +12,12 @@
 
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.EXTEfx;
-
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.EXTEfx;
 
 /**
  * A sound effect that can be attached to a sound source via {@link SoundSource#attachEffect(SoundEffect)}. It uses native resources, call {@link #dispose()}
@@ -28,12 +26,12 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @see <a href="https://github.com/Hangman/TuningFork/wiki/Sound-Effects">The wiki entry</a>
  */
 public class SoundEffect implements Disposable {
-    private final ErrorLogger        errorLogger;
-    private final TuningForkLogger   logger;
-    private final int                auxSlotId;
-    private final int                effectId;
-    private final Array<SoundSource> attachedSources = new Array<>();
 
+    private final ErrorLogger errorLogger;
+    private final TuningForkLogger logger;
+    private final int auxSlotId;
+    private final int effectId;
+    private final Array<SoundSource> attachedSources = new Array<>();
 
     /**
      * Creates a new SoundEffect from a template.
@@ -57,13 +55,16 @@ public class SoundEffect implements Disposable {
         data.apply(effectId);
 
         // SET EFFECT TO AUX SLOT
-        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
+        EXTEfx.alAuxiliaryEffectSloti(
+            auxSlotId,
+            EXTEfx.AL_EFFECTSLOT_EFFECT,
+            effectId
+        );
 
         if (!errorLogger.checkLogError("Failed to create the SoundEffect")) {
             logger.debug(this.getClass(), "SoundEffect successfully created");
         }
     }
-
 
     /**
      * Updates the sound effect data. This is also possible at runtime, when the sound effect is in active use.
@@ -74,13 +75,20 @@ public class SoundEffect implements Disposable {
      */
     public void updateEffect(SoundEffectData data) {
         // AL wants us to do it this way: detach effect from aux slot, re-attach altered effect to aux slot
-        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, EXTEfx.AL_EFFECT_NULL);
+        EXTEfx.alAuxiliaryEffectSloti(
+            auxSlotId,
+            EXTEfx.AL_EFFECTSLOT_EFFECT,
+            EXTEfx.AL_EFFECT_NULL
+        );
         data.apply(effectId);
-        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
+        EXTEfx.alAuxiliaryEffectSloti(
+            auxSlotId,
+            EXTEfx.AL_EFFECTSLOT_EFFECT,
+            effectId
+        );
 
         errorLogger.checkLogError("Failed to update SoundEffect");
     }
-
 
     /**
      * Sets whether this effect should be automtically adjusted by source and listener position. Enabling this leads to a more realistic impression of the
@@ -89,13 +97,16 @@ public class SoundEffect implements Disposable {
      * @param value whether this effect should be environmental or "pure"
      */
     public void setEnvironmental(boolean value) {
-        EXTEfx.alAuxiliaryEffectSloti(auxSlotId, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, value ? AL10.AL_TRUE : AL10.AL_FALSE);
+        EXTEfx.alAuxiliaryEffectSloti(
+            auxSlotId,
+            EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO,
+            value ? AL10.AL_TRUE : AL10.AL_FALSE
+        );
 
         if (!errorLogger.checkLogError("Something went wrong")) {
             logger.trace(this.getClass(), "SoundEffect set to environmental");
         }
     }
-
 
     /**
      * Returns true if this sound effect is attached to one or more sources.
@@ -105,7 +116,6 @@ public class SoundEffect implements Disposable {
     public boolean isAttached() {
         return !attachedSources.isEmpty();
     }
-
 
     /**
      * Saves all {@link SoundSource}s that this SoundEffect is currently attached to in the list specified in the parameter.
@@ -122,21 +132,17 @@ public class SoundEffect implements Disposable {
         return true;
     }
 
-
     int getAuxSlotId() {
         return auxSlotId;
     }
-
 
     void addSource(SoundSource source) {
         attachedSources.add(source);
     }
 
-
     void removeSource(SoundSource source) {
         attachedSources.removeValue(source, true);
     }
-
 
     /**
      * Releases all resources of this effect and detaches it from every sound source it is attached to.
@@ -154,5 +160,4 @@ public class SoundEffect implements Disposable {
             logger.trace(this.getClass(), "SoundEffect successfully disposed");
         }
     }
-
 }

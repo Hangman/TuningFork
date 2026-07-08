@@ -12,15 +12,8 @@
 
 package de.pottgames.tuningfork.test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDevice;
@@ -30,11 +23,19 @@ import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 public class DeviceTest {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+    public static void main(String[] args)
+        throws IOException, InterruptedException {
+        System.out.println(
+            "Working Directory = " + System.getProperty("user.dir")
+        );
         Gdx.files = new Lwjgl3Files();
 
         // FETCH AVAILABLE DEVICES
@@ -52,7 +53,9 @@ public class DeviceTest {
         });
 
         // READ USER INPUT
-        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(
+            new InputStreamReader(System.in)
+        );
         System.out.print("Enter device number: ");
         final int number = Integer.parseInt(br.readLine());
         br.close();
@@ -62,7 +65,15 @@ public class DeviceTest {
         logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
         audioDeviceConfig.setDeviceSpecifier(deviceList.get(number));
-        final Audio audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
+        final Audio audio = Audio.init(
+            new AudioConfig(
+                audioDeviceConfig,
+                DistanceAttenuationModel.NONE,
+                1,
+                0,
+                logger
+            )
+        );
 
         // LOAD SOUND
         final File soundFile = new File("src/test/resources/numbers.wav");
@@ -77,5 +88,4 @@ public class DeviceTest {
         sound.dispose();
         audio.dispose();
     }
-
 }

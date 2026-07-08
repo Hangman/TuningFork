@@ -12,18 +12,16 @@
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkException;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An {@link AudioStream} implementation to read qoa files.
@@ -31,13 +29,13 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class QoaInputStream implements AudioStream {
-    private final InputStream      stream;
-    private QoaDecoder             decoder;
-    private final TuningForkLogger logger;
-    private final FileHandle       file;
-    private final float            duration;
-    private boolean                closed = false;
 
+    private final InputStream stream;
+    private QoaDecoder decoder;
+    private final TuningForkLogger logger;
+    private final FileHandle file;
+    private final float duration;
+    private boolean closed = false;
 
     /**
      * Initializes a {@link QoaInputStream} from a {@link FileHandle}.
@@ -47,7 +45,6 @@ public class QoaInputStream implements AudioStream {
     public QoaInputStream(FileHandle file) {
         this(file, true);
     }
-
 
     /**
      * Initializes a {@link QoaInputStream} from a {@link FileHandle}.
@@ -63,7 +60,6 @@ public class QoaInputStream implements AudioStream {
         duration = (float) totalSamplesPerChannel() / getSampleRate();
     }
 
-
     /**
      * Initializes a {@link QoaInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
      * {@link #QoaInputStream(FileHandle)} instead to get the full functionality.
@@ -73,7 +69,6 @@ public class QoaInputStream implements AudioStream {
     public QoaInputStream(InputStream stream) {
         this(stream, true);
     }
-
 
     /**
      * Initializes a {@link QoaInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
@@ -90,22 +85,32 @@ public class QoaInputStream implements AudioStream {
         duration = (float) totalSamplesPerChannel() / getSampleRate();
     }
 
-
     private void setup(boolean forStreaming) {
         final byte[] header = new byte[8];
         try {
             if (Util.readAll(stream, header, header.length) < 8) {
-                this.throwRuntimeError("Not a valid QOA file, header too short");
+                this.throwRuntimeError(
+                    "Not a valid QOA file, header too short"
+                );
             }
         } catch (final IOException e) {
             this.throwRuntimeError("Error reading QOA file", e);
         }
-        if (header[0] != 'q' || header[1] != 'o' || header[2] != 'a' || header[3] != 'f') {
-            this.throwRuntimeError("Not a valid QOA file, header missing qoaf identifier");
+        if (
+            header[0] != 'q' ||
+            header[1] != 'o' ||
+            header[2] != 'a' ||
+            header[3] != 'f'
+        ) {
+            this.throwRuntimeError(
+                "Not a valid QOA file, header missing qoaf identifier"
+            );
         }
         final long totalSamples = Util.uIntOfBigEndianBytes(header, 4);
         if (totalSamples == 0) {
-            this.throwRuntimeError("Invalid static QOA file, streamed QOA isn't supported by TuningFork");
+            this.throwRuntimeError(
+                "Invalid static QOA file, streamed QOA isn't supported by TuningFork"
+            );
         }
         try {
             decoder = new QoaDecoder(stream, totalSamples);
@@ -113,7 +118,6 @@ public class QoaInputStream implements AudioStream {
             this.throwRuntimeError("Error creating QOA decoder", e);
         }
     }
-
 
     @Override
     public int read(byte[] bytes) {
@@ -124,70 +128,66 @@ public class QoaInputStream implements AudioStream {
         }
     }
 
-
     @Override
     public float getDuration() {
         return duration;
     }
 
-
     @Override
     public AudioStream reset() {
         if (file == null) {
-            this.throwRuntimeError("This AudioStream doesn't support resetting.");
+            this.throwRuntimeError(
+                "This AudioStream doesn't support resetting."
+            );
         }
         StreamUtils.closeQuietly(this);
         return new QoaInputStream(file);
     }
 
-
     public long totalSamplesPerChannel() {
         return decoder.outputTotalSamplesPerChannel();
     }
-
 
     @Override
     public int getChannels() {
         return decoder.outputChannels();
     }
 
-
     @Override
     public int getSampleRate() {
         return decoder.outputSampleRate();
     }
-
 
     @Override
     public int getBitsPerSample() {
         return decoder.outputBitsPerSample();
     }
 
-
     @Override
     public PcmDataType getPcmDataType() {
         return decoder.outputPcmDataType();
     }
 
-
     private void throwRuntimeError(String message) {
         this.throwRuntimeError(message, null);
     }
 
-
     private void throwRuntimeError(String message, Exception e) {
         if (e == null) {
-            throw new TuningForkRuntimeException(message + ": " + file.toString());
+            throw new TuningForkRuntimeException(
+                message + ": " + file.toString()
+            );
         }
-        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + file.toString(), e);
+        throw new TuningForkRuntimeException(
+            message + ". " + e.getMessage() + ": " + file.toString(),
+            e
+        );
     }
-
 
     @Override
     public boolean isClosed() {
         return closed;
     }
-
 
     @Override
     public void close() throws IOException {
@@ -199,10 +199,12 @@ public class QoaInputStream implements AudioStream {
             }
         } catch (final IOException e) {
             // ignore but log it
-            logger.error(this.getClass(), "QoaInputStream didn't close successfully: " + e.getMessage());
+            logger.error(
+                this.getClass(),
+                "QoaInputStream didn't close successfully: " + e.getMessage()
+            );
         } finally {
             closed = true;
         }
     }
-
 }

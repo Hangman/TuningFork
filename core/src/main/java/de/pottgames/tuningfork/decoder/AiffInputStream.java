@@ -12,32 +12,30 @@
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.decoder.LawDecoder.Encoding;
 import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class AiffInputStream implements AudioStream {
-    private final InputStream      stream;
-    private AiffDecoder            decoder;
-    private final TuningForkLogger logger;
-    private final FileHandle       file;
-    private int                    channels          = 0;
-    private int                    sampleRate        = 0;
-    private long                   totalSampleFrames = 0;
-    private int                    inputBitsPerSample;
-    private float                  duration          = -1f;
-    private boolean                closed            = false;
-    private String                 compressionId     = "NONE";
 
+    private final InputStream stream;
+    private AiffDecoder decoder;
+    private final TuningForkLogger logger;
+    private final FileHandle file;
+    private int channels = 0;
+    private int sampleRate = 0;
+    private long totalSampleFrames = 0;
+    private int inputBitsPerSample;
+    private float duration = -1f;
+    private boolean closed = false;
+    private String compressionId = "NONE";
 
     /**
      * Initializes a {@link AiffInputStream} from a {@link FileHandle}.
@@ -54,7 +52,6 @@ public class AiffInputStream implements AudioStream {
             this.throwRuntimeError("Error reading aiff file", e);
         }
     }
-
 
     /**
      * Initializes a {@link AiffInputStream} from an {@link InputStream}. This stream does not support the reset function. Use
@@ -73,7 +70,6 @@ public class AiffInputStream implements AudioStream {
         }
     }
 
-
     private void setup() throws IOException {
         final boolean aifc = readFormChunk();
         readCommChunk(aifc);
@@ -83,7 +79,10 @@ public class AiffInputStream implements AudioStream {
         final long offset = readUnsignedLong();
         final long blockSize = readUnsignedLong();
         if (blockSize > 0) {
-            logger.warn(this.getClass(), "This aiff file uses block-aligned sound data, which TuningFork does not fully support.");
+            logger.warn(
+                this.getClass(),
+                "This aiff file uses block-aligned sound data, which TuningFork does not fully support."
+            );
         }
         skip(offset);
 
@@ -115,27 +114,53 @@ public class AiffInputStream implements AudioStream {
                     decoder = new Aiff32BitDecoder(inputBitsPerSample);
                     break;
             }
-        } else if ("alaw".equalsIgnoreCase(compressionId) && inputBytesPerSample == 1) {
-            decoder = new LawDecoder(channels, sampleRate, Encoding.A_LAW, true);
-        } else if ("ulaw".equalsIgnoreCase(compressionId) && inputBytesPerSample == 1) {
-            decoder = new LawDecoder(channels, sampleRate, Encoding.U_LAW, true);
-        } else if ("FL32".equalsIgnoreCase(compressionId) && inputBytesPerSample == 4) {
+        } else if (
+            "alaw".equalsIgnoreCase(compressionId) && inputBytesPerSample == 1
+        ) {
+            decoder = new LawDecoder(
+                channels,
+                sampleRate,
+                Encoding.A_LAW,
+                true
+            );
+        } else if (
+            "ulaw".equalsIgnoreCase(compressionId) && inputBytesPerSample == 1
+        ) {
+            decoder = new LawDecoder(
+                channels,
+                sampleRate,
+                Encoding.U_LAW,
+                true
+            );
+        } else if (
+            "FL32".equalsIgnoreCase(compressionId) && inputBytesPerSample == 4
+        ) {
             decoder = new Aiff32BitFloatDecoder();
-        } else if ("FL64".equalsIgnoreCase(compressionId) && inputBytesPerSample == 8) {
+        } else if (
+            "FL64".equalsIgnoreCase(compressionId) && inputBytesPerSample == 8
+        ) {
             decoder = new Aiff64BitFloatDecoder();
         }
 
         if (decoder == null) {
-            this.throwRuntimeError("Unsupported aiff format: bits per sample (" + inputBitsPerSample + ")" + ", compression type (" + compressionId + ")");
+            this.throwRuntimeError(
+                "Unsupported aiff format: bits per sample (" +
+                    inputBitsPerSample +
+                    ")" +
+                    ", compression type (" +
+                    compressionId +
+                    ")"
+            );
         }
         decoder.setup(stream, dataChunkSize - 8 - offset);
     }
 
-
     private void readCommChunk(boolean aifc) throws IOException {
         final int commChunkSize = skipToChunk('C', 'O', 'M', 'M');
-        if (!aifc && commChunkSize != 18 || aifc && commChunkSize < 22) {
-            this.throwRuntimeError("Not a valid aiff file, COMM chunk not found");
+        if ((!aifc && commChunkSize != 18) || (aifc && commChunkSize < 22)) {
+            this.throwRuntimeError(
+                "Not a valid aiff file, COMM chunk not found"
+            );
         }
 
         channels = readShort();
@@ -148,7 +173,11 @@ public class AiffInputStream implements AudioStream {
             final char char3 = (char) stream.read();
             final char char4 = (char) stream.read();
             final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(char1).append(char2).append(char3).append(char4);
+            stringBuilder
+                .append(char1)
+                .append(char2)
+                .append(char3)
+                .append(char4);
             compressionId = stringBuilder.toString();
 
             readPString();
@@ -159,19 +188,23 @@ public class AiffInputStream implements AudioStream {
         endChunk(commChunkSize);
     }
 
-
     private short readShort() throws IOException {
         final int byte1 = stream.read();
         final int byte2 = stream.read();
-        return (short) (byte1 << 8 | byte2);
+        return (short) ((byte1 << 8) | byte2);
     }
-
 
     private boolean readFormChunk() throws IOException {
         // FORM CHUNK ID
-        final boolean form = stream.read() == 'F' && stream.read() == 'O' && stream.read() == 'R' && stream.read() == 'M';
+        final boolean form =
+            stream.read() == 'F' &&
+            stream.read() == 'O' &&
+            stream.read() == 'R' &&
+            stream.read() == 'M';
         if (!form) {
-            this.throwRuntimeError("Not a valid aiff file, FORM container chunk missing");
+            this.throwRuntimeError(
+                "Not a valid aiff file, FORM container chunk missing"
+            );
         }
 
         // SKIP CHUNK SIZE
@@ -185,17 +218,21 @@ public class AiffInputStream implements AudioStream {
         final int char2 = stream.read();
         final int char3 = stream.read();
         final int char4 = stream.read();
-        final boolean aiff = char1 == 'A' && char2 == 'I' && char3 == 'F' && char4 == 'F';
-        final boolean aifc = char1 == 'A' && char2 == 'I' && char3 == 'F' && char4 == 'C';
+        final boolean aiff =
+            char1 == 'A' && char2 == 'I' && char3 == 'F' && char4 == 'F';
+        final boolean aifc =
+            char1 == 'A' && char2 == 'I' && char3 == 'F' && char4 == 'C';
         if (!aiff && !aifc) {
-            this.throwRuntimeError("Not a valid aiff file, FORM type is not AIFF or AIFC");
+            this.throwRuntimeError(
+                "Not a valid aiff file, FORM type is not AIFF or AIFC"
+            );
         }
 
         return aifc;
     }
 
-
-    private int skipToChunk(char byte1, char byte2, char byte3, char byte4) throws IOException {
+    private int skipToChunk(char byte1, char byte2, char byte3, char byte4)
+        throws IOException {
         int chunkSize = -1;
         while (chunkSize < 0) {
             final int read1 = stream.read();
@@ -203,7 +240,9 @@ public class AiffInputStream implements AudioStream {
                 continue;
             }
             if (read1 < 0) {
-                this.throwRuntimeError("Not a valid aiff file, unexpected end of file");
+                this.throwRuntimeError(
+                    "Not a valid aiff file, unexpected end of file"
+                );
             }
             final char read2 = (char) stream.read();
             if (read2 != byte2) {
@@ -222,20 +261,17 @@ public class AiffInputStream implements AudioStream {
         return chunkSize;
     }
 
-
     private void skip(long bytes) throws IOException {
         for (int i = 0; i < bytes; i++) {
             stream.read();
         }
     }
 
-
     public void endChunk(long chunkSize) throws IOException {
         if (Util.isOdd(chunkSize)) {
             stream.read();
         }
     }
-
 
     @Override
     public int read(byte[] bytes) {
@@ -246,67 +282,68 @@ public class AiffInputStream implements AudioStream {
         }
     }
 
-
     public long totalSamplesPerChannel() {
         return totalSampleFrames;
     }
-
 
     @Override
     public float getDuration() {
         return duration;
     }
 
-
     @Override
     public AudioStream reset() {
         if (file == null) {
-            throw new TuningForkRuntimeException("This AudioStream doesn't support resetting.");
+            throw new TuningForkRuntimeException(
+                "This AudioStream doesn't support resetting."
+            );
         }
         StreamUtils.closeQuietly(this);
         return new AiffInputStream(file);
     }
-
 
     @Override
     public int getChannels() {
         return channels;
     }
 
-
     @Override
     public int getSampleRate() {
         return sampleRate;
     }
-
 
     @Override
     public int getBitsPerSample() {
         return decoder.outputBitsPerSample();
     }
 
-
     @Override
     public PcmDataType getPcmDataType() {
         return decoder.outputPcmDataType();
     }
-
 
     @Override
     public boolean isClosed() {
         return closed;
     }
 
-
     private int readLong() throws IOException {
-        return stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();
+        return (
+            (stream.read() << 24) |
+            (stream.read() << 16) |
+            (stream.read() << 8) |
+            stream.read()
+        );
     }
-
 
     private long readUnsignedLong() throws IOException {
-        return (long) stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();
+        return (
+            ((long) stream.read() << 24) |
+            (stream.read() << 16) |
+            (stream.read() << 8) |
+            stream.read()
+        );
     }
-
 
     private String readPString() throws IOException {
         final int stringLength = stream.read();
@@ -326,7 +363,6 @@ public class AiffInputStream implements AudioStream {
         return builder.toString();
     }
 
-
     private float readExtendedPrecision() throws IOException {
         final int byte1 = stream.read();
         final int byte2 = stream.read();
@@ -339,13 +375,20 @@ public class AiffInputStream implements AudioStream {
         final int byte9 = stream.read();
         final int byte10 = stream.read();
         final boolean sign = byte1 >>> 7 != 0;
-        final int exponent = (byte1 & 0b01111111) << 8 | byte2;
-        final long fraction = (long) byte3 << 56L | (long) byte4 << 48 | (long) byte5 << 40 | (long) byte6 << 32 | (long) byte7 << 24 | (long) byte8 << 16
-                | (long) byte9 << 8 | byte10;
+        final int exponent = ((byte1 & 0b01111111) << 8) | byte2;
+        final long fraction =
+            ((long) byte3 << 56L) |
+            ((long) byte4 << 48) |
+            ((long) byte5 << 40) |
+            ((long) byte6 << 32) |
+            ((long) byte7 << 24) |
+            ((long) byte8 << 16) |
+            ((long) byte9 << 8) |
+            byte10;
 
         // conversion to java float
         final int floatExponent = exponent - 16383 + 127;
-        final long longFraction = fraction << 1 >>> 64 - 23;
+        final long longFraction = (fraction << 1) >>> (64 - 23);
         final int floatFraction = (int) longFraction;
         final int shiftedSignBit = (sign ? 1 : 0) << 31;
         final int shiftedExponent = floatExponent << 23;
@@ -353,19 +396,21 @@ public class AiffInputStream implements AudioStream {
         return Float.intBitsToFloat(rawVal);
     }
 
-
     private void throwRuntimeError(String message) {
         this.throwRuntimeError(message, null);
     }
 
-
     private void throwRuntimeError(String message, Exception e) {
         if (e == null) {
-            throw new TuningForkRuntimeException(message + ": " + file.toString());
+            throw new TuningForkRuntimeException(
+                message + ": " + file.toString()
+            );
         }
-        throw new TuningForkRuntimeException(message + ". " + e.getMessage() + ": " + file.toString(), e);
+        throw new TuningForkRuntimeException(
+            message + ". " + e.getMessage() + ": " + file.toString(),
+            e
+        );
     }
-
 
     @Override
     public void close() throws IOException {
@@ -377,10 +422,12 @@ public class AiffInputStream implements AudioStream {
             }
         } catch (final IOException e) {
             // ignore but log it
-            logger.error(this.getClass(), "AiffInputStream didn't close successfully: " + e.getMessage());
+            logger.error(
+                this.getClass(),
+                "AiffInputStream didn't close successfully: " + e.getMessage()
+            );
         } finally {
             closed = true;
         }
     }
-
 }

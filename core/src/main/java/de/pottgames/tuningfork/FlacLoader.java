@@ -12,14 +12,12 @@
 
 package de.pottgames.tuningfork;
 
-import java.io.File;
-import java.io.InputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.decoder.FlacInputStream;
 import de.pottgames.tuningfork.misc.PcmUtil;
+import java.io.File;
+import java.io.InputStream;
 
 public abstract class FlacLoader {
 
@@ -34,7 +32,6 @@ public abstract class FlacLoader {
         return FlacLoader.load(new FlacInputStream(file), false);
     }
 
-
     /**
      * Loads a flac file into a {@link ReadableSoundBuffer}.
      *
@@ -43,9 +40,11 @@ public abstract class FlacLoader {
      * @return the SoundBuffer
      */
     public static ReadableSoundBuffer loadReadable(FileHandle file) {
-        return (ReadableSoundBuffer) FlacLoader.load(new FlacInputStream(file), true);
+        return (ReadableSoundBuffer) FlacLoader.load(
+            new FlacInputStream(file),
+            true
+        );
     }
-
 
     /**
      * Loads a flac file into a {@link SoundBuffer}.
@@ -58,7 +57,6 @@ public abstract class FlacLoader {
         return FlacLoader.load(new FlacInputStream(file), false);
     }
 
-
     /**
      * Loads a flac file into a {@link ReadableSoundBuffer}.
      *
@@ -67,9 +65,11 @@ public abstract class FlacLoader {
      * @return the SoundBuffer
      */
     public static ReadableSoundBuffer loadReadable(File file) {
-        return (ReadableSoundBuffer) FlacLoader.load(new FlacInputStream(file), true);
+        return (ReadableSoundBuffer) FlacLoader.load(
+            new FlacInputStream(file),
+            true
+        );
     }
-
 
     /**
      * Loads a flac stream into a {@link SoundBuffer} and closes it afterward.
@@ -82,7 +82,6 @@ public abstract class FlacLoader {
         return FlacLoader.load(new FlacInputStream(stream), false);
     }
 
-
     /**
      * Loads a flac stream into a {@link ReadableSoundBuffer} and closes it afterward.
      *
@@ -91,9 +90,11 @@ public abstract class FlacLoader {
      * @return the SoundBuffer
      */
     public static ReadableSoundBuffer loadReadable(InputStream stream) {
-        return (ReadableSoundBuffer) FlacLoader.load(new FlacInputStream(stream), true);
+        return (ReadableSoundBuffer) FlacLoader.load(
+            new FlacInputStream(stream),
+            true
+        );
     }
-
 
     /**
      * Loads a {@link SoundBuffer} from a {@link FlacInputStream}.
@@ -102,18 +103,33 @@ public abstract class FlacLoader {
      *
      * @return the SoundBuffer
      */
-    private static SoundBuffer load(FlacInputStream flacStream, boolean readable) {
+    private static SoundBuffer load(
+        FlacInputStream flacStream,
+        boolean readable
+    ) {
         SoundBuffer result;
 
         try {
-            final byte[] buffer = new byte[(int) flacStream.totalSamples() * flacStream.getBytesPerSample() * flacStream.getChannels()];
+            final byte[] buffer = new byte[(int) flacStream.totalSamples() *
+                flacStream.getBytesPerSample() *
+                flacStream.getChannels()];
             flacStream.read(buffer);
             if (readable) {
-                result = new ReadableSoundBuffer(buffer, flacStream.getChannels(), flacStream.getSampleRate(), flacStream.getBitsPerSample(),
-                        flacStream.getPcmDataType());
+                result = new ReadableSoundBuffer(
+                    buffer,
+                    flacStream.getChannels(),
+                    flacStream.getSampleRate(),
+                    flacStream.getBitsPerSample(),
+                    flacStream.getPcmDataType()
+                );
             } else {
-                result = new SoundBuffer(buffer, flacStream.getChannels(), flacStream.getSampleRate(), flacStream.getBitsPerSample(),
-                        flacStream.getPcmDataType());
+                result = new SoundBuffer(
+                    buffer,
+                    flacStream.getChannels(),
+                    flacStream.getSampleRate(),
+                    flacStream.getBitsPerSample(),
+                    flacStream.getPcmDataType()
+                );
             }
         } finally {
             StreamUtils.closeQuietly(flacStream);
@@ -121,7 +137,6 @@ public abstract class FlacLoader {
 
         return result;
     }
-
 
     /**
      * Loads a flac file in reverse into a {@link SoundBuffer}.
@@ -136,20 +151,32 @@ public abstract class FlacLoader {
 
         try {
             if (stream.getBitsPerSample() % 8 != 0) {
-                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+                throw new TuningForkRuntimeException(
+                    "Reverse loading isn't supported for sample sizes that aren't divisible by 8."
+                );
             }
 
-            final byte[] buffer = new byte[(int) stream.totalSamples() * stream.getBytesPerSample() * stream.getChannels()];
+            final byte[] buffer = new byte[(int) stream.totalSamples() *
+                stream.getBytesPerSample() *
+                stream.getChannels()];
             stream.read(buffer);
-            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, stream.getBitsPerSample() / 8);
-            result = new SoundBuffer(reversedPcm, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
+            final byte[] reversedPcm = PcmUtil.reverseAudio(
+                buffer,
+                stream.getBitsPerSample() / 8
+            );
+            result = new SoundBuffer(
+                reversedPcm,
+                stream.getChannels(),
+                stream.getSampleRate(),
+                stream.getBitsPerSample(),
+                stream.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(stream);
         }
 
         return result;
     }
-
 
     /**
      * Loads a flac file in reverse into a {@link ReadableSoundBuffer}.
@@ -164,18 +191,30 @@ public abstract class FlacLoader {
 
         try {
             if (stream.getBitsPerSample() % 8 != 0) {
-                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+                throw new TuningForkRuntimeException(
+                    "Reverse loading isn't supported for sample sizes that aren't divisible by 8."
+                );
             }
 
-            final byte[] buffer = new byte[(int) stream.totalSamples() * stream.getBytesPerSample() * stream.getChannels()];
+            final byte[] buffer = new byte[(int) stream.totalSamples() *
+                stream.getBytesPerSample() *
+                stream.getChannels()];
             stream.read(buffer);
-            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, stream.getBitsPerSample() / 8);
-            result = new ReadableSoundBuffer(reversedPcm, stream.getChannels(), stream.getSampleRate(), stream.getBitsPerSample(), stream.getPcmDataType());
+            final byte[] reversedPcm = PcmUtil.reverseAudio(
+                buffer,
+                stream.getBitsPerSample() / 8
+            );
+            result = new ReadableSoundBuffer(
+                reversedPcm,
+                stream.getChannels(),
+                stream.getSampleRate(),
+                stream.getBitsPerSample(),
+                stream.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(stream);
         }
 
         return result;
     }
-
 }

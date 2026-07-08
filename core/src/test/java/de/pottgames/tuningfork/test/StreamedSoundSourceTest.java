@@ -17,24 +17,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.StreamedSoundSource;
 
 public class StreamedSoundSourceTest extends ApplicationAdapter {
-    private Audio               audio;
-    private StreamedSoundSource source;
 
+    private Audio audio;
+    private StreamedSoundSource source;
 
     @Override
     public void create() {
         audio = Audio.init();
-        source = new StreamedSoundSource(Gdx.files.absolute("src/test/resources/numbers.wav"));
+        source = new StreamedSoundSource(
+            Gdx.files.absolute("src/test/resources/numbers.wav")
+        );
         System.out.println("Sound duration: " + source.getDuration() + "s");
         source.setLooping(true);
         source.play();
     }
-
 
     @Override
     public void render() {
@@ -61,21 +61,19 @@ public class StreamedSoundSourceTest extends ApplicationAdapter {
         }
     }
 
-
     @Override
     public void dispose() {
         source.dispose();
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("StreamedSoundSourceTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new StreamedSoundSourceTest(), config);
     }
-
 }

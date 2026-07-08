@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.ReadableSoundBuffer;
@@ -27,14 +26,14 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class AsyncLoadTest extends ApplicationAdapter {
-    private static final String FILE_1                    = "guitar.wav";
-    private static final String FILE_2                    = "numbers.aiff";
-    private Audio               audio;
-    private AssetManager        assetManager;
-    private SoundSource         source;
-    private boolean             playedSoundBuffer         = false;
-    private boolean             playedReadableSoundBuffer = false;
 
+    private static final String FILE_1 = "guitar.wav";
+    private static final String FILE_2 = "numbers.aiff";
+    private Audio audio;
+    private AssetManager assetManager;
+    private SoundSource source;
+    private boolean playedSoundBuffer = false;
+    private boolean playedReadableSoundBuffer = false;
 
     @Override
     public void create() {
@@ -42,36 +41,50 @@ public class AsyncLoadTest extends ApplicationAdapter {
 
         final AudioConfig config = new AudioConfig();
         config.setAssetManager(assetManager);
-        config.setLogger(new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR));
+        config.setLogger(
+            new ConsoleLogger(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR)
+        );
         audio = Audio.init(config);
 
         // If you cannot provide an AssetManager in the AudioConfig, use this:
         // this.audio.registerAssetManagerLoaders(this.assetManager);
 
         assetManager.load(AsyncLoadTest.FILE_1, SoundBuffer.class);
-        final ReadableSoundBufferLoaderParameter parameter = new ReadableSoundBufferLoaderParameter();
+        final ReadableSoundBufferLoaderParameter parameter =
+            new ReadableSoundBufferLoaderParameter();
         parameter.reverse = true;
-        assetManager.load(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class, parameter);
+        assetManager.load(
+            AsyncLoadTest.FILE_2,
+            ReadableSoundBuffer.class,
+            parameter
+        );
     }
-
 
     @Override
     public void render() {
         if (assetManager.update(15)) {
             if (!playedSoundBuffer) {
-                final SoundBuffer soundBuffer = assetManager.get(AsyncLoadTest.FILE_1, SoundBuffer.class);
+                final SoundBuffer soundBuffer = assetManager.get(
+                    AsyncLoadTest.FILE_1,
+                    SoundBuffer.class
+                );
                 source = audio.obtainSource(soundBuffer);
                 source.play();
                 playedSoundBuffer = true;
-            } else if (source != null && !source.isPlaying() && !playedReadableSoundBuffer) {
-                final ReadableSoundBuffer buffer = assetManager.get(AsyncLoadTest.FILE_2, ReadableSoundBuffer.class);
+            } else if (
+                source != null &&
+                !source.isPlaying() &&
+                !playedReadableSoundBuffer
+            ) {
+                final ReadableSoundBuffer buffer = assetManager.get(
+                    AsyncLoadTest.FILE_2,
+                    ReadableSoundBuffer.class
+                );
                 buffer.play();
                 playedReadableSoundBuffer = true;
             }
-
         }
     }
-
 
     @Override
     public void dispose() {
@@ -79,14 +92,13 @@ public class AsyncLoadTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("AsyncLoadTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new AsyncLoadTest(), config);
     }
-
 }

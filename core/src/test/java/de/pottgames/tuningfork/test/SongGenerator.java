@@ -143,5 +143,4 @@ abstract class SongGenerator {
 
         return song;
     }
-
 }

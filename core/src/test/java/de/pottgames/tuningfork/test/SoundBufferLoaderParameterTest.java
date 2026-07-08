@@ -19,7 +19,6 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -27,26 +26,30 @@ import de.pottgames.tuningfork.SoundBufferLoader;
 import de.pottgames.tuningfork.SoundBufferLoader.SoundBufferLoaderParameter;
 
 public class SoundBufferLoaderParameterTest extends ApplicationAdapter {
-    private AssetManager        assetManager;
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private SoundBuffer         soundReverse;
-    private BufferedSoundSource source;
 
+    private AssetManager assetManager;
+    private Audio audio;
+    private SoundBuffer sound;
+    private SoundBuffer soundReverse;
+    private BufferedSoundSource source;
 
     @Override
     public void create() {
         audio = Audio.init();
         assetManager = new AssetManager();
         final FileHandleResolver resolver = new InternalFileHandleResolver();
-        assetManager.setLoader(SoundBuffer.class, new SoundBufferLoader(resolver));
+        assetManager.setLoader(
+            SoundBuffer.class,
+            new SoundBufferLoader(resolver)
+        );
 
         // queue fordward playback asset for loading as usual
         assetManager.load("numbers.wav", SoundBuffer.class);
 
         // queue reverse playback asset for loading
         // it's the same file so we need to trick the AssetManager into thinking it's a different file
-        final SoundBufferLoaderParameter parameter = new SoundBufferLoaderParameter();
+        final SoundBufferLoaderParameter parameter =
+            new SoundBufferLoaderParameter();
         parameter.reverse = true;
         parameter.file = Gdx.files.internal("numbers.wav");
         assetManager.load("numerinos_wavus", SoundBuffer.class, parameter);
@@ -62,17 +65,17 @@ public class SoundBufferLoaderParameterTest extends ApplicationAdapter {
         source.play();
     }
 
-
     @Override
     public void render() {
         if (!source.isPlaying()) {
             final SoundBuffer playedSound = source.getBuffer();
             source.free();
-            source = audio.obtainSource(playedSound == sound ? soundReverse : sound);
+            source = audio.obtainSource(
+                playedSound == sound ? soundReverse : sound
+            );
             source.play();
         }
     }
-
 
     @Override
     public void dispose() {
@@ -80,14 +83,13 @@ public class SoundBufferLoaderParameterTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("SoundBufferLoaderParameterTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new SoundBufferLoaderParameterTest(), config);
     }
-
 }

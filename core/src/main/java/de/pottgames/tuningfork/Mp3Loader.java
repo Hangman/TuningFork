@@ -1,14 +1,12 @@
 package de.pottgames.tuningfork;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
+import de.pottgames.tuningfork.misc.PcmUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-import de.pottgames.tuningfork.misc.PcmUtil;
 import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.Header;
 import javazoom.jl.decoder.MP3Decoder;
@@ -33,7 +31,6 @@ public abstract class Mp3Loader {
         return Mp3Loader.load(Gdx.files.absolute(file.getAbsolutePath()));
     }
 
-
     /**
      * Loads a mp3 into a {@link ReadableSoundBuffer}.
      *
@@ -42,9 +39,10 @@ public abstract class Mp3Loader {
      * @return the ReadableSoundBuffer
      */
     public static ReadableSoundBuffer loadReadable(File file) {
-        return Mp3Loader.loadReadable(Gdx.files.absolute(file.getAbsolutePath()));
+        return Mp3Loader.loadReadable(
+            Gdx.files.absolute(file.getAbsolutePath())
+        );
     }
-
 
     /**
      * Loads sound data from a {@link FileHandle} into a {@link SoundBuffer} using the mp3 decoder and closes the stream afterward.
@@ -57,7 +55,6 @@ public abstract class Mp3Loader {
         return Mp3Loader.load(file.read());
     }
 
-
     /**
      * Loads sound data from a {@link FileHandle} into a {@link ReadableSoundBuffer} using the mp3 decoder and closes the stream afterward.
      *
@@ -68,7 +65,6 @@ public abstract class Mp3Loader {
     public static ReadableSoundBuffer loadReadable(FileHandle file) {
         return Mp3Loader.loadReadable(file.read());
     }
-
 
     /**
      * Loads a mp3 into a {@link SoundBuffer} and closes the InputStream afterward.
@@ -85,7 +81,8 @@ public abstract class Mp3Loader {
         final MP3Decoder decoder = new MP3Decoder();
         try {
             OutputBuffer outputBuffer = null;
-            int sampleRate = -1, channels = -1;
+            int sampleRate = -1,
+                channels = -1;
             while (true) {
                 final Header header = bitstream.readFrame();
                 if (header == null) {
@@ -106,14 +103,22 @@ public abstract class Mp3Loader {
                 output.write(outputBuffer.getBuffer(), 0, outputBuffer.reset());
             }
             bitstream.close();
-            result = new SoundBuffer(output.toByteArray(), channels, sampleRate, 16, PcmDataType.INTEGER);
+            result = new SoundBuffer(
+                output.toByteArray(),
+                channels,
+                sampleRate,
+                16,
+                PcmDataType.INTEGER
+            );
         } catch (final Throwable ex) {
-            throw new TuningForkRuntimeException("Error reading audio data.", ex);
+            throw new TuningForkRuntimeException(
+                "Error reading audio data.",
+                ex
+            );
         }
 
         return result;
     }
-
 
     /**
      * Loads a mp3 into a {@link ReadableSoundBuffer} and closes the InputStream afterward.
@@ -130,7 +135,8 @@ public abstract class Mp3Loader {
         final MP3Decoder decoder = new MP3Decoder();
         try {
             OutputBuffer outputBuffer = null;
-            int sampleRate = -1, channels = -1;
+            int sampleRate = -1,
+                channels = -1;
             while (true) {
                 final Header header = bitstream.readFrame();
                 if (header == null) {
@@ -151,14 +157,22 @@ public abstract class Mp3Loader {
                 output.write(outputBuffer.getBuffer(), 0, outputBuffer.reset());
             }
             bitstream.close();
-            result = new ReadableSoundBuffer(output.toByteArray(), channels, sampleRate, 16, PcmDataType.INTEGER);
+            result = new ReadableSoundBuffer(
+                output.toByteArray(),
+                channels,
+                sampleRate,
+                16,
+                PcmDataType.INTEGER
+            );
         } catch (final Throwable ex) {
-            throw new TuningForkRuntimeException("Error reading audio data.", ex);
+            throw new TuningForkRuntimeException(
+                "Error reading audio data.",
+                ex
+            );
         }
 
         return result;
     }
-
 
     /**
      * Loads an mp3 file in reverse into a {@link SoundBuffer}.
@@ -175,7 +189,8 @@ public abstract class Mp3Loader {
         final MP3Decoder decoder = new MP3Decoder();
         try {
             OutputBuffer outputBuffer = null;
-            int sampleRate = -1, channels = -1;
+            int sampleRate = -1,
+                channels = -1;
             while (true) {
                 final Header header = bitstream.readFrame();
                 if (header == null) {
@@ -200,14 +215,22 @@ public abstract class Mp3Loader {
             final byte[] pcmData = output.toByteArray();
             final byte[] reversedPcm = PcmUtil.reverseAudio(pcmData, 2);
 
-            result = new SoundBuffer(reversedPcm, channels, sampleRate, 16, PcmDataType.INTEGER);
+            result = new SoundBuffer(
+                reversedPcm,
+                channels,
+                sampleRate,
+                16,
+                PcmDataType.INTEGER
+            );
         } catch (final Throwable ex) {
-            throw new TuningForkRuntimeException("Error reading audio data.", ex);
+            throw new TuningForkRuntimeException(
+                "Error reading audio data.",
+                ex
+            );
         }
 
         return result;
     }
-
 
     /**
      * Loads an mp3 file in reverse into a {@link ReadableSoundBuffer}.
@@ -224,7 +247,8 @@ public abstract class Mp3Loader {
         final MP3Decoder decoder = new MP3Decoder();
         try {
             OutputBuffer outputBuffer = null;
-            int sampleRate = -1, channels = -1;
+            int sampleRate = -1,
+                channels = -1;
             while (true) {
                 final Header header = bitstream.readFrame();
                 if (header == null) {
@@ -249,12 +273,20 @@ public abstract class Mp3Loader {
             final byte[] pcmData = output.toByteArray();
             final byte[] reversedPcm = PcmUtil.reverseAudio(pcmData, 2);
 
-            result = new ReadableSoundBuffer(reversedPcm, channels, sampleRate, 16, PcmDataType.INTEGER);
+            result = new ReadableSoundBuffer(
+                reversedPcm,
+                channels,
+                sampleRate,
+                16,
+                PcmDataType.INTEGER
+            );
         } catch (final Throwable ex) {
-            throw new TuningForkRuntimeException("Error reading audio data.", ex);
+            throw new TuningForkRuntimeException(
+                "Error reading audio data.",
+                ex
+            );
         }
 
         return result;
     }
-
 }

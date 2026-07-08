@@ -21,11 +21,11 @@ import com.badlogic.gdx.utils.ObjectMap;
  * @author Matthias
  */
 public class SongMeta {
-    protected String                  artist;
-    protected String                  title;
-    protected String                  album;
-    private ObjectMap<Object, Object> attributes;
 
+    protected String artist;
+    protected String title;
+    protected String album;
+    private ObjectMap<Object, Object> attributes;
 
     /**
      * Sets the artist.
@@ -39,7 +39,6 @@ public class SongMeta {
         return this;
     }
 
-
     /**
      * Sets the title.
      *
@@ -51,7 +50,6 @@ public class SongMeta {
         this.title = title;
         return this;
     }
-
 
     /**
      * Sets the album.
@@ -65,7 +63,6 @@ public class SongMeta {
         return this;
     }
 
-
     /**
      * Returns the artist. May be null.
      *
@@ -74,7 +71,6 @@ public class SongMeta {
     public String getArtist() {
         return artist;
     }
-
 
     /**
      * Returns the title. May be null.
@@ -85,7 +81,6 @@ public class SongMeta {
         return title;
     }
 
-
     /**
      * Returns the album. May be null.
      *
@@ -94,7 +89,6 @@ public class SongMeta {
     public String getAlbum() {
         return album;
     }
-
 
     /**
      * Adds a custom attribute. Attributes are simple key-value pairs.
@@ -112,7 +106,6 @@ public class SongMeta {
         return this;
     }
 
-
     /**
      * Returns the value that is connected to the given key.
      *
@@ -127,10 +120,18 @@ public class SongMeta {
         return attributes.get(key);
     }
 
-
     @Override
     public String toString() {
-        return "SongMeta [artist=" + artist + ", title=" + title + ", album=" + album + ", attributes=" + attributes + "]";
+        return (
+            "SongMeta [artist=" +
+            artist +
+            ", title=" +
+            title +
+            ", album=" +
+            album +
+            ", attributes=" +
+            attributes +
+            "]"
+        );
     }
-
 }

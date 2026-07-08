@@ -50,7 +50,12 @@ public enum DistanceAttenuationModel {
      * equivalent to the IASIG I3DL2 distance model. distance = max(distance,AL_REFERENCE_DISTANCE); distance = min (distance,AL_MAX_DISTANCE); gain =
      * AL_REFERENCE_DISTANCE / (AL_REFERENCE_DISTANCE + AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE));
      */
-    INVERSE_DISTANCE_CLAMPED(AL11.AL_INVERSE_DISTANCE_CLAMPED, 1f, 1f, Float.MAX_VALUE),
+    INVERSE_DISTANCE_CLAMPED(
+        AL11.AL_INVERSE_DISTANCE_CLAMPED,
+        1f,
+        1f,
+        Float.MAX_VALUE
+    ),
 
     /**
      * This text is taken from the official OpenAL documentation. You may want to take a look at
@@ -88,40 +93,43 @@ public enum DistanceAttenuationModel {
      * AL_REFERENCE_DISTANCE) distance = min(distance, AL_MAX_DISTANCE) gain = (distance / AL_REFERENCE_DISTANCE) ^ (- AL_ROLLOFF_FACTOR)
      *
      */
-    EXPONENT_DISTANCE_CLAMPED(AL11.AL_EXPONENT_DISTANCE_CLAMPED, 1f, 1f, Float.MAX_VALUE);
+    EXPONENT_DISTANCE_CLAMPED(
+        AL11.AL_EXPONENT_DISTANCE_CLAMPED,
+        1f,
+        1f,
+        Float.MAX_VALUE
+    );
 
-
-    private final int   alId;
+    private final int alId;
     private final float attenuationFactor;
     private final float attenuationMinDistance;
     private final float attenuationMaxDistance;
 
-
-    DistanceAttenuationModel(int alId, float attenuationFactor, float attenuationMinDistance, float attenuationMaxDistance) {
+    DistanceAttenuationModel(
+        int alId,
+        float attenuationFactor,
+        float attenuationMinDistance,
+        float attenuationMaxDistance
+    ) {
         this.alId = alId;
         this.attenuationFactor = attenuationFactor;
         this.attenuationMinDistance = attenuationMinDistance;
         this.attenuationMaxDistance = attenuationMaxDistance;
     }
 
-
     int getAlId() {
         return alId;
     }
-
 
     float getAttenuationFactor() {
         return attenuationFactor;
     }
 
-
     float getAttenuationMinDistance() {
         return attenuationMinDistance;
     }
 
-
     float getAttenuationMaxDistance() {
         return attenuationMaxDistance;
     }
-
 }

@@ -12,20 +12,17 @@
 
 package de.pottgames.tuningfork.capture;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
-import java.util.List;
-
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALC11;
-import org.lwjgl.openal.ALUtil;
-
 import com.badlogic.gdx.utils.Disposable;
-
 import de.pottgames.tuningfork.PcmFormat;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
+import java.util.List;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALC11;
+import org.lwjgl.openal.ALUtil;
 
 /**
  * This class helps to record audio from input devices like microphones.
@@ -33,16 +30,22 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class CaptureDevice implements Disposable {
+
     private final TuningForkLogger logger;
-    private final ErrorLogger      errorLogger;
-    private final long             alDeviceHandle;
-    private final String           alDeviceName;
-    private final PcmFormat        format;
-    private final int              frequency;
-    private final int              bufferSize;
+    private final ErrorLogger errorLogger;
+    private final long alDeviceHandle;
+    private final String alDeviceName;
+    private final PcmFormat format;
+    private final int frequency;
+    private final int bufferSize;
 
-
-    private CaptureDevice(long handle, PcmFormat format, int frequency, int bufferSize, TuningForkLogger logger) {
+    private CaptureDevice(
+        long handle,
+        PcmFormat format,
+        int frequency,
+        int bufferSize,
+        TuningForkLogger logger
+    ) {
         if (logger == null) {
             this.logger = new MockLogger();
         } else {
@@ -53,20 +56,26 @@ public class CaptureDevice implements Disposable {
         this.format = format;
         this.frequency = frequency;
         this.bufferSize = bufferSize;
-        alDeviceName = ALC10.alcGetString(handle, ALC11.ALC_CAPTURE_DEVICE_SPECIFIER);
+        alDeviceName = ALC10.alcGetString(
+            handle,
+            ALC11.ALC_CAPTURE_DEVICE_SPECIFIER
+        );
     }
-
 
     /**
      * Starts the capture. If there were previously recorded samples, they will be overwritten by this method.
      */
     public void startCapture() {
         ALC11.alcCaptureStart(alDeviceHandle);
-        if (!errorLogger.checkLogAlcError(alDeviceHandle, "failed to start capturing")) {
+        if (
+            !errorLogger.checkLogAlcError(
+                alDeviceHandle,
+                "failed to start capturing"
+            )
+        ) {
             logger.trace(this.getClass(), "capturing started");
         }
     }
-
 
     /**
      * Returns the number of captured samples.
@@ -76,7 +85,6 @@ public class CaptureDevice implements Disposable {
     public int capturedSamples() {
         return ALC10.alcGetInteger(alDeviceHandle, ALC11.ALC_CAPTURE_SAMPLES);
     }
-
 
     /**
      * Retrieves pcm data from the input device and saves it to a ByteBuffer. Use this for 8-Bit data only unless you know what you're doing.
@@ -88,7 +96,6 @@ public class CaptureDevice implements Disposable {
         ALC11.alcCaptureSamples(alDeviceHandle, buffer, samples);
     }
 
-
     /**
      * Retrieves pcm data from the input device and saves it to a short array. Use this for 16-Bit data only unless you know what you're doing.
      *
@@ -98,7 +105,6 @@ public class CaptureDevice implements Disposable {
     public void fetch16BitSamples(short[] buffer, int samples) {
         ALC11.alcCaptureSamples(alDeviceHandle, buffer, samples);
     }
-
 
     /**
      * Retrieves pcm data from the input device and saves it to a ShortBuffer. Use this for 16-Bit data only unless you know what you're doing.
@@ -110,17 +116,20 @@ public class CaptureDevice implements Disposable {
         ALC11.alcCaptureSamples(alDeviceHandle, buffer, samples);
     }
 
-
     /**
      * Stops the capture.
      */
     public void stopCapture() {
         ALC11.alcCaptureStop(alDeviceHandle);
-        if (!errorLogger.checkLogAlcError(alDeviceHandle, "failed to stop capturing")) {
+        if (
+            !errorLogger.checkLogAlcError(
+                alDeviceHandle,
+                "failed to stop capturing"
+            )
+        ) {
             logger.trace(this.getClass(), "capturing stopped");
         }
     }
-
 
     /**
      * Returns the device name.
@@ -131,7 +140,6 @@ public class CaptureDevice implements Disposable {
         return alDeviceName;
     }
 
-
     /**
      * Returns the pcm format of the device.
      *
@@ -140,7 +148,6 @@ public class CaptureDevice implements Disposable {
     public PcmFormat getPcmFormat() {
         return format;
     }
-
 
     /**
      * Returns the frequency of the device.
@@ -151,7 +158,6 @@ public class CaptureDevice implements Disposable {
         return frequency;
     }
 
-
     /**
      * Returns the size of the internal buffer of the device.
      *
@@ -161,14 +167,15 @@ public class CaptureDevice implements Disposable {
         return bufferSize;
     }
 
-
     @Override
     public void dispose() {
         if (!ALC11.alcCaptureCloseDevice(alDeviceHandle)) {
-            logger.error(this.getClass(), "Failed to dispose the CaptureDevice");
+            logger.error(
+                this.getClass(),
+                "Failed to dispose the CaptureDevice"
+            );
         }
     }
-
 
     /**
      * Returns a list of available input devices.
@@ -179,16 +186,17 @@ public class CaptureDevice implements Disposable {
         return ALUtil.getStringList(0L, ALC11.ALC_CAPTURE_DEVICE_SPECIFIER);
     }
 
-
     /**
      * Returns the name of the default input device.
      *
      * @return name of the default input device
      */
     public static String getDefaultDeviceName() {
-        return ALC10.alcGetString(0L, ALC11.ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
+        return ALC10.alcGetString(
+            0L,
+            ALC11.ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER
+        );
     }
-
 
     /**
      * Opens the default input device with default settings.
@@ -198,7 +206,6 @@ public class CaptureDevice implements Disposable {
     public static CaptureDevice open() {
         return CaptureDevice.open(new CaptureConfig());
     }
-
 
     /**
      * Opens an input device with the given {@link CaptureConfig}.
@@ -210,13 +217,22 @@ public class CaptureDevice implements Disposable {
     public static CaptureDevice open(CaptureConfig config) {
         CaptureDevice captureDevice = null;
 
-        final long deviceHandle =
-                ALC11.alcCaptureOpenDevice(config.getDeviceSpecifier(), config.getFrequency(), config.getPcmFormat().getAlId(), config.getBufferSize());
+        final long deviceHandle = ALC11.alcCaptureOpenDevice(
+            config.getDeviceSpecifier(),
+            config.getFrequency(),
+            config.getPcmFormat().getAlId(),
+            config.getBufferSize()
+        );
         if (deviceHandle != 0L) {
-            captureDevice = new CaptureDevice(deviceHandle, config.getPcmFormat(), config.getFrequency(), config.getBufferSize(), config.getLogger());
+            captureDevice = new CaptureDevice(
+                deviceHandle,
+                config.getPcmFormat(),
+                config.getFrequency(),
+                config.getBufferSize(),
+                config.getLogger()
+            );
         }
 
         return captureDevice;
     }
-
 }

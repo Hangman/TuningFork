@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork.jukebox.playlist;
 
 import com.badlogic.gdx.utils.Array;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.jukebox.song.Song;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
@@ -24,18 +23,17 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class PlayList {
-    protected final TuningForkLogger logger;
-    protected final Array<Song>      songs                  = new Array<>();
-    protected int                    songIndex              = 0;
-    protected boolean                playedThrough          = false;
-    protected boolean                loop                   = false;
-    protected boolean                shuffleAfterPlaytrough = false;
 
+    protected final TuningForkLogger logger;
+    protected final Array<Song> songs = new Array<>();
+    protected int songIndex = 0;
+    protected boolean playedThrough = false;
+    protected boolean loop = false;
+    protected boolean shuffleAfterPlaytrough = false;
 
     public PlayList() {
         logger = Audio.get().getLogger();
     }
-
 
     /**
      * Adds a song to the end of the list.
@@ -46,7 +44,6 @@ public class PlayList {
         songs.add(song);
     }
 
-
     /**
      * Returns the next {@link Song} in the list. Starts over if the last song of the list is fetched.
      *
@@ -54,7 +51,10 @@ public class PlayList {
      */
     public Song nextSong() {
         if (songs.isEmpty()) {
-            logger.warn(this.getClass(), "Requested nextSong on empty PlayList: " + this);
+            logger.warn(
+                this.getClass(),
+                "Requested nextSong on empty PlayList: " + this
+            );
             return null;
         }
 
@@ -70,7 +70,6 @@ public class PlayList {
         return song;
     }
 
-
     /**
      * Resets the index to 0, so the next call to {@link #nextSong()} will return the first song in the list. {@link #isPlayedThrough()} will return false
      * afterwards.
@@ -79,7 +78,6 @@ public class PlayList {
         songIndex = 0;
         playedThrough = false;
     }
-
 
     /**
      * Returns true if the all {@link Song}s from the list have been fetched.
@@ -90,14 +88,12 @@ public class PlayList {
         return playedThrough;
     }
 
-
     /**
      * Shuffles the internal list of {@link Song}s.
      */
     public void shuffle() {
         songs.shuffle();
     }
-
 
     /**
      * If set to true, the internal list of {@link Song}s is shuffled after a complete play through of this {@link PlayList}.
@@ -108,7 +104,6 @@ public class PlayList {
         shuffleAfterPlaytrough = value;
     }
 
-
     /**
      * If set to true, this {@link PlayList} indicates that it should be played on repeat.
      *
@@ -117,7 +112,6 @@ public class PlayList {
     public void setLooping(boolean loop) {
         this.loop = loop;
     }
-
 
     /**
      * Returns true if this {@link PlayList} should be played on repeat.
@@ -128,11 +122,20 @@ public class PlayList {
         return loop;
     }
 
-
     @Override
     public String toString() {
-        return "PlayList [songs=" + songs + ", songIndex=" + songIndex + ", playedThrough=" + playedThrough + ", loop=" + loop + ", shuffleAfterPlaytrough="
-                + shuffleAfterPlaytrough + "]";
+        return (
+            "PlayList [songs=" +
+            songs +
+            ", songIndex=" +
+            songIndex +
+            ", playedThrough=" +
+            playedThrough +
+            ", loop=" +
+            loop +
+            ", shuffleAfterPlaytrough=" +
+            shuffleAfterPlaytrough +
+            "]"
+        );
     }
-
 }

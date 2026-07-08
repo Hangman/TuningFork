@@ -12,57 +12,48 @@
 
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.AL10;
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+import org.lwjgl.openal.AL10;
 
 public class SoundListener {
-    private final float[] orientation = new float[6];
-    private final Vector3 tempVector  = new Vector3();
 
+    private final float[] orientation = new float[6];
+    private final Vector3 tempVector = new Vector3();
 
     SoundListener() {
         // hide public constructor
     }
 
-
     void setMasterVolume(float volume) {
         AL10.alListenerf(AL10.AL_GAIN, volume);
     }
-
 
     float getMasterVolume() {
         return AL10.alGetListenerf(AL10.AL_GAIN);
     }
 
-
     public SoundListener setSpeed(Vector3 speed) {
         return this.setSpeed(speed.x, speed.y, speed.z);
     }
-
 
     public SoundListener setSpeed(float x, float y, float z) {
         AL10.alListener3f(AL10.AL_VELOCITY, x, y, z);
         return this;
     }
 
-
     public SoundListener setPosition(Camera camera) {
         return this.setPosition(camera.position);
     }
-
 
     public SoundListener setPosition(Vector3 position) {
         return this.setPosition(position.x, position.y, position.z);
     }
 
-
     public SoundListener setPosition(float x, float y, float z) {
         AL10.alListener3f(AL10.AL_POSITION, x, y, z);
         return this;
     }
-
 
     public SoundListener setOrientation(Camera camera) {
         tempVector.set(camera.direction);
@@ -71,7 +62,6 @@ public class SoundListener {
         this.setOrientation(camera.direction, tempVector);
         return this;
     }
-
 
     public SoundListener setOrientation(Vector3 at, Vector3 up) {
         orientation[0] = at.x;
@@ -83,5 +73,4 @@ public class SoundListener {
         AL10.alListenerfv(AL10.AL_ORIENTATION, orientation);
         return this;
     }
-
 }

@@ -18,7 +18,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.utils.Array;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.BufferedSoundSource;
@@ -27,40 +26,46 @@ import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.StreamedSoundSource;
 
 public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
-    private Audio               audio;
-    private Array<String>       resamplers;
-    private StreamedSoundSource streamedSource;
-    private SoundBuffer         sound;
-    private BufferedSoundSource soundSource;
 
+    private Audio audio;
+    private Array<String> resamplers;
+    private StreamedSoundSource streamedSource;
+    private SoundBuffer sound;
+    private BufferedSoundSource soundSource;
 
     @Override
     public void create() {
         Gdx.input.setInputProcessor(this);
         audio = Audio.init();
         final AudioDevice device = audio.getDevice();
-        System.out.println("default resampler: " + device.getDefaultResampler());
+        System.out.println(
+            "default resampler: " + device.getDefaultResampler()
+        );
         resamplers = device.getAvailableResamplers();
         for (int i = 0; i < resamplers.size; i++) {
-            System.out.println("Press " + i + " to set the " + resamplers.get(i) + " resampler");
+            System.out.println(
+                "Press " + i + " to set the " + resamplers.get(i) + " resampler"
+            );
         }
         System.out.println("Press A to play the BufferedSoundSource");
         System.out.println("Press B to play the StreamedSoundSource");
 
-        streamedSource = new StreamedSoundSource(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
+        streamedSource = new StreamedSoundSource(
+            Gdx.files.internal("numbers_8bit_mono_8kHz.wav")
+        );
         streamedSource.setLooping(true);
 
-        sound = SoundLoader.load(Gdx.files.internal("numbers_8bit_mono_8kHz.wav"));
+        sound = SoundLoader.load(
+            Gdx.files.internal("numbers_8bit_mono_8kHz.wav")
+        );
         soundSource = audio.obtainSource(sound);
         soundSource.setLooping(true);
     }
-
 
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public boolean keyUp(int keycode) {
@@ -127,21 +132,19 @@ public class ResamplerTest extends ApplicationAdapter implements InputAdapter {
         return true;
     }
 
-
     @Override
     public void dispose() {
         sound.dispose();
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("Resampler Test");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new ResamplerTest(), config);
     }
-
 }

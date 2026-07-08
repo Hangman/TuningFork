@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork.jukebox.playlist;
 
 import com.badlogic.gdx.utils.IntMap;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 
@@ -24,15 +23,14 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class ThemePlayListProvider implements PlayListProvider {
-    private final TuningForkLogger logger;
-    private IntMap<PlayList>       lists = new IntMap<>();
-    protected int                  theme;
 
+    private final TuningForkLogger logger;
+    private IntMap<PlayList> lists = new IntMap<>();
+    protected int theme;
 
     public ThemePlayListProvider() {
         logger = Audio.get().getLogger();
     }
-
 
     /**
      * Sets the theme.
@@ -43,12 +41,15 @@ public class ThemePlayListProvider implements PlayListProvider {
      */
     public ThemePlayListProvider setTheme(int theme) {
         if (lists.get(theme) == null) {
-            logger.warn(this.getClass(), "There is no corresponding playlist for the selected theme: " + theme);
+            logger.warn(
+                this.getClass(),
+                "There is no corresponding playlist for the selected theme: " +
+                    theme
+            );
         }
         this.theme = theme;
         return this;
     }
-
 
     /**
      * Returns the theme.
@@ -58,7 +59,6 @@ public class ThemePlayListProvider implements PlayListProvider {
     public int getTheme() {
         return theme;
     }
-
 
     /**
      * Adds a theme and the corresponding {@link PlayList}, potentially replacing a previously set {@link PlayList} for that theme.
@@ -73,7 +73,6 @@ public class ThemePlayListProvider implements PlayListProvider {
         return this;
     }
 
-
     /**
      * Removes a {@link PlayList} and the theme from the internal map.
      *
@@ -86,12 +85,10 @@ public class ThemePlayListProvider implements PlayListProvider {
         return this;
     }
 
-
     @Override
     public PlayList next() {
         return lists.get(theme);
     }
-
 
     @Override
     public boolean hasNext() {
@@ -99,10 +96,10 @@ public class ThemePlayListProvider implements PlayListProvider {
         return list != null;
     }
 
-
     @Override
     public String toString() {
-        return "ThemePlayListProvider [lists=" + lists + ", theme=" + theme + "]";
+        return (
+            "ThemePlayListProvider [lists=" + lists + ", theme=" + theme + "]"
+        );
     }
-
 }

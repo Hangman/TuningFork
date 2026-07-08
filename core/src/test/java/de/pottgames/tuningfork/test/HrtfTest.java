@@ -12,11 +12,6 @@
 
 package de.pottgames.tuningfork.test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,7 +19,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDevice;
@@ -35,14 +29,18 @@ import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundLoader;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 public class HrtfTest extends ApplicationAdapter implements InputAdapter {
-    private Audio               audio;
-    private SoundBuffer         soundBuffer;
-    private BufferedSoundSource soundSource;
-    private float               angle;
-    private String              hrtfName;
 
+    private Audio audio;
+    private SoundBuffer soundBuffer;
+    private BufferedSoundSource soundSource;
+    private float angle;
+    private String hrtfName;
 
     @Override
     public void create() {
@@ -61,7 +59,9 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         });
 
         // READ USER INPUT
-        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(
+            new InputStreamReader(System.in)
+        );
         System.out.print("Enter device number: ");
         int number = 0;
         try {
@@ -76,7 +76,15 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         logger.setLogLevel(LogLevel.TRACE_DEBUG_INFO_WARN_ERROR);
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
         audioDeviceConfig.setDeviceSpecifier(deviceList.get(number));
-        audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
+        audio = Audio.init(
+            new AudioConfig(
+                audioDeviceConfig,
+                DistanceAttenuationModel.NONE,
+                1,
+                0,
+                logger
+            )
+        );
         Gdx.input.setInputProcessor(this);
 
         // ENABLE HRTF
@@ -98,16 +106,20 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         soundSource.setRelative(true);
         soundSource.play();
 
-        System.out.println("Focus the application window and press space to toggle HRTF");
+        System.out.println(
+            "Focus the application window and press space to toggle HRTF"
+        );
     }
-
 
     @Override
     public void render() {
         angle += Math.PI / 4f / 100f;
-        soundSource.setPosition(MathUtils.sin(angle), 0f, -MathUtils.cos(angle));
+        soundSource.setPosition(
+            MathUtils.sin(angle),
+            0f,
+            -MathUtils.cos(angle)
+        );
     }
-
 
     @Override
     public boolean keyDown(int button) {
@@ -124,7 +136,6 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         return true;
     }
 
-
     @Override
     public void dispose() {
         soundSource.free();
@@ -132,14 +143,13 @@ public class HrtfTest extends ApplicationAdapter implements InputAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("HrtfTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new HrtfTest(), config);
     }
-
 }

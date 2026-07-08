@@ -12,22 +12,11 @@
 
 package de.pottgames.tuningfork;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
-import org.lwjgl.openal.SOFTBlockAlignment;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamManager.TaskAction;
 import de.pottgames.tuningfork.decoder.AiffInputStream;
@@ -41,6 +30,14 @@ import de.pottgames.tuningfork.decoder.util.Util;
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTBlockAlignment;
 
 /**
  * A {@link SoundSource} that streams audio data instead of loading all data at once into memory.
@@ -48,31 +45,31 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class StreamedSoundSource extends SongSource implements Disposable {
-    public static final int        BUFFER_SIZE_PER_CHANNEL  = 65536;
-    public static final int        BUFFER_COUNT             = 3;
+
+    public static final int BUFFER_SIZE_PER_CHANNEL = 65536;
+    public static final int BUFFER_COUNT = 3;
     private final TuningForkLogger logger;
-    private final ErrorLogger      errorLogger;
-    private AudioStream            audioStream;
-    private final float            secondsPerBuffer;
-    private final IntBuffer        buffers;
-    private final PcmFormat        pcmFormat;
-    private final ByteBuffer       tempBuffer;
-    private final byte[]           tempBytes;
-    private final Audio            audio;
-    private final AtomicBoolean    playing                  = new AtomicBoolean(false);
-    private final AtomicBoolean    stopped                  = new AtomicBoolean(true);
-    private volatile boolean       looping                  = false;
-    private volatile float         loopStart                = 0f;
-    private volatile float         loopEnd                  = 0f;
-    private boolean                manuallySetBehindLoopEnd = false;
-    private volatile boolean       readyToDispose           = false;
-    private final float            duration;
+    private final ErrorLogger errorLogger;
+    private AudioStream audioStream;
+    private final float secondsPerBuffer;
+    private final IntBuffer buffers;
+    private final PcmFormat pcmFormat;
+    private final ByteBuffer tempBuffer;
+    private final byte[] tempBytes;
+    private final Audio audio;
+    private final AtomicBoolean playing = new AtomicBoolean(false);
+    private final AtomicBoolean stopped = new AtomicBoolean(true);
+    private volatile boolean looping = false;
+    private volatile float loopStart = 0f;
+    private volatile float loopEnd = 0f;
+    private boolean manuallySetBehindLoopEnd = false;
+    private volatile boolean readyToDispose = false;
+    private final float duration;
 
     private final FloatArray bufferTimeQueue;
-    private volatile float   processedTime;
-    private float            queuedSeconds;
-    private final float      bytesPerSecond;
-
+    private volatile float processedTime;
+    private float queuedSeconds;
+    private final float bytesPerSecond;
 
     /**
      * Creates a new {@link StreamedSoundSource} and loads the first bits of sound data.
@@ -82,7 +79,6 @@ public class StreamedSoundSource extends SongSource implements Disposable {
     public StreamedSoundSource(FileHandle file) {
         this(StreamedSoundSource.createAudioStream(file));
     }
-
 
     /**
      * Creates a new {@link StreamedSoundSource} from a {@link AudioStream} and loads the first bits of sound data.
@@ -95,10 +91,15 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
 
         // FETCH AND SET DEPENDENCIES
-        bufferTimeQueue = new FloatArray(true, StreamedSoundSource.BUFFER_COUNT + 1);
+        bufferTimeQueue = new FloatArray(
+            true,
+            StreamedSoundSource.BUFFER_COUNT + 1
+        );
         audio = Audio.get();
         if (audio == null) {
-            throw new TuningForkRuntimeException("StreamedSoundSource cannot be created before Audio is initialized.");
+            throw new TuningForkRuntimeException(
+                "StreamedSoundSource cannot be created before Audio is initialized."
+            );
         }
         logger = audio.getLogger();
         errorLogger = new ErrorLogger(this.getClass(), logger);
@@ -114,17 +115,31 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         final int sampleDepth = audioStream.getBitsPerSample();
         final int bytesPerSample = sampleDepth / 8;
         final PcmDataType pcmDataType = audioStream.getPcmDataType();
-        pcmFormat = PcmFormat.determineFormat(channels, sampleDepth, pcmDataType);
+        pcmFormat = PcmFormat.determineFormat(
+            channels,
+            sampleDepth,
+            pcmDataType
+        );
         if (pcmFormat == null) {
-            throw new TuningForkRuntimeException("Unsupported pcm format - channels: " + channels + ", sample depth: " + sampleDepth);
+            throw new TuningForkRuntimeException(
+                "Unsupported pcm format - channels: " +
+                    channels +
+                    ", sample depth: " +
+                    sampleDepth
+            );
         }
 
         // CREATE BUFFERS
         final int blockSize = audioStream.getBlockSize();
-        final int bufferSize = determineBufferSize(channels, blockSize, (int) Math.ceil(audioStream.getBitsPerSample() / 8d));
+        final int bufferSize = determineBufferSize(
+            channels,
+            blockSize,
+            (int) Math.ceil(audioStream.getBitsPerSample() / 8d)
+        );
         tempBuffer = BufferUtils.createByteBuffer(bufferSize);
         tempBytes = new byte[bufferSize];
-        secondsPerBuffer = (float) bufferSize / (bytesPerSample * channels * sampleRate);
+        secondsPerBuffer =
+            (float) bufferSize / (bytesPerSample * channels * sampleRate);
         bytesPerSecond = bytesPerSample * channels * sampleRate;
         buffers = BufferUtils.createIntBuffer(StreamedSoundSource.BUFFER_COUNT);
         AL10.alGenBuffers(buffers);
@@ -133,9 +148,16 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             for (int i = 0; i < StreamedSoundSource.BUFFER_COUNT; i++) {
                 final int bufferId = buffers.get(i);
                 final int blockAlign = audioStream.getBlockAlign();
-                AL11.alBufferi(bufferId, SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT, blockAlign);
+                AL11.alBufferi(
+                    bufferId,
+                    SOFTBlockAlignment.AL_UNPACK_BLOCK_ALIGNMENT_SOFT,
+                    blockAlign
+                );
                 errorLogger.checkLogError("Couldn't set blockAlign");
-                logger.trace(this.getClass(), "setting block align to " + blockAlign);
+                logger.trace(
+                    this.getClass(),
+                    "setting block align to " + blockAlign
+                );
             }
         }
 
@@ -147,8 +169,11 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         audio.streamManager.registerSource(this);
     }
 
-
-    private int determineBufferSize(int channels, int blockSize, int bytesPerSample) {
+    private int determineBufferSize(
+        int channels,
+        int blockSize,
+        int bytesPerSample
+    ) {
         int bufferSize = StreamedSoundSource.BUFFER_SIZE_PER_CHANNEL * channels;
 
         // keep block alignment
@@ -164,15 +189,16 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         return bufferSize;
     }
 
-
     private void resetStream() {
         audioStream = audioStream.reset();
     }
 
-
     void updateAsync() {
         synchronized (this) {
-            int processedBufferCount = AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_PROCESSED);
+            int processedBufferCount = AL10.alGetSourcei(
+                sourceId,
+                AL10.AL_BUFFERS_PROCESSED
+            );
             checkPlaybackPosResetAsync();
 
             boolean end = false;
@@ -198,18 +224,25 @@ public class StreamedSoundSource extends SongSource implements Disposable {
                 }
             }
 
-            final int queuedBuffers = AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_QUEUED);
+            final int queuedBuffers = AL10.alGetSourcei(
+                sourceId,
+                AL10.AL_BUFFERS_QUEUED
+            );
 
             if (end && queuedBuffers == 0) {
                 stopInternal();
                 manuallySetBehindLoopEnd = false;
-            } else if (playing.get() && AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING && queuedBuffers > 0) {
+            } else if (
+                playing.get() &&
+                AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) !=
+                    AL10.AL_PLAYING &&
+                queuedBuffers > 0
+            ) {
                 // A buffer underflow will cause the source to stop, so we should resume playback in this case.
                 AL10.alSourcePlay(sourceId);
             }
         }
     }
-
 
     private void checkPlaybackPosResetAsync() {
         if (bufferTimeQueue.size > 0) {
@@ -224,7 +257,6 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
     }
 
-
     /**
      * Returns the current playback position in seconds.<br>
      * <b>Note that the returned value is subject to small inaccuracies due to the asynchronous nature of this source .</b>
@@ -235,7 +267,6 @@ public class StreamedSoundSource extends SongSource implements Disposable {
     public float getPlaybackPosition() {
         return processedTime + AL10.alGetSourcef(sourceId, AL11.AL_SEC_OFFSET);
     }
-
 
     /**
      * Specifies the two offsets the source will use to loop, expressed in seconds.<br>
@@ -250,28 +281,31 @@ public class StreamedSoundSource extends SongSource implements Disposable {
      */
     public void setLoopPoints(float start, float end) {
         if (start > end) {
-            throw new TuningForkRuntimeException("Invalid loop points: start > end");
+            throw new TuningForkRuntimeException(
+                "Invalid loop points: start > end"
+            );
         }
         if (start < 0 || end < 0) {
-            throw new TuningForkRuntimeException("Invalid loop points: start and end must not be > 0");
+            throw new TuningForkRuntimeException(
+                "Invalid loop points: start and end must not be > 0"
+            );
         }
 
         loopStart = start;
         loopEnd = end;
     }
 
-
     void skipStreamToPosition(final float seconds) {
         synchronized (this) {
             resetStream();
             int bytesToSkip = (int) (seconds * bytesPerSecond);
-            final int overbytes = bytesToSkip % (audioStream.getBitsPerSample() / 8);
+            final int overbytes =
+                bytesToSkip % (audioStream.getBitsPerSample() / 8);
             bytesToSkip -= overbytes;
             final byte[] buffer = new byte[bytesToSkip];
             audioStream.read(buffer);
         }
     }
-
 
     /**
      * Sets the playback position of this sound source. Invalid values are ignored but an error is logged.
@@ -280,12 +314,18 @@ public class StreamedSoundSource extends SongSource implements Disposable {
      */
     public void setPlaybackPosition(float seconds) {
         if (seconds >= 0f) {
-            audio.streamManager.postTask(this, TaskAction.SET_PLAYBACK_POSITION, seconds);
+            audio.streamManager.postTask(
+                this,
+                TaskAction.SET_PLAYBACK_POSITION,
+                seconds
+            );
         } else {
-            logger.error(this.getClass(), "Can't set playback position to values < 0");
+            logger.error(
+                this.getClass(),
+                "Can't set playback position to values < 0"
+            );
         }
     }
-
 
     void setPlaybackPositionAsync(final float seconds) {
         synchronized (this) {
@@ -325,7 +365,11 @@ public class StreamedSoundSource extends SongSource implements Disposable {
 
             // SKIP TO PERFECT POSITION IN BUFFER
             if (filledBufferCount > 0) {
-                AL10.alSourcef(sourceId, AL11.AL_SEC_OFFSET, seconds - currentSeconds);
+                AL10.alSourcef(
+                    sourceId,
+                    AL11.AL_SEC_OFFSET,
+                    seconds - currentSeconds
+                );
             }
 
             // RESTORE SOURCE STATE
@@ -343,12 +387,10 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
     }
 
-
     @Override
     public void setLooping(boolean value) {
         looping = value;
     }
-
 
     void pauseAsync() {
         synchronized (this) {
@@ -356,13 +398,11 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
     }
 
-
     void pauseInternal() {
         super.pause();
         playing.set(false);
         stopped.set(false);
     }
-
 
     @Override
     public void pause() {
@@ -372,20 +412,17 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
     }
 
-
     void playAsync() {
         synchronized (this) {
             playInternal();
         }
     }
 
-
     void playInternal() {
         super.play();
         playing.set(true);
         stopped.set(false);
     }
-
 
     @Override
     public void play() {
@@ -395,13 +432,11 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
     }
 
-
     void stopAsync() {
         synchronized (this) {
             stopInternal();
         }
     }
-
 
     void stopInternal() {
         super.stop();
@@ -415,7 +450,6 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         stopped.set(true);
     }
 
-
     @Override
     public void stop() {
         if (!stopped.get()) {
@@ -424,7 +458,6 @@ public class StreamedSoundSource extends SongSource implements Disposable {
             stopped.set(true);
         }
     }
-
 
     private boolean fillBufferInternal(int bufferId) {
         int length = audioStream.read(tempBytes);
@@ -446,11 +479,19 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         int bytesToUpload = length;
         boolean loopEndCut = false;
         if (looping && loopEnd > 0f && loopEnd > loopStart) {
-            if (queuedSeconds + secondsInUploadBuffer >= loopEnd && !manuallySetBehindLoopEnd) {
+            if (
+                queuedSeconds + secondsInUploadBuffer >= loopEnd &&
+                !manuallySetBehindLoopEnd
+            ) {
                 secondsInUploadBuffer = loopEnd - queuedSeconds;
                 bytesToUpload = (int) (bytesPerSecond * secondsInUploadBuffer);
-                final int overbytes = bytesToUpload % (audioStream.getBitsPerSample() / 8);
-                bytesToUpload = MathUtils.clamp(bytesToUpload - overbytes, 0, length);
+                final int overbytes =
+                    bytesToUpload % (audioStream.getBitsPerSample() / 8);
+                bytesToUpload = MathUtils.clamp(
+                    bytesToUpload - overbytes,
+                    0,
+                    length
+                );
                 loopEndCut = true;
                 skipStreamToPosition(loopStart);
                 queuedSeconds = loopStart;
@@ -465,10 +506,14 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         }
         tempBuffer.clear();
         tempBuffer.put(tempBytes, 0, bytesToUpload).flip();
-        AL10.alBufferData(bufferId, pcmFormat.getAlId(), tempBuffer, audioStream.getSampleRate());
+        AL10.alBufferData(
+            bufferId,
+            pcmFormat.getAlId(),
+            tempBuffer,
+            audioStream.getSampleRate()
+        );
         return true;
     }
-
 
     private int fillAllBuffersInternal() {
         AL10.alSourcei(sourceId, AL10.AL_BUFFER, 0); // removes all buffers from the source
@@ -487,18 +532,15 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         return filledBufferCount;
     }
 
-
     @Override
     public boolean isPlaying() {
         return playing.get();
     }
 
-
     @Override
     public boolean isPaused() {
         return !playing.get() && !stopped.get();
     }
-
 
     /**
      * Returns the duration of the attached sound in seconds.
@@ -511,15 +553,15 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         return duration;
     }
 
-
     void readyToDispose() {
         readyToDispose = true;
     }
 
-
     private static AudioStream createAudioStream(FileHandle file) {
         final String fileExtension = file.extension();
-        SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        SoundFileType soundFileType = SoundFileType.getByFileEnding(
+            fileExtension
+        );
         if (soundFileType == null) {
             try {
                 soundFileType = SoundFileType.parseFromFile(file);
@@ -548,7 +590,6 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         return null;
     }
 
-
     /**
      * Disposes the sound sources native resources. You should never use this sound source after disposing it.
      */
@@ -569,5 +610,4 @@ public class StreamedSoundSource extends SongSource implements Disposable {
         errorLogger.checkLogError("Failed to dispose the SoundSources buffers");
         StreamUtils.closeQuietly(audioStream);
     }
-
 }

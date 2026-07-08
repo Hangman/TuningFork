@@ -12,17 +12,15 @@
 
 package de.pottgames.tuningfork.router;
 
-import java.util.List;
-
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.EnumerateAllExt;
-import org.lwjgl.openal.SOFTReopenDevice;
-import org.lwjgl.system.MemoryUtil;
-
 import de.pottgames.tuningfork.AudioDevice;
 import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import de.pottgames.tuningfork.misc.Objects;
+import java.util.List;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.EnumerateAllExt;
+import org.lwjgl.openal.SOFTReopenDevice;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * The SmartDeviceRerouter checks every 1.5 seconds (configurable) whether the connection to the audio device still exists and whether it is the optimal
@@ -39,18 +37,18 @@ import de.pottgames.tuningfork.misc.Objects;
  *
  */
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
+
     /**
      * Defines how often the background thread will check the connection and try to reconnect to audio devies.
      */
     private final long checkInterval;
 
-    private volatile boolean           active                 = false;
-    private long                       device;
+    private volatile boolean active = false;
+    private long device;
     private volatile ContextAttributes attributes;
-    private volatile String            desiredDeviceSpecifier = null;
-    private volatile String            currentDeviceSpecifier = "none";
-    private boolean                    setup                  = false;
-
+    private volatile String desiredDeviceSpecifier = null;
+    private volatile String currentDeviceSpecifier = "none";
+    private boolean setup = false;
 
     /**
      * Creates a new {@link SmartDeviceRerouter} with the default check interval.
@@ -58,7 +56,6 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     public SmartDeviceRerouter() {
         this(1500L);
     }
-
 
     /**
      * Creates a new {@link SmartDeviceRerouter} with the given check interval for the background thread.
@@ -69,9 +66,12 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         this.checkInterval = checkInterval;
     }
 
-
     @Override
-    public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
+    public void setup(
+        long device,
+        String desiredDeviceSpecifier,
+        ContextAttributes attributes
+    ) {
         this.device = device;
         this.attributes = attributes;
         currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
@@ -79,19 +79,16 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         setup = true;
     }
 
-
     @Override
     public void updateDesiredDevice(String desiredDeviceSpecifier) {
         this.desiredDeviceSpecifier = desiredDeviceSpecifier;
         currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
     }
 
-
     @Override
     public void updateContextAttributes(ContextAttributes attributes) {
         this.attributes = attributes;
     }
-
 
     /**
      * Starts the thread.
@@ -99,7 +96,9 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
     @Override
     public void start() {
         if (!setup) {
-            throw new TuningForkRuntimeException("SmartDeviceRerouter wasn't set up properly");
+            throw new TuningForkRuntimeException(
+                "SmartDeviceRerouter wasn't set up properly"
+            );
         }
 
         active = true;
@@ -108,7 +107,6 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         thread.setDaemon(true);
         thread.start();
     }
-
 
     @Override
     public void onDisconnect() {
@@ -119,7 +117,6 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         currentDeviceSpecifier = "none";
         tryReopen();
     }
-
 
     private void loop() {
         while (active) {
@@ -132,7 +129,6 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         }
     }
 
-
     private synchronized void tryReopen() {
         if (desiredDeviceSpecifier == null) {
             tryReopenOnDefaultDevice();
@@ -141,18 +137,20 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         }
     }
 
-
     private void tryReopenOnDesiredDevice() {
         if (!currentDeviceSpecifier.equals(desiredDeviceSpecifier)) {
-            final List<String> availableDevices = AudioDevice.availableDevices();
-            if (availableDevices != null && availableDevices.contains(desiredDeviceSpecifier)) {
+            final List<String> availableDevices =
+                AudioDevice.availableDevices();
+            if (
+                availableDevices != null &&
+                availableDevices.contains(desiredDeviceSpecifier)
+            ) {
                 reopen(desiredDeviceSpecifier);
             } else {
                 tryReopenOnDefaultDevice();
             }
         }
     }
-
 
     private void tryReopenOnDefaultDevice() {
         final String defaultDeviceSpecifier = fetchDefaultDeviceSpecifier();
@@ -161,27 +159,37 @@ public class SmartDeviceRerouter implements AudioDeviceRerouter {
         }
     }
 
-
     private String fetchDefaultDeviceSpecifier() {
-        return Objects.requireNonNullElse(ALC10.alcGetString(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER), "none");
+        return Objects.requireNonNullElse(
+            ALC10.alcGetString(
+                MemoryUtil.NULL,
+                EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER
+            ),
+            "none"
+        );
     }
-
 
     private String fetchCurrentDeviceSpecifier() {
-        return ALC10.alcGetString(device, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+        return ALC10.alcGetString(
+            device,
+            EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER
+        );
     }
 
-
     private void reopen(String deviceSpecifier) {
-        if (SOFTReopenDevice.alcReopenDeviceSOFT(device, deviceSpecifier, attributes.getBuffer())) {
+        if (
+            SOFTReopenDevice.alcReopenDeviceSOFT(
+                device,
+                deviceSpecifier,
+                attributes.getBuffer()
+            )
+        ) {
             currentDeviceSpecifier = fetchCurrentDeviceSpecifier();
         }
     }
-
 
     @Override
     public void dispose() {
         active = false;
     }
-
 }

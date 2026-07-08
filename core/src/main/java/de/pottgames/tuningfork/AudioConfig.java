@@ -12,14 +12,7 @@
 
 package de.pottgames.tuningfork;
 
-import java.util.Objects;
-
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.SOFTDirectChannelsRemix;
-import org.lwjgl.openal.SOFTSourceSpatialize;
-
 import com.badlogic.gdx.assets.AssetManager;
-
 import de.pottgames.tuningfork.decoder.DefaultWavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavInputStream;
@@ -27,27 +20,36 @@ import de.pottgames.tuningfork.logger.GdxLogger;
 import de.pottgames.tuningfork.logger.MockLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
 import de.pottgames.tuningfork.misc.ExperimentalFeature;
+import java.util.Objects;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.SOFTDirectChannelsRemix;
+import org.lwjgl.openal.SOFTSourceSpatialize;
 
 public class AudioConfig {
-    protected AudioDeviceConfig        deviceConfig;
-    protected DistanceAttenuationModel distanceAttenuationModel;
-    protected int                      simultaneousSources;
-    protected int                      idleTasks;
-    protected Virtualization           virtualization;
-    protected Spatialization           spatialization;
-    protected TuningForkLogger         logger;
-    protected WavDecoderProvider       wavDecoderProvider;
-    protected boolean                  useNativeDecoders = true;
-    protected AssetManager             assetManager;
 
+    protected AudioDeviceConfig deviceConfig;
+    protected DistanceAttenuationModel distanceAttenuationModel;
+    protected int simultaneousSources;
+    protected int idleTasks;
+    protected Virtualization virtualization;
+    protected Spatialization spatialization;
+    protected TuningForkLogger logger;
+    protected WavDecoderProvider wavDecoderProvider;
+    protected boolean useNativeDecoders = true;
+    protected AssetManager assetManager;
 
     /**
      * Creates an AudioConfig with default settings.
      */
     public AudioConfig() {
-        this(new AudioDeviceConfig(), DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED, 20, 10, new GdxLogger());
+        this(
+            new AudioDeviceConfig(),
+            DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED,
+            20,
+            10,
+            new GdxLogger()
+        );
     }
-
 
     /**
      * Creates an AudioConfig with default settings and the provided {@link AudioDeviceConfig}.
@@ -55,9 +57,14 @@ public class AudioConfig {
      * @param deviceConfig the device config
      */
     public AudioConfig(AudioDeviceConfig deviceConfig) {
-        this(deviceConfig, DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED, 20, 10, new GdxLogger());
+        this(
+            deviceConfig,
+            DistanceAttenuationModel.INVERSE_DISTANCE_CLAMPED,
+            20,
+            10,
+            new GdxLogger()
+        );
     }
-
 
     /**
      * Creates an AudioConfig with the given settings.
@@ -70,11 +77,22 @@ public class AudioConfig {
      * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
      *            available logger implementations that are shipped with TuningFork.
      */
-    public AudioConfig(AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources, int idleTasks,
-            TuningForkLogger logger) {
-        this(deviceConfig, distanceAttenuationModel, simultaneousSources, idleTasks, Virtualization.ON, logger);
+    public AudioConfig(
+        AudioDeviceConfig deviceConfig,
+        DistanceAttenuationModel distanceAttenuationModel,
+        int simultaneousSources,
+        int idleTasks,
+        TuningForkLogger logger
+    ) {
+        this(
+            deviceConfig,
+            distanceAttenuationModel,
+            simultaneousSources,
+            idleTasks,
+            Virtualization.ON,
+            logger
+        );
     }
-
 
     /**
      * Creates an AudioConfig with the given settings.
@@ -88,8 +106,14 @@ public class AudioConfig {
      * @param logger the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the
      *            available logger implementations that are shipped with TuningFork.
      */
-    public AudioConfig(AudioDeviceConfig deviceConfig, DistanceAttenuationModel distanceAttenuationModel, int simultaneousSources, int idleTasks,
-            Virtualization virtualization, TuningForkLogger logger) {
+    public AudioConfig(
+        AudioDeviceConfig deviceConfig,
+        DistanceAttenuationModel distanceAttenuationModel,
+        int simultaneousSources,
+        int idleTasks,
+        Virtualization virtualization,
+        TuningForkLogger logger
+    ) {
         setDeviceConfig(deviceConfig);
         setDistanceAttenuationModel(distanceAttenuationModel);
         setSimultaneousSources(simultaneousSources);
@@ -100,11 +124,9 @@ public class AudioConfig {
         setWavDecoderProvider(new DefaultWavDecoderProvider());
     }
 
-
     public AudioDeviceConfig getDeviceConfig() {
         return deviceConfig;
     }
-
 
     /**
      * Sets the audio device config.
@@ -121,11 +143,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public DistanceAttenuationModel getDistanceAttenuationModel() {
         return distanceAttenuationModel;
     }
-
 
     /**
      * Sets the distance attenuation model.
@@ -134,7 +154,9 @@ public class AudioConfig {
      *
      * @return this
      */
-    public AudioConfig setDistanceAttenuationModel(DistanceAttenuationModel distanceAttenuationModel) {
+    public AudioConfig setDistanceAttenuationModel(
+        DistanceAttenuationModel distanceAttenuationModel
+    ) {
         this.distanceAttenuationModel = distanceAttenuationModel;
         if (distanceAttenuationModel == null) {
             this.distanceAttenuationModel = DistanceAttenuationModel.NONE;
@@ -142,11 +164,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public int getSimultaneousSources() {
         return simultaneousSources;
     }
-
 
     /**
      * Defines how many {@link BufferedSoundSource}s are allowed to play simultaneously.
@@ -163,11 +183,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public int getIdleTasks() {
         return idleTasks;
     }
-
 
     /**
      * The initial task pool capacity, 10 is the default, only go higher if you plan to make heavy use of {@link StreamedSoundSource}s simultaneously.
@@ -184,11 +202,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public Spatialization getSpatialization() {
         return spatialization;
     }
-
 
     /**
      * Sets the spatialization mode that is used on all sources. The default is: {@link Spatialization#ON}<br>
@@ -203,11 +219,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public AssetManager getAssetManager() {
         return assetManager;
     }
-
 
     /**
      * Sets a libGDX {@link com.badlogic.gdx.assets.AssetManager AssetManager}. If set, the TuningFork loaders will be registered automatically when
@@ -223,11 +237,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public Virtualization getVirtualization() {
         return virtualization;
     }
-
 
     /**
      * Sets the default virtualization enabled state all sound sources are initialized with. You can change it on a per-source basis later.<br>
@@ -245,7 +257,6 @@ public class AudioConfig {
         return this;
     }
 
-
     /**
      * When true, native decoders will be used if available.
      *
@@ -254,7 +265,6 @@ public class AudioConfig {
     public boolean useNativeDecoders() {
         return useNativeDecoders;
     }
-
 
     /**
      * If this is set to false, TuningFork will not load the native decoders and instead use the slower Java ones.
@@ -268,11 +278,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public TuningForkLogger getLogger() {
         return logger;
     }
-
 
     /**
      * Sets the logger to be used by TuningFork. You can implement the {@link TuningForkLogger} interface to write your own or choose one of the available
@@ -290,11 +298,9 @@ public class AudioConfig {
         return this;
     }
 
-
     public WavDecoderProvider getResamplerProvider() {
         return wavDecoderProvider;
     }
-
 
     /**
      * Sets the decoder provider that is used by {@link WavInputStream}.
@@ -303,12 +309,13 @@ public class AudioConfig {
      *
      * @return this
      */
-    public AudioConfig setWavDecoderProvider(WavDecoderProvider decoderProvider) {
+    public AudioConfig setWavDecoderProvider(
+        WavDecoderProvider decoderProvider
+    ) {
         Objects.requireNonNull(decoderProvider);
         wavDecoderProvider = decoderProvider;
         return this;
     }
-
 
     public enum Spatialization {
         /**
@@ -326,20 +333,16 @@ public class AudioConfig {
          */
         OFF(AL10.AL_FALSE);
 
-
         private static final Spatialization[] MAP = Spatialization.values();
-        private final int                     alId;
-
+        private final int alId;
 
         Spatialization(int alId) {
             this.alId = alId;
         }
 
-
         int getAlId() {
             return alId;
         }
-
 
         static Spatialization getByAlId(int id) {
             for (final Spatialization spatialization : Spatialization.MAP) {
@@ -349,9 +352,7 @@ public class AudioConfig {
             }
             return null;
         }
-
     }
-
 
     /**
      * Holds different options for enabling/disabling the virtualization that is performed when playing non-mono audio.
@@ -384,20 +385,16 @@ public class AudioConfig {
         @ExperimentalFeature
         OFF_REMIX_CHANNELS(SOFTDirectChannelsRemix.AL_REMIX_UNMATCHED_SOFT);
 
-
         private static final Virtualization[] MAP = Virtualization.values();
-        private final int                     alId;
-
+        private final int alId;
 
         Virtualization(int alId) {
             this.alId = alId;
         }
 
-
         int getAlId() {
             return alId;
         }
-
 
         static Virtualization getByAlId(int id) {
             for (final Virtualization virtualization : Virtualization.MAP) {
@@ -408,5 +405,4 @@ public class AudioConfig {
             return null;
         }
     }
-
 }

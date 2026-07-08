@@ -12,10 +12,9 @@
 
 package de.pottgames.tuningfork.test.unit;
 
+import de.pottgames.tuningfork.PitchShifter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import de.pottgames.tuningfork.PitchShifter;
 
 public class PitchShifterUnitTest {
 
@@ -27,7 +26,6 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(0, shifter.fineTune);
     }
 
-
     @Test
     public void correctPitchPoint5() {
         final PitchShifter shifter = new PitchShifter();
@@ -35,7 +33,6 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(12, shifter.coarseTune);
         Assertions.assertEquals(0, shifter.fineTune);
     }
-
 
     @Test
     public void correctPitch1() {
@@ -45,7 +42,6 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(0, shifter.fineTune);
     }
 
-
     @Test
     public void correctPitch1Point5() {
         final PitchShifter shifter = new PitchShifter();
@@ -53,7 +49,6 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(-7, shifter.coarseTune);
         Assertions.assertEquals(-2, shifter.fineTune);
     }
-
 
     @Test
     public void correctPitch1Point6() {
@@ -63,7 +58,6 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(-14, shifter.fineTune);
     }
 
-
     @Test
     public void correctPitch2() {
         final PitchShifter shifter = new PitchShifter();
@@ -72,7 +66,6 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(-0, shifter.fineTune);
     }
 
-
     @Test
     public void correctPitch3() {
         final PitchShifter shifter = new PitchShifter();
@@ -80,5 +73,4 @@ public class PitchShifterUnitTest {
         Assertions.assertEquals(-12, shifter.coarseTune);
         Assertions.assertEquals(-0, shifter.fineTune);
     }
-
 }

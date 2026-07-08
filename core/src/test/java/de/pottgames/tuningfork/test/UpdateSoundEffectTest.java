@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AutoWah;
 import de.pottgames.tuningfork.Chorus;
@@ -26,17 +25,29 @@ import de.pottgames.tuningfork.SoundSource;
 import de.pottgames.tuningfork.VocalMorpher;
 
 public class UpdateSoundEffectTest extends ApplicationAdapter {
-    private Audio       audio;
+
+    private Audio audio;
     private SoundBuffer sound;
     private SoundSource source;
     private SoundEffect effect;
-    private long        tick = System.currentTimeMillis();
+    private long tick = System.currentTimeMillis();
 
-    private SoundEffectData[] effectData      =
-            { AutoWah.funkyBeats(), Chorus.chore(), new Compressor(), Distortion.rattle(), EaxReverb.auditorium(), Echo.farAway(), new Equalizer(),
-                    Flanger.robotMetallic(), new FrequencyShifter(), PitchShifter.chipmunk(), new Reverb(), RingModulator.tremolo(), new VocalMorpher() };
-    private int               effectDataIndex = effectData.length;
-
+    private SoundEffectData[] effectData = {
+        AutoWah.funkyBeats(),
+        Chorus.chore(),
+        new Compressor(),
+        Distortion.rattle(),
+        EaxReverb.auditorium(),
+        Echo.farAway(),
+        new Equalizer(),
+        Flanger.robotMetallic(),
+        new FrequencyShifter(),
+        PitchShifter.chipmunk(),
+        new Reverb(),
+        RingModulator.tremolo(),
+        new VocalMorpher(),
+    };
+    private int effectDataIndex = effectData.length;
 
     @Override
     public void create() {
@@ -51,7 +62,6 @@ public class UpdateSoundEffectTest extends ApplicationAdapter {
         source.attachEffect(effect);
     }
 
-
     @Override
     public void render() {
         if (tick + 2000 < System.currentTimeMillis()) {
@@ -60,7 +70,6 @@ public class UpdateSoundEffectTest extends ApplicationAdapter {
             effect.updateEffect(data);
         }
     }
-
 
     private SoundEffectData getNextEffectData() {
         effectDataIndex++;
@@ -72,7 +81,6 @@ public class UpdateSoundEffectTest extends ApplicationAdapter {
         return data;
     }
 
-
     @Override
     public void dispose() {
         effect.dispose();
@@ -80,14 +88,13 @@ public class UpdateSoundEffectTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("UpdateSoundEffectTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new UpdateSoundEffectTest(), config);
     }
-
 }

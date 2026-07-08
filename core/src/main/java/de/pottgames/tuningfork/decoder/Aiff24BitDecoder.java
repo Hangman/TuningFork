@@ -12,31 +12,28 @@
 
 package de.pottgames.tuningfork.decoder;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-
 public class Aiff24BitDecoder implements AiffDecoder {
-    private final int    bitsPerSample;
-    private InputStream  stream;
-    private long         inputBytesRemaining;
-    private final byte[] buffer       = new byte[4096];
-    private int          bufferOffset = 0;
-    private int          bufferLength = 0;
 
+    private final int bitsPerSample;
+    private InputStream stream;
+    private long inputBytesRemaining;
+    private final byte[] buffer = new byte[4096];
+    private int bufferOffset = 0;
+    private int bufferLength = 0;
 
     public Aiff24BitDecoder(int bitsPerSample) {
         this.bitsPerSample = bitsPerSample;
     }
-
 
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
         inputBytesRemaining = streamLength;
     }
-
 
     @Override
     public int read(byte[] output) throws IOException {
@@ -56,7 +53,10 @@ public class Aiff24BitDecoder implements AiffDecoder {
                 }
             }
 
-            while (bufferOffset + 1 < bufferLength && writeOffset < output.length - 1) {
+            while (
+                bufferOffset + 1 < bufferLength &&
+                writeOffset < output.length - 1
+            ) {
                 final byte byte1 = buffer[bufferOffset++];
                 final byte byte2 = buffer[bufferOffset++];
                 bufferOffset++; // we skip byte3 because OpenAL only supports 16-Bit integer sound (float
@@ -73,34 +73,28 @@ public class Aiff24BitDecoder implements AiffDecoder {
         return writeOffset;
     }
 
-
     private int fillBuffer() throws IOException {
         bufferOffset = 0;
         return stream.read(buffer, 0, buffer.length);
     }
-
 
     @Override
     public int inputBitsPerSample() {
         return bitsPerSample;
     }
 
-
     @Override
     public int outputBitsPerSample() {
         return 16;
     }
-
 
     @Override
     public PcmDataType outputPcmDataType() {
         return PcmDataType.INTEGER;
     }
 
-
     @Override
     public void close() throws IOException {
         stream.close();
     }
-
 }

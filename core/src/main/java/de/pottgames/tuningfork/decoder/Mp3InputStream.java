@@ -1,7 +1,6 @@
 package de.pottgames.tuningfork.decoder;
 
 import com.badlogic.gdx.files.FileHandle;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.TuningForkRuntimeException;
 import javazoom.jl.decoder.Bitstream;
@@ -17,20 +16,19 @@ import javazoom.jl.decoder.OutputBuffer;
  * @author Matthias
  */
 public class Mp3InputStream implements AudioStream {
-    protected Bitstream    bitstream;
-    protected OutputBuffer outputBuffer;
-    protected MP3Decoder   decoder;
-    protected int          channels;
-    protected int          sampleRate;
-    protected FileHandle   file;
-    protected float        duration = -1f;
-    protected boolean      closed   = false;
 
+    protected Bitstream bitstream;
+    protected OutputBuffer outputBuffer;
+    protected MP3Decoder decoder;
+    protected int channels;
+    protected int sampleRate;
+    protected FileHandle file;
+    protected float duration = -1f;
+    protected boolean closed = false;
 
     public Mp3InputStream(FileHandle file) {
         init(file);
     }
-
 
     protected void init(FileHandle file) {
         this.file = file;
@@ -47,16 +45,19 @@ public class Mp3InputStream implements AudioStream {
             decoder.setOutputBuffer(outputBuffer);
             sampleRate = header.getSampleRate();
         } catch (final BitstreamException e) {
-            throw new TuningForkRuntimeException("error while preloading mp3", e);
+            throw new TuningForkRuntimeException(
+                "error while preloading mp3",
+                e
+            );
         }
     }
-
 
     @Override
     public int read(byte[] bytes) {
         try {
             int totalLength = 0;
-            final int minRequiredLength = bytes.length - OutputBuffer.BUFFERSIZE * 2;
+            final int minRequiredLength =
+                bytes.length - OutputBuffer.BUFFERSIZE * 2;
             while (totalLength <= minRequiredLength) {
                 final Header header = bitstream.readFrame();
                 if (header == null) {
@@ -70,22 +71,29 @@ public class Mp3InputStream implements AudioStream {
                 bitstream.closeFrame();
 
                 final int length = outputBuffer.reset();
-                System.arraycopy(outputBuffer.getBuffer(), 0, bytes, totalLength, length);
+                System.arraycopy(
+                    outputBuffer.getBuffer(),
+                    0,
+                    bytes,
+                    totalLength,
+                    length
+                );
                 totalLength += length;
             }
             return totalLength;
         } catch (final Throwable ex) {
             reset();
-            throw new TuningForkRuntimeException("Error reading audio data.", ex);
+            throw new TuningForkRuntimeException(
+                "Error reading audio data.",
+                ex
+            );
         }
     }
-
 
     @Override
     public float getDuration() {
         return duration;
     }
-
 
     @Override
     public AudioStream reset() {
@@ -94,30 +102,25 @@ public class Mp3InputStream implements AudioStream {
         return this;
     }
 
-
     @Override
     public int getChannels() {
         return channels;
     }
-
 
     @Override
     public int getSampleRate() {
         return sampleRate;
     }
 
-
     @Override
     public int getBitsPerSample() {
         return 16;
     }
 
-
     @Override
     public PcmDataType getPcmDataType() {
         return PcmDataType.INTEGER;
     }
-
 
     @Override
     public void close() {
@@ -133,10 +136,8 @@ public class Mp3InputStream implements AudioStream {
         }
     }
 
-
     @Override
     public boolean isClosed() {
         return closed;
     }
-
 }

@@ -53,20 +53,16 @@ public enum OutputMode {
      */
     SURROUND_7_1(SOFTOutputMode.ALC_SURROUND_7_1_SOFT);
 
-
     private static final OutputMode[] MAP = OutputMode.values();
-    private final int                 alId;
-
+    private final int alId;
 
     OutputMode(int alId) {
         this.alId = alId;
     }
 
-
     int getAlId() {
         return alId;
     }
-
 
     public static OutputMode getByAlId(int id) {
         for (final OutputMode mode : OutputMode.MAP) {
