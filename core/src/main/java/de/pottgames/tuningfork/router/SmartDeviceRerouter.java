@@ -39,7 +39,7 @@ import org.lwjgl.system.MemoryUtil;
 public class SmartDeviceRerouter implements AudioDeviceRerouter {
 
     /**
-     * Defines how often the background thread will check the connection and try to reconnect to audio devies.
+     * Defines how often the background thread will check the connection and try to reconnect to audio devices.
      */
     private final long checkInterval;
 

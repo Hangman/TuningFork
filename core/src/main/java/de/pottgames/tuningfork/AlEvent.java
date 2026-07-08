@@ -48,4 +48,16 @@ public class AlEvent {
     public long getUserParam() {
         return userParam;
     }
+
+    @Override
+    public String toString() {
+        return "AlEvent{" +
+                "eventType=" + eventType +
+                ", object=" + object +
+                ", param=" + param +
+                ", length=" + length +
+                ", message=" + message +
+                ", userParam=" + userParam +
+                "}";
+    }
 }
