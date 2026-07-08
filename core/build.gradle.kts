@@ -180,4 +180,16 @@ jmh {
     includeTests = false
 }
 
+val eclipseClasspath by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+    extendsFrom(configurations.compileOnly.get())
+}
+
+eclipse {
+    classpath {
+        plusConfigurations.add(eclipseClasspath)
+    }
+}
+
 eclipse.project.name = "TuningFork-core"
