@@ -35,7 +35,7 @@ Note that TuningFork is not an extension to libGDX audio but a replacement.
 
 ### Supported Formats
 
-Check out the [full list](https://github.com/Hangman/TuningFork/wiki/Supported-audio-formats-and-codecs) for precise
+Check out the [full list](https://github.com/Hangman/TuningFork/wiki/Supported-audio-formats-and-codecs) for detailed
 information about format and codec support.
 
 * wav
@@ -59,7 +59,7 @@ only):
 [![Release](https://jitpack.io/v/Hangman/TuningFork.svg)](https://jitpack.io/#Hangman/TuningFork)
 
 ```groovy
-implementation 'com.github.Hangman:TuningFork:4.4.3'
+implementation 'com.github.Hangman:TuningFork:4.4.4'
 ```
 
 ### Compatibility
@@ -68,11 +68,10 @@ Java 8 is required, make sure to set `sourceCompatibility = JavaLanguageVersion.
 scripts.
 | Version of libGDX | Latest compatible version of TuningFork |
 |      :----:         | :--- |
-| 1.12.1 - 1.14.2 | 4.4.3 |
+| 1.12.1 - 1.14.2 | 4.4.4 |
 | 1.12.0 | 4.1.0 |
 | 1.9.12 - 1.11.0 | 3.3.0 |
 | 1.9.11 | 2.0.1 |
-| < 1.9.11 | not supported, might work though: 2.0.1 |
 
 ### Upgrading
 
@@ -90,7 +89,7 @@ issue.
 
 To build the library from source, you need a JDK >= 8 installed. You can grab one
 here: [Liberica JDK](https://bell-sw.com/pages/downloads/).  
-TuningFork uses [Gradle](https://gradle.org/) as it's build tool (you don't need to have Gradle installed).  
+TuningFork uses [Gradle](https://gradle.org/) as its build tool (you don't need to have Gradle installed).  
 <br>
 This will compile the library. The resulting jar can be found under `core/build/libs/`.
 
