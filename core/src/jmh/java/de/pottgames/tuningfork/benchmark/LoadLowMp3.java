@@ -18,21 +18,21 @@ import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.Mp3Loader;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.logger.MockLogger;
-import org.openjdk.jmh.annotations.*;
-
 import java.io.File;
+import org.openjdk.jmh.annotations.*;
 
 @State(Scope.Thread)
 public class LoadLowMp3 {
-    private Audio       audio;
-    private SoundBuffer soundBuffer;
 
+    private Audio audio;
+    private SoundBuffer soundBuffer;
 
     @Benchmark
     public void load() {
-        this.soundBuffer = Mp3Loader.load(new File("src/jmh/resources/bench_145-185kbps.mp3"));
+        this.soundBuffer = Mp3Loader.load(
+            new File("src/jmh/resources/bench_145-185kbps.mp3")
+        );
     }
-
 
     @Setup(Level.Iteration)
     public void setup() {
@@ -41,11 +41,9 @@ public class LoadLowMp3 {
         this.audio = Audio.init(config);
     }
 
-
     @TearDown(Level.Iteration)
     public void teardown() {
         this.soundBuffer.dispose();
         this.audio.dispose();
     }
-
 }

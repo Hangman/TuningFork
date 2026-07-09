@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -25,6 +24,7 @@ import org.lwjgl.openal.EXTEfx;
  * @author Matthias
  */
 public class Chorus extends SoundEffectData {
+
     /**
      * 0 = sinusoid, 1 = triangle<br>
      * This property sets the waveform shape of the LFO that controls the delay time of the delayed signals.
@@ -66,7 +66,6 @@ public class Chorus extends SoundEffectData {
      */
     public float delay = 0.016f;
 
-
     public static Chorus chore() {
         final Chorus result = new Chorus();
         result.waveForm = 0;
@@ -77,7 +76,6 @@ public class Chorus extends SoundEffectData {
         result.delay = 0.016f;
         return result;
     }
-
 
     public static Chorus voiceBreak() {
         final Chorus result = new Chorus();
@@ -90,7 +88,6 @@ public class Chorus extends SoundEffectData {
         return result;
     }
 
-
     public static Chorus goofy() {
         final Chorus result = new Chorus();
         result.waveForm = 0;
@@ -101,7 +98,6 @@ public class Chorus extends SoundEffectData {
         result.delay = 0.016f;
         return result;
     }
-
 
     public static Chorus goofyRobot() {
         final Chorus result = new Chorus();
@@ -114,10 +110,13 @@ public class Chorus extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_CHORUS);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_CHORUS
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_WAVEFORM, waveForm);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_CHORUS_PHASE, phase);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_RATE, rate);
@@ -126,12 +125,10 @@ public class Chorus extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_CHORUS_DELAY, delay);
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(delay, depth, feedback, phase, rate, waveForm);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -145,16 +142,33 @@ public class Chorus extends SoundEffectData {
             return false;
         }
         final Chorus other = (Chorus) obj;
-        return Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(depth) == Float.floatToIntBits(other.depth)
-                && Float.floatToIntBits(feedback) == Float.floatToIntBits(other.feedback) && phase == other.phase
-                && Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) && waveForm == other.waveForm;
+        return (
+            Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) &&
+            Float.floatToIntBits(depth) == Float.floatToIntBits(other.depth) &&
+            Float.floatToIntBits(feedback) ==
+                Float.floatToIntBits(other.feedback) &&
+            phase == other.phase &&
+            Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) &&
+            waveForm == other.waveForm
+        );
     }
-
 
     @Override
     public String toString() {
-        return "Chorus [waveForm=" + waveForm + ", phase=" + phase + ", rate=" + rate + ", depth=" + depth + ", feedback=" + feedback + ", delay=" + delay
-                + "]";
+        return (
+            "Chorus [waveForm=" +
+            waveForm +
+            ", phase=" +
+            phase +
+            ", rate=" +
+            rate +
+            ", depth=" +
+            depth +
+            ", feedback=" +
+            feedback +
+            ", delay=" +
+            delay +
+            "]"
+        );
     }
-
 }

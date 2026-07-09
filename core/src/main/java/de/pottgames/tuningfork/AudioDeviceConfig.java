@@ -47,11 +47,9 @@ public class AudioDeviceConfig {
      */
     protected OutputMode outputMode = OutputMode.ANY;
 
-
     public String getDeviceSpecifier() {
         return deviceSpecifier;
     }
-
 
     /**
      * Must be one of the device specifiers you can query with {@link AudioDevice#availableDevices()}. Leave it null to use the default audio device.
@@ -65,11 +63,9 @@ public class AudioDeviceConfig {
         return this;
     }
 
-
     public boolean isEnableOutputLimiter() {
         return enableOutputLimiter;
     }
-
 
     /**
      * Whether to use the OpenAL output limiter that prevents clipping on the output.
@@ -78,16 +74,16 @@ public class AudioDeviceConfig {
      *
      * @return this
      */
-    public AudioDeviceConfig setEnableOutputLimiter(boolean enableOutputLimiter) {
+    public AudioDeviceConfig setEnableOutputLimiter(
+        boolean enableOutputLimiter
+    ) {
         this.enableOutputLimiter = enableOutputLimiter;
         return this;
     }
 
-
     public int getEffectSlots() {
         return effectSlots;
     }
-
 
     /**
      * Defines how many effects can be attached to sound sources. It's not guaranteed that the device will provide as many slots as requested. Call
@@ -103,11 +99,9 @@ public class AudioDeviceConfig {
         return this;
     }
 
-
     public AudioDeviceRerouter getRerouter() {
         return rerouter;
     }
-
 
     /**
      * A device rerouter is responsible for routing the audio to another audio device when the connection to the current device is lost. May also be used to
@@ -123,11 +117,9 @@ public class AudioDeviceConfig {
         return this;
     }
 
-
     public OutputMode getOutputMode() {
         return outputMode;
     }
-
 
     /**
      * Request an output mode of your choice. It is just a hint for OpenAL and it might not give you the exact mode you wanted but its closest relative. Set
@@ -147,5 +139,4 @@ public class AudioDeviceConfig {
         outputMode = mode;
         return this;
     }
-
 }

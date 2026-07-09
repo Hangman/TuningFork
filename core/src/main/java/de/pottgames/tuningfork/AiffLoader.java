@@ -12,15 +12,13 @@
 
 package de.pottgames.tuningfork;
 
-import java.io.File;
-import java.io.InputStream;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.StreamUtils;
-
 import de.pottgames.tuningfork.decoder.AiffInputStream;
 import de.pottgames.tuningfork.misc.PcmUtil;
+import java.io.File;
+import java.io.InputStream;
 
 public abstract class AiffLoader {
 
@@ -35,7 +33,6 @@ public abstract class AiffLoader {
         return AiffLoader.load(Gdx.files.absolute(file.getAbsolutePath()));
     }
 
-
     /**
      * Loads an aiff file into a {@link ReadableSoundBuffer}.
      *
@@ -44,9 +41,10 @@ public abstract class AiffLoader {
      * @return the ReadableSoundBuffer
      */
     public static ReadableSoundBuffer loadReadable(File file) {
-        return AiffLoader.loadReadable(Gdx.files.absolute(file.getAbsolutePath()));
+        return AiffLoader.loadReadable(
+            Gdx.files.absolute(file.getAbsolutePath())
+        );
     }
-
 
     /**
      * Loads an aiff file into a {@link SoundBuffer}.
@@ -60,7 +58,6 @@ public abstract class AiffLoader {
         return AiffLoader.load(input);
     }
 
-
     /**
      * Loads an aiff file into a {@link ReadableSoundBuffer}.
      *
@@ -72,7 +69,6 @@ public abstract class AiffLoader {
         final AiffInputStream input = new AiffInputStream(file);
         return AiffLoader.loadReadable(input);
     }
-
 
     /**
      * Loads a {@link SoundBuffer} from an {@link InputStream} and closes it afterwards.
@@ -86,7 +82,6 @@ public abstract class AiffLoader {
         return AiffLoader.load(input);
     }
 
-
     /**
      * Loads a {@link ReadableSoundBuffer} from an {@link InputStream} and closes it afterwards.
      *
@@ -99,7 +94,6 @@ public abstract class AiffLoader {
         return AiffLoader.loadReadable(input);
     }
 
-
     /**
      * Loads a {@link SoundBuffer} from a {@link AiffInputStream}.
      *
@@ -110,16 +104,24 @@ public abstract class AiffLoader {
     public static SoundBuffer load(AiffInputStream input) {
         SoundBuffer result = null;
         try {
-            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer =
+                new byte[(int) input.totalSamplesPerChannel() *
+                    (input.getBitsPerSample() / 8) *
+                    input.getChannels()];
             input.read(buffer);
-            result = new SoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            result = new SoundBuffer(
+                buffer,
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 
     /**
      * Loads a {@link ReadableSoundBuffer} from a {@link AiffInputStream}.
@@ -131,16 +133,24 @@ public abstract class AiffLoader {
     public static ReadableSoundBuffer loadReadable(AiffInputStream input) {
         ReadableSoundBuffer result = null;
         try {
-            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer =
+                new byte[(int) input.totalSamplesPerChannel() *
+                    (input.getBitsPerSample() / 8) *
+                    input.getChannels()];
             input.read(buffer);
-            result = new ReadableSoundBuffer(buffer, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            result = new ReadableSoundBuffer(
+                buffer,
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 
     /**
      * Loads an aiff file in reverse into a {@link SoundBuffer}.
@@ -154,20 +164,33 @@ public abstract class AiffLoader {
         SoundBuffer result = null;
         try {
             if (input.getBitsPerSample() % 8 != 0) {
-                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+                throw new TuningForkRuntimeException(
+                    "Reverse loading isn't supported for sample sizes that aren't divisible by 8."
+                );
             }
 
-            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer =
+                new byte[(int) input.totalSamplesPerChannel() *
+                    (input.getBitsPerSample() / 8) *
+                    input.getChannels()];
             input.read(buffer);
-            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
-            result = new SoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            final byte[] reversedPcm = PcmUtil.reverseAudio(
+                buffer,
+                input.getBitsPerSample() / 8
+            );
+            result = new SoundBuffer(
+                reversedPcm,
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 
     /**
      * Loads an aiff file in reverse into a {@link ReadableSoundBuffer}.
@@ -181,18 +204,31 @@ public abstract class AiffLoader {
         ReadableSoundBuffer result = null;
         try {
             if (input.getBitsPerSample() % 8 != 0) {
-                throw new TuningForkRuntimeException("Reverse loading isn't supported for sample sizes that aren't divisible by 8.");
+                throw new TuningForkRuntimeException(
+                    "Reverse loading isn't supported for sample sizes that aren't divisible by 8."
+                );
             }
 
-            final byte[] buffer = new byte[(int) input.totalSamplesPerChannel() * (input.getBitsPerSample() / 8) * input.getChannels()];
+            final byte[] buffer =
+                new byte[(int) input.totalSamplesPerChannel() *
+                    (input.getBitsPerSample() / 8) *
+                    input.getChannels()];
             input.read(buffer);
-            final byte[] reversedPcm = PcmUtil.reverseAudio(buffer, input.getBitsPerSample() / 8);
-            result = new ReadableSoundBuffer(reversedPcm, input.getChannels(), input.getSampleRate(), input.getBitsPerSample(), input.getPcmDataType());
+            final byte[] reversedPcm = PcmUtil.reverseAudio(
+                buffer,
+                input.getBitsPerSample() / 8
+            );
+            result = new ReadableSoundBuffer(
+                reversedPcm,
+                input.getChannels(),
+                input.getSampleRate(),
+                input.getBitsPerSample(),
+                input.getPcmDataType()
+            );
         } finally {
             StreamUtils.closeQuietly(input);
         }
 
         return result;
     }
-
 }

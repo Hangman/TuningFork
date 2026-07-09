@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.EaxReverb;
@@ -26,12 +25,12 @@ import de.pottgames.tuningfork.SoundEffect;
 import de.pottgames.tuningfork.SoundLoader;
 
 public class EffectTest extends ApplicationAdapter {
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private SoundEffect         effect1;
-    private SoundEffect         effect2;
-    private BufferedSoundSource soundSource;
 
+    private Audio audio;
+    private SoundBuffer sound;
+    private SoundEffect effect1;
+    private SoundEffect effect2;
+    private BufferedSoundSource soundSource;
 
     @Override
     public void create() {
@@ -60,12 +59,10 @@ public class EffectTest extends ApplicationAdapter {
         soundSource.setFilter(0f, 0f);
     }
 
-
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -78,14 +75,13 @@ public class EffectTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("EffectTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new EffectTest(), config);
     }
-
 }

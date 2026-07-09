@@ -65,24 +65,19 @@ public enum ALExtension {
     AL_SOFTX_FILTER_GAIN_EX("AL_SOFTX_filter_gain_ex", false),
     AL_SOFTX_HOLD_ON_DISCONNECT("AL_SOFTX_hold_on_disconnect", false);
 
-
-    private final String  alSpecifier;
+    private final String alSpecifier;
     private final boolean alc;
-
 
     ALExtension(String alSpecifier, boolean alc) {
         this.alSpecifier = alSpecifier;
         this.alc = alc;
     }
 
-
     String getAlSpecifier() {
         return alSpecifier;
     }
 
-
     boolean isAlc() {
         return alc;
     }
-
 }

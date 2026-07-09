@@ -1,9 +1,69 @@
 val gdxVersion: String by project
+val lwjglVersion: String by project
 val jmhInstanceVersion: String by project
 val jmhPluginVersion: String by project
 val junitJupiterVersion: String by project
 val junitJupiterPlatformLauncherVersion: String by project
 val flacLibraryJavaVersion: String by project
+
+val testAppClasses = listOf(
+    "de.pottgames.tuningfork.test.InputAdapter",
+    "de.pottgames.tuningfork.test.Rng",
+    "de.pottgames.tuningfork.test.MiniExample",
+    "de.pottgames.tuningfork.test.DeviceTest",
+    "de.pottgames.tuningfork.test.HrtfTest",
+    "de.pottgames.tuningfork.test.AsyncLoadTest",
+    "de.pottgames.tuningfork.test.EffectTest",
+    "de.pottgames.tuningfork.test.PlaybackPositionBufferedSourceTest",
+    "de.pottgames.tuningfork.test.FilterTest",
+    "de.pottgames.tuningfork.test.PcmSoundSourceTest",
+    "de.pottgames.tuningfork.test.StreamedSoundSourceTest",
+    "de.pottgames.tuningfork.test.ProceduralSoundTest",
+    "de.pottgames.tuningfork.test.Note",
+    "de.pottgames.tuningfork.test.SongNote",
+    "de.pottgames.tuningfork.test.SongGenerator",
+    "de.pottgames.tuningfork.test.CaptureTest",
+    "de.pottgames.tuningfork.test.EightBitTest",
+    "de.pottgames.tuningfork.test.FlacTest",
+    "de.pottgames.tuningfork.test.ResamplerTest",
+    "de.pottgames.tuningfork.test.PanningTest",
+    "de.pottgames.tuningfork.test.WavFloat32PcmTest",
+    "de.pottgames.tuningfork.test.WavFloat64PcmTest",
+    "de.pottgames.tuningfork.test.WavInt24PcmTest",
+    "de.pottgames.tuningfork.test.WavInt32PcmTest",
+    "de.pottgames.tuningfork.test.WavExtensibleFormatTest",
+    "de.pottgames.tuningfork.test.ImaAdpcmWavMonoTest",
+    "de.pottgames.tuningfork.test.ImaAdpcmWavStereoTest",
+    "de.pottgames.tuningfork.test.Mp3LoadDemo",
+    "de.pottgames.tuningfork.test.Mp3StreamDemo",
+    "de.pottgames.tuningfork.test.SpeedOnlyChangeTest",
+    "de.pottgames.tuningfork.test.LoaderInputStreamTest",
+    "de.pottgames.tuningfork.test.JukeBoxTest",
+    "de.pottgames.tuningfork.test.AuxSendsTest",
+    "de.pottgames.tuningfork.test.SmartDeviceRerouterTest",
+    "de.pottgames.tuningfork.test.WavULawTest",
+    "de.pottgames.tuningfork.test.WavALawTest",
+    "de.pottgames.tuningfork.test.AifcULawTest",
+    "de.pottgames.tuningfork.test.AifcALawTest",
+    "de.pottgames.tuningfork.test.MsAdpcmWavMonoTest",
+    "de.pottgames.tuningfork.test.MsAdpcmWavStereoTest",
+    "de.pottgames.tuningfork.test.StbVorbisTest",
+    "de.pottgames.tuningfork.test.DirectChannelRemixTest",
+    "de.pottgames.tuningfork.test.LoopPointSoundBufferTest",
+    "de.pottgames.tuningfork.test.LoopPointStreamingTest",
+    "de.pottgames.tuningfork.test.ClockTest",
+    "de.pottgames.tuningfork.test.PlayReverseExample",
+    "de.pottgames.tuningfork.test.SoundBufferLoaderParameterTest",
+    "de.pottgames.tuningfork.test.UpdateSoundEffectTest",
+    "de.pottgames.tuningfork.test.PlayStartDelayTest",
+    "de.pottgames.tuningfork.test.ThemePlayListProviderTest",
+    "de.pottgames.tuningfork.test.QoaTest",
+    "de.pottgames.tuningfork.test.WaveFormTest",
+    "de.pottgames.tuningfork.test.SoundLoaderAudioStreamTest",
+    "de.pottgames.tuningfork.test.unit.DurationTest",
+    "de.pottgames.tuningfork.test.unit.SoundSourceUnitTest",
+    "de.pottgames.tuningfork.test.unit.SoundLoaderUnitTest"
+)
 
 buildscript {
     project.version = "4.4.3"
@@ -29,13 +89,24 @@ repositories {
 }
 
 dependencies {
-    // compileOnly is kinda hacky but probably (afaik) the best solution we can get
+    // compileOnly is not hacky and afaik the best solution we can get
     compileOnly("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
+
+    // Explicit lwjgl version for testing (overrides transitive version from gdx-backend-lwjgl3)
+    compileOnly("org.lwjgl:lwjgl:${lwjglVersion}")
+    compileOnly("org.lwjgl:lwjgl-openal:${lwjglVersion}")
+    compileOnly("org.lwjgl:lwjgl-stb:${lwjglVersion}")
 
     implementation("com.github.Hangman:FLAC-library-Java:${flacLibraryJavaVersion}")
 
     testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
     testImplementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:${gdxVersion}")
+
+    // Explicit lwjgl version for testing (overrides transitive version from gdx-backend-lwjgl3)
+    testImplementation("org.lwjgl:lwjgl:${lwjglVersion}")
+    testImplementation("org.lwjgl:lwjgl-openal:${lwjglVersion}")
+    testImplementation("org.lwjgl:lwjgl-stb:${lwjglVersion}")
+
     testImplementation("com.badlogicgames.gdx:gdx-platform:${gdxVersion}:natives-desktop")
     testImplementation("com.badlogicgames.gdx:gdx:${gdxVersion}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:${junitJupiterPlatformLauncherVersion}")
@@ -80,62 +151,36 @@ tasks {
         }
         failFast = true
 
-        exclude("de/pottgames/tuningfork/test/InputAdapter.class")
-        exclude("de/pottgames/tuningfork/test/Rng.class")
-        exclude("de/pottgames/tuningfork/test/MiniExample.class")
-        exclude("de/pottgames/tuningfork/test/DeviceTest.class")
-        exclude("de/pottgames/tuningfork/test/HrtfTest.class")
-        exclude("de/pottgames/tuningfork/test/AsyncLoadTest.class")
-        exclude("de/pottgames/tuningfork/test/EffectTest.class")
-        exclude("de/pottgames/tuningfork/test/PlaybackPositionBufferedSourceTest.class")
-        exclude("de/pottgames/tuningfork/test/FilterTest.class")
-        exclude("de/pottgames/tuningfork/test/PcmSoundSourceTest.class")
-        exclude("de/pottgames/tuningfork/test/StreamedSoundSourceTest.class")
-        exclude("de/pottgames/tuningfork/test/ProceduralSoundTest.class")
-        exclude("de/pottgames/tuningfork/test/Note.class")
-        exclude("de/pottgames/tuningfork/test/SongNote.class")
-        exclude("de/pottgames/tuningfork/test/SongGenerator.class")
-        exclude("de/pottgames/tuningfork/test/CaptureTest.class")
-        exclude("de/pottgames/tuningfork/test/EightBitTest.class")
-        exclude("de/pottgames/tuningfork/test/FlacTest.class")
-        exclude("de/pottgames/tuningfork/test/ResamplerTest.class")
-        exclude("de/pottgames/tuningfork/test/PanningTest.class")
-        exclude("de/pottgames/tuningfork/test/WavFloat32PcmTest.class")
-        exclude("de/pottgames/tuningfork/test/WavFloat64PcmTest.class")
-        exclude("de/pottgames/tuningfork/test/WavInt24PcmTest.class")
-        exclude("de/pottgames/tuningfork/test/WavInt32PcmTest.class")
-        exclude("de/pottgames/tuningfork/test/WavExtensibleFormatTest.class")
-        exclude("de/pottgames/tuningfork/test/ImaAdpcmWavMonoTest.class")
-        exclude("de/pottgames/tuningfork/test/ImaAdpcmWavStereoTest.class")
-        exclude("de/pottgames/tuningfork/test/Mp3LoadDemo.class")
-        exclude("de/pottgames/tuningfork/test/Mp3StreamDemo.class")
-        exclude("de/pottgames/tuningfork/test/SpeedOnlyChangeTest.class")
-        exclude("de/pottgames/tuningfork/test/LoaderInputStreamTest.class")
-        exclude("de/pottgames/tuningfork/test/JukeBoxTest.class")
-        exclude("de/pottgames/tuningfork/test/AuxSendsTest.class")
-        exclude("de/pottgames/tuningfork/test/SmartDeviceRerouterTest.class")
-        exclude("de/pottgames/tuningfork/test/WavULawTest.class")
-        exclude("de/pottgames/tuningfork/test/WavALawTest.class")
-        exclude("de/pottgames/tuningfork/test/AifcULawTest.class")
-        exclude("de/pottgames/tuningfork/test/AifcALawTest.class")
-        exclude("de/pottgames/tuningfork/test/MsAdpcmWavMonoTest.class")
-        exclude("de/pottgames/tuningfork/test/MsAdpcmWavStereoTest.class")
-        exclude("de/pottgames/tuningfork/test/StbVorbisTest.class")
-        exclude("de/pottgames/tuningfork/test/DirectChannelRemixTest.class")
-        exclude("de/pottgames/tuningfork/test/LoopPointSoundBufferTest.class")
-        exclude("de/pottgames/tuningfork/test/LoopPointStreamingTest.class")
-        exclude("de/pottgames/tuningfork/test/ClockTest.class")
-        exclude("de/pottgames/tuningfork/test/PlayReverseExample.class")
-        exclude("de/pottgames/tuningfork/test/SoundBufferLoaderParameterTest.class")
-        exclude("de/pottgames/tuningfork/test/UpdateSoundEffectTest.class")
-        exclude("de/pottgames/tuningfork/test/PlayStartDelayTest.class")
-        exclude("de/pottgames/tuningfork/test/ThemePlayListProviderTest.class")
-        exclude("de/pottgames/tuningfork/test/QoaTest.class")
-        exclude("de/pottgames/tuningfork/test/WaveFormTest.class")
-        exclude("de/pottgames/tuningfork/test/SoundLoaderAudioStreamTest.class")
-        exclude("de/pottgames/tuningfork/test/unit/DurationTest.class")
-        exclude("de/pottgames/tuningfork/test/unit/SoundSourceUnitTest.class")
-        exclude("de/pottgames/tuningfork/test/unit/SoundLoaderUnitTest.class")
+        testAppClasses.forEach { className ->
+            exclude(className.replace(".", "/") + ".class")
+        }
+    }
+
+    // Create run tasks for all non-unit-tests
+    testAppClasses.forEach { className ->
+        val taskName = className.substringAfterLast('.')
+        register<JavaExec>(taskName) {
+            group = "verification"
+            mainClass.set(className)
+            classpath = sourceSets.test.get().runtimeClasspath
+            standardInput = System.`in`
+            jvmArgs(
+                "--enable-native-access=ALL-UNNAMED",
+                "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                "--add-opens", "java.base/java.nio=ALL-UNNAMED",
+                "--add-opens", "java.base/java.util=ALL-UNNAMED"
+            )
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            if (requested.group == "org.lwjgl") {
+                useVersion(lwjglVersion)
+            }
+        }
     }
 }
 
@@ -172,6 +217,18 @@ jmh {
     zip64 = false // Use ZIP64 format for bigger archives
     jmhVersion = jmhInstanceVersion // Specifies JMH version
     includeTests = false
+}
+
+val eclipseClasspath by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+    extendsFrom(configurations.compileOnly.get())
+}
+
+eclipse {
+    classpath {
+        plusConfigurations.add(eclipseClasspath)
+    }
 }
 
 eclipse.project.name = "TuningFork-core"

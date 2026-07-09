@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundSource;
@@ -24,18 +23,20 @@ import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.WaveLoader;
 
 public class WavInt32PcmTest extends ApplicationAdapter {
-    private static final String SOUND_PATH = "32bit_stereo.wav";
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private StreamedSoundSource streamedSource;
 
+    private static final String SOUND_PATH = "32bit_stereo.wav";
+    private Audio audio;
+    private SoundBuffer sound;
+    private StreamedSoundSource streamedSource;
 
     @Override
     public void create() {
         audio = Audio.init();
         sound = WaveLoader.load(Gdx.files.internal(WavInt32PcmTest.SOUND_PATH));
         final SoundSource bufferedSource = audio.obtainSource(sound);
-        streamedSource = new StreamedSoundSource(Gdx.files.internal(WavInt32PcmTest.SOUND_PATH));
+        streamedSource = new StreamedSoundSource(
+            Gdx.files.internal(WavInt32PcmTest.SOUND_PATH)
+        );
         bufferedSource.setLooping(true);
         streamedSource.setLooping(true);
         bufferedSource.play();
@@ -46,15 +47,15 @@ public class WavInt32PcmTest extends ApplicationAdapter {
         }
         streamedSource.play();
         System.out.println("buffered duration: " + sound.getDuration() + "s");
-        System.out.println("streamed duration: " + streamedSource.getDuration() + "s");
+        System.out.println(
+            "streamed duration: " + streamedSource.getDuration() + "s"
+        );
     }
-
 
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -65,14 +66,13 @@ public class WavInt32PcmTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("WavInt24PcmTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new WavInt32PcmTest(), config);
     }
-
 }

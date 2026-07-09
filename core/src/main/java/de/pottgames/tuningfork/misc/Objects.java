@@ -18,12 +18,10 @@ public class Objects {
         return obj != null ? obj : Objects.requireNonNull(defaultObj);
     }
 
-
     public static <T> T requireNonNull(T obj) {
         if (obj == null) {
             throw new NullPointerException();
         }
         return obj;
     }
-
 }

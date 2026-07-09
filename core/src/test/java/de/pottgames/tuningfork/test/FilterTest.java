@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.BufferedSoundSource;
@@ -26,12 +25,12 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class FilterTest extends ApplicationAdapter {
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private final float[][]     filters     = new float[3][2];
-    private int                 filterIndex = 0;
-    private BufferedSoundSource soundSource;
 
+    private Audio audio;
+    private SoundBuffer sound;
+    private final float[][] filters = new float[3][2];
+    private int filterIndex = 0;
+    private BufferedSoundSource soundSource;
 
     @Override
     public void create() {
@@ -60,7 +59,6 @@ public class FilterTest extends ApplicationAdapter {
         filters[2][1] = 0.01f;
     }
 
-
     @Override
     public void render() {
         if (!soundSource.isPlaying()) {
@@ -68,7 +66,10 @@ public class FilterTest extends ApplicationAdapter {
             System.out.println("using low freq: " + filters[filterIndex][0]);
             System.out.println("using low freq: " + filters[filterIndex][1]);
             System.out.println();
-            soundSource.setFilter(filters[filterIndex][0], filters[filterIndex][1]);
+            soundSource.setFilter(
+                filters[filterIndex][0],
+                filters[filterIndex][1]
+            );
             soundSource.play();
             filterIndex++;
             if (filterIndex >= filters.length) {
@@ -76,7 +77,6 @@ public class FilterTest extends ApplicationAdapter {
             }
         }
     }
-
 
     @Override
     public void dispose() {
@@ -87,14 +87,13 @@ public class FilterTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("FilterTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new FilterTest(), config);
     }
-
 }

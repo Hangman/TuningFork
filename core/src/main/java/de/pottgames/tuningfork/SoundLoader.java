@@ -12,13 +12,11 @@
 
 package de.pottgames.tuningfork;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import com.badlogic.gdx.files.FileHandle;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.decoder.AudioStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * The SoundLoader class provides utility methods for loading audio files into SoundBuffers.<br>
@@ -48,7 +46,6 @@ public abstract class SoundLoader {
         return SoundLoader.load(file, false);
     }
 
-
     /**
      * Loads an audio file from the specified FileHandle and returns a SoundBuffer.
      *
@@ -61,7 +58,6 @@ public abstract class SoundLoader {
     public static ReadableSoundBuffer loadReadable(FileHandle file) {
         return SoundLoader.loadReadable(file, false);
     }
-
 
     /**
      * Loads an audio file from the specified FileHandle and reverses the audio data.
@@ -76,7 +72,6 @@ public abstract class SoundLoader {
         return SoundLoader.load(file, true);
     }
 
-
     /**
      * Loads an audio file from the specified FileHandle and reverses the audio data.
      *
@@ -90,7 +85,6 @@ public abstract class SoundLoader {
         return SoundLoader.loadReadable(file, true);
     }
 
-
     /**
      * Loads a SoundBuffer from any AudioStream.
      *
@@ -101,7 +95,6 @@ public abstract class SoundLoader {
     public static SoundBuffer load(AudioStream stream) {
         return SoundLoader.load(stream, false);
     }
-
 
     /**
      * Loads a ReadableSoundBuffer from any AudioStream.
@@ -114,9 +107,13 @@ public abstract class SoundLoader {
         return (ReadableSoundBuffer) SoundLoader.load(stream, true);
     }
 
-
-    private static SoundBuffer load(AudioStream stream, boolean readableBuffer) {
-        final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096 * 8);
+    private static SoundBuffer load(
+        AudioStream stream,
+        boolean readableBuffer
+    ) {
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream(
+            4096 * 8
+        );
         final byte[] tempBuffer = new byte[8192];
         int numBytesRead = 0;
         while ((numBytesRead = stream.read(tempBuffer)) > 0) {
@@ -129,11 +126,24 @@ public abstract class SoundLoader {
         final PcmDataType pcmDataType = stream.getPcmDataType();
         final int blockAlign = stream.getBlockAlign();
         if (readableBuffer) {
-            return new ReadableSoundBuffer(buffer.toByteArray(), channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
+            return new ReadableSoundBuffer(
+                buffer.toByteArray(),
+                channels,
+                sampleRate,
+                bitsPerSample,
+                pcmDataType,
+                blockAlign
+            );
         }
-        return new SoundBuffer(buffer.toByteArray(), channels, sampleRate, bitsPerSample, pcmDataType, blockAlign);
+        return new SoundBuffer(
+            buffer.toByteArray(),
+            channels,
+            sampleRate,
+            bitsPerSample,
+            pcmDataType,
+            blockAlign
+        );
     }
-
 
     /**
      * Loads an audio file from the specified FileHandle and returns a SoundBuffer. Optionally, it can load the audio in reverse order if the 'reverse'
@@ -152,7 +162,9 @@ public abstract class SoundLoader {
         }
 
         final String fileExtension = file.extension();
-        SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        SoundFileType soundFileType = SoundFileType.getByFileEnding(
+            fileExtension
+        );
         if (soundFileType == null) {
             try {
                 soundFileType = SoundFileType.parseFromFile(file);
@@ -164,23 +176,36 @@ public abstract class SoundLoader {
         if (soundFileType != null) {
             switch (soundFileType) {
                 case FLAC:
-                    return reverse ? FlacLoader.loadReverse(file) : FlacLoader.load(file);
+                    return reverse
+                        ? FlacLoader.loadReverse(file)
+                        : FlacLoader.load(file);
                 case OGG:
-                    return reverse ? OggLoader.loadReverse(file) : OggLoader.load(file);
+                    return reverse
+                        ? OggLoader.loadReverse(file)
+                        : OggLoader.load(file);
                 case WAV:
-                    return reverse ? WaveLoader.loadReverse(file) : WaveLoader.load(file);
+                    return reverse
+                        ? WaveLoader.loadReverse(file)
+                        : WaveLoader.load(file);
                 case MP3:
-                    return reverse ? Mp3Loader.loadReverse(file) : Mp3Loader.load(file);
+                    return reverse
+                        ? Mp3Loader.loadReverse(file)
+                        : Mp3Loader.load(file);
                 case AIFF:
-                    return reverse ? AiffLoader.loadReverse(file) : AiffLoader.load(file);
+                    return reverse
+                        ? AiffLoader.loadReverse(file)
+                        : AiffLoader.load(file);
                 case QOA:
-                    return reverse ? QoaLoader.loadReverse(file) : QoaLoader.load(file);
+                    return reverse
+                        ? QoaLoader.loadReverse(file)
+                        : QoaLoader.load(file);
             }
         }
 
-        throw new TuningForkRuntimeException("Couldn't identify file type: " + file);
+        throw new TuningForkRuntimeException(
+            "Couldn't identify file type: " + file
+        );
     }
-
 
     /**
      * Loads an audio file from the specified FileHandle and returns a ReadableSoundBuffer. Optionally, it can load the audio in reverse order if the 'reverse'
@@ -196,13 +221,18 @@ public abstract class SoundLoader {
      *
      * @see ReadableSoundBuffer
      */
-    public static ReadableSoundBuffer loadReadable(FileHandle file, boolean reverse) {
+    public static ReadableSoundBuffer loadReadable(
+        FileHandle file,
+        boolean reverse
+    ) {
         if (file == null) {
             throw new TuningForkRuntimeException("file must not be null");
         }
 
         final String fileExtension = file.extension();
-        SoundFileType soundFileType = SoundFileType.getByFileEnding(fileExtension);
+        SoundFileType soundFileType = SoundFileType.getByFileEnding(
+            fileExtension
+        );
         if (soundFileType == null) {
             try {
                 soundFileType = SoundFileType.parseFromFile(file);
@@ -214,21 +244,34 @@ public abstract class SoundLoader {
         if (soundFileType != null) {
             switch (soundFileType) {
                 case FLAC:
-                    return reverse ? FlacLoader.loadReadableReverse(file) : FlacLoader.loadReadable(file);
+                    return reverse
+                        ? FlacLoader.loadReadableReverse(file)
+                        : FlacLoader.loadReadable(file);
                 case OGG:
-                    return reverse ? OggLoader.loadReadableReverse(file) : OggLoader.loadReadable(file);
+                    return reverse
+                        ? OggLoader.loadReadableReverse(file)
+                        : OggLoader.loadReadable(file);
                 case WAV:
-                    return reverse ? WaveLoader.loadReadableReverse(file) : WaveLoader.loadReadable(file);
+                    return reverse
+                        ? WaveLoader.loadReadableReverse(file)
+                        : WaveLoader.loadReadable(file);
                 case MP3:
-                    return reverse ? Mp3Loader.loadReadableReverse(file) : Mp3Loader.loadReadable(file);
+                    return reverse
+                        ? Mp3Loader.loadReadableReverse(file)
+                        : Mp3Loader.loadReadable(file);
                 case AIFF:
-                    return reverse ? AiffLoader.loadReadableReverse(file) : AiffLoader.loadReadable(file);
+                    return reverse
+                        ? AiffLoader.loadReadableReverse(file)
+                        : AiffLoader.loadReadable(file);
                 case QOA:
-                    return reverse ? QoaLoader.loadReadableReverse(file) : QoaLoader.loadReadable(file);
+                    return reverse
+                        ? QoaLoader.loadReadableReverse(file)
+                        : QoaLoader.loadReadable(file);
             }
         }
 
-        throw new TuningForkRuntimeException("Couldn't identify file type: " + file);
+        throw new TuningForkRuntimeException(
+            "Couldn't identify file type: " + file
+        );
     }
-
 }

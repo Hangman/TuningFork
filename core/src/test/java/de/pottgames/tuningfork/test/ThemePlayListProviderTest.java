@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.Interpolation;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.BufferedSoundSource;
 import de.pottgames.tuningfork.SoundBuffer;
@@ -20,18 +19,21 @@ import de.pottgames.tuningfork.jukebox.song.Song;
 import de.pottgames.tuningfork.jukebox.song.SongMeta;
 import de.pottgames.tuningfork.jukebox.song.SongSettings;
 
-public class ThemePlayListProviderTest extends ApplicationAdapter implements JukeBoxObserver {
-    private Audio                 audio;
-    private StreamedSoundSource   rhythm1;
-    private SoundBuffer           rhythm2;
-    private BufferedSoundSource   rhythm2Source;
-    private StreamedSoundSource   rhythm3;
-    private SoundBuffer           rhythm4;
-    private BufferedSoundSource   rhythm4Source;
-    private StreamedSoundSource   rhythm5;
-    private JukeBox               jukeBox;
-    private ThemePlayListProvider provider;
+public class ThemePlayListProviderTest
+    extends ApplicationAdapter
+    implements JukeBoxObserver
+{
 
+    private Audio audio;
+    private StreamedSoundSource rhythm1;
+    private SoundBuffer rhythm2;
+    private BufferedSoundSource rhythm2Source;
+    private StreamedSoundSource rhythm3;
+    private SoundBuffer rhythm4;
+    private BufferedSoundSource rhythm4Source;
+    private StreamedSoundSource rhythm5;
+    private JukeBox jukeBox;
+    private ThemePlayListProvider provider;
 
     @Override
     public void create() {
@@ -59,11 +61,31 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
 
         // CREATE SONGS
         final SongSettings settings = SongSettings.linear(1f, 2f, 2f);
-        final Song song1 = new Song(rhythm1, SongSettings.linear(1f, 0.5f, 1f), new SongMeta().setTitle("rhythm1"));
-        final Song song2 = new Song(rhythm2Source, settings, new SongMeta().setTitle("rhythm2"));
-        final Song song3 = new Song(rhythm3, settings, new SongMeta().setTitle("rhythm3"));
-        final Song song4 = new Song(rhythm4Source, settings, new SongMeta().setTitle("rhythm4"));
-        final Song song5 = new Song(rhythm5, settings, new SongMeta().setTitle("rhythm5"));
+        final Song song1 = new Song(
+            rhythm1,
+            SongSettings.linear(1f, 0.5f, 1f),
+            new SongMeta().setTitle("rhythm1")
+        );
+        final Song song2 = new Song(
+            rhythm2Source,
+            settings,
+            new SongMeta().setTitle("rhythm2")
+        );
+        final Song song3 = new Song(
+            rhythm3,
+            settings,
+            new SongMeta().setTitle("rhythm3")
+        );
+        final Song song4 = new Song(
+            rhythm4Source,
+            settings,
+            new SongMeta().setTitle("rhythm4")
+        );
+        final Song song5 = new Song(
+            rhythm5,
+            settings,
+            new SongMeta().setTitle("rhythm5")
+        );
 
         // CREATE PLAYLIST 1
         final PlayList playList = new PlayList() {
@@ -99,7 +121,6 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
         jukeBox.play();
     }
 
-
     @Override
     public void render() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -122,7 +143,6 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
         jukeBox.update();
     }
 
-
     @Override
     public void dispose() {
         jukeBox.clear();
@@ -134,9 +154,9 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("ThemePlayListProviderTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
@@ -144,46 +164,38 @@ public class ThemePlayListProviderTest extends ApplicationAdapter implements Juk
         new Lwjgl3Application(new ThemePlayListProviderTest(), config);
     }
 
-
     @Override
     public void onSongStart(Song song) {
         System.out.println("Song started: " + song.getMeta().getTitle());
     }
-
 
     @Override
     public void onSongEnd(Song song) {
         System.out.println("Song ended: " + song.getMeta().getTitle());
     }
 
-
     @Override
     public void onPlayListStart(PlayList playList) {
         System.out.println("PlayList started: " + playList);
     }
-
 
     @Override
     public void onPlayListEnd(PlayList playList) {
         System.out.println("PlayList ended: " + playList);
     }
 
-
     @Override
     public void onJukeBoxEnd() {
         System.out.println("JukeBox ended");
     }
-
 
     @Override
     public void onJukeBoxStart() {
         System.out.println("JukeBox started");
     }
 
-
     @Override
     public void onJukeBoxPause() {
         System.out.println("JukeBox paused");
     }
-
 }

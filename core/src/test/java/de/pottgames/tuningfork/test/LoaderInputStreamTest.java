@@ -12,16 +12,9 @@
 
 package de.pottgames.tuningfork.test;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.AiffLoader;
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.FlacLoader;
@@ -29,18 +22,23 @@ import de.pottgames.tuningfork.Mp3Loader;
 import de.pottgames.tuningfork.OggLoader;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.WaveLoader;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class LoaderInputStreamTest extends ApplicationAdapter {
-    private Audio       audio;
+
+    private Audio audio;
     private SoundBuffer wav;
     private SoundBuffer flac;
     private SoundBuffer ogg;
     private SoundBuffer aiff;
     private SoundBuffer mp3;
     private SoundBuffer playing;
-    private long        startTime;
-    private float       duration;
-
+    private long startTime;
+    private float duration;
 
     @Override
     public void create() {
@@ -52,11 +50,23 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         InputStream aiffStream = null;
         InputStream mp3Stream = null;
         try {
-            wavStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers.wav")));
-            flacStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers_16bit_mono.flac")));
-            oggStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers2.ogg")));
-            aiffStream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers.aiff")));
-            mp3Stream = new BufferedInputStream(new FileInputStream(new File("src/test/resources/numbers.mp3")));
+            wavStream = new BufferedInputStream(
+                new FileInputStream(new File("src/test/resources/numbers.wav"))
+            );
+            flacStream = new BufferedInputStream(
+                new FileInputStream(
+                    new File("src/test/resources/numbers_16bit_mono.flac")
+                )
+            );
+            oggStream = new BufferedInputStream(
+                new FileInputStream(new File("src/test/resources/numbers2.ogg"))
+            );
+            aiffStream = new BufferedInputStream(
+                new FileInputStream(new File("src/test/resources/numbers.aiff"))
+            );
+            mp3Stream = new BufferedInputStream(
+                new FileInputStream(new File("src/test/resources/numbers.mp3"))
+            );
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
@@ -68,7 +78,6 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         aiff = AiffLoader.load(aiffStream);
         mp3 = Mp3Loader.load(mp3Stream);
     }
-
 
     @Override
     public void render() {
@@ -100,7 +109,6 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         }
     }
 
-
     @Override
     public void dispose() {
         wav.dispose();
@@ -112,14 +120,13 @@ public class LoaderInputStreamTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("LoaderInputStreamTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new LoaderInputStreamTest(), config);
     }
-
 }

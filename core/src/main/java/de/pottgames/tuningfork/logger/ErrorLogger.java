@@ -16,53 +16,55 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC10;
 
 public class ErrorLogger {
-    private static final String    TF_UNKNOWN_ERROR_CODE = "TF_UNKNOWN_ERROR_CODE";
-    private static final String    AL_INVALID_NAME       = "AL_INVALID_NAME";
-    private static final String    AL_INVALID_ENUM       = "AL_INVALID_ENUM";
-    private static final String    AL_INVALID_VALUE      = "AL_INVALID_VALUE";
-    private static final String    AL_INVALID_OPERATION  = "AL_INVALID_OPERATION";
-    private static final String    AL_OUT_OF_MEMORY      = "AL_OUT_OF_MEMORY";
-    private static final String    ALC_INVALID_DEVICE    = "ALC_INVALID_DEVICE";
-    private static final String    ALC_INVALID_CONTEXT   = "ALC_INVALID_CONTEXT";
-    private static final String    ALC_INVALID_ENUM      = "ALC_INVALID_ENUM";
-    private static final String    ALC_INVALID_VALUE     = "ALC_INVALID_VALUE";
-    private static final String    ALC_OUT_OF_MEMORY     = "ALC_OUT_OF_MEMORY";
-    private final Class<?>         clazz;
-    private final TuningForkLogger logger;
 
+    private static final String TF_UNKNOWN_ERROR_CODE = "TF_UNKNOWN_ERROR_CODE";
+    private static final String AL_INVALID_NAME = "AL_INVALID_NAME";
+    private static final String AL_INVALID_ENUM = "AL_INVALID_ENUM";
+    private static final String AL_INVALID_VALUE = "AL_INVALID_VALUE";
+    private static final String AL_INVALID_OPERATION = "AL_INVALID_OPERATION";
+    private static final String AL_OUT_OF_MEMORY = "AL_OUT_OF_MEMORY";
+    private static final String ALC_INVALID_DEVICE = "ALC_INVALID_DEVICE";
+    private static final String ALC_INVALID_CONTEXT = "ALC_INVALID_CONTEXT";
+    private static final String ALC_INVALID_ENUM = "ALC_INVALID_ENUM";
+    private static final String ALC_INVALID_VALUE = "ALC_INVALID_VALUE";
+    private static final String ALC_OUT_OF_MEMORY = "ALC_OUT_OF_MEMORY";
+    private final Class<?> clazz;
+    private final TuningForkLogger logger;
 
     public ErrorLogger(Class<?> clazz, TuningForkLogger logger) {
         this.clazz = clazz;
         this.logger = logger;
     }
 
-
     public void dismissError() {
         AL10.alGetError();
     }
 
-
     public boolean checkLogAlcError(long deviceHandle, String message) {
         final int alcError = ALC10.alcGetError(deviceHandle);
         if (alcError != ALC10.ALC_NO_ERROR) {
-            logger.error(clazz, message + " - " + ErrorLogger.alcErrorToString(alcError));
+            logger.error(
+                clazz,
+                message + " - " + ErrorLogger.alcErrorToString(alcError)
+            );
             return true;
         }
 
         return false;
     }
-
 
     public boolean checkLogError(String message) {
         final int alError = AL10.alGetError();
         if (alError != AL10.AL_NO_ERROR) {
-            logger.error(clazz, message + " - " + ErrorLogger.alErrorToString(alError));
+            logger.error(
+                clazz,
+                message + " - " + ErrorLogger.alErrorToString(alError)
+            );
             return true;
         }
 
         return false;
     }
-
 
     public static String alErrorToString(int alError) {
         switch (alError) {
@@ -81,7 +83,6 @@ public class ErrorLogger {
         }
     }
 
-
     public static String alcErrorToString(int alcError) {
         switch (alcError) {
             case ALC10.ALC_INVALID_DEVICE:
@@ -98,5 +99,4 @@ public class ErrorLogger {
                 return ErrorLogger.TF_UNKNOWN_ERROR_CODE;
         }
     }
-
 }

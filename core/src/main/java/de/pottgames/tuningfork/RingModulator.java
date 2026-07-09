@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -23,6 +22,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class RingModulator extends SoundEffectData {
+
     /**
      * Range: 0.0 - 8000.0, Default: 440.0<br>
      * This is the frequency of the carrier signal. If the carrier signal is slowly varying (less than 20 Hz), the result is a tremolo (slow amplitude
@@ -46,7 +46,6 @@ public class RingModulator extends SoundEffectData {
      */
     public int waveform = 0;
 
-
     public static RingModulator tremolo() {
         final RingModulator result = new RingModulator();
         result.frequency = 3.5f;
@@ -54,7 +53,6 @@ public class RingModulator extends SoundEffectData {
         result.waveform = 0;
         return result;
     }
-
 
     public static RingModulator slowTremolo() {
         final RingModulator result = new RingModulator();
@@ -64,7 +62,6 @@ public class RingModulator extends SoundEffectData {
         return result;
     }
 
-
     public static RingModulator fastTremolo() {
         final RingModulator result = new RingModulator();
         result.frequency = 5f;
@@ -73,21 +70,30 @@ public class RingModulator extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_RING_MODULATOR);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_FREQUENCY, frequency);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_RING_MODULATOR_HIGHPASS_CUTOFF, highpassCutoff);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_RING_MODULATOR
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_RING_MODULATOR_FREQUENCY,
+            frequency
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_RING_MODULATOR_HIGHPASS_CUTOFF,
+            highpassCutoff
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_RING_MODULATOR_WAVEFORM, waveform);
     }
-
 
     @Override
     public int hashCode() {
         return Objects.hash(frequency, highpassCutoff, waveform);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -101,14 +107,25 @@ public class RingModulator extends SoundEffectData {
             return false;
         }
         final RingModulator other = (RingModulator) obj;
-        return Float.floatToIntBits(frequency) == Float.floatToIntBits(other.frequency)
-                && Float.floatToIntBits(highpassCutoff) == Float.floatToIntBits(other.highpassCutoff) && waveform == other.waveform;
+        return (
+            Float.floatToIntBits(frequency) ==
+                Float.floatToIntBits(other.frequency) &&
+            Float.floatToIntBits(highpassCutoff) ==
+                Float.floatToIntBits(other.highpassCutoff) &&
+            waveform == other.waveform
+        );
     }
-
 
     @Override
     public String toString() {
-        return "RingModulator [frequency=" + frequency + ", highpassCutoff=" + highpassCutoff + ", waveform=" + waveform + "]";
+        return (
+            "RingModulator [frequency=" +
+            frequency +
+            ", highpassCutoff=" +
+            highpassCutoff +
+            ", waveform=" +
+            waveform +
+            "]"
+        );
     }
-
 }

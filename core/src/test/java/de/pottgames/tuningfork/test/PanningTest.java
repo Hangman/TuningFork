@@ -16,18 +16,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundLoader;
 
 public class PanningTest extends ApplicationAdapter {
-    private Audio       audio;
-    private SoundBuffer sound;
-    private boolean     left;
-    private long        soundPlayStartTime;
-    private float       soundDuration;
 
+    private Audio audio;
+    private SoundBuffer sound;
+    private boolean left;
+    private long soundPlayStartTime;
+    private float soundDuration;
 
     @Override
     public void create() {
@@ -36,22 +35,22 @@ public class PanningTest extends ApplicationAdapter {
         soundDuration = sound.getDuration() * 1000f;
     }
 
-
     @Override
     public void render() {
-        if (System.currentTimeMillis() > soundPlayStartTime + (long) soundDuration) {
+        if (
+            System.currentTimeMillis() >
+            soundPlayStartTime + (long) soundDuration
+        ) {
             left = !left;
             playSound(left ? -1f : 1f);
             System.out.println(left ? "left" : "right");
         }
     }
 
-
     private void playSound(float pan) {
         sound.play(1f, 1f, pan);
         soundPlayStartTime = System.currentTimeMillis();
     }
-
 
     @Override
     public void dispose() {
@@ -59,14 +58,13 @@ public class PanningTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("PanningTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new PanningTest(), config);
     }
-
 }

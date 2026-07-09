@@ -60,7 +60,10 @@ public enum WavAudioFormat {
     WAVE_FORMAT_G722_ADPCM(0x0065, "WAVE_FORMAT_G722_ADPCM"),
     WAVE_FORMAT_DSAT(0x0066, "WAVE_FORMAT_DSAT"),
     WAVE_FORMAT_DSAT_DISPLAY(0x0067, "WAVE_FORMAT_DSAT_DISPLAY"),
-    WAVE_FORMAT_VOXWARE_BYTE_ALIGNED(0x0069, "WAVE_FORMAT_VOXWARE_BYTE_ALIGNED"),
+    WAVE_FORMAT_VOXWARE_BYTE_ALIGNED(
+        0x0069,
+        "WAVE_FORMAT_VOXWARE_BYTE_ALIGNED"
+    ),
     WAVE_FORMAT_VOXWARE_AC8(0x0070, "WAVE_FORMAT_VOXWARE_AC8"),
     WAVE_FORMAT_VOXWARE_AC10(0x0071, "WAVE_FORMAT_VOXWARE_AC10"),
     WAVE_FORMAT_VOXWARE_AC16(0x0072, "WAVE_FORMAT_VOXWARE_AC16"),
@@ -91,8 +94,14 @@ public enum WavAudioFormat {
     WAVE_FORMAT_VIVO_SIREN(0x0112, "WAVE_FORMAT_VIVO_SIREN"),
     WAVE_FORMAT_DIGITAL_G723(0x0123, "WAVE_FORMAT_DIGITAL_G723"),
     WAVE_FORMAT_CREATIVE_ADPCM(0x0200, "WAVE_FORMAT_CREATIVE_ADPCM"),
-    WAVE_FORMAT_CREATIVE_FASTSPEECH8(0x0202, "WAVE_FORMAT_CREATIVE_FASTSPEECH8"),
-    WAVE_FORMAT_CREATIVE_FASTSPEECH10(0x0203, "WAVE_FORMAT_ CREATIVE_FASTSPEECH10"),
+    WAVE_FORMAT_CREATIVE_FASTSPEECH8(
+        0x0202,
+        "WAVE_FORMAT_CREATIVE_FASTSPEECH8"
+    ),
+    WAVE_FORMAT_CREATIVE_FASTSPEECH10(
+        0x0203,
+        "WAVE_FORMAT_ CREATIVE_FASTSPEECH10"
+    ),
     WAVE_FORMAT_QUARTERDECK(0x0220, "WAVE_FORMAT_QUARTERDECK"),
     WAVE_FORMAT_FM_TOWNS_SND(0x0300, "WAVE_FORMAT_FM_TOWNS_SND"),
     WAVE_FORMAT_BTV_DIGITAL(0x0400, "WAVE_FORMAT_BTV_DIGITAL"),
@@ -105,14 +114,16 @@ public enum WavAudioFormat {
     WAVE_FORMAT_LH_CODEC(0x1100, "WAVE_FORMAT_LH_CODEC"),
     WAVE_FORMAT_NORRIS(0x1400, "WAVE_FORMAT_NORRIS"),
     WAVE_FORMAT_ISIAUDIO_(0x1401, "WAVE_FORMAT_ISIAUDIO"),
-    WAVE_FORMAT_SOUNDSPACE_MUSICOMPRESS(0x1500, "WAVE_FORMAT_SOUNDSPACE_MUSICOMPRESS"),
+    WAVE_FORMAT_SOUNDSPACE_MUSICOMPRESS(
+        0x1500,
+        "WAVE_FORMAT_SOUNDSPACE_MUSICOMPRESS"
+    ),
     WAVE_FORMAT_DVM(0x2000, "WAVE_FORMAT_DVM"),
     WAVE_FORMAT_EXTENSIBLE(0xfffe, "WAVE_FORMAT_EXTENSIBLE");
 
-
     private static final IntMap<WavAudioFormat> MAP = new IntMap<>();
-    private final int                           regNumber;
-    private final String                        wFormatTagId;
+    private final int regNumber;
+    private final String wFormatTagId;
 
     static {
         for (final WavAudioFormat format : WavAudioFormat.values()) {
@@ -120,25 +131,20 @@ public enum WavAudioFormat {
         }
     }
 
-
     WavAudioFormat(int regNumber, String wFormatTagId) {
         this.regNumber = regNumber;
         this.wFormatTagId = wFormatTagId;
     }
 
-
     public int getRegNumber() {
         return regNumber;
     }
-
 
     public String getWFormatTagId() {
         return wFormatTagId;
     }
 
-
     public static WavAudioFormat getByRegNumber(int regNumber) {
         return WavAudioFormat.MAP.get(regNumber);
     }
-
 }

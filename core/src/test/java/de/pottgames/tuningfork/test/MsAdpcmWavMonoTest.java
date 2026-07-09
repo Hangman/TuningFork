@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundSource;
@@ -24,19 +23,23 @@ import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.WaveLoader;
 
 public class MsAdpcmWavMonoTest extends ApplicationAdapter {
-    private static final String SOUND_PATH = "ms_adpcm_mono.wav";
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private SoundSource         bufferedSource;
-    private StreamedSoundSource streamedSource;
 
+    private static final String SOUND_PATH = "ms_adpcm_mono.wav";
+    private Audio audio;
+    private SoundBuffer sound;
+    private SoundSource bufferedSource;
+    private StreamedSoundSource streamedSource;
 
     @Override
     public void create() {
         audio = Audio.init();
-        sound = WaveLoader.load(Gdx.files.internal(MsAdpcmWavMonoTest.SOUND_PATH));
+        sound = WaveLoader.load(
+            Gdx.files.internal(MsAdpcmWavMonoTest.SOUND_PATH)
+        );
         bufferedSource = audio.obtainSource(sound);
-        streamedSource = new StreamedSoundSource(Gdx.files.internal(MsAdpcmWavMonoTest.SOUND_PATH));
+        streamedSource = new StreamedSoundSource(
+            Gdx.files.internal(MsAdpcmWavMonoTest.SOUND_PATH)
+        );
         bufferedSource.setLooping(true);
         streamedSource.setLooping(true);
         bufferedSource.play();
@@ -47,15 +50,15 @@ public class MsAdpcmWavMonoTest extends ApplicationAdapter {
         }
         streamedSource.play();
         System.out.println("buffered duration: " + sound.getDuration() + "s");
-        System.out.println("streamed duration: " + streamedSource.getDuration() + "s");
+        System.out.println(
+            "streamed duration: " + streamedSource.getDuration() + "s"
+        );
     }
-
 
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -63,14 +66,13 @@ public class MsAdpcmWavMonoTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("MsAdpcmWavMonoTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new MsAdpcmWavMonoTest(), config);
     }
-
 }

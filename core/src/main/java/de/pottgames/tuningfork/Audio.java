@@ -12,8 +12,6 @@
 
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.AL10;
-
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.math.MathUtils;
@@ -21,12 +19,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
-
 import de.pottgames.tuningfork.AudioConfig.Spatialization;
 import de.pottgames.tuningfork.AudioConfig.Virtualization;
 import de.pottgames.tuningfork.decoder.WavDecoderProvider;
 import de.pottgames.tuningfork.decoder.WavInputStream;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.AL10;
 
 /**
  * The main management and entry point of TuningFork. This class initializes the sound device and gives access to SoundSource's for advanced manual playback
@@ -35,19 +33,19 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class Audio implements Disposable {
+
     private static Audio instance;
 
-    private final boolean            nativeDecoderAvailable;
-    final StreamManager              streamManager;
-    final Filter                     publicFilter;
+    private final boolean nativeDecoderAvailable;
+    final StreamManager streamManager;
+    final Filter publicFilter;
     private final WavDecoderProvider wavDecoderProvider;
-    private final SoundListener      listener;
-    private final SoundSourcePool    sourcePool;
-    private final Array<SoundSource> managedSources  = new Array<>();
-    private final TuningForkLogger   logger;
-    private final AudioDevice        device;
-    private final AudioSettings      defaultSettings = new AudioSettings();
-
+    private final SoundListener listener;
+    private final SoundSourcePool sourcePool;
+    private final Array<SoundSource> managedSources = new Array<>();
+    private final TuningForkLogger logger;
+    private final AudioDevice device;
+    private final AudioSettings defaultSettings = new AudioSettings();
 
     /**
      * Initializes an Audio instance with the default {@link AudioConfig}. Errors are logged but exceptions are silently ignored. Call
@@ -59,7 +57,6 @@ public class Audio implements Disposable {
         return Audio.init(new AudioConfig());
     }
 
-
     /**
      * Initializes an Audio instance with the default {@link AudioConfig}. If you don't want to take care of exceptions, call {@link Audio#init(AudioConfig)}
      * instead.
@@ -69,10 +66,10 @@ public class Audio implements Disposable {
      * @throws OpenDeviceException is thrown when a device couldn't be opened
      * @throws UnsupportedAudioDeviceException is thrown when the desired device couldn't be found or isn't a valid device
      */
-    public static Audio initSafe() throws OpenDeviceException, UnsupportedAudioDeviceException {
+    public static Audio initSafe()
+        throws OpenDeviceException, UnsupportedAudioDeviceException {
         return Audio.initSafe(new AudioConfig());
     }
-
 
     /**
      * Initializes an Audio instance with the given {@link AudioConfig}. Errors are logged but exceptions are silently ignored. Call
@@ -84,20 +81,29 @@ public class Audio implements Disposable {
      */
     public static Audio init(AudioConfig config) {
         if (Audio.instance != null) {
-            throw new IllegalStateException("Audio has already been initialized. Please call dispose() before initializing again.");
+            throw new IllegalStateException(
+                "Audio has already been initialized. Please call dispose() before initializing again."
+            );
         }
 
         AudioDevice device;
         Audio audio = null;
         try {
-            device = new AudioDevice(config.getDeviceConfig(), config.getLogger());
+            device = new AudioDevice(
+                config.getDeviceConfig(),
+                config.getLogger()
+            );
             audio = new Audio(device, config);
         } catch (final Exception e) {
-            config.getLogger().error(Audio.class, "Failed to init Audio. Details: " + e.getMessage());
+            config
+                .getLogger()
+                .error(
+                    Audio.class,
+                    "Failed to init Audio. Details: " + e.getMessage()
+                );
         }
         return audio;
     }
-
 
     /**
      * Initializes an Audio instance with the given {@link AudioConfig}. If you don't want to take care of exceptions, call {@link Audio#init(AudioConfig)}
@@ -110,15 +116,20 @@ public class Audio implements Disposable {
      * @throws OpenDeviceException is thrown when a device couldn't be opened
      * @throws UnsupportedAudioDeviceException is thrown when the desired device couldn't be found or isn't a valid device
      */
-    public static Audio initSafe(AudioConfig config) throws OpenDeviceException, UnsupportedAudioDeviceException {
+    public static Audio initSafe(AudioConfig config)
+        throws OpenDeviceException, UnsupportedAudioDeviceException {
         if (Audio.instance != null) {
-            throw new IllegalStateException("Audio has already been initialized. Please call dispose() before initializing again.");
+            throw new IllegalStateException(
+                "Audio has already been initialized. Please call dispose() before initializing again."
+            );
         }
 
-        final AudioDevice device = new AudioDevice(config.getDeviceConfig(), config.getLogger());
+        final AudioDevice device = new AudioDevice(
+            config.getDeviceConfig(),
+            config.getLogger()
+        );
         return new Audio(device, config);
     }
-
 
     private Audio(AudioDevice device, AudioConfig config) {
         logger = config.getLogger();
@@ -132,7 +143,10 @@ public class Audio implements Disposable {
                 nativesLoaded = true;
             } catch (final Exception e) {
                 logger.warn(this.getClass(), e.getMessage());
-                logger.warn(this.getClass(), "Native decoders aren't available on this platform");
+                logger.warn(
+                    this.getClass(),
+                    "Native decoders aren't available on this platform"
+                );
             }
         }
         nativeDecoderAvailable = nativesLoaded;
@@ -158,9 +172,7 @@ public class Audio implements Disposable {
 
         // CREATE SOURCES
         sourcePool = new SoundSourcePool(config.getSimultaneousSources());
-
     }
-
 
     /**
      * Returns the currently active instance of Audio.
@@ -171,7 +183,6 @@ public class Audio implements Disposable {
         return Audio.instance;
     }
 
-
     /**
      * Returns the currently used AudioDevice.
      *
@@ -180,7 +191,6 @@ public class Audio implements Disposable {
     public AudioDevice getDevice() {
         return device;
     }
-
 
     /**
      * As the listener moves away from a sound source, the volume of the sound source decreases for the listener. The Attenuation Model is responsible for this
@@ -203,7 +213,6 @@ public class Audio implements Disposable {
         setDefaultAttenuationMaxDistance(model.getAttenuationMaxDistance());
     }
 
-
     /**
      * Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
      * attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
@@ -215,7 +224,6 @@ public class Audio implements Disposable {
         defaultSettings.setMinAttenuationDistance(distance);
     }
 
-
     /**
      * Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
      * attenuation model and the attenuation factor of the source. This value is used for all sources that are created/obtained afterwards, it doesn't affect
@@ -226,7 +234,6 @@ public class Audio implements Disposable {
     public void setDefaultAttenuationMaxDistance(float distance) {
         defaultSettings.setMaxAttenuationDistance(distance);
     }
-
 
     /**
      * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
@@ -240,7 +247,6 @@ public class Audio implements Disposable {
         defaultSettings.setAttenuationFactor(rolloff);
     }
 
-
     /**
      * Returns the default attenuation minimum distance that is used to calculate the attenuation by the current default attenuation model.
      *
@@ -249,7 +255,6 @@ public class Audio implements Disposable {
     public float getDefaultAttenuationMinDistance() {
         return defaultSettings.getMinAttenuationDistance();
     }
-
 
     /**
      * Returns the default attenuation maximum distance that is used to calculate the attenuation by the current default attenuation model.
@@ -260,7 +265,6 @@ public class Audio implements Disposable {
         return defaultSettings.getMaxAttenuationDistance();
     }
 
-
     /**
      * Returns the default attenuation factor that is used to calculate the attenuation by the current default attenuation model.
      *
@@ -269,7 +273,6 @@ public class Audio implements Disposable {
     public float getDefaultAttenuationFactor() {
         return defaultSettings.getAttenuationFactor();
     }
-
 
     /**
      * Returns whether virtualization is enabled or disabled by default for all sound sources. See {@link AudioConfig#setVirtualization(Virtualization)} for
@@ -281,7 +284,6 @@ public class Audio implements Disposable {
         return defaultSettings.getVirtualization();
     }
 
-
     /**
      * Returns the default {@link AudioSettings}.
      *
@@ -290,7 +292,6 @@ public class Audio implements Disposable {
     AudioSettings getDefaultAudioSettings() {
         return defaultSettings;
     }
-
 
     /**
      * Immediately sets the virtualization method for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
@@ -315,11 +316,9 @@ public class Audio implements Disposable {
         }
     }
 
-
     public Spatialization getDefaultSpatialization() {
         return defaultSettings.getSpatialization();
     }
-
 
     public void setDefaultSpatialization(Spatialization spatialization) {
         defaultSettings.setSpatialization(spatialization);
@@ -334,7 +333,6 @@ public class Audio implements Disposable {
         }
     }
 
-
     /**
      * Returns the global volume value that is applied to all sources.
      *
@@ -344,7 +342,6 @@ public class Audio implements Disposable {
         return listener.getMasterVolume();
     }
 
-
     /**
      * Sets the global volume that is applied to all sources. Values above 1 or below 0 will be clamped.
      *
@@ -353,7 +350,6 @@ public class Audio implements Disposable {
     public void setMasterVolume(float volume) {
         listener.setMasterVolume(MathUtils.clamp(volume, 0f, 1f));
     }
-
 
     /**
      * Changing the doppler factor exaggerates or de-emphasizes the doppler effect. Physically accurate doppler calculation might not give the desired result,
@@ -368,7 +364,6 @@ public class Audio implements Disposable {
         }
     }
 
-
     /**
      * Returns a {@link BufferedSoundSource} for permanent use. Call {@link BufferedSoundSource#free() free()} on it to return it to the pool of available
      * sources.
@@ -379,7 +374,9 @@ public class Audio implements Disposable {
      */
     public BufferedSoundSource obtainSource(SoundBuffer buffer) {
         // FIND FREE SOUND SOURCE
-        final BufferedSoundSource source = sourcePool.findFreeSource(defaultSettings);
+        final BufferedSoundSource source = sourcePool.findFreeSource(
+            defaultSettings
+        );
 
         // PREPARE SOURCE
         source.obtained = true;
@@ -389,10 +386,14 @@ public class Audio implements Disposable {
         return source;
     }
 
-
-    private BufferedSoundSource obtainRelativeSource(SoundBuffer buffer, boolean looping) {
+    private BufferedSoundSource obtainRelativeSource(
+        SoundBuffer buffer,
+        boolean looping
+    ) {
         // FIND FREE SOUND SOURCE
-        final BufferedSoundSource source = sourcePool.findFreeSource(defaultSettings);
+        final BufferedSoundSource source = sourcePool.findFreeSource(
+            defaultSettings
+        );
 
         // PREPARE SOURCE
         source.obtained = true;
@@ -401,7 +402,6 @@ public class Audio implements Disposable {
 
         return source;
     }
-
 
     /**
      * Plays the sound.
@@ -413,7 +413,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
@@ -428,7 +427,6 @@ public class Audio implements Disposable {
         source.obtained = false;
     }
 
-
     /**
      * Plays a sound with an effect.
      *
@@ -442,7 +440,6 @@ public class Audio implements Disposable {
         source.obtained = false;
     }
 
-
     /**
      * Plays the sound with the given volume.
      *
@@ -455,7 +452,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays the sound with the given volume and effect.
@@ -472,7 +468,6 @@ public class Audio implements Disposable {
         source.obtained = false;
     }
 
-
     /**
      * Plays the sound with the given volume and pitch.
      *
@@ -488,7 +483,6 @@ public class Audio implements Disposable {
         source.obtained = false;
     }
 
-
     /**
      * Plays the sound with the given volume, pitch and filter.
      *
@@ -498,7 +492,13 @@ public class Audio implements Disposable {
      * @param lowFreqVolume the volume of low frequencies
      * @param highFreqVolume the volume of high frequencies
      */
-    protected void play(SoundBuffer buffer, float volume, float pitch, float lowFreqVolume, float highFreqVolume) {
+    protected void play(
+        SoundBuffer buffer,
+        float volume,
+        float pitch,
+        float lowFreqVolume,
+        float highFreqVolume
+    ) {
         final BufferedSoundSource source = obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
@@ -506,7 +506,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays the sound with the given volume, pitch and effect.
@@ -516,7 +515,12 @@ public class Audio implements Disposable {
      * @param pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)
      * @param effect the sound effect
      */
-    protected void play(SoundBuffer buffer, float volume, float pitch, SoundEffect effect) {
+    protected void play(
+        SoundBuffer buffer,
+        float volume,
+        float pitch,
+        SoundEffect effect
+    ) {
         final BufferedSoundSource source = obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
@@ -524,7 +528,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays the sound with the given volume, pitch and pan.
@@ -534,7 +537,12 @@ public class Audio implements Disposable {
      * @param pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)
      * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      */
-    protected void play(SoundBuffer buffer, float volume, float pitch, float pan) {
+    protected void play(
+        SoundBuffer buffer,
+        float volume,
+        float pitch,
+        float pan
+    ) {
         final BufferedSoundSource source = obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
@@ -543,7 +551,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays the sound with the given volume, pitch, pan and effect.
@@ -554,7 +561,13 @@ public class Audio implements Disposable {
      * @param pan in the range of -1.0 (full left) to 1.0 (full right). (default center 0.0)
      * @param effect the sound effect
      */
-    protected void play(SoundBuffer buffer, float volume, float pitch, float pan, SoundEffect effect) {
+    protected void play(
+        SoundBuffer buffer,
+        float volume,
+        float pitch,
+        float pan,
+        SoundEffect effect
+    ) {
         final BufferedSoundSource source = obtainRelativeSource(buffer, false);
         source.setVolume(volume);
         source.setPitch(pitch);
@@ -564,7 +577,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound at the given position.
@@ -579,7 +591,6 @@ public class Audio implements Disposable {
         source.obtained = false;
     }
 
-
     /**
      * Plays a spatial sound with the given filter at the given position.
      *
@@ -588,14 +599,18 @@ public class Audio implements Disposable {
      * @param lowFreqVolume the volume of low frequencies
      * @param highFreqVolume the volume of high frequencies
      */
-    protected void play3D(SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume) {
+    protected void play3D(
+        SoundBuffer buffer,
+        Vector3 position,
+        float lowFreqVolume,
+        float highFreqVolume
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setPosition(position);
         source.setFilter(lowFreqVolume, highFreqVolume);
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound at the given position with an effect.
@@ -604,14 +619,17 @@ public class Audio implements Disposable {
      * @param position the position in 3D space
      * @param effect the sound effect
      */
-    protected void play3D(SoundBuffer buffer, Vector3 position, SoundEffect effect) {
+    protected void play3D(
+        SoundBuffer buffer,
+        Vector3 position,
+        SoundEffect effect
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setPosition(position);
         source.attachEffect(effect);
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound at the given position with the given effect and filter.
@@ -622,7 +640,13 @@ public class Audio implements Disposable {
      * @param highFreqVolume the volume of high frequencies
      * @param effect the sound effect
      */
-    protected void play3D(SoundBuffer buffer, Vector3 position, float lowFreqVolume, float highFreqVolume, SoundEffect effect) {
+    protected void play3D(
+        SoundBuffer buffer,
+        Vector3 position,
+        float lowFreqVolume,
+        float highFreqVolume,
+        SoundEffect effect
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setPosition(position);
         source.attachEffect(effect);
@@ -630,7 +654,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound with the given volume at the given position.
@@ -647,7 +670,6 @@ public class Audio implements Disposable {
         source.obtained = false;
     }
 
-
     /**
      * Plays a spatial sound with the given volume and filter at the given position.
      *
@@ -657,7 +679,13 @@ public class Audio implements Disposable {
      * @param lowFreqVolume the volume of low frequencies
      * @param highFreqVolume the volume of high frequencies
      */
-    protected void play3D(SoundBuffer buffer, float volume, Vector3 position, float lowFreqVolume, float highFreqVolume) {
+    protected void play3D(
+        SoundBuffer buffer,
+        float volume,
+        Vector3 position,
+        float lowFreqVolume,
+        float highFreqVolume
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setVolume(volume);
         source.setPosition(position);
@@ -665,7 +693,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound with the given volume and effect at the given position.
@@ -675,7 +702,12 @@ public class Audio implements Disposable {
      * @param position the position in 3D space
      * @param effect the sound effect
      */
-    protected void play3D(SoundBuffer buffer, float volume, Vector3 position, SoundEffect effect) {
+    protected void play3D(
+        SoundBuffer buffer,
+        float volume,
+        Vector3 position,
+        SoundEffect effect
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setVolume(volume);
         source.setPosition(position);
@@ -683,7 +715,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound with the given volume and pitch at the given position.
@@ -693,7 +724,12 @@ public class Audio implements Disposable {
      * @param pitch in the range of 0.5 - 2.0 with values &lt; 1 making the sound slower and values &gt; 1 making it faster (default 1)
      * @param position the position in 3D space
      */
-    protected void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position) {
+    protected void play3D(
+        SoundBuffer buffer,
+        float volume,
+        float pitch,
+        Vector3 position
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setVolume(volume);
         source.setPitch(pitch);
@@ -701,7 +737,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Plays a spatial sound with the given volume, pitch and effect at the given position.
@@ -712,7 +747,13 @@ public class Audio implements Disposable {
      * @param position the position in 3D space
      * @param effect the sound effect
      */
-    protected void play3D(SoundBuffer buffer, float volume, float pitch, Vector3 position, SoundEffect effect) {
+    protected void play3D(
+        SoundBuffer buffer,
+        float volume,
+        float pitch,
+        Vector3 position,
+        SoundEffect effect
+    ) {
         final BufferedSoundSource source = obtainSource(buffer);
         source.setVolume(volume);
         source.setPitch(pitch);
@@ -721,7 +762,6 @@ public class Audio implements Disposable {
         source.play();
         source.obtained = false;
     }
-
 
     /**
      * Immediately sets the resampler for all sound sources, regardless of their state (playing, paused, obtained, etc.).<br>
@@ -735,7 +775,9 @@ public class Audio implements Disposable {
      */
     public boolean setDefaultResampler(String resampler) {
         if (resampler != null) {
-            final int resamplerIndex = device.getResamplerIndexByName(resampler);
+            final int resamplerIndex = device.getResamplerIndexByName(
+                resampler
+            );
             if (resamplerIndex >= 0) {
                 sourcePool.setResamplerByIndex(resamplerIndex);
 
@@ -754,7 +796,6 @@ public class Audio implements Disposable {
         return false;
     }
 
-
     /**
      * Resumes to play all {@link BufferedSoundSource}s and {@link StreamedSoundSource}s that are paused.
      */
@@ -763,7 +804,6 @@ public class Audio implements Disposable {
         resumeAllStreamedSources();
     }
 
-
     /**
      * Resumes to play all {@link StreamedSoundSource}s that are paused at the moment.
      */
@@ -771,14 +811,12 @@ public class Audio implements Disposable {
         streamManager.resumeAll();
     }
 
-
     /**
      * Resumes to play all {@link BufferedSoundSource}s that are paused at the moment.
      */
     public void resumeAllBufferedSources() {
         sourcePool.resumeAll();
     }
-
 
     /**
      * Pauses all {@link BufferedSoundSource}s and {@link StreamedSoundSource}s.
@@ -788,7 +826,6 @@ public class Audio implements Disposable {
         pauseAllStreamedSources();
     }
 
-
     /**
      * Pauses all {@link StreamedSoundSource}.
      */
@@ -796,14 +833,12 @@ public class Audio implements Disposable {
         streamManager.pauseAll();
     }
 
-
     /**
      * Pauses all {@link BufferedSoundSource}s.
      */
     public void pauseAllBufferedSources() {
         sourcePool.pauseAll();
     }
-
 
     /**
      * Stops all {@link BufferedSoundSource}s and {@link StreamedSoundSource}s.
@@ -813,14 +848,12 @@ public class Audio implements Disposable {
         stopAllStreamedSources();
     }
 
-
     /**
      * Stops all {@link StreamedSoundSource}s.
      */
     public void stopAllStreamedSources() {
         streamManager.stopAll();
     }
-
 
     /**
      * Stops all {@link BufferedSoundSource}s.
@@ -829,21 +862,17 @@ public class Audio implements Disposable {
         sourcePool.stopAll();
     }
 
-
     int getDefaultResamplerIndex() {
         return defaultSettings.getResamplerIndex();
     }
-
 
     void registerManagedSource(SoundSource source) {
         managedSources.add(source);
     }
 
-
     void removeManagedSource(SoundSource source) {
         managedSources.removeValue(source, true);
     }
-
 
     /**
      * Returns the {@link SoundListener}.
@@ -854,7 +883,6 @@ public class Audio implements Disposable {
         return listener;
     }
 
-
     /**
      * Registers TuningFork's async loaders on libGDX's AssetManager. If you provided an AssetManager in the {@link AudioConfig}, loaders have been registered
      * and you can skip this step.
@@ -863,13 +891,18 @@ public class Audio implements Disposable {
      */
     public void registerAssetManagerLoaders(AssetManager manager) {
         if (manager.getLoader(SoundBuffer.class) == null) {
-            manager.setLoader(SoundBuffer.class, new SoundBufferLoader(new InternalFileHandleResolver()));
+            manager.setLoader(
+                SoundBuffer.class,
+                new SoundBufferLoader(new InternalFileHandleResolver())
+            );
         }
         if (manager.getLoader(ReadableSoundBuffer.class) == null) {
-            manager.setLoader(ReadableSoundBuffer.class, new ReadableSoundBufferLoader(new InternalFileHandleResolver()));
+            manager.setLoader(
+                ReadableSoundBuffer.class,
+                new ReadableSoundBufferLoader(new InternalFileHandleResolver())
+            );
         }
     }
-
 
     /**
      * Returns the wav decoder provider that is used by {@link WavInputStream}.
@@ -880,16 +913,13 @@ public class Audio implements Disposable {
         return wavDecoderProvider;
     }
 
-
     void onBufferDisposal(SoundBuffer buffer) {
         sourcePool.onBufferDisposal(buffer);
     }
 
-
     public TuningForkLogger getLogger() {
         return logger;
     }
-
 
     /**
      * Returns true if the native decoders are available. Java decoders will be used as a fallback.
@@ -899,7 +929,6 @@ public class Audio implements Disposable {
     public boolean isNativeDecodersAvailable() {
         return nativeDecoderAvailable;
     }
-
 
     /**
      * Shuts down TuningFork.
@@ -916,5 +945,4 @@ public class Audio implements Disposable {
 
         Audio.instance = null;
     }
-
 }

@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -25,25 +24,27 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class Compressor extends SoundEffectData {
+
     /**
      * 0 = on, 1 = off, Default = 1<br>
      * The OpenAL Effect Extension Compressor can only be switched on and off – it cannot be adjusted.
      */
     public int onOff = 1;
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_COMPRESSOR);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_COMPRESSOR
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_COMPRESSOR_ONOFF, onOff);
     }
-
 
     @Override
     public int hashCode() {
         return Objects.hash(onOff);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -60,10 +61,8 @@ public class Compressor extends SoundEffectData {
         return onOff == other.onOff;
     }
 
-
     @Override
     public String toString() {
         return "Compressor [onOff=" + onOff + "]";
     }
-
 }

@@ -12,12 +12,10 @@
 
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.EXTEfx;
-
 import com.badlogic.gdx.math.MathUtils;
-
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.EXTEfx;
 
 /**
  * A filter is used to remove high and low frequency content from a signal and can be applied to multiple sound sources. It's not possible to specify the
@@ -27,10 +25,10 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 class Filter {
-    private final TuningForkLogger logger;
-    private final ErrorLogger      errorLogger;
-    private final int              id;
 
+    private final TuningForkLogger logger;
+    private final ErrorLogger errorLogger;
+    private final int id;
 
     /**
      * Creates a band-pass filter with the given parameters.
@@ -53,11 +51,9 @@ class Filter {
         setHighFrequencyVolume(volumeHf);
     }
 
-
     int getId() {
         return id;
     }
-
 
     /**
      * Sets the factor by which the low frequencies should be attenuated.
@@ -69,7 +65,6 @@ class Filter {
         EXTEfx.alFilterf(id, EXTEfx.AL_BANDPASS_GAINLF, volume);
     }
 
-
     /**
      * Sets the factor by which the high frequencies should be attenuated.
      *
@@ -80,7 +75,6 @@ class Filter {
         EXTEfx.alFilterf(id, EXTEfx.AL_BANDPASS_GAINHF, volume);
     }
 
-
     void dispose() {
         errorLogger.dismissError();
         EXTEfx.alDeleteFilters(id);
@@ -88,5 +82,4 @@ class Filter {
             logger.debug(this.getClass(), "Filter disposed.");
         }
     }
-
 }

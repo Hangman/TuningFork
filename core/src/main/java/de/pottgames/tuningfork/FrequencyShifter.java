@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -26,6 +25,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class FrequencyShifter extends SoundEffectData {
+
     /**
      * Range: 0.0 - 24000.0, Default: 0.0<br>
      * This is the carrier frequency. For carrier frequencies below the audible range, the single-sideband modulator may produce phaser effects, spatial effects
@@ -48,21 +48,34 @@ public class FrequencyShifter extends SoundEffectData {
      */
     public int rightDirection = 0;
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FREQUENCY_SHIFTER);
-        EXTEfx.alEffectf(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_FREQUENCY, frequency);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION, leftDirection);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION, rightDirection);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_FREQUENCY_SHIFTER
+        );
+        EXTEfx.alEffectf(
+            effectId,
+            EXTEfx.AL_FREQUENCY_SHIFTER_FREQUENCY,
+            frequency
+        );
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION,
+            leftDirection
+        );
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION,
+            rightDirection
+        );
     }
-
 
     @Override
     public int hashCode() {
         return Objects.hash(frequency, leftDirection, rightDirection);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -76,14 +89,24 @@ public class FrequencyShifter extends SoundEffectData {
             return false;
         }
         final FrequencyShifter other = (FrequencyShifter) obj;
-        return Float.floatToIntBits(frequency) == Float.floatToIntBits(other.frequency) && leftDirection == other.leftDirection
-                && rightDirection == other.rightDirection;
+        return (
+            Float.floatToIntBits(frequency) ==
+                Float.floatToIntBits(other.frequency) &&
+            leftDirection == other.leftDirection &&
+            rightDirection == other.rightDirection
+        );
     }
-
 
     @Override
     public String toString() {
-        return "FrequencyShifter [frequency=" + frequency + ", leftDirection=" + leftDirection + ", rightDirection=" + rightDirection + "]";
+        return (
+            "FrequencyShifter [frequency=" +
+            frequency +
+            ", leftDirection=" +
+            leftDirection +
+            ", rightDirection=" +
+            rightDirection +
+            "]"
+        );
     }
-
 }

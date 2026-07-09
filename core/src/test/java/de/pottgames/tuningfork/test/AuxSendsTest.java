@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDeviceConfig;
@@ -32,9 +31,9 @@ import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
 
 public class AuxSendsTest extends ApplicationAdapter {
-    private Audio       audio;
-    private SoundBuffer sound;
 
+    private Audio audio;
+    private SoundBuffer sound;
 
     @Override
     public void create() {
@@ -49,7 +48,10 @@ public class AuxSendsTest extends ApplicationAdapter {
         // INIT
         audio = Audio.init(config);
         sound = SoundLoader.load(Gdx.files.internal("numbers.wav"));
-        System.out.println("available effect slots: " + audio.getDevice().getNumberOfEffectSlots());
+        System.out.println(
+            "available effect slots: " +
+                audio.getDevice().getNumberOfEffectSlots()
+        );
 
         // PLAY
         final SoundSource source = audio.obtainSource(sound);
@@ -62,12 +64,10 @@ public class AuxSendsTest extends ApplicationAdapter {
         source.play();
     }
 
-
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -75,14 +75,13 @@ public class AuxSendsTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("AuxSendsTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new AuxSendsTest(), config);
     }
-
 }

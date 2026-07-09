@@ -21,9 +21,9 @@ import com.badlogic.gdx.utils.Array;
  * @author Matthias
  */
 public class CircularPlayListProvider implements PlayListProvider {
-    private final Array<PlayList> lists = new Array<>();
-    private int                   index = 0;
 
+    private final Array<PlayList> lists = new Array<>();
+    private int index = 0;
 
     /**
      * Adds a {@link PlayList} to the end of the internal list.
@@ -37,7 +37,6 @@ public class CircularPlayListProvider implements PlayListProvider {
         return this;
     }
 
-
     /**
      * Adds all {@link PlayList}s from the given array to the end of the internal list.
      *
@@ -49,7 +48,6 @@ public class CircularPlayListProvider implements PlayListProvider {
         this.lists.addAll(lists);
         return this;
     }
-
 
     /**
      * Removes a {@link PlayList} from the internal list.
@@ -63,7 +61,6 @@ public class CircularPlayListProvider implements PlayListProvider {
         return this;
     }
 
-
     @Override
     public PlayList next() {
         final PlayList result = lists.get(index);
@@ -74,16 +71,19 @@ public class CircularPlayListProvider implements PlayListProvider {
         return result;
     }
 
-
     @Override
     public boolean hasNext() {
         return lists.size > 0;
     }
 
-
     @Override
     public String toString() {
-        return "CircularPlayListProvider [lists=" + lists + ", index=" + index + "]";
+        return (
+            "CircularPlayListProvider [lists=" +
+            lists +
+            ", index=" +
+            index +
+            "]"
+        );
     }
-
 }

@@ -21,7 +21,6 @@ import de.pottgames.tuningfork.jukebox.JukeBox;
  *
  */
 public interface PlayListProvider {
-
     /**
      * Returns the next PlayList. May be null if none is available.
      *
@@ -29,12 +28,10 @@ public interface PlayListProvider {
      */
     PlayList next();
 
-
     /**
      * Returns true if a {@link PlayList} is available via {@link #next()}.
      *
      * @return true if a {@link PlayList} is available, false otherwise
      */
     boolean hasNext();
-
 }

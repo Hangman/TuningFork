@@ -12,6 +12,12 @@
 
 package de.pottgames.tuningfork;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
+import de.pottgames.tuningfork.AudioConfig.Spatialization;
+import de.pottgames.tuningfork.AudioConfig.Virtualization;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
@@ -20,14 +26,6 @@ import org.lwjgl.openal.SOFTDirectChannels;
 import org.lwjgl.openal.SOFTSourceResampler;
 import org.lwjgl.openal.SOFTSourceSpatialize;
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-
-import de.pottgames.tuningfork.AudioConfig.Spatialization;
-import de.pottgames.tuningfork.AudioConfig.Virtualization;
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-
 /**
  * A sound source is used to represent the position, speed and other attributes of a sound in the virtual audio world . It enables you to play, pause, stop,
  * position sounds and let's you set different effects on it.
@@ -35,17 +33,17 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public abstract class SoundSource {
-    private final TuningForkLogger logger;
-    private final ErrorLogger      errorLogger;
-    protected final int            sourceId;
-    private final SoundEffect[]    effects;
-    private int                    nextSoundEffectSendId = 0;
-    private float                  attenuationFactor     = 1f;
-    private final Vector3          position              = new Vector3(0f, 0f, 0f);
-    private boolean                directional           = false;
-    private volatile int           resamplerIndex        = -1;
-    private boolean                directFilter          = false;
 
+    private final TuningForkLogger logger;
+    private final ErrorLogger errorLogger;
+    protected final int sourceId;
+    private final SoundEffect[] effects;
+    private int nextSoundEffectSendId = 0;
+    private float attenuationFactor = 1f;
+    private final Vector3 position = new Vector3(0f, 0f, 0f);
+    private boolean directional = false;
+    private volatile int resamplerIndex = -1;
+    private boolean directFilter = false;
 
     protected SoundSource() {
         final Audio audio = Audio.get();
@@ -70,7 +68,6 @@ public abstract class SoundSource {
         setResamplerByIndex(defaultSettings.getResamplerIndex());
     }
 
-
     /**
      * Sets the base volume of this sound source. The final output volume might differ depending on the source's position, listener position etc.
      *
@@ -80,7 +77,6 @@ public abstract class SoundSource {
         AL10.alSourcef(sourceId, AL10.AL_GAIN, MathUtils.clamp(volume, 0f, 1f));
     }
 
-
     /**
      * Returns the base volume of this sound source.
      *
@@ -89,7 +85,6 @@ public abstract class SoundSource {
     public float getVolume() {
         return AL10.alGetSourcef(sourceId, AL10.AL_GAIN);
     }
-
 
     /**
      * Sets the pitch of this sound source.
@@ -104,7 +99,6 @@ public abstract class SoundSource {
         AL10.alSourcef(sourceId, AL10.AL_PITCH, pitch);
     }
 
-
     /**
      * Returns the pitch of this sound source.
      *
@@ -113,7 +107,6 @@ public abstract class SoundSource {
     public float getPitch() {
         return AL10.alGetSourcef(sourceId, AL10.AL_PITCH);
     }
-
 
     /**
      * Starts the playback of this sound source.
@@ -124,7 +117,6 @@ public abstract class SoundSource {
         }
     }
 
-
     /**
      * Sets whether the position attribute of this sound source should be handled as relative or absolute values to the listener's position.<br>
      * If set to false, the position is the absolute position in the 3D world.<br>
@@ -133,9 +125,12 @@ public abstract class SoundSource {
      * @param relative true = relative, false = absolute
      */
     public void setRelative(boolean relative) {
-        AL10.alSourcei(sourceId, AL10.AL_SOURCE_RELATIVE, relative ? AL10.AL_TRUE : AL10.AL_FALSE);
+        AL10.alSourcei(
+            sourceId,
+            AL10.AL_SOURCE_RELATIVE,
+            relative ? AL10.AL_TRUE : AL10.AL_FALSE
+        );
     }
-
 
     /**
      * Returns whether this sound source handles the position attribute as relative to the listeners position.
@@ -143,9 +138,10 @@ public abstract class SoundSource {
      * @return relative
      */
     public boolean isRelative() {
-        return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_RELATIVE) == AL10.AL_TRUE;
+        return (
+            AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_RELATIVE) == AL10.AL_TRUE
+        );
     }
-
 
     /**
      * Sets the positions of this sound source in the virtual world.
@@ -155,7 +151,6 @@ public abstract class SoundSource {
     public void setPosition(Vector3 position) {
         this.setPosition(position.x, position.y, position.z);
     }
-
 
     /**
      * Sets the positions of this sound source in the virtual world.
@@ -169,7 +164,6 @@ public abstract class SoundSource {
         AL10.alSource3f(sourceId, AL10.AL_POSITION, x, y, z);
     }
 
-
     /**
      * Retrieves the position of this sound source.
      *
@@ -180,7 +174,6 @@ public abstract class SoundSource {
     public Vector3 getPosition(Vector3 saveTo) {
         return saveTo.set(position);
     }
-
 
     /**
      * Changes the source to a "large" source with a radius. The source has a raised cosine shape. A radius of 0 is the default (point-source).<br>
@@ -194,7 +187,6 @@ public abstract class SoundSource {
         AL10.alSourcef(sourceId, EXTSourceRadius.AL_SOURCE_RADIUS, radius);
     }
 
-
     /**
      * Returns the radius of the source.
      *
@@ -203,7 +195,6 @@ public abstract class SoundSource {
     public float getRadius() {
         return AL10.alGetSourcef(sourceId, EXTSourceRadius.AL_SOURCE_RADIUS);
     }
-
 
     /**
      * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
@@ -215,7 +206,6 @@ public abstract class SoundSource {
     public void setSpeed(Vector3 speed) {
         this.setSpeed(speed.x, speed.y, speed.z);
     }
-
 
     /**
      * Sets the speed of this sound source. The speed is <b>not</b> automatically determined by changes to the position, you need to call setSpeed manually.<br>
@@ -230,7 +220,6 @@ public abstract class SoundSource {
         AL10.alSource3f(sourceId, AL10.AL_VELOCITY, x, y, z);
     }
 
-
     /**
      * Makes this sound source emit sound in a cone shape facing a direction. Inside the inner cone angle, the listener hears the sound at full volume. Outside
      * the outer cone angle the sound is even on the level specified by outOfConeVolume. The volume is faded in between both angles (inside the cone). Call
@@ -241,15 +230,22 @@ public abstract class SoundSource {
      * @param coneOuterAngle the outer cone angle
      * @param outOfConeVolume the volume of the sound source when outside of the cone
      */
-    public void makeDirectional(Vector3 direction, float coneInnerAngle, float coneOuterAngle, float outOfConeVolume) {
+    public void makeDirectional(
+        Vector3 direction,
+        float coneInnerAngle,
+        float coneOuterAngle,
+        float outOfConeVolume
+    ) {
         directional = true;
         AL10.alSourcef(sourceId, AL10.AL_CONE_INNER_ANGLE, coneInnerAngle);
         AL10.alSourcef(sourceId, AL10.AL_CONE_OUTER_ANGLE, coneOuterAngle);
         AL10.alSourcef(sourceId, AL10.AL_CONE_OUTER_GAIN, outOfConeVolume);
         setDirection(direction);
-        logger.trace(this.getClass(), "SoundSource successfully set to directional");
+        logger.trace(
+            this.getClass(),
+            "SoundSource successfully set to directional"
+        );
     }
-
 
     /**
      * Sets the direction of this sound source. You need to call {@link #makeDirectional(Vector3, float, float, float)} first, otherwise the direction will be
@@ -259,10 +255,15 @@ public abstract class SoundSource {
      */
     public void setDirection(Vector3 direction) {
         if (directional) {
-            AL10.alSource3f(sourceId, AL10.AL_DIRECTION, direction.x, direction.y, direction.z);
+            AL10.alSource3f(
+                sourceId,
+                AL10.AL_DIRECTION,
+                direction.x,
+                direction.y,
+                direction.z
+            );
         }
     }
-
 
     /**
      * Makes this sound source omni-directional. This is the default, so you only need to call it if you have made the source directional earlier.
@@ -270,9 +271,11 @@ public abstract class SoundSource {
     public void makeOmniDirectional() {
         directional = false;
         AL10.alSource3f(sourceId, AL10.AL_DIRECTION, 0f, 0f, 0f);
-        logger.trace(this.getClass(), "SoundSource successfully set to omnidirectional");
+        logger.trace(
+            this.getClass(),
+            "SoundSource successfully set to omnidirectional"
+        );
     }
-
 
     /**
      * Returns true if this sound source is directional.
@@ -283,7 +286,6 @@ public abstract class SoundSource {
         return directional;
     }
 
-
     /**
      * Enables the distance attenuation of this sound source.
      */
@@ -291,14 +293,12 @@ public abstract class SoundSource {
         AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, attenuationFactor);
     }
 
-
     /**
      * Disables the distance attenuation of this sound source.
      */
     public void disableAttenuation() {
         AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 0f);
     }
-
 
     /**
      * This factor determines how slowly or how quickly the sound source loses volume as the listener moves away from the source. A factor of 0.5 reduces the
@@ -311,7 +311,6 @@ public abstract class SoundSource {
         AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
     }
 
-
     /**
      * Sets the distance the listener must be from the sound source at which the attenuation should begin. The attenuation itself is controlled by the
      * attenuation model and the attenuation factor of the source.
@@ -321,7 +320,6 @@ public abstract class SoundSource {
     public void setAttenuationMinDistance(float minDistance) {
         AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, minDistance);
     }
-
 
     /**
      * Sets the distance the listener must be from the sound source at which the attenuation should stop. The attenuation itself is controlled by the
@@ -333,7 +331,6 @@ public abstract class SoundSource {
         AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, maxDistance);
     }
 
-
     /**
      * Returns the attenuation factor of this source. See {@link #setAttenuationFactor(float)} for more information.
      *
@@ -342,7 +339,6 @@ public abstract class SoundSource {
     public float getAttenuationFactor() {
         return AL10.alGetSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR);
     }
-
 
     /**
      * Returns the minimum distance for the attenuation to start. See {@link #setAttenuationMinDistance(float)} for more information.
@@ -353,7 +349,6 @@ public abstract class SoundSource {
         return AL10.alGetSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE);
     }
 
-
     /**
      * Returns the distance at which the attenuation will stop. See {@link #setAttenuationMaxDistance(float)} for more information.
      *
@@ -362,7 +357,6 @@ public abstract class SoundSource {
     public float getAttenuationMaxDistance() {
         return AL10.alGetSourcef(sourceId, AL10.AL_MAX_DISTANCE);
     }
-
 
     /**
      * Sets the virtualization enabled state for this sound source.<br>
@@ -381,10 +375,13 @@ public abstract class SoundSource {
      */
     public void setVirtualization(Virtualization virtualization) {
         if (virtualization != null) {
-            AL10.alSourcei(sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT, virtualization.getAlId());
+            AL10.alSourcei(
+                sourceId,
+                SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT,
+                virtualization.getAlId()
+            );
         }
     }
-
 
     /**
      * Retrieves the virtualization mode.
@@ -392,10 +389,12 @@ public abstract class SoundSource {
      * @return the virtualization mode
      */
     public Virtualization getVirtualization() {
-        final int alId = AL10.alGetSourcei(sourceId, SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT);
+        final int alId = AL10.alGetSourcei(
+            sourceId,
+            SOFTDirectChannels.AL_DIRECT_CHANNELS_SOFT
+        );
         return Virtualization.getByAlId(alId);
     }
-
 
     /**
      * Sets the spatialization mode for this sound source.
@@ -404,10 +403,13 @@ public abstract class SoundSource {
      */
     public void setSpatialization(Spatialization spatialization) {
         if (spatialization != null) {
-            AL10.alSourcei(sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT, spatialization.getAlId());
+            AL10.alSourcei(
+                sourceId,
+                SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT,
+                spatialization.getAlId()
+            );
         }
     }
-
 
     /**
      * Retrieves the spatialization mode.
@@ -415,10 +417,12 @@ public abstract class SoundSource {
      * @return the spatialization mode
      */
     public Spatialization getSpatialization() {
-        final int alId = AL10.alGetSourcei(sourceId, SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT);
+        final int alId = AL10.alGetSourcei(
+            sourceId,
+            SOFTSourceSpatialize.AL_SOURCE_SPATIALIZE_SOFT
+        );
         return Spatialization.getByAlId(alId);
     }
-
 
     /**
      * Sets wether this sound source should loop. When looping is enabled, the source will immediately play the sound again when it's finished playing.
@@ -426,9 +430,12 @@ public abstract class SoundSource {
      * @param looping true for looped playback
      */
     public void setLooping(boolean looping) {
-        AL10.alSourcei(sourceId, AL10.AL_LOOPING, looping ? AL10.AL_TRUE : AL10.AL_FALSE);
+        AL10.alSourcei(
+            sourceId,
+            AL10.AL_LOOPING,
+            looping ? AL10.AL_TRUE : AL10.AL_FALSE
+        );
     }
-
 
     /**
      * Returns whether this sound source is currently playing.
@@ -436,9 +443,10 @@ public abstract class SoundSource {
      * @return true when this sound source is playing, false otherwise.
      */
     public boolean isPlaying() {
-        return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+        return (
+            AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING
+        );
     }
-
 
     /**
      * Returns whether this sound source is paused.
@@ -446,9 +454,10 @@ public abstract class SoundSource {
      * @return true when this sound source is paused, false otherwise.
      */
     public boolean isPaused() {
-        return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
+        return (
+            AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED
+        );
     }
-
 
     /**
      * Pauses the sound playback.
@@ -457,14 +466,12 @@ public abstract class SoundSource {
         AL10.alSourcePause(sourceId);
     }
 
-
     /**
      * Stops the sound playback and rewinds it.
      */
     public void stop() {
         AL10.alSourceRewind(sourceId);
     }
-
 
     /**
      * Enables the given filter as direct filter (dry signal) on this sound source.
@@ -480,9 +487,12 @@ public abstract class SoundSource {
             filter.setLowFrequencyVolume(lowFreqVolume);
             filter.setHighFrequencyVolume(highFreqVolume);
         }
-        AL10.alSourcei(sourceId, EXTEfx.AL_DIRECT_FILTER, filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL);
+        AL10.alSourcei(
+            sourceId,
+            EXTEfx.AL_DIRECT_FILTER,
+            filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL
+        );
     }
-
 
     /**
      * Returns true if a direct filter is active on this sound source.
@@ -492,7 +502,6 @@ public abstract class SoundSource {
     public boolean hasFilter() {
         return directFilter;
     }
-
 
     /**
      * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
@@ -509,7 +518,6 @@ public abstract class SoundSource {
         return this.attachEffect(effect, 1f, 1f);
     }
 
-
     /**
      * Attaches a sound effect to this sound source. If you attach more effects than effect slots are available, the oldest attached effect will be kicked out.
      * Attaching an effect that is already attached to this source is a legal NOP. Optionally you can set a filter that is only used for this effect, or null if
@@ -524,9 +532,16 @@ public abstract class SoundSource {
      *
      * @return the effect that was kicked out or null otherwise
      */
-    public SoundEffect attachEffect(SoundEffect effect, float lowFreqVolume, float highFreqVolume) {
+    public SoundEffect attachEffect(
+        SoundEffect effect,
+        float lowFreqVolume,
+        float highFreqVolume
+    ) {
         if (effects.length == 0) {
-            logger.error(this.getClass(), "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig.");
+            logger.error(
+                this.getClass(),
+                "Attaching an effect failed: no effect slots available, check your AudioDeviceConfig."
+            );
             return null;
         }
 
@@ -553,8 +568,15 @@ public abstract class SoundSource {
             filter.setLowFrequencyVolume(lowFreqVolume);
             filter.setHighFrequencyVolume(highFreqVolume);
         }
-        final int filterHandle = filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL;
-        AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, effect.getAuxSlotId(), nextSoundEffectSendId, filterHandle);
+        final int filterHandle =
+            filter != null ? filter.getId() : EXTEfx.AL_FILTER_NULL;
+        AL11.alSource3i(
+            sourceId,
+            EXTEfx.AL_AUXILIARY_SEND_FILTER,
+            effect.getAuxSlotId(),
+            nextSoundEffectSendId,
+            filterHandle
+        );
         effects[nextSoundEffectSendId] = effect;
         effect.addSource(this);
 
@@ -567,7 +589,6 @@ public abstract class SoundSource {
         return result;
     }
 
-
     /**
      * Detaches the given SoundEffect from this sound source.
      *
@@ -578,7 +599,13 @@ public abstract class SoundSource {
     public boolean detachEffect(SoundEffect effect) {
         for (int i = 0; i < effects.length; i++) {
             if (effects[i] == effect) {
-                AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                AL11.alSource3i(
+                    sourceId,
+                    EXTEfx.AL_AUXILIARY_SEND_FILTER,
+                    EXTEfx.AL_EFFECTSLOT_NULL,
+                    i,
+                    EXTEfx.AL_FILTER_NULL
+                );
                 effects[i].removeSource(this);
                 effects[i] = null;
                 return true;
@@ -588,14 +615,19 @@ public abstract class SoundSource {
         return false;
     }
 
-
     /**
      * Detaches all currently attached sound effects from this sound source.
      */
     public void detachAllEffects() {
         for (int i = 0; i < effects.length; i++) {
             if (effects[i] != null) {
-                AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                AL11.alSource3i(
+                    sourceId,
+                    EXTEfx.AL_AUXILIARY_SEND_FILTER,
+                    EXTEfx.AL_EFFECTSLOT_NULL,
+                    i,
+                    EXTEfx.AL_FILTER_NULL
+                );
                 effects[i].removeSource(this);
                 effects[i] = null;
             }
@@ -603,14 +635,16 @@ public abstract class SoundSource {
         nextSoundEffectSendId = 0;
     }
 
-
     protected void setResamplerByIndex(int index) {
         if (index >= 0 && index != resamplerIndex) {
             resamplerIndex = index;
-            AL10.alSourcei(sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT, index);
+            AL10.alSourcei(
+                sourceId,
+                SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT,
+                index
+            );
         }
     }
-
 
     /**
      * Sets the resampler for this sound source.<br>
@@ -632,7 +666,6 @@ public abstract class SoundSource {
         return false;
     }
 
-
     /**
      * Returns the name of the resampler currently in use.
      *
@@ -640,22 +673,29 @@ public abstract class SoundSource {
      */
     public String getResampler() {
         final AudioDevice device = Audio.get().getDevice();
-        final int resamplerIndex = AL10.alGetSourcei(sourceId, SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT);
+        final int resamplerIndex = AL10.alGetSourcei(
+            sourceId,
+            SOFTSourceResampler.AL_SOURCE_RESAMPLER_SOFT
+        );
         return device.getResamplerNameByIndex(resamplerIndex);
     }
-
 
     void onEffectDisposal(SoundEffect effect) {
         for (int i = 0; i < effects.length; i++) {
             if (effects[i] == effect) {
-                AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER, EXTEfx.AL_EFFECTSLOT_NULL, i, EXTEfx.AL_FILTER_NULL);
+                AL11.alSource3i(
+                    sourceId,
+                    EXTEfx.AL_AUXILIARY_SEND_FILTER,
+                    EXTEfx.AL_EFFECTSLOT_NULL,
+                    i,
+                    EXTEfx.AL_FILTER_NULL
+                );
                 effects[i] = null;
                 nextSoundEffectSendId = i;
                 break;
             }
         }
     }
-
 
     protected void dispose() {
         detachAllEffects();
@@ -664,5 +704,4 @@ public abstract class SoundSource {
             logger.debug(this.getClass(), "SoundSource successfully disposed");
         }
     }
-
 }

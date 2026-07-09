@@ -16,7 +16,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.SoundSource;
@@ -24,18 +23,22 @@ import de.pottgames.tuningfork.StreamedSoundSource;
 import de.pottgames.tuningfork.WaveLoader;
 
 public class ImaAdpcmWavStereoTest extends ApplicationAdapter {
-    private static final String SOUND_PATH = "ima_adpcm_stereo.wav";
-    private Audio               audio;
-    private SoundBuffer         sound;
-    private StreamedSoundSource streamedSource;
 
+    private static final String SOUND_PATH = "ima_adpcm_stereo.wav";
+    private Audio audio;
+    private SoundBuffer sound;
+    private StreamedSoundSource streamedSource;
 
     @Override
     public void create() {
         audio = Audio.init();
-        sound = WaveLoader.load(Gdx.files.internal(ImaAdpcmWavStereoTest.SOUND_PATH));
+        sound = WaveLoader.load(
+            Gdx.files.internal(ImaAdpcmWavStereoTest.SOUND_PATH)
+        );
         final SoundSource bufferedSource = audio.obtainSource(sound);
-        streamedSource = new StreamedSoundSource(Gdx.files.internal(ImaAdpcmWavStereoTest.SOUND_PATH));
+        streamedSource = new StreamedSoundSource(
+            Gdx.files.internal(ImaAdpcmWavStereoTest.SOUND_PATH)
+        );
         bufferedSource.setLooping(true);
         streamedSource.setLooping(true);
         bufferedSource.play();
@@ -46,15 +49,15 @@ public class ImaAdpcmWavStereoTest extends ApplicationAdapter {
         }
         streamedSource.play();
         System.out.println("buffered duration: " + sound.getDuration() + "s");
-        System.out.println("streamed duration: " + streamedSource.getDuration() + "s");
+        System.out.println(
+            "streamed duration: " + streamedSource.getDuration() + "s"
+        );
     }
-
 
     @Override
     public void render() {
         // we chill in a black window
     }
-
 
     @Override
     public void dispose() {
@@ -65,14 +68,13 @@ public class ImaAdpcmWavStereoTest extends ApplicationAdapter {
         audio.dispose();
     }
 
-
     public static void main(String[] args) {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        final Lwjgl3ApplicationConfiguration config =
+            new Lwjgl3ApplicationConfiguration();
         config.setTitle("ImaAdpcmWavStereoTest");
         config.setWindowedMode(1000, 800);
         config.useVsync(true);
         config.disableAudio(true);
         new Lwjgl3Application(new ImaAdpcmWavStereoTest(), config);
     }
-
 }

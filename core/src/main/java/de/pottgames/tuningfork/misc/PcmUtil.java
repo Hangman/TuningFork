@@ -33,12 +33,17 @@ public abstract class PcmUtil {
         for (int i = 0; i < numSamples; i++) {
             final int srcStart = i * sampleSizeInBytes;
             final int destStart = (numSamples - i - 1) * sampleSizeInBytes;
-            System.arraycopy(pcmData, srcStart, reversedData, destStart, sampleSizeInBytes);
+            System.arraycopy(
+                pcmData,
+                srcStart,
+                reversedData,
+                destStart,
+                sampleSizeInBytes
+            );
         }
 
         return reversedData;
     }
-
 
     /**
      * Calculates the average amplitude of a slice of samples. The result is always in the range 0 - 1. With 0 equals silence and 1 equals full amplitude.
@@ -51,92 +56,171 @@ public abstract class PcmUtil {
      *
      * @return the average amplitude of all samples in the slice in the range 0 - 1
      */
-    @ExperimentalFeature(description = "Needs more testing and accuracy in code and javadoc.")
-    public static float averageSample(byte[] input, PcmFormat format, int startSample, int endSample, int channel) {
+    @ExperimentalFeature(
+        description = "Needs more testing and accuracy in code and javadoc."
+    )
+    public static float averageSample(
+        byte[] input,
+        PcmFormat format,
+        int startSample,
+        int endSample,
+        int channel
+    ) {
         if (channel > format.getChannels()) {
-            throw new TuningForkRuntimeException("The specified channel number " + channel + "doesn't exist.");
+            throw new TuningForkRuntimeException(
+                "The specified channel number " + channel + "doesn't exist."
+            );
         }
 
         switch (format) {
             case MS_ADPCM_STEREO:
             case MS_ADPCM_MONO:
-                throw new TuningForkRuntimeException("Currently not supported for this format.");
+                throw new TuningForkRuntimeException(
+                    "Currently not supported for this format."
+                );
             case FLOAT_MONO_64_BIT:
             case FLOAT_STEREO_64_BIT:
-                return PcmUtil.averageSampleDouble(input, format.getChannels(), startSample, endSample, channel);
+                return PcmUtil.averageSampleDouble(
+                    input,
+                    format.getChannels(),
+                    startSample,
+                    endSample,
+                    channel
+                );
             case FLOAT_MONO_32_BIT:
             case FLOAT_STEREO_32_BIT:
-                return PcmUtil.averageSampleFloat(input, format.getChannels(), startSample, endSample, channel);
+                return PcmUtil.averageSampleFloat(
+                    input,
+                    format.getChannels(),
+                    startSample,
+                    endSample,
+                    channel
+                );
             case MONO_16_BIT:
             case STEREO_16_BIT:
             case QUAD_16_BIT:
             case SURROUND_7DOT1_16_BIT:
             case SURROUND_6DOT1_16_BIT:
             case SURROUND_5DOT1_16_BIT:
-                return PcmUtil.averageSample16Bit(input, format.getChannels(), startSample, endSample, channel);
+                return PcmUtil.averageSample16Bit(
+                    input,
+                    format.getChannels(),
+                    startSample,
+                    endSample,
+                    channel
+                );
             case MONO_8_BIT:
             case STEREO_8_BIT:
             case QUAD_8_BIT:
             case SURROUND_5DOT1_8_BIT:
             case SURROUND_6DOT1_8_BIT:
             case SURROUND_7DOT1_8_BIT:
-                return PcmUtil.averageSample8Bit(input, format.getChannels(), startSample, endSample, channel);
+                return PcmUtil.averageSample8Bit(
+                    input,
+                    format.getChannels(),
+                    startSample,
+                    endSample,
+                    channel
+                );
             default:
                 throw new TuningForkRuntimeException("Unknown format.");
         }
     }
 
-
-    private static float averageSample8Bit(byte[] input, int channels, int startSample, int endSample, int channel) {
+    private static float averageSample8Bit(
+        byte[] input,
+        int channels,
+        int startSample,
+        int endSample,
+        int channel
+    ) {
         float sampleSum = 0f;
-        for (int sampleIndex = startSample; sampleIndex <= endSample; sampleIndex += channels) {
-            sampleSum += Math.abs(Byte.toUnsignedInt(input[sampleIndex]) - 128) / 128f;
+        for (
+            int sampleIndex = startSample;
+            sampleIndex <= endSample;
+            sampleIndex += channels
+        ) {
+            sampleSum +=
+                Math.abs(Byte.toUnsignedInt(input[sampleIndex]) - 128) / 128f;
         }
         return sampleSum / (endSample - startSample);
     }
 
-
-    private static float averageSample16Bit(byte[] input, int channels, int startSample, int endSample, int channel) {
+    private static float averageSample16Bit(
+        byte[] input,
+        int channels,
+        int startSample,
+        int endSample,
+        int channel
+    ) {
         final int totalSamples = endSample - startSample;
         final int startIndex = startSample * channels * 2 + (channel - 1) * 2;
-        final int endIndex = startIndex + totalSamples * channels * 2 + (channel - 1) * 2;
+        final int endIndex =
+            startIndex + totalSamples * channels * 2 + (channel - 1) * 2;
         final int indexStepSize = channels * 2;
         float sampleSum = 0f;
-        for (int sampleIndex = startIndex; sampleIndex < endIndex - 1; sampleIndex += indexStepSize) {
+        for (
+            int sampleIndex = startIndex;
+            sampleIndex < endIndex - 1;
+            sampleIndex += indexStepSize
+        ) {
             final byte byte1 = input[sampleIndex];
             final byte byte2 = input[sampleIndex + 1];
-            final short sample = (short) (byte1 | byte2 << 8);
+            final short sample = (short) (byte1 | (byte2 << 8));
             sampleSum += Math.abs(sample) / 32768f;
         }
         return sampleSum / totalSamples;
     }
 
-
-    private static float averageSampleFloat(byte[] input, int channels, int startSample, int endSample, int channel) {
+    private static float averageSampleFloat(
+        byte[] input,
+        int channels,
+        int startSample,
+        int endSample,
+        int channel
+    ) {
         final int totalSamples = endSample - startSample;
         final int startIndex = startSample * channels * 4 + (channel - 1) * 4;
-        final int endIndex = startIndex + totalSamples * channels * 4 + (channel - 1) * 4;
+        final int endIndex =
+            startIndex + totalSamples * channels * 4 + (channel - 1) * 4;
         final int indexStepSize = channels * 4;
         float sampleSum = 0f;
-        for (int sampleIndex = startIndex; sampleIndex < endIndex - 3; sampleIndex += indexStepSize) {
-            final float sample = Float.intBitsToFloat(Util.intOfLittleEndianBytes(input, sampleIndex));
+        for (
+            int sampleIndex = startIndex;
+            sampleIndex < endIndex - 3;
+            sampleIndex += indexStepSize
+        ) {
+            final float sample = Float.intBitsToFloat(
+                Util.intOfLittleEndianBytes(input, sampleIndex)
+            );
             sampleSum += sample;
         }
         return sampleSum / totalSamples;
     }
 
-
-    private static float averageSampleDouble(byte[] input, int channels, int startSample, int endSample, int channel) {
+    private static float averageSampleDouble(
+        byte[] input,
+        int channels,
+        int startSample,
+        int endSample,
+        int channel
+    ) {
         final int totalSamples = endSample - startSample;
         final int startIndex = startSample * channels * 8 + (channel - 1) * 8;
-        final int endIndex = startIndex + totalSamples * channels * 8 + (channel - 1) * 8;
+        final int endIndex =
+            startIndex + totalSamples * channels * 8 + (channel - 1) * 8;
         final int indexStepSize = channels * 8;
         float sampleSum = 0f;
-        for (int sampleIndex = startIndex; sampleIndex < endIndex - 7; sampleIndex += indexStepSize) {
-            final float sample = (float) Double.longBitsToDouble(Util.longOfLittleEndianBytes(input, sampleIndex));
+        for (
+            int sampleIndex = startIndex;
+            sampleIndex < endIndex - 7;
+            sampleIndex += indexStepSize
+        ) {
+            final float sample = (float) Double.longBitsToDouble(
+                Util.longOfLittleEndianBytes(input, sampleIndex)
+            );
             sampleSum += sample;
         }
         return sampleSum / totalSamples;
     }
-
 }

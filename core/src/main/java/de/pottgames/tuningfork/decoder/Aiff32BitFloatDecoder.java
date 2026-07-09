@@ -12,25 +12,23 @@
 
 package de.pottgames.tuningfork.decoder;
 
+import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.pottgames.tuningfork.PcmFormat.PcmDataType;
-
 public class Aiff32BitFloatDecoder implements AiffDecoder {
-    private InputStream  stream;
-    private long         inputBytesRemaining;
-    private final byte[] buffer       = new byte[4096];
-    private int          bufferOffset = 0;
-    private int          bufferLength = 0;
 
+    private InputStream stream;
+    private long inputBytesRemaining;
+    private final byte[] buffer = new byte[4096];
+    private int bufferOffset = 0;
+    private int bufferLength = 0;
 
     @Override
     public void setup(InputStream stream, long streamLength) {
         this.stream = stream;
         inputBytesRemaining = streamLength;
     }
-
 
     @Override
     public int read(byte[] output) throws IOException {
@@ -50,7 +48,10 @@ public class Aiff32BitFloatDecoder implements AiffDecoder {
                 }
             }
 
-            while (bufferOffset + 3 < bufferLength && writeOffset < output.length - 3) {
+            while (
+                bufferOffset + 3 < bufferLength &&
+                writeOffset < output.length - 3
+            ) {
                 final byte byte1 = buffer[bufferOffset++];
                 final byte byte2 = buffer[bufferOffset++];
                 final byte byte3 = buffer[bufferOffset++];
@@ -69,34 +70,28 @@ public class Aiff32BitFloatDecoder implements AiffDecoder {
         return writeOffset;
     }
 
-
     private int fillBuffer() throws IOException {
         bufferOffset = 0;
         return stream.read(buffer, 0, buffer.length);
     }
-
 
     @Override
     public int inputBitsPerSample() {
         return 32;
     }
 
-
     @Override
     public int outputBitsPerSample() {
         return 32;
     }
-
 
     @Override
     public PcmDataType outputPcmDataType() {
         return PcmDataType.FLOAT;
     }
 
-
     @Override
     public void close() throws IOException {
         stream.close();
     }
-
 }

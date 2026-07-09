@@ -12,11 +12,10 @@
 
 package de.pottgames.tuningfork.router;
 
-import org.lwjgl.openal.SOFTReopenDevice;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.ContextAttributes;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.SOFTReopenDevice;
 
 /**
  * A simple rerouter that connects to the default device when the connection to the current device is lost.
@@ -24,37 +23,37 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
-    private long              device;
-    private ContextAttributes attributes;
-    private boolean           setup   = false;
-    private boolean           started = false;
 
+    private long device;
+    private ContextAttributes attributes;
+    private boolean setup = false;
+    private boolean started = false;
 
     @Override
-    public void setup(long device, String desiredDeviceSpecifier, ContextAttributes attributes) {
+    public void setup(
+        long device,
+        String desiredDeviceSpecifier,
+        ContextAttributes attributes
+    ) {
         this.device = device;
         this.attributes = attributes;
         setup = true;
     }
-
 
     @Override
     public void updateDesiredDevice(String desiredDeviceSpecifier) {
         // this rerouter doesn't care about desires
     }
 
-
     @Override
     public void updateContextAttributes(ContextAttributes attributes) {
         this.attributes = attributes;
     }
 
-
     @Override
     public void start() {
         started = true;
     }
-
 
     @Override
     public void onDisconnect() {
@@ -62,7 +61,13 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
             return;
         }
 
-        if (!SOFTReopenDevice.alcReopenDeviceSOFT(device, (String) null, attributes.getBuffer())) {
+        if (
+            !SOFTReopenDevice.alcReopenDeviceSOFT(
+                device,
+                (String) null,
+                attributes.getBuffer()
+            )
+        ) {
             final TuningForkLogger logger = Audio.get().getLogger();
             if (logger != null) {
                 logger.error(this.getClass(), "Failed to reopen audio device");
@@ -70,10 +75,8 @@ public class KeepAliveDeviceRerouter implements AudioDeviceRerouter {
         }
     }
 
-
     @Override
     public void dispose() {
         started = false;
     }
-
 }

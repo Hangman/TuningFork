@@ -12,14 +12,7 @@
 
 package de.pottgames.tuningfork.test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.ShortBuffer;
-import java.util.List;
-
 import com.badlogic.gdx.utils.BufferUtils;
-
 import de.pottgames.tuningfork.Audio;
 import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.AudioDevice;
@@ -33,10 +26,16 @@ import de.pottgames.tuningfork.capture.CaptureConfig;
 import de.pottgames.tuningfork.capture.CaptureDevice;
 import de.pottgames.tuningfork.logger.ConsoleLogger;
 import de.pottgames.tuningfork.logger.ConsoleLogger.LogLevel;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.ShortBuffer;
+import java.util.List;
 
 public class CaptureTest {
 
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    public static void main(String[] args)
+        throws NumberFormatException, IOException {
         final int frequency = 44100;
         final int bufferSize = frequency / 10;
 
@@ -55,7 +54,9 @@ public class CaptureTest {
         });
 
         // READ USER INPUT
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader reader = new BufferedReader(
+            new InputStreamReader(System.in)
+        );
         System.out.println("Select output device!");
         System.out.print("Enter device number: ");
         final int outputNumber = Integer.parseInt(reader.readLine());
@@ -64,11 +65,24 @@ public class CaptureTest {
         final ConsoleLogger logger = new ConsoleLogger();
         logger.setLogLevel(LogLevel.WARN_ERROR);
         final AudioDeviceConfig audioDeviceConfig = new AudioDeviceConfig();
-        audioDeviceConfig.setDeviceSpecifier(outputDeviceList.get(outputNumber));
-        final Audio audio = Audio.init(new AudioConfig(audioDeviceConfig, DistanceAttenuationModel.NONE, 1, 0, logger));
+        audioDeviceConfig.setDeviceSpecifier(
+            outputDeviceList.get(outputNumber)
+        );
+        final Audio audio = Audio.init(
+            new AudioConfig(
+                audioDeviceConfig,
+                DistanceAttenuationModel.NONE,
+                1,
+                0,
+                logger
+            )
+        );
 
         // CREATE SOUND SOURCE
-        final PcmSoundSource source = new PcmSoundSource(frequency, PcmFormat.MONO_16_BIT);
+        final PcmSoundSource source = new PcmSoundSource(
+            frequency,
+            PcmFormat.MONO_16_BIT
+        );
         final SoundEffect effect = new SoundEffect(new PitchShifter());
         source.attachEffect(effect);
 
@@ -90,7 +104,9 @@ public class CaptureTest {
         // READ USER INPUT
         System.out.println("");
         System.out.println("Select input device!");
-        System.out.println("Default input device: " + CaptureDevice.getDefaultDeviceName());
+        System.out.println(
+            "Default input device: " + CaptureDevice.getDefaultDeviceName()
+        );
         System.out.print("Enter device number: ");
         final int inputNumber = Integer.parseInt(reader.readLine());
         reader.close();
@@ -127,5 +143,4 @@ public class CaptureTest {
         device.dispose();
         audio.dispose();
     }
-
 }

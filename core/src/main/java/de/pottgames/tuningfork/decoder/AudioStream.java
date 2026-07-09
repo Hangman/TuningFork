@@ -12,10 +12,9 @@
 
 package de.pottgames.tuningfork.decoder;
 
-import java.io.Closeable;
-
 import de.pottgames.tuningfork.PcmFormat.PcmDataType;
 import de.pottgames.tuningfork.StreamedSoundSource;
+import java.io.Closeable;
 
 /**
  * An audio stream interface that can be implemented to feed a {@link StreamedSoundSource}.
@@ -24,14 +23,12 @@ import de.pottgames.tuningfork.StreamedSoundSource;
  *
  */
 public interface AudioStream extends Closeable {
-
     /**
      * Returns the duration in seconds or -1 if this information is not available.
      *
      * @return duration in seconds or -1 if the information is not available
      */
     float getDuration();
-
 
     /**
      * Resets the audio stream as if it was re-opened. Implementations are free to close themselves and provide a new AudioStream. The AudioStream returned by
@@ -41,14 +38,12 @@ public interface AudioStream extends Closeable {
      */
     AudioStream reset();
 
-
     /**
      * Returns the number of audio channels.
      *
      * @return number of channels
      */
     int getChannels();
-
 
     /**
      * Returns the sample rate.
@@ -57,14 +52,12 @@ public interface AudioStream extends Closeable {
      */
     int getSampleRate();
 
-
     /**
      * Returns the number of bits per sample, also known as the sample depth.
      *
      * @return the number of bits per sample
      */
     int getBitsPerSample();
-
 
     /**
      * Reads bytes from the stream until the given array is full or the stream ends. Returns the number of bytes that were actually read.
@@ -75,14 +68,12 @@ public interface AudioStream extends Closeable {
      */
     int read(byte[] bytes);
 
-
     /**
      * Returns the output data format of this AudioStream.
      *
      * @return the pcm data type
      */
     PcmDataType getPcmDataType();
-
 
     /**
      * Returns the block size in bytes. This only applies for data that is organized in blocks like ADPCM, all other implementations should return -1.
@@ -92,7 +83,6 @@ public interface AudioStream extends Closeable {
     default int getBlockSize() {
         return -1;
     }
-
 
     /**
      * Returns the block alignment in sample frames. This only applies for data that is organized in blocks like ADPCM, all other implementations should return
@@ -104,12 +94,10 @@ public interface AudioStream extends Closeable {
         return -1;
     }
 
-
     /**
      * Returns true if the AudioStream is closed.
      *
      * @return true if closed, false if open
      */
     boolean isClosed();
-
 }

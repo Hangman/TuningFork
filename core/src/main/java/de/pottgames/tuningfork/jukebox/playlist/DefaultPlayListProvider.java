@@ -21,8 +21,8 @@ import com.badlogic.gdx.utils.Array;
  * @author Matthias
  */
 public class DefaultPlayListProvider implements PlayListProvider {
-    private final Array<PlayList> lists = new Array<>();
 
+    private final Array<PlayList> lists = new Array<>();
 
     /**
      * Adds a {@link PlayList} to the end of the queue.
@@ -36,7 +36,6 @@ public class DefaultPlayListProvider implements PlayListProvider {
         return this;
     }
 
-
     /**
      * Adds all {@link PlayList}s of the given array to the end of the queue.
      *
@@ -48,7 +47,6 @@ public class DefaultPlayListProvider implements PlayListProvider {
         this.lists.addAll(lists);
         return this;
     }
-
 
     /**
      * Removes a {@link PlayList} from the queue.
@@ -62,22 +60,18 @@ public class DefaultPlayListProvider implements PlayListProvider {
         return this;
     }
 
-
     @Override
     public PlayList next() {
         return lists.removeIndex(0);
     }
-
 
     @Override
     public boolean hasNext() {
         return lists.size > 0;
     }
 
-
     @Override
     public String toString() {
         return "DefaultPlayListProvider [lists=" + lists + "]";
     }
-
 }

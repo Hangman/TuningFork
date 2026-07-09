@@ -12,18 +12,15 @@
 
 package de.pottgames.tuningfork;
 
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.IntArray;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
-
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntArray;
-
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
 
 /**
  * A low level sound source class that can be fed with raw pcm data in a real-time fashion.
@@ -31,17 +28,17 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  * @author Matthias
  */
 public class PcmSoundSource extends SoundSource implements Disposable {
-    private static final int BUFFER_SIZE          = 4096 * 10;
+
+    private static final int BUFFER_SIZE = 4096 * 10;
     private static final int INITIAL_BUFFER_COUNT = 10;
 
     private final TuningForkLogger logger;
-    private final ErrorLogger      errorLogger;
-    private final IntArray         freeBufferIds = new IntArray();
-    private final ByteBuffer       tempBuffer;
-    private final FloatBuffer      tempFloatBuffer;
-    private final int              formatAlId;
-    private final int              sampleRate;
-
+    private final ErrorLogger errorLogger;
+    private final IntArray freeBufferIds = new IntArray();
+    private final ByteBuffer tempBuffer;
+    private final FloatBuffer tempFloatBuffer;
+    private final int formatAlId;
+    private final int sampleRate;
 
     /**
      * Creates a new {@link PcmSoundSource} with the given specs.
@@ -57,7 +54,9 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         this.sampleRate = sampleRate;
         formatAlId = pcmFormat.getAlId();
         tempBuffer = BufferUtils.createByteBuffer(PcmSoundSource.BUFFER_SIZE);
-        tempFloatBuffer = BufferUtils.createFloatBuffer(PcmSoundSource.BUFFER_SIZE);
+        tempFloatBuffer = BufferUtils.createFloatBuffer(
+            PcmSoundSource.BUFFER_SIZE
+        );
 
         for (int i = 0; i < PcmSoundSource.INITIAL_BUFFER_COUNT; i++) {
             freeBufferIds.add(AL10.alGenBuffers());
@@ -65,7 +64,6 @@ public class PcmSoundSource extends SoundSource implements Disposable {
 
         audio.registerManagedSource(this);
     }
-
 
     /**
      * Adds pcm data to the queue of this sound source.<br>
@@ -86,7 +84,10 @@ public class PcmSoundSource extends SoundSource implements Disposable {
 
         while (length > 0) {
             final int alBufferId = getFreeBufferId();
-            final int writtenLength = Math.min(PcmSoundSource.BUFFER_SIZE, length);
+            final int writtenLength = Math.min(
+                PcmSoundSource.BUFFER_SIZE,
+                length
+            );
             tempBuffer.clear();
             tempBuffer.put(pcm, offset, writtenLength).flip();
             AL10.alBufferData(alBufferId, formatAlId, tempBuffer, sampleRate);
@@ -95,7 +96,6 @@ public class PcmSoundSource extends SoundSource implements Disposable {
             offset += writtenLength;
         }
     }
-
 
     /**
      * Adds pcm data to the queue of this sound source.<br>
@@ -114,16 +114,23 @@ public class PcmSoundSource extends SoundSource implements Disposable {
 
         while (length > 0) {
             final int alBufferId = getFreeBufferId();
-            final int writtenLength = Math.min(PcmSoundSource.BUFFER_SIZE, length);
+            final int writtenLength = Math.min(
+                PcmSoundSource.BUFFER_SIZE,
+                length
+            );
             tempFloatBuffer.clear();
             tempFloatBuffer.put(pcm, offset, writtenLength).flip();
-            AL10.alBufferData(alBufferId, formatAlId, tempFloatBuffer, sampleRate);
+            AL10.alBufferData(
+                alBufferId,
+                formatAlId,
+                tempFloatBuffer,
+                sampleRate
+            );
             AL10.alSourceQueueBuffers(sourceId, alBufferId);
             length -= writtenLength;
             offset += writtenLength;
         }
     }
-
 
     /**
      * Adds pcm data to the queue of this sound source.<br>
@@ -144,7 +151,6 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         AL10.alSourceQueueBuffers(sourceId, alBufferId);
     }
 
-
     /**
      * Adds pcm data to the queue of this sound source.<br>
      * <br>
@@ -164,7 +170,6 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         AL10.alSourceQueueBuffers(sourceId, alBufferId);
     }
 
-
     /**
      * Adds pcm data to the queue of this sound source.<br>
      * <br>
@@ -182,7 +187,6 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         AL10.alSourceQueueBuffers(sourceId, alBufferId);
     }
 
-
     private int getFreeBufferId() {
         if (freeBufferIds.isEmpty()) {
             return AL10.alGenBuffers();
@@ -190,17 +194,18 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         return freeBufferIds.pop();
     }
 
-
     /**
      * Unqueues processed buffers. This is called automatically on each call to any of the queueSamples methods, so you never <b>have</b> to call it manually.
      */
     public void unqueueProcessedBuffers() {
-        final int processedBuffers = AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_PROCESSED);
+        final int processedBuffers = AL10.alGetSourcei(
+            sourceId,
+            AL10.AL_BUFFERS_PROCESSED
+        );
         for (int i = 0; i < processedBuffers; i++) {
             freeBufferIds.add(AL10.alSourceUnqueueBuffers(sourceId));
         }
     }
-
 
     /**
      * Returns the number of queued buffers. This number is automatically decreased once a buffer is processed (finished playing). Each call to any of the
@@ -213,7 +218,6 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         return AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_QUEUED);
     }
 
-
     /**
      * Disposes the sound sources native resources. You should never use this sound source after disposing it.
      */
@@ -221,7 +225,10 @@ public class PcmSoundSource extends SoundSource implements Disposable {
     public void dispose() {
         stop();
 
-        final int processedBuffers = AL10.alGetSourcei(sourceId, AL10.AL_BUFFERS_PROCESSED);
+        final int processedBuffers = AL10.alGetSourcei(
+            sourceId,
+            AL10.AL_BUFFERS_PROCESSED
+        );
         for (int i = 0; i < processedBuffers; i++) {
             freeBufferIds.add(AL10.alSourceUnqueueBuffers(sourceId));
         }
@@ -236,5 +243,4 @@ public class PcmSoundSource extends SoundSource implements Disposable {
         errorLogger.checkLogError("Failed to dispose the SoundSource");
         super.dispose();
     }
-
 }

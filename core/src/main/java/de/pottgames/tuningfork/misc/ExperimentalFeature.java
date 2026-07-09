@@ -23,8 +23,12 @@ import java.lang.annotation.Target;
  * @author Matthias
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR })
+@Target({
+    ElementType.TYPE,
+    ElementType.METHOD,
+    ElementType.FIELD,
+    ElementType.CONSTRUCTOR,
+})
 public @interface ExperimentalFeature {
     String description() default "";
-
 }

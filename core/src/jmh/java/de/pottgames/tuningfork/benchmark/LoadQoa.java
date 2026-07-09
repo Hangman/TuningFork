@@ -18,21 +18,21 @@ import de.pottgames.tuningfork.AudioConfig;
 import de.pottgames.tuningfork.QoaLoader;
 import de.pottgames.tuningfork.SoundBuffer;
 import de.pottgames.tuningfork.logger.MockLogger;
-import org.openjdk.jmh.annotations.*;
-
 import java.io.File;
+import org.openjdk.jmh.annotations.*;
 
 @State(Scope.Thread)
 public class LoadQoa {
-    private Audio       audio;
-    private SoundBuffer soundBuffer;
 
+    private Audio audio;
+    private SoundBuffer soundBuffer;
 
     @Benchmark
     public void load() {
-        this.soundBuffer = QoaLoader.load(new File("src/jmh/resources/bench.qoa"));
+        this.soundBuffer = QoaLoader.load(
+            new File("src/jmh/resources/bench.qoa")
+        );
     }
-
 
     @Setup(Level.Iteration)
     public void setup() {
@@ -41,11 +41,9 @@ public class LoadQoa {
         this.audio = Audio.init(config);
     }
 
-
     @TearDown(Level.Iteration)
     public void teardown() {
         this.soundBuffer.dispose();
         this.audio.dispose();
     }
-
 }

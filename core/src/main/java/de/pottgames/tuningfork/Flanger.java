@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -24,6 +23,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class Flanger extends SoundEffectData {
+
     /**
      * 0 = sinusoid, 1 = triangle<br>
      * Selects the shape of the LFO waveform that controls the amount of the delay of the sampled signal. Zero is a sinusoid and one is a triangle.
@@ -62,7 +62,6 @@ public class Flanger extends SoundEffectData {
      */
     public float delay = 0.002f;
 
-
     public static Flanger robotHigh() {
         final Flanger result = new Flanger();
         result.waveform = 1;
@@ -73,7 +72,6 @@ public class Flanger extends SoundEffectData {
         result.delay = 0.002f;
         return result;
     }
-
 
     public static Flanger robotLow() {
         final Flanger result = new Flanger();
@@ -86,7 +84,6 @@ public class Flanger extends SoundEffectData {
         return result;
     }
 
-
     public static Flanger robotMetallic() {
         final Flanger result = new Flanger();
         result.waveform = 1;
@@ -98,10 +95,13 @@ public class Flanger extends SoundEffectData {
         return result;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_FLANGER);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_FLANGER
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_WAVEFORM, waveform);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_FLANGER_PHASE, phase);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_RATE, rate);
@@ -110,12 +110,10 @@ public class Flanger extends SoundEffectData {
         EXTEfx.alEffectf(effectId, EXTEfx.AL_FLANGER_DELAY, delay);
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(delay, depth, feedback, phase, rate, waveform);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -129,16 +127,33 @@ public class Flanger extends SoundEffectData {
             return false;
         }
         final Flanger other = (Flanger) obj;
-        return Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) && Float.floatToIntBits(depth) == Float.floatToIntBits(other.depth)
-                && Float.floatToIntBits(feedback) == Float.floatToIntBits(other.feedback) && phase == other.phase
-                && Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) && waveform == other.waveform;
+        return (
+            Float.floatToIntBits(delay) == Float.floatToIntBits(other.delay) &&
+            Float.floatToIntBits(depth) == Float.floatToIntBits(other.depth) &&
+            Float.floatToIntBits(feedback) ==
+                Float.floatToIntBits(other.feedback) &&
+            phase == other.phase &&
+            Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) &&
+            waveform == other.waveform
+        );
     }
-
 
     @Override
     public String toString() {
-        return "Flanger [waveform=" + waveform + ", phase=" + phase + ", rate=" + rate + ", depth=" + depth + ", feedback=" + feedback + ", delay=" + delay
-                + "]";
+        return (
+            "Flanger [waveform=" +
+            waveform +
+            ", phase=" +
+            phase +
+            ", rate=" +
+            rate +
+            ", depth=" +
+            depth +
+            ", feedback=" +
+            feedback +
+            ", delay=" +
+            delay +
+            "]"
+        );
     }
-
 }

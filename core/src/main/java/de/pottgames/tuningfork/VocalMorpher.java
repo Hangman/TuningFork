@@ -13,7 +13,6 @@
 package de.pottgames.tuningfork;
 
 import java.util.Objects;
-
 import org.lwjgl.openal.EXTEfx;
 
 /**
@@ -26,6 +25,7 @@ import org.lwjgl.openal.EXTEfx;
  *
  */
 public class VocalMorpher extends SoundEffectData {
+
     /**
      * Range: 0 - 29, Default: 0<br>
      * If both parameters are set to the same phoneme, that determines the filtering effect that will be heard. If these two parameters are set to different
@@ -66,24 +66,40 @@ public class VocalMorpher extends SoundEffectData {
      */
     public float rate = 1.41f;
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_VOCAL_MORPHER);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_VOCAL_MORPHER
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA, phonemea);
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB, phonemeb);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEA_COARSE_TUNING, phonemeaCoarseTuning);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_PHONEMEB_COARSE_TUNING, phonemebCoarseTuning);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_VOCMORPHER_PHONEMEA_COARSE_TUNING,
+            phonemeaCoarseTuning
+        );
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_VOCMORPHER_PHONEMEB_COARSE_TUNING,
+            phonemebCoarseTuning
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_VOCMORPHER_WAVEFORM, waveform);
         EXTEfx.alEffectf(effectId, EXTEfx.AL_VOCMORPHER_RATE, rate);
     }
 
-
     @Override
     public int hashCode() {
-        return Objects.hash(phonemea, phonemeaCoarseTuning, phonemeb, phonemebCoarseTuning, rate, waveform);
+        return Objects.hash(
+            phonemea,
+            phonemeaCoarseTuning,
+            phonemeb,
+            phonemebCoarseTuning,
+            rate,
+            waveform
+        );
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -97,16 +113,32 @@ public class VocalMorpher extends SoundEffectData {
             return false;
         }
         final VocalMorpher other = (VocalMorpher) obj;
-        return phonemea == other.phonemea && phonemeaCoarseTuning == other.phonemeaCoarseTuning && phonemeb == other.phonemeb
-                && phonemebCoarseTuning == other.phonemebCoarseTuning && Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate)
-                && waveform == other.waveform;
+        return (
+            phonemea == other.phonemea &&
+            phonemeaCoarseTuning == other.phonemeaCoarseTuning &&
+            phonemeb == other.phonemeb &&
+            phonemebCoarseTuning == other.phonemebCoarseTuning &&
+            Float.floatToIntBits(rate) == Float.floatToIntBits(other.rate) &&
+            waveform == other.waveform
+        );
     }
-
 
     @Override
     public String toString() {
-        return "VocalMorpher [phonemea=" + phonemea + ", phonemeb=" + phonemeb + ", phonemeaCoarseTuning=" + phonemeaCoarseTuning + ", phonemebCoarseTuning="
-                + phonemebCoarseTuning + ", waveform=" + waveform + ", rate=" + rate + "]";
+        return (
+            "VocalMorpher [phonemea=" +
+            phonemea +
+            ", phonemeb=" +
+            phonemeb +
+            ", phonemeaCoarseTuning=" +
+            phonemeaCoarseTuning +
+            ", phonemebCoarseTuning=" +
+            phonemebCoarseTuning +
+            ", waveform=" +
+            waveform +
+            ", rate=" +
+            rate +
+            "]"
+        );
     }
-
 }

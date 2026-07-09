@@ -12,15 +12,13 @@
 
 package de.pottgames.tuningfork;
 
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
-import org.lwjgl.openal.SOFTSourceStartDelay;
-
 import com.badlogic.gdx.math.Vector3;
-
 import de.pottgames.tuningfork.jukebox.song.SongSource;
 import de.pottgames.tuningfork.logger.ErrorLogger;
 import de.pottgames.tuningfork.logger.TuningForkLogger;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
+import org.lwjgl.openal.SOFTSourceStartDelay;
 
 /**
  * A sound source that is backed by a single buffer.
@@ -29,18 +27,17 @@ import de.pottgames.tuningfork.logger.TuningForkLogger;
  *
  */
 public class BufferedSoundSource extends SongSource {
-    private SoundBuffer            buffer;
-    private final TuningForkLogger logger;
-    private final ErrorLogger      errorLogger;
-    boolean                        obtained = false;
 
+    private SoundBuffer buffer;
+    private final TuningForkLogger logger;
+    private final ErrorLogger errorLogger;
+    boolean obtained = false;
 
     BufferedSoundSource() {
         final Audio audio = Audio.get();
         logger = audio.getLogger();
         errorLogger = new ErrorLogger(this.getClass(), logger);
     }
-
 
     @Override
     public void setVolume(float volume) {
@@ -49,7 +46,6 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void setPitch(float pitch) {
         if (obtained) {
@@ -57,14 +53,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void play() {
         if (obtained) {
             super.play();
         }
     }
-
 
     /**
      * Plays the sound at the specified time. Negative values for time will result in an error log entry but do nothing else. Positive values that point to the
@@ -84,14 +78,16 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     void setBuffer(SoundBuffer buffer) {
         if (obtained) {
             this.buffer = buffer;
-            AL10.alSourcei(sourceId, AL10.AL_BUFFER, buffer != null ? buffer.getBufferId() : 0);
+            AL10.alSourcei(
+                sourceId,
+                AL10.AL_BUFFER,
+                buffer != null ? buffer.getBufferId() : 0
+            );
         }
     }
-
 
     @Override
     public void setRelative(boolean relative) {
@@ -100,14 +96,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void setPosition(float x, float y, float z) {
         if (obtained) {
             super.setPosition(x, y, z);
         }
     }
-
 
     @Override
     public void enableAttenuation() {
@@ -116,14 +110,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void disableAttenuation() {
         if (obtained) {
             super.disableAttenuation();
         }
     }
-
 
     @Override
     public void setAttenuationFactor(float rolloff) {
@@ -132,14 +124,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void setAttenuationMinDistance(float minDistance) {
         if (obtained) {
             super.setAttenuationMinDistance(minDistance);
         }
     }
-
 
     @Override
     public void setAttenuationMaxDistance(float maxDistance) {
@@ -148,14 +138,22 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
-    public void makeDirectional(Vector3 direction, float coneInnerAngle, float coneOuterAngle, float outOfConeVolume) {
+    public void makeDirectional(
+        Vector3 direction,
+        float coneInnerAngle,
+        float coneOuterAngle,
+        float outOfConeVolume
+    ) {
         if (obtained) {
-            super.makeDirectional(direction, coneInnerAngle, coneOuterAngle, outOfConeVolume);
+            super.makeDirectional(
+                direction,
+                coneInnerAngle,
+                coneOuterAngle,
+                outOfConeVolume
+            );
         }
     }
-
 
     @Override
     public void setDirection(Vector3 direction) {
@@ -164,14 +162,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void makeOmniDirectional() {
         if (obtained) {
             super.makeOmniDirectional();
         }
     }
-
 
     @Override
     public void setSpeed(float x, float y, float z) {
@@ -180,14 +176,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void setLooping(boolean looping) {
         if (obtained) {
             super.setLooping(looping);
         }
     }
-
 
     @Override
     public void pause() {
@@ -196,14 +190,12 @@ public class BufferedSoundSource extends SongSource {
         }
     }
 
-
     @Override
     public void stop() {
         if (obtained) {
             super.stop();
         }
     }
-
 
     /**
      * Returns the duration of the attached sound in seconds.
@@ -216,7 +208,6 @@ public class BufferedSoundSource extends SongSource {
         return buffer != null ? buffer.getDuration() : -1f;
     }
 
-
     /**
      * Sets the playback position of this sound source. Invalid values are ignored but an error is logged.
      *
@@ -226,7 +217,6 @@ public class BufferedSoundSource extends SongSource {
         AL10.alSourcef(sourceId, AL11.AL_SEC_OFFSET, seconds);
         errorLogger.checkLogError("Failed to set playback position");
     }
-
 
     /**
      * Returns the current playback position in seconds.
@@ -238,7 +228,6 @@ public class BufferedSoundSource extends SongSource {
         return AL10.alGetSourcef(sourceId, AL11.AL_SEC_OFFSET);
     }
 
-
     @Override
     public SoundEffect attachEffect(SoundEffect effect) {
         if (obtained) {
@@ -247,7 +236,6 @@ public class BufferedSoundSource extends SongSource {
 
         return null;
     }
-
 
     @Override
     public boolean detachEffect(SoundEffect effect) {
@@ -258,14 +246,12 @@ public class BufferedSoundSource extends SongSource {
         return false;
     }
 
-
     @Override
     public void detachAllEffects() {
         if (obtained) {
             super.detachAllEffects();
         }
     }
-
 
     /**
      * Returns the SoundBuffer that this source is currently using.
@@ -275,7 +261,6 @@ public class BufferedSoundSource extends SongSource {
     public SoundBuffer getBuffer() {
         return buffer;
     }
-
 
     void reset(AudioSettings defaultSettings) {
         obtained = true;
@@ -299,18 +284,18 @@ public class BufferedSoundSource extends SongSource {
         obtained = false;
     }
 
-
     /**
      * Releases this sound source which makes it available again. Always call this after you're done using it.
      */
     public void free() {
         if (!obtained) {
-            throw new TuningForkRuntimeException("Invalid call to BufferedSoundSource.free(), you are not the owner of this sound source.");
+            throw new TuningForkRuntimeException(
+                "Invalid call to BufferedSoundSource.free(), you are not the owner of this sound source."
+            );
         }
         stop();
         setBuffer(null);
         detachAllEffects();
         obtained = false;
     }
-
 }

@@ -12,12 +12,17 @@
 
 package de.pottgames.tuningfork;
 
-import java.nio.ByteBuffer;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.ObjectMap;
+import de.pottgames.tuningfork.logger.ErrorLogger;
+import de.pottgames.tuningfork.logger.TuningForkLogger;
+import de.pottgames.tuningfork.router.AudioDeviceRerouter;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.util.List;
 import java.util.Objects;
-
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
@@ -28,6 +33,7 @@ import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTDeviceClock;
+import org.lwjgl.openal.SOFTEventProcI;
 import org.lwjgl.openal.SOFTEvents;
 import org.lwjgl.openal.SOFTHRTF;
 import org.lwjgl.openal.SOFTOutputLimiter;
@@ -38,34 +44,26 @@ import org.lwjgl.openal.SOFTXHoldOnDisconnect;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.ObjectMap;
-
-import de.pottgames.tuningfork.logger.ErrorLogger;
-import de.pottgames.tuningfork.logger.TuningForkLogger;
-import de.pottgames.tuningfork.router.AudioDeviceRerouter;
-
 /**
  * A class that gives access to some audio hardware device specific settings. Allows to query and change hardware specific settings.
  *
  * @author Matthias
  */
 public class AudioDevice {
-    private final long                            deviceHandle;
-    private final long                            context;
-    private final TuningForkLogger                logger;
-    private final ErrorLogger                     errorLogger;
-    private boolean                               hrtfEnabled           = false;
-    private final AudioDeviceConfig               config;
-    private final ObjectMap<ALExtension, Boolean> extensionAvailableMap = new ObjectMap<>();
-    private final Array<String>                   resamplers            = new Array<>();
-    private final int                             effectSlots;
-    private AudioDeviceRerouter                   deviceRerouter;
-    private ContextAttributes                     contextAttributes;
-    private final long[]                          clockLatencyCache     = new long[2];
 
+    private final long deviceHandle;
+    private final long context;
+    private final TuningForkLogger logger;
+    private final ErrorLogger errorLogger;
+    private boolean hrtfEnabled = false;
+    private final AudioDeviceConfig config;
+    private final ObjectMap<ALExtension, Boolean> extensionAvailableMap =
+        new ObjectMap<>();
+    private final Array<String> resamplers = new Array<>();
+    private final int effectSlots;
+    private AudioDeviceRerouter deviceRerouter;
+    private ContextAttributes contextAttributes;
+    private final long[] clockLatencyCache = new long[2];
 
     /**
      * Returns a list of identifiers of available sound devices. You can use an identifier in {@link AudioDeviceConfig#setDeviceSpecifier(String)} to request a
@@ -74,11 +72,14 @@ public class AudioDevice {
      * @return the list
      */
     public static List<String> availableDevices() {
-        return ALUtil.getStringList(MemoryUtil.NULL, EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER);
+        return ALUtil.getStringList(
+            MemoryUtil.NULL,
+            EnumerateAllExt.ALC_ALL_DEVICES_SPECIFIER
+        );
     }
 
-
-    protected AudioDevice(AudioDeviceConfig config, TuningForkLogger logger) throws OpenDeviceException, UnsupportedAudioDeviceException {
+    protected AudioDevice(AudioDeviceConfig config, TuningForkLogger logger)
+        throws OpenDeviceException, UnsupportedAudioDeviceException {
         this.config = config;
         this.logger = logger;
         errorLogger = new ErrorLogger(this.getClass(), logger);
@@ -90,9 +91,12 @@ public class AudioDevice {
         // CHECK IF THE SPECIFIED DEVICE IS AVAILABLE
         final String deviceSpecifier = config.getDeviceSpecifier();
         if (deviceSpecifier != null) {
-            final List<String> availableDevices = AudioDevice.availableDevices();
+            final List<String> availableDevices =
+                AudioDevice.availableDevices();
             if (!availableDevices.contains(deviceSpecifier)) {
-                throw new UnsupportedAudioDeviceException("Unable to find audio device: " + deviceSpecifier);
+                throw new UnsupportedAudioDeviceException(
+                    "Unable to find audio device: " + deviceSpecifier
+                );
             }
         }
         String deviceName = deviceSpecifier;
@@ -103,7 +107,9 @@ public class AudioDevice {
         // OPEN THE SOUND DEVICE
         deviceHandle = ALC10.alcOpenDevice(deviceSpecifier);
         if (deviceHandle == 0L) {
-            throw new OpenDeviceException("Failed to open the " + deviceName + " OpenAL device.");
+            throw new OpenDeviceException(
+                "Failed to open the " + deviceName + " OpenAL device."
+            );
         }
 
         // CREATE A CONTEXT AND SET IT ACTIVE
@@ -111,12 +117,19 @@ public class AudioDevice {
         attributes[0] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
         attributes[1] = config.getEffectSlots();
         attributes[2] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
-        attributes[3] = config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+        attributes[3] = config.isEnableOutputLimiter()
+            ? ALC10.ALC_TRUE
+            : ALC10.ALC_FALSE;
         attributes[4] = SOFTOutputMode.ALC_OUTPUT_MODE_SOFT;
         attributes[5] = config.outputMode.getAlId();
         contextAttributes = new ContextAttributes(attributes);
-        final ALCCapabilities deviceCapabilities = ALC.createCapabilities(deviceHandle);
-        context = ALC10.alcCreateContext(deviceHandle, contextAttributes.getBuffer());
+        final ALCCapabilities deviceCapabilities = ALC.createCapabilities(
+            deviceHandle
+        );
+        context = ALC10.alcCreateContext(
+            deviceHandle,
+            contextAttributes.getBuffer()
+        );
         if (context == 0L) {
             throw new IllegalStateException("Failed to create OpenAL context.");
         }
@@ -150,125 +163,236 @@ public class AudioDevice {
             final int[] outputLimiterEnabled = new int[1];
             outputLimiterEnabled[0] = ALC10.ALC_FALSE;
             if (isExtensionAvailable(ALExtension.ALC_SOFT_OUTPUT_LIMITER)) {
-                ALC10.alcGetIntegerv(deviceHandle, SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT, outputLimiterEnabled);
+                ALC10.alcGetIntegerv(
+                    deviceHandle,
+                    SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT,
+                    outputLimiterEnabled
+                );
             }
-            logger.debug(this.getClass(), "Output limiter: " + (outputLimiterEnabled[0] == ALC10.ALC_TRUE ? "enabled" : "disabled"));
+            logger.debug(
+                this.getClass(),
+                "Output limiter: " +
+                    (outputLimiterEnabled[0] == ALC10.ALC_TRUE
+                        ? "enabled"
+                        : "disabled")
+            );
         }
 
         // CHECK AND LOG HRTF SETTINGS
         if (isExtensionAvailable(ALExtension.ALC_SOFT_HRTF)) {
-            final int hrtfSoftStatus = ALC10.alcGetInteger(deviceHandle, SOFTHRTF.ALC_HRTF_STATUS_SOFT);
+            final int hrtfSoftStatus = ALC10.alcGetInteger(
+                deviceHandle,
+                SOFTHRTF.ALC_HRTF_STATUS_SOFT
+            );
             switch (hrtfSoftStatus) {
                 case SOFTHRTF.ALC_HRTF_DISABLED_SOFT:
                     hrtfEnabled = false;
-                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_DISABLED_SOFT");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is: ALC_HRTF_DISABLED_SOFT"
+                    );
                     break;
                 case SOFTHRTF.ALC_HRTF_ENABLED_SOFT:
                     hrtfEnabled = true;
-                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_ENABLED_SOFT");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is: ALC_HRTF_ENABLED_SOFT"
+                    );
                     break;
                 case SOFTHRTF.ALC_HRTF_DENIED_SOFT:
                     hrtfEnabled = false;
-                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_DENIED_SOFT");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is: ALC_HRTF_DENIED_SOFT"
+                    );
                     break;
                 case SOFTHRTF.ALC_HRTF_REQUIRED_SOFT:
                     hrtfEnabled = true;
-                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_REQUIRED_SOFT");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is: ALC_HRTF_REQUIRED_SOFT"
+                    );
                     break;
                 case SOFTHRTF.ALC_HRTF_HEADPHONES_DETECTED_SOFT:
                     hrtfEnabled = true;
-                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_HEADPHONES_DETECTED_SOFT");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is: ALC_HRTF_HEADPHONES_DETECTED_SOFT"
+                    );
                     break;
                 case SOFTHRTF.ALC_HRTF_UNSUPPORTED_FORMAT_SOFT:
                     hrtfEnabled = false;
-                    logger.debug(this.getClass(), "HRTF status is: ALC_HRTF_UNSUPPORTED_FORMAT_SOFT");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is: ALC_HRTF_UNSUPPORTED_FORMAT_SOFT"
+                    );
                     break;
                 default:
                     hrtfEnabled = false;
-                    logger.debug(this.getClass(), "HRTF status is unknown: " + hrtfSoftStatus + " - TuningFork will report it as disabled.");
+                    logger.debug(
+                        this.getClass(),
+                        "HRTF status is unknown: " +
+                            hrtfSoftStatus +
+                            " - TuningFork will report it as disabled."
+                    );
                     break;
             }
         }
 
         // CHECK AVAILABLE AUXILIARY SENDS
         final IntBuffer auxSends = BufferUtils.newIntBuffer(1);
-        ALC10.alcGetIntegerv(deviceHandle, EXTEfx.ALC_MAX_AUXILIARY_SENDS, auxSends);
+        ALC10.alcGetIntegerv(
+            deviceHandle,
+            EXTEfx.ALC_MAX_AUXILIARY_SENDS,
+            auxSends
+        );
         effectSlots = auxSends.get(0);
-        logger.debug(this.getClass(), "Available auxiliary sends: " + effectSlots);
+        logger.debug(
+            this.getClass(),
+            "Available auxiliary sends: " + effectSlots
+        );
         if (effectSlots != config.getEffectSlots()) {
-            logger.error(this.getClass(), "The audio device rejected the requested number of effect slots (" + config.getEffectSlots() + ").");
+            logger.error(
+                this.getClass(),
+                "The audio device rejected the requested number of effect slots (" +
+                    config.getEffectSlots() +
+                    ")."
+            );
         }
 
         // FINAL SETUP
         getAvailableResamplers();
         setDeviceRerouter(config.getRerouter());
-        AL10.alDisable(SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
-        SOFTEvents.alEventControlSOFT(new int[] { SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT }, true);
-        SOFTEvents.alEventCallbackSOFT((eventType, object, param, length, message, userParam) -> {
-            final AlEvent event = new AlEvent(eventType, object, param, length, message, userParam);
+        AL10.alDisable(
+            SOFTXHoldOnDisconnect.AL_STOP_SOURCES_ON_DISCONNECT_SOFT
+        );
+        SOFTEvents.alEventControlSOFT(
+            new int[] { SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT },
+            true
+        );
+        SOFTEventProcI eventCallback = (
+            eventType,
+            object,
+            param,
+            length,
+            message,
+            userParam
+        ) -> {
+            final AlEvent event = new AlEvent(
+                eventType,
+                object,
+                param,
+                length,
+                message,
+                userParam
+            );
             AudioDevice.this.onAlEvent(event);
-        }, (ByteBuffer) null);
+        };
+        SOFTEvents.nalEventCallbackSOFT(eventCallback.address(), 0L);
 
         // LOG ERRORS
-        errorLogger.checkLogAlcError(deviceHandle, "There was at least one ALC error upon audio device initialization");
-        errorLogger.checkLogError("There was at least one AL error upon audio device initialization");
+        errorLogger.checkLogAlcError(
+            deviceHandle,
+            "There was at least one ALC error upon audio device initialization"
+        );
+        errorLogger.checkLogError(
+            "There was at least one AL error upon audio device initialization"
+        );
     }
 
-
-    private void checkAL11Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities) throws OpenDeviceException {
+    private void checkAL11Support(
+        TuningForkLogger logger,
+        String deviceName,
+        final ALCCapabilities deviceCapabilities
+    ) throws OpenDeviceException {
         if (!deviceCapabilities.OpenALC11) {
             try {
                 dispose(false);
             } catch (final Exception e) {
-                logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt " + "to close the device failed.");
+                logger.error(
+                    this.getClass(),
+                    "The device was opened successfully, but didn't support a required feature. The attempt " +
+                        "to close the device failed."
+                );
             }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.1 API which is a requirement of TuningFork.");
+            throw new OpenDeviceException(
+                "The audio device " +
+                    deviceName +
+                    " doesn't support the OpenAL 1.1 API which is a requirement of TuningFork."
+            );
         }
         logger.trace(this.getClass(), "OpenAL 1.1 supported.");
     }
 
-
-    private void checkAL10Support(TuningForkLogger logger, String deviceName, final ALCCapabilities deviceCapabilities) throws OpenDeviceException {
+    private void checkAL10Support(
+        TuningForkLogger logger,
+        String deviceName,
+        final ALCCapabilities deviceCapabilities
+    ) throws OpenDeviceException {
         if (!deviceCapabilities.OpenALC10) {
             try {
                 dispose(false);
             } catch (final Exception e) {
-                logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support a required feature. The attempt " + "to close the device failed.");
+                logger.error(
+                    this.getClass(),
+                    "The device was opened successfully, but didn't support a required feature. The attempt " +
+                        "to close the device failed."
+                );
             }
-            throw new OpenDeviceException("The audio device " + deviceName + " doesn't support the OpenAL 1.0 API which is a requirement of TuningFork.");
+            throw new OpenDeviceException(
+                "The audio device " +
+                    deviceName +
+                    " doesn't support the OpenAL 1.0 API which is a requirement of TuningFork."
+            );
         }
         logger.trace(this.getClass(), "OpenAL 1.0 supported.");
     }
 
-
-    private void checkRequiredExtension(ALExtension extension) throws OpenDeviceException {
+    private void checkRequiredExtension(ALExtension extension)
+        throws OpenDeviceException {
         final Boolean checkResult = extensionAvailableMap.get(extension);
         if (checkResult == null || !checkResult) {
             try {
                 dispose(false);
             } catch (final Exception e) {
-                logger.error(this.getClass(),
-                        "The device was opened successfully, but didn't support " + extension.getAlSpecifier() + ". The attempt to close the device failed.");
+                logger.error(
+                    this.getClass(),
+                    "The device was opened successfully, but didn't support " +
+                        extension.getAlSpecifier() +
+                        ". The attempt to close the device failed."
+                );
             }
-            throw new OpenDeviceException("The audio device doesn't support " + extension.getAlSpecifier() + " which is a requirement of TuningFork.");
+            throw new OpenDeviceException(
+                "The audio device doesn't support " +
+                    extension.getAlSpecifier() +
+                    " which is a requirement of TuningFork."
+            );
         }
 
-        logger.trace(this.getClass(), "Extension available: " + extension.getAlSpecifier());
+        logger.trace(
+            this.getClass(),
+            "Extension available: " + extension.getAlSpecifier()
+        );
     }
-
 
     private void checkAvailableExtensions() {
         for (final ALExtension extension : ALExtension.values()) {
             if (extension.isAlc()) {
-                extensionAvailableMap.put(extension, ALC10.alcIsExtensionPresent(deviceHandle, extension.getAlSpecifier()));
+                extensionAvailableMap.put(
+                    extension,
+                    ALC10.alcIsExtensionPresent(
+                        deviceHandle,
+                        extension.getAlSpecifier()
+                    )
+                );
             } else {
-                extensionAvailableMap.put(extension, AL10.alIsExtensionPresent(extension.getAlSpecifier()));
+                extensionAvailableMap.put(
+                    extension,
+                    AL10.alIsExtensionPresent(extension.getAlSpecifier())
+                );
             }
         }
     }
-
 
     protected boolean isExtensionAvailable(ALExtension extension) {
         final Boolean result = extensionAvailableMap.get(extension);
@@ -277,7 +401,6 @@ public class AudioDevice {
         }
         return result;
     }
-
 
     /**
      * Returns whether the audio output device is still connected. While most people are using either PCI audio cards or a chip welded to their motherboard,
@@ -292,7 +415,11 @@ public class AudioDevice {
         if (isExtensionAvailable(ALExtension.ALC_EXT_DISCONNECT)) {
             try (MemoryStack stack = MemoryStack.stackPush()) {
                 final IntBuffer resultBuffer = stack.mallocInt(1);
-                ALC10.alcGetIntegerv(deviceHandle, EXTDisconnect.ALC_CONNECTED, resultBuffer);
+                ALC10.alcGetIntegerv(
+                    deviceHandle,
+                    EXTDisconnect.ALC_CONNECTED,
+                    resultBuffer
+                );
                 return resultBuffer.get(0) == ALC10.ALC_TRUE;
             }
         }
@@ -300,7 +427,6 @@ public class AudioDevice {
         // If the extension is not available, always report true
         return true;
     }
-
 
     /**
      * Switches to another audio device.
@@ -310,13 +436,16 @@ public class AudioDevice {
      * @return true if successful
      */
     public boolean switchToDevice(String deviceSpecifier) {
-        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(deviceHandle, deviceSpecifier, contextAttributes.getBuffer());
+        final boolean success = SOFTReopenDevice.alcReopenDeviceSOFT(
+            deviceHandle,
+            deviceSpecifier,
+            contextAttributes.getBuffer()
+        );
         if (success && deviceRerouter != null) {
             deviceRerouter.updateDesiredDevice(deviceSpecifier);
         }
         return success;
     }
-
 
     /**
      * Sets the device rerouter, calls {@link AudioDeviceRerouter#setup(long, String, ContextAttributes) setup} and {@link AudioDeviceRerouter#start() start} on
@@ -330,11 +459,14 @@ public class AudioDevice {
         }
         deviceRerouter = rerouter;
         if (rerouter != null) {
-            rerouter.setup(deviceHandle, config.deviceSpecifier, contextAttributes);
+            rerouter.setup(
+                deviceHandle,
+                config.deviceSpecifier,
+                contextAttributes
+            );
             rerouter.start();
         }
     }
-
 
     /**
      * Returns the currently active {@link AudioDeviceRerouter}.
@@ -345,17 +477,18 @@ public class AudioDevice {
         return deviceRerouter;
     }
 
-
     /**
      * Returns the output mode of the device. It includes the channel configuration of the physical (if not virtual) sound hardware this device is connected to.
      *
      * @return the output mode
      */
     public OutputMode getOutputMode() {
-        final int alId = ALC10.alcGetInteger(deviceHandle, SOFTOutputMode.ALC_OUTPUT_MODE_SOFT);
+        final int alId = ALC10.alcGetInteger(
+            deviceHandle,
+            SOFTOutputMode.ALC_OUTPUT_MODE_SOFT
+        );
         return OutputMode.getByAlId(alId);
     }
-
 
     /**
      * Returns true if HRTF is supported by this device. This does not necessarily mean that a hrtf profile is available, call {@link #getAvailableHrtfs()} to
@@ -367,7 +500,6 @@ public class AudioDevice {
         return isExtensionAvailable(ALExtension.ALC_SOFT_HRTF);
     }
 
-
     /**
      * Returns true if HRTF is enabled.
      *
@@ -376,7 +508,6 @@ public class AudioDevice {
     public boolean isHrtfEnabled() {
         return hrtfEnabled;
     }
-
 
     /**
      * Returns a list of available hrtf configurations of this device.
@@ -387,16 +518,24 @@ public class AudioDevice {
         final Array<String> hrtfs = new Array<>();
 
         if (isHrtfSupported()) {
-            final int num_hrtf = ALC10.alcGetInteger(deviceHandle, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
+            final int num_hrtf = ALC10.alcGetInteger(
+                deviceHandle,
+                SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT
+            );
             for (int i = 0; i < num_hrtf; i++) {
-                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
+                final String name = Objects.requireNonNull(
+                    SOFTHRTF.alcGetStringiSOFT(
+                        deviceHandle,
+                        SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT,
+                        i
+                    )
+                );
                 hrtfs.add(name);
             }
         }
 
         return hrtfs;
     }
-
 
     /**
      * Enables hrtf on this device.
@@ -407,12 +546,21 @@ public class AudioDevice {
      */
     public boolean enableHrtf(String specifier) {
         if (isHrtfSupported()) {
-            final int num_hrtf = ALC10.alcGetInteger(deviceHandle, SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT);
+            final int num_hrtf = ALC10.alcGetInteger(
+                deviceHandle,
+                SOFTHRTF.ALC_NUM_HRTF_SPECIFIERS_SOFT
+            );
 
             // FIND HRTF INDEX BY SPECIFIER
             int hrtfIndex = -1;
             for (int i = 0; i < num_hrtf; i++) {
-                final String name = Objects.requireNonNull(SOFTHRTF.alcGetStringiSOFT(deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT, i));
+                final String name = Objects.requireNonNull(
+                    SOFTHRTF.alcGetStringiSOFT(
+                        deviceHandle,
+                        SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT,
+                        i
+                    )
+                );
                 if (name.equals(specifier)) {
                     hrtfIndex = i;
                     break;
@@ -430,14 +578,28 @@ public class AudioDevice {
                 attributes[4] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
                 attributes[5] = config.getEffectSlots();
                 attributes[6] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
-                attributes[7] = config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+                attributes[7] = config.isEnableOutputLimiter()
+                    ? ALC10.ALC_TRUE
+                    : ALC10.ALC_FALSE;
                 attributes[8] = SOFTOutputMode.ALC_OUTPUT_MODE_SOFT;
                 attributes[9] = config.getOutputMode().getAlId();
                 contextAttributes = new ContextAttributes(attributes);
 
                 // RESET DEVICE
-                if (!SOFTHRTF.alcResetDeviceSOFT(deviceHandle, contextAttributes.getBuffer())) {
-                    logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(deviceHandle, ALC10.alcGetError(deviceHandle)));
+                if (
+                    !SOFTHRTF.alcResetDeviceSOFT(
+                        deviceHandle,
+                        contextAttributes.getBuffer()
+                    )
+                ) {
+                    logger.error(
+                        this.getClass(),
+                        "Failed to reset device: " +
+                            ALC10.alcGetString(
+                                deviceHandle,
+                                ALC10.alcGetError(deviceHandle)
+                            )
+                    );
                     hrtfEnabled = false;
                     contextAttributes = oldAttributes;
                     return false;
@@ -449,10 +611,19 @@ public class AudioDevice {
                 }
 
                 // CHECK CURRENT HRTF STATE
-                final int hrtfState = ALC10.alcGetInteger(deviceHandle, SOFTHRTF.ALC_HRTF_SOFT);
+                final int hrtfState = ALC10.alcGetInteger(
+                    deviceHandle,
+                    SOFTHRTF.ALC_HRTF_SOFT
+                );
                 if (hrtfState != 0) {
-                    final String name = ALC10.alcGetString(deviceHandle, SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT);
-                    logger.info(this.getClass(), "Using HRTF configuration: " + name);
+                    final String name = ALC10.alcGetString(
+                        deviceHandle,
+                        SOFTHRTF.ALC_HRTF_SPECIFIER_SOFT
+                    );
+                    logger.info(
+                        this.getClass(),
+                        "Using HRTF configuration: " + name
+                    );
                     hrtfEnabled = true;
                     return true;
                 }
@@ -464,13 +635,15 @@ public class AudioDevice {
         return false;
     }
 
-
     /**
      * Disables hrtf on this device.
      */
     public void disableHrtf() {
         if (!isHrtfSupported()) {
-            logger.warn(this.getClass(), "HRTF is not supported by this device and was never enabled.");
+            logger.warn(
+                this.getClass(),
+                "HRTF is not supported by this device and was never enabled."
+            );
             return;
         }
 
@@ -483,15 +656,29 @@ public class AudioDevice {
             attributes[2] = EXTEfx.ALC_MAX_AUXILIARY_SENDS;
             attributes[3] = config.getEffectSlots();
             attributes[4] = SOFTOutputLimiter.ALC_OUTPUT_LIMITER_SOFT;
-            attributes[5] = config.isEnableOutputLimiter() ? ALC10.ALC_TRUE : ALC10.ALC_FALSE;
+            attributes[5] = config.isEnableOutputLimiter()
+                ? ALC10.ALC_TRUE
+                : ALC10.ALC_FALSE;
             attributes[6] = SOFTOutputMode.ALC_OUTPUT_MODE_SOFT;
             attributes[7] = config.getOutputMode().getAlId();
             contextAttributes = new ContextAttributes(attributes);
 
             // RESET DEVICE
-            if (!SOFTHRTF.alcResetDeviceSOFT(deviceHandle, contextAttributes.getBuffer())) {
+            if (
+                !SOFTHRTF.alcResetDeviceSOFT(
+                    deviceHandle,
+                    contextAttributes.getBuffer()
+                )
+            ) {
                 contextAttributes = oldAttributes;
-                logger.error(this.getClass(), "Failed to reset device: " + ALC10.alcGetString(deviceHandle, ALC10.alcGetError(deviceHandle)));
+                logger.error(
+                    this.getClass(),
+                    "Failed to reset device: " +
+                        ALC10.alcGetString(
+                            deviceHandle,
+                            ALC10.alcGetError(deviceHandle)
+                        )
+                );
                 return;
             }
             hrtfEnabled = false;
@@ -501,7 +688,6 @@ public class AudioDevice {
             }
         }
     }
-
 
     /**
      * Returns a list of available resamplers for this device. The list is ordered by performance impact. That is, indices closer to 0 are of lower impact, and
@@ -516,15 +702,19 @@ public class AudioDevice {
     public Array<String> getAvailableResamplers() {
         resamplers.clear();
 
-        final int numberOfResamplers = AL10.alGetInteger(SOFTSourceResampler.AL_NUM_RESAMPLERS_SOFT);
+        final int numberOfResamplers = AL10.alGetInteger(
+            SOFTSourceResampler.AL_NUM_RESAMPLERS_SOFT
+        );
         for (int index = 0; index < numberOfResamplers; index++) {
-            final String resamplerName = SOFTSourceResampler.alGetStringiSOFT(SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT, index);
+            final String resamplerName = SOFTSourceResampler.alGetStringiSOFT(
+                SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT,
+                index
+            );
             resamplers.add(resamplerName);
         }
 
         return new Array<>(resamplers);
     }
-
 
     /**
      * Returns the number of available effect slots. If you want to change the number, see {@link AudioDeviceConfig#setEffectSlots(int)}.
@@ -534,7 +724,6 @@ public class AudioDevice {
     public int getNumberOfEffectSlots() {
         return effectSlots;
     }
-
 
     /**
      * Returns the index of the first occurrence of the value in the array, or -1 if no such value exists.
@@ -547,16 +736,16 @@ public class AudioDevice {
         return resamplers.indexOf(name, false);
     }
 
-
     String getResamplerNameByIndex(int index) {
-        return SOFTSourceResampler.alGetStringiSOFT(SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT, index);
+        return SOFTSourceResampler.alGetStringiSOFT(
+            SOFTSourceResampler.AL_RESAMPLER_NAME_SOFT,
+            index
+        );
     }
-
 
     protected int getDefaultResamplerIndex() {
         return AL10.alGetInteger(SOFTSourceResampler.AL_DEFAULT_RESAMPLER_SOFT);
     }
-
 
     /**
      * Returns the name of the default resampler currently in use.
@@ -567,7 +756,6 @@ public class AudioDevice {
         return getResamplerNameByIndex(getDefaultResamplerIndex());
     }
 
-
     /**
      * Returns the clock time in nanoseconds as seen by the audio device, which may be slightly different than the system clock's tick rate (the infamous timer
      * drift).
@@ -576,9 +764,11 @@ public class AudioDevice {
      */
     public long getClockTime() {
         // no error check here because this should be as fast as possible
-        return SOFTDeviceClock.alcGetInteger64vSOFT(deviceHandle, SOFTDeviceClock.ALC_DEVICE_CLOCK_SOFT);
+        return SOFTDeviceClock.alcGetInteger64vSOFT(
+            deviceHandle,
+            SOFTDeviceClock.ALC_DEVICE_CLOCK_SOFT
+        );
     }
-
 
     /**
      * Returns the current audio device latency in nanoseconds. This is effectively the delay for the samples rendered at the the device's current clock time
@@ -587,11 +777,16 @@ public class AudioDevice {
      * @return latency in nanoseconds
      */
     public long getLatency() {
-        final long result = SOFTDeviceClock.alcGetInteger64vSOFT(deviceHandle, SOFTDeviceClock.ALC_DEVICE_LATENCY_SOFT);
-        errorLogger.checkLogAlcError(deviceHandle, "Error while fetching alc device latency");
+        final long result = SOFTDeviceClock.alcGetInteger64vSOFT(
+            deviceHandle,
+            SOFTDeviceClock.ALC_DEVICE_LATENCY_SOFT
+        );
+        errorLogger.checkLogAlcError(
+            deviceHandle,
+            "Error while fetching alc device latency"
+        );
         return result;
     }
-
 
     /**
      * This method fetches the audio device clock time and latency at the same time, avoiding the imprecision by calling both functions separately.<br>
@@ -603,7 +798,11 @@ public class AudioDevice {
     public long[] getClockTimeAndLatency() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final LongBuffer buffer = stack.mallocLong(2);
-            SOFTDeviceClock.alcGetInteger64vSOFT(deviceHandle, SOFTDeviceClock.ALC_DEVICE_CLOCK_LATENCY_SOFT, buffer);
+            SOFTDeviceClock.alcGetInteger64vSOFT(
+                deviceHandle,
+                SOFTDeviceClock.ALC_DEVICE_CLOCK_LATENCY_SOFT,
+                buffer
+            );
             clockLatencyCache[0] = buffer.get(0);
             clockLatencyCache[1] = buffer.get(1);
         }
@@ -611,25 +810,24 @@ public class AudioDevice {
         return clockLatencyCache;
     }
 
-
     /**
      * This method is invoked from OpenAL on an arbitrary thread when an event occurs for which TuningFork has registered.
      *
      * @param event the OpenAL event
      */
     protected void onAlEvent(AlEvent event) {
-        if (event.getEventType() == SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT) {
+        if (
+            event.getEventType() == SOFTEvents.AL_EVENT_TYPE_DISCONNECTED_SOFT
+        ) {
             Gdx.app.postRunnable(this::onDisconnect);
         }
     }
-
 
     protected void onDisconnect() {
         if (deviceRerouter != null) {
             deviceRerouter.onDisconnect();
         }
     }
-
 
     protected void dispose(boolean log) {
         if (deviceRerouter != null) {
@@ -639,8 +837,10 @@ public class AudioDevice {
             ALC10.alcDestroyContext(context);
         }
         if (deviceHandle != 0L && !ALC10.alcCloseDevice(deviceHandle) && log) {
-            logger.error(this.getClass(), "The audio device did not close properly.");
+            logger.error(
+                this.getClass(),
+                "The audio device did not close properly."
+            );
         }
     }
-
 }

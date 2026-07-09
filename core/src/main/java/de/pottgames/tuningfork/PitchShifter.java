@@ -12,11 +12,9 @@
 
 package de.pottgames.tuningfork;
 
-import java.util.Objects;
-
-import org.lwjgl.openal.EXTEfx;
-
 import com.badlogic.gdx.math.MathUtils;
+import java.util.Objects;
+import org.lwjgl.openal.EXTEfx;
 
 /**
  * The pitch shifter applies time-invariant pitch shifting to the input signal, over a one octave range and controllable at a semi-tone and cent resolution.
@@ -24,6 +22,7 @@ import com.badlogic.gdx.math.MathUtils;
  * @author Matthias
  */
 public class PitchShifter extends SoundEffectData {
+
     /**
      * Range: -12 - 12, Default: 12<br>
      * This sets the number of semitones by which the pitch is shifted. There are 12 semitones per octave. Negative values create a downwards shift in pitch,
@@ -38,20 +37,17 @@ public class PitchShifter extends SoundEffectData {
      */
     public int fineTune = 0;
 
-
     public static PitchShifter chipmunk() {
         final PitchShifter result = new PitchShifter();
         result.coarseTune = 8;
         return result;
     }
 
-
     public static PitchShifter demon() {
         final PitchShifter result = new PitchShifter();
         result.coarseTune = -9;
         return result;
     }
-
 
     public static PitchShifter maxPitch() {
         final PitchShifter result = new PitchShifter();
@@ -60,14 +56,12 @@ public class PitchShifter extends SoundEffectData {
         return result;
     }
 
-
     public static PitchShifter minPitch() {
         final PitchShifter result = new PitchShifter();
         result.coarseTune = -12;
         result.fineTune = -50;
         return result;
     }
-
 
     /**
      * Sets {@link PitchShifter#coarseTune coarseTune} and {@link PitchShifter#fineTune fineTune} to values that try to correct a pitch applied to a
@@ -84,7 +78,8 @@ public class PitchShifter extends SoundEffectData {
     public PitchShifter correctPitch(float pitch) {
         pitch = MathUtils.clamp(pitch, 0.5f, 2f);
 
-        final float semitones = (float) (12d / Math.log(2d) * Math.log(1d / pitch));
+        final float semitones = (float) ((12d / Math.log(2d)) *
+            Math.log(1d / pitch));
         coarseTune = Math.round(semitones);
         final float rest = semitones - coarseTune;
         fineTune = Math.round(rest * 100f);
@@ -92,20 +87,25 @@ public class PitchShifter extends SoundEffectData {
         return this;
     }
 
-
     @Override
     protected void apply(int effectId) {
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_PITCH_SHIFTER);
-        EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_COARSE_TUNE, coarseTune);
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_EFFECT_TYPE,
+            EXTEfx.AL_EFFECT_PITCH_SHIFTER
+        );
+        EXTEfx.alEffecti(
+            effectId,
+            EXTEfx.AL_PITCH_SHIFTER_COARSE_TUNE,
+            coarseTune
+        );
         EXTEfx.alEffecti(effectId, EXTEfx.AL_PITCH_SHIFTER_FINE_TUNE, fineTune);
     }
-
 
     @Override
     public int hashCode() {
         return Objects.hash(coarseTune, fineTune);
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -122,10 +122,14 @@ public class PitchShifter extends SoundEffectData {
         return coarseTune == other.coarseTune && fineTune == other.fineTune;
     }
 
-
     @Override
     public String toString() {
-        return "PitchShifter [coarseTune=" + coarseTune + ", fineTune=" + fineTune + "]";
+        return (
+            "PitchShifter [coarseTune=" +
+            coarseTune +
+            ", fineTune=" +
+            fineTune +
+            "]"
+        );
     }
-
 }
