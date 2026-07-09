@@ -66,7 +66,7 @@ val testAppClasses = listOf(
 )
 
 buildscript {
-    project.version = "4.4.3"
+    project.version = "4.4.4"
     project.group = "de.pottgames"
 }
 
